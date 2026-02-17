@@ -290,20 +290,91 @@ Each block type supports these **appearance properties** for the theme system:
 
 > For the full list of block types and their properties, refer to `config/templates/pages/iw_default.xml`.
 
-#### Using the bundle's base template
+#### Integrating the theme in your base template
 
-Your Twig template can extend the bundle's base layout to get theme CSS, fonts, and menu automatically:
+The recommended approach is to integrate the theme Twig functions directly into your project's `templates/base.html.twig`. This gives you full control over the layout while benefiting from the theme system.
+
+Here is a complete example:
 
 ```twig
-{# templates/pages/my_page.html.twig #}
-{% extends '@ItechWorldSuluTheme/base.html.twig' %}
+{# templates/base.html.twig #}
+<!DOCTYPE html>
+<html lang="{{ app.request.locale|split('_')[0] }}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-{% block content %}
-    {# Your page content here #}
-{% endblock %}
+    {% block meta %}
+        {{ include('@SuluWebsite/Extension/seo.html.twig', {
+            seo: extension.seo|default([]),
+            content: content|default([]),
+            localizations: localizations|default([]),
+            shadowBaseLocale: shadowBaseLocale|default(),
+        }) }}
+    {% endblock %}
+
+    {# Theme: Google Fonts #}
+    {{ iw_sulu_theme_fonts_link()|raw }}
+
+    {# Theme: compiled CSS custom properties #}
+    {% set themeCssPath = iw_sulu_theme_css_path() %}
+    {% if themeCssPath is not empty %}
+        <link rel="stylesheet" href="{{ themeCssPath }}">
+    {% endif %}
+
+    {% block style %}{% endblock %}
+    {{ encore_entry_link_tags('app') }}
+</head>
+<body class="bg-[var(--color-background)] text-[var(--color-text)]">
+    {# Theme: dynamic menu #}
+    {% set menuConfig = iw_sulu_theme_menu_config() %}
+    {% block header %}
+        {% if menuConfig is not empty and menuConfig.type is defined %}
+            {% include '@ItechWorldSuluTheme/menu/_' ~ menuConfig.type ~ '.html.twig' with {config: menuConfig} %}
+        {% else %}
+            <header>
+                <nav class="container mx-auto px-4 py-4">
+                    <ul class="flex gap-4">
+                        <li><a href="{{ sulu_content_root_path() }}">Home</a></li>
+                        {% for item in sulu_page_navigation_root_tree('main', 1, {title: 'title', url: 'url'}) %}
+                            <li>
+                                <a href="{{ sulu_content_path(item.url) }}" title="{{ item.title }}">{{ item.title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </header>
+        {% endif %}
+    {% endblock %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        {% block footer %}
+            <p>Copyright {{ 'now'|date('Y') }} SULU</p>
+        {% endblock %}
+    </footer>
+
+    {% block javascripts %}{% endblock %}
+    {{ encore_entry_script_tags('app') }}
+</body>
+</html>
 ```
 
-Or build your own layout using the Twig functions directly (see below).
+**Key integration points:**
+
+| Element | Code | Purpose |
+|---------|------|---------|
+| Google Fonts | `{{ iw_sulu_theme_fonts_link()\|raw }}` | Loads font families defined in the theme |
+| Theme CSS | `{{ iw_sulu_theme_css_path() }}` | Includes compiled CSS custom properties |
+| Body classes | `bg-[var(--color-background)] text-[var(--color-text)]` | Applies theme background and text colors |
+| Dynamic menu | `iw_sulu_theme_menu_config()` | Renders the menu type configured in the admin |
+| Menu templates | `@ItechWorldSuluTheme/menu/_<type>.html.twig` | Available types: `navbar`, `burger`, `fullscreen`, `sidebar` |
+
+> The bundle also provides a `@ItechWorldSuluTheme/base.html.twig` template that you can extend if you prefer, but integrating the functions directly gives you more flexibility.
 
 ### Twig functions
 

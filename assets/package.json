@@ -1,0 +1,31 @@
+{
+  "name": "@itech-world/sulu-theme-bundle",
+  "license": "MIT",
+  "config": {
+    "css_source": "styles/app.css"
+  },
+  "symfony": {
+    "controllers": {
+      "menu": {
+        "main": "controllers/menu_controller.js",
+        "enabled": true,
+        "fetch": "lazy"
+      },
+      "gallery": {
+        "main": "controllers/gallery_controller.js",
+        "enabled": true,
+        "fetch": "lazy"
+      },
+      "key_figures": {
+        "main": "controllers/key_figures_controller.js",
+        "enabled": true,
+        "fetch": "lazy"
+      },
+      "slider": {
+        "main": "controllers/slider_controller.js",
+        "enabled": true,
+        "fetch": "lazy"
+      }
+    }
+  }
+}
