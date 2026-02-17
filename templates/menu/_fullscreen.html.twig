@@ -38,9 +38,10 @@
         class="hidden fixed inset-0 z-40 flex items-center justify-center"
         style="background-color: {{ menuBg }};"
     >
-        {% if sulu_navigation_root_tree() is defined %}
+        {% set navItems = sulu_page_navigation_root_tree('main', 2, {title: 'title', url: 'url'}) %}
+        {% if navItems is not empty %}
             <nav class="text-center space-y-4 md:space-y-6">
-                {% for item in sulu_navigation_root_tree() %}
+                {% for item in navItems %}
                     <div>
                         <a
                             href="{{ sulu_content_path(item.url) }}"

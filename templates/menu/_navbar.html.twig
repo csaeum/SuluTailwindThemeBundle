@@ -21,9 +21,10 @@
             </div>
 
             {# Desktop navigation #}
+            {% set navItems = sulu_page_navigation_root_tree('main', 2, {title: 'title', url: 'url'}) %}
             <div class="hidden md:flex items-center gap-1">
-                {% if sulu_navigation_root_tree() is defined %}
-                    {% for item in sulu_navigation_root_tree() %}
+                {% if navItems is not empty %}
+                    {% for item in navItems %}
                         {% if item.children is defined and item.children|length > 0 %}
                             {# Dropdown parent #}
                             <div class="relative group">
@@ -84,8 +85,8 @@
             data-menu-target="panel"
             class="hidden md:hidden pb-4"
         >
-            {% if sulu_navigation_root_tree() is defined %}
-                {% for item in sulu_navigation_root_tree() %}
+            {% if navItems is not empty %}
+                {% for item in navItems %}
                     {% if item.children is defined and item.children|length > 0 %}
                         <div class="border-b border-white/10">
                             <button
