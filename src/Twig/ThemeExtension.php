@@ -41,6 +41,7 @@ class ThemeExtension extends AbstractExtension implements GlobalsInterface
             new TwigFunction('iw_sulu_block_style_template', $this->getBlockStyleTemplate(...)),
             new TwigFunction('iw_sulu_theme_menu_config', $this->getMenuConfig(...)),
             new TwigFunction('iw_sulu_theme_tokens', $this->getTokens(...)),
+            new TwigFunction('iw_sulu_theme_block_styles', $this->getBlockStyles(...)),
         ];
     }
 
@@ -141,6 +142,16 @@ class ThemeExtension extends AbstractExtension implements GlobalsInterface
 
         // Fallback to the first style
         return $styles[0]['twig'] ?? null;
+    }
+
+    /**
+     * Get the block styles configuration for the active theme.
+     *
+     * @return array<string, mixed> The block styles
+     */
+    public function getBlockStyles(): array
+    {
+        return $this->themeProvider->getBlockStyles();
     }
 
     /**

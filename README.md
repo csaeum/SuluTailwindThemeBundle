@@ -133,6 +133,134 @@ Navigate to **Settings > Themes** in the Sulu admin panel. From there you can:
 7. **Configure menu**: Choose menu type, colors, animation, and display options
 8. **Activate**: Toggle the `isActive` flag to make a theme the active one
 
+### Page templates
+
+The bundle ships with a ready-to-use page template (`iw_default`) that includes 8 block types: `text`, `text_images`, `gallery`, `key_figures`, `linked_pages`, `location`, `form`, and `document`.
+
+To use it, simply select **"Page par défaut"** (or **"Default page"**) as the template when creating a page in the Sulu admin.
+
+#### Creating your own page template
+
+If you want your own page template while reusing the bundle's block types, create an XML template in your project's `config/templates/pages/` directory:
+
+```xml
+<?xml version="1.0" ?>
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+
+    <key>my_page</key>
+    <view>pages/my_page</view>
+    <controller>Sulu\Content\UserInterface\Controller\Website\ContentController::indexAction</controller>
+    <cacheLifetime>604800</cacheLifetime>
+
+    <meta>
+        <title lang="en">My custom page</title>
+        <title lang="fr">Ma page personnalisée</title>
+    </meta>
+
+    <properties>
+        <property name="title" type="text_line" mandatory="true">
+            <meta>
+                <title lang="en">Title</title>
+                <title lang="fr">Titre</title>
+            </meta>
+            <params>
+                <param name="headline" value="true"/>
+            </params>
+            <tag name="sulu.rlp.part"/>
+        </property>
+
+        <property name="url" type="route" mandatory="true">
+            <meta>
+                <title lang="en">URL</title>
+                <title lang="fr">URL</title>
+            </meta>
+            <tag name="sulu.rlp"/>
+        </property>
+
+        <!-- Content blocks -->
+        <block name="blocks" default-type="text" minOccurs="0">
+            <meta>
+                <title lang="en">Content blocks</title>
+                <title lang="fr">Blocs de contenu</title>
+            </meta>
+
+            <types>
+                <!-- Example: text block -->
+                <type name="text">
+                    <meta>
+                        <title lang="en">Text</title>
+                        <title lang="fr">Texte</title>
+                    </meta>
+                    <properties>
+                        <property name="title" type="text_line">
+                            <meta><title lang="en">Title</title><title lang="fr">Titre</title></meta>
+                        </property>
+                        <property name="subTitle" type="text_line">
+                            <meta><title lang="en">Subtitle</title><title lang="fr">Sous-titre</title></meta>
+                        </property>
+                        <property name="text" type="text_editor">
+                            <meta><title lang="en">Text</title><title lang="fr">Texte</title></meta>
+                        </property>
+                        <!-- Appearance properties (used by the theme system) -->
+                        <property name="variant" type="text_line">
+                            <meta><title lang="en">Color variant</title><title lang="fr">Variante de couleur</title></meta>
+                        </property>
+                        <property name="style" type="text_line">
+                            <meta><title lang="en">Layout style</title><title lang="fr">Style d'agencement</title></meta>
+                        </property>
+                        <property name="marginTop" type="text_line">
+                            <meta><title lang="en">Top margin</title><title lang="fr">Marge haute</title></meta>
+                        </property>
+                        <property name="marginBottom" type="text_line">
+                            <meta><title lang="en">Bottom margin</title><title lang="fr">Marge basse</title></meta>
+                        </property>
+                        <property name="lateralMargins" type="checkbox">
+                            <meta><title lang="en">Lateral margins</title><title lang="fr">Marges latérales</title></meta>
+                        </property>
+                        <property name="showBackground" type="checkbox">
+                            <meta><title lang="en">Background color</title><title lang="fr">Couleur de fond</title></meta>
+                        </property>
+                    </properties>
+                </type>
+
+                <!-- Add more block types as needed (text_images, gallery, etc.) -->
+                <!-- See config/templates/pages/iw_default.xml for all available block types -->
+            </types>
+        </block>
+    </properties>
+</template>
+```
+
+Each block type supports these **appearance properties** for the theme system:
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `variant` | `text_line` | Color variant name (e.g., `clair`, `accent`, `sombre`) |
+| `style` | `text_line` | Layout style (e.g., `centered`, `grid`, `overlay`) |
+| `marginTop` | `text_line` | Top margin (Tailwind spacing value) |
+| `marginBottom` | `text_line` | Bottom margin (Tailwind spacing value) |
+| `lateralMargins` | `checkbox` | Enable lateral container margins |
+| `showBackground` | `checkbox` | Show the variant background color |
+
+> For the full list of block types and their properties, refer to `config/templates/pages/iw_default.xml`.
+
+#### Using the bundle's base template
+
+Your Twig template can extend the bundle's base layout to get theme CSS, fonts, and menu automatically:
+
+```twig
+{# templates/pages/my_page.html.twig #}
+{% extends '@ItechWorldSuluTheme/base.html.twig' %}
+
+{% block content %}
+    {# Your page content here #}
+{% endblock %}
+```
+
+Or build your own layout using the Twig functions directly (see below).
+
 ### Twig functions
 
 Use these functions in your templates:
@@ -149,6 +277,9 @@ Use these functions in your templates:
 
 {# Get all theme tokens #}
 {% set tokens = iw_sulu_theme_tokens() %}
+
+{# Get block styles configuration #}
+{% set blockStyles = iw_sulu_theme_block_styles() %}
 
 {# Get block style template path #}
 {% set template = iw_sulu_block_style_template('gallery', 'grid') %}
