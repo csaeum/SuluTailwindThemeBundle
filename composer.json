@@ -3,7 +3,7 @@
     "description": "Complete theming system for Sulu CMS 3.x based on design tokens compiled to CSS custom properties",
     "type": "sulu-bundle",
     "license": "MIT",
-    "keywords": ["sulu", "symfony", "cms", "php", "theme", "design-tokens", "css-variables"],
+    "keywords": ["sulu", "symfony", "symfony-ux", "cms", "php", "theme", "design-tokens", "css-variables"],
     "authors": [
         {
             "name": "Steeven THOMAS",
