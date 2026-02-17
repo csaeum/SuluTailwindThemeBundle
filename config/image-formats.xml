@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<image-formats xmlns="http://schemas.sulu.io/media/image-formats"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://schemas.sulu.io/media/image-formats http://schemas.sulu.io/media/image-formats-1.1.xsd">
+
+    <!-- 16:9 widescreen format (hero images, banners) -->
+    <image-format key="iw_theme_16_9">
+        <meta>
+            <title lang="en">Theme 16:9</title>
+            <title lang="fr">Thème 16:9</title>
+        </meta>
+        <scale x="1920" y="1080" mode="outbound"/>
+    </image-format>
+
+    <!-- 4:3 standard format -->
+    <image-format key="iw_theme_4_3">
+        <meta>
+            <title lang="en">Theme 4:3</title>
+            <title lang="fr">Thème 4:3</title>
+        </meta>
+        <scale x="1200" y="900" mode="outbound"/>
+    </image-format>
+
+    <!-- 1:1 square format (icons, avatars, thumbnails) -->
+    <image-format key="iw_theme_1_1">
+        <meta>
+            <title lang="en">Theme 1:1</title>
+            <title lang="fr">Thème 1:1</title>
+        </meta>
+        <scale x="800" y="800" mode="outbound"/>
+    </image-format>
+
+    <!-- 3:4 portrait format -->
+    <image-format key="iw_theme_3_4">
+        <meta>
+            <title lang="en">Theme 3:4</title>
+            <title lang="fr">Thème 3:4</title>
+        </meta>
+        <scale x="600" y="800" mode="outbound"/>
+    </image-format>
+
+    <!-- Gallery thumbnail -->
+    <image-format key="iw_theme_gallery_thumb">
+        <meta>
+            <title lang="en">Theme Gallery Thumbnail</title>
+            <title lang="fr">Thème Miniature Galerie</title>
+        </meta>
+        <scale x="400" y="300" mode="outbound"/>
+    </image-format>
+
+    <!-- Hero banner format (ultra-wide) -->
+    <image-format key="iw_theme_hero">
+        <meta>
+            <title lang="en">Theme Hero Banner</title>
+            <title lang="fr">Thème Bannière Hero</title>
+        </meta>
+        <scale x="1920" y="800" mode="outbound"/>
+    </image-format>
+
+</image-formats>

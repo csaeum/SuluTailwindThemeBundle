@@ -1,0 +1,12 @@
+{# Block wrapper — applies variant, margins, container #}
+{% set variantClass = 'block-variant-' ~ (variant|default('clair')) %}
+{% set mtClass = marginTop|default('mt-0') %}
+{% set mbClass = marginBottom|default('mb-0') %}
+{% set containerClass = (lateralMargins|default(true)) ? 'container mx-auto px-4 sm:px-6 lg:px-8' : '' %}
+{% set bgAttr = (showBackground|default(true)) ? 'data-has-bg="true"' : '' %}
+
+<section class="block {{ variantClass }} {{ mtClass }} {{ mbClass }}" {{ bgAttr|raw }}>
+    <div class="{{ containerClass }}">
+        {{ block('block_content') }}
+    </div>
+</section>

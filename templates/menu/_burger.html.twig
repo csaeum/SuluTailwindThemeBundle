@@ -1,0 +1,88 @@
+{# Menu — always burger (hamburger icon), full slide-out panel #}
+{% set menuBg = config.bg|default('var(--menu-bg)') %}
+{% set menuText = config.text|default('var(--menu-text)') %}
+
+<header
+    data-controller="menu"
+    class="sticky top-0 z-40 w-full"
+    style="background-color: {{ menuBg }}; color: {{ menuText }};"
+>
+    <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            {# Logo / Brand #}
+            <a href="{{ sulu_content_path('/') }}" class="flex items-center no-underline" style="color: {{ menuText }};">
+                {% if config.logo is defined and config.logo is not empty %}
+                    <img src="{{ config.logo }}" alt="{{ config.siteName|default('') }}" class="h-8 w-auto">
+                {% else %}
+                    <span class="text-xl font-bold">{{ config.siteName|default('Site') }}</span>
+                {% endif %}
+            </a>
+
+            {# Burger button — always visible #}
+            <button
+                type="button"
+                data-action="menu#toggle"
+                class="w-10 h-10 flex items-center justify-center"
+                aria-label="Menu"
+                style="color: {{ menuText }};"
+            >
+                <svg data-menu-target="iconOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <svg data-menu-target="iconClose" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+    </nav>
+
+    {# Slide-out panel #}
+    <div
+        data-menu-target="panel"
+        class="hidden fixed inset-0 top-16 z-50"
+    >
+        {# Backdrop #}
+        <div data-action="click->menu#close" class="absolute inset-0 bg-black/50"></div>
+
+        {# Panel content #}
+        <div
+            class="absolute top-0 right-0 w-80 max-w-[85vw] h-full overflow-y-auto p-6 shadow-xl"
+            style="background-color: {{ menuBg }};"
+        >
+            {% if sulu_navigation_root_tree() is defined %}
+                <nav class="space-y-1">
+                    {% for item in sulu_navigation_root_tree() %}
+                        {% if item.children is defined and item.children|length > 0 %}
+                            <div>
+                                <button
+                                    type="button"
+                                    data-action="menu#toggleMobileSubmenu"
+                                    class="flex items-center justify-between w-full py-3 text-left font-medium"
+                                    style="color: {{ menuText }};"
+                                >
+                                    {{ item.title }}
+                                    <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                                </button>
+                                <div data-menu-target="submenu" class="hidden pl-4 space-y-1">
+                                    {% for child in item.children %}
+                                        <a
+                                            href="{{ sulu_content_path(child.url) }}"
+                                            class="block py-2 text-sm opacity-80 hover:opacity-100 no-underline"
+                                            style="color: {{ menuText }};"
+                                        >
+                                            {{ child.title }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <a
+                                href="{{ sulu_content_path(item.url) }}"
+                                class="block py-3 font-medium no-underline"
+                                style="color: {{ menuText }};"
+                            >
+                                {{ item.title }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+</header>

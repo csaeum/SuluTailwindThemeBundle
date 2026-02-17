@@ -1,0 +1,454 @@
+<?xml version="1.0" ?>
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+
+    <key>iw_default</key>
+    <view>@ItechWorldSuluTheme/pages/default</view>
+    <controller>Sulu\Content\UserInterface\Controller\Website\ContentController::indexAction</controller>
+    <cacheLifetime>604800</cacheLifetime>
+
+    <meta>
+        <title lang="fr">Page par défaut</title>
+        <title lang="en">Default page</title>
+    </meta>
+
+    <properties>
+        <property name="title" type="text_line" mandatory="true">
+            <meta>
+                <title lang="fr">Titre</title>
+                <title lang="en">Title</title>
+            </meta>
+            <params>
+                <param name="headline" value="true"/>
+            </params>
+            <tag name="sulu.rlp.part"/>
+        </property>
+
+        <property name="url" type="route" mandatory="true">
+            <meta>
+                <title lang="fr">URL</title>
+                <title lang="en">URL</title>
+            </meta>
+            <tag name="sulu.rlp"/>
+        </property>
+
+        <block name="blocks" default-type="text" minOccurs="0">
+            <meta>
+                <title lang="fr">Blocs de contenu</title>
+                <title lang="en">Content blocks</title>
+            </meta>
+
+            <types>
+                <!-- ═══ Block type: text ═══ -->
+                <type name="text">
+                    <meta>
+                        <title lang="fr">Texte</title>
+                        <title lang="en">Text</title>
+                    </meta>
+                    <properties>
+                        <property name="title" type="text_line">
+                            <meta><title lang="fr">Titre</title><title lang="en">Title</title></meta>
+                        </property>
+                        <property name="subTitle" type="text_line">
+                            <meta><title lang="fr">Sous-titre</title><title lang="en">Subtitle</title></meta>
+                        </property>
+                        <property name="text" type="text_editor">
+                            <meta><title lang="fr">Texte</title><title lang="en">Text</title></meta>
+                        </property>
+                        <!-- Appearance -->
+                        <property name="variant" type="text_line">
+                            <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
+                        </property>
+                        <property name="style" type="text_line">
+                            <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                        </property>
+                        <property name="marginTop" type="text_line">
+                            <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
+                        </property>
+                        <property name="marginBottom" type="text_line">
+                            <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
+                        </property>
+                        <property name="lateralMargins" type="checkbox">
+                            <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="showBackground" type="checkbox">
+                            <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
+                        </property>
+                    </properties>
+                </type>
+
+                <!-- ═══ Block type: text_images ═══ -->
+                <type name="text_images">
+                    <meta>
+                        <title lang="fr">Texte et images</title>
+                        <title lang="en">Text and images</title>
+                    </meta>
+                    <properties>
+                        <property name="title" type="text_line">
+                            <meta><title lang="fr">Titre</title><title lang="en">Title</title></meta>
+                        </property>
+                        <property name="subTitle" type="text_line">
+                            <meta><title lang="fr">Sous-titre</title><title lang="en">Subtitle</title></meta>
+                        </property>
+                        <property name="images" type="media_selection">
+                            <meta><title lang="fr">Images</title><title lang="en">Images</title></meta>
+                        </property>
+                        <property name="imageFilter" type="single_select">
+                            <meta><title lang="fr">Format d'image</title><title lang="en">Image format</title></meta>
+                            <params>
+                                <param name="default_value" type="string" value="original"/>
+                                <param name="values" type="collection">
+                                    <param name="16_9"><meta><title lang="fr">16:9</title><title lang="en">16:9</title></meta></param>
+                                    <param name="4_3"><meta><title lang="fr">4:3</title><title lang="en">4:3</title></meta></param>
+                                    <param name="1_1"><meta><title lang="fr">1:1</title><title lang="en">1:1</title></meta></param>
+                                    <param name="3_4"><meta><title lang="fr">3:4</title><title lang="en">3:4</title></meta></param>
+                                    <param name="original"><meta><title lang="fr">Original</title><title lang="en">Original</title></meta></param>
+                                </param>
+                            </params>
+                        </property>
+                        <property name="imagePosition" type="single_select">
+                            <meta><title lang="fr">Position de l'image</title><title lang="en">Image position</title></meta>
+                            <params>
+                                <param name="default_value" type="string" value="right"/>
+                                <param name="values" type="collection">
+                                    <param name="left"><meta><title lang="fr">Gauche</title><title lang="en">Left</title></meta></param>
+                                    <param name="right"><meta><title lang="fr">Droite</title><title lang="en">Right</title></meta></param>
+                                    <param name="top"><meta><title lang="fr">Haut</title><title lang="en">Top</title></meta></param>
+                                    <param name="background"><meta><title lang="fr">Arrière-plan</title><title lang="en">Background</title></meta></param>
+                                </param>
+                            </params>
+                        </property>
+                        <property name="showImagesName" type="checkbox">
+                            <meta><title lang="fr">Afficher le nom des images</title><title lang="en">Show image names</title></meta>
+                        </property>
+                        <property name="text" type="text_editor">
+                            <meta><title lang="fr">Texte</title><title lang="en">Text</title></meta>
+                        </property>
+                        <!-- Appearance -->
+                        <property name="variant" type="text_line">
+                            <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
+                        </property>
+                        <property name="style" type="text_line">
+                            <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                        </property>
+                        <property name="marginTop" type="text_line">
+                            <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
+                        </property>
+                        <property name="marginBottom" type="text_line">
+                            <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
+                        </property>
+                        <property name="lateralMargins" type="checkbox">
+                            <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="showBackground" type="checkbox">
+                            <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
+                        </property>
+                    </properties>
+                </type>
+
+                <!-- ═══ Block type: gallery ═══ -->
+                <type name="gallery">
+                    <meta>
+                        <title lang="fr">Galerie</title>
+                        <title lang="en">Gallery</title>
+                    </meta>
+                    <properties>
+                        <property name="title" type="text_line">
+                            <meta><title lang="fr">Titre</title><title lang="en">Title</title></meta>
+                        </property>
+                        <property name="subTitle" type="text_line">
+                            <meta><title lang="fr">Sous-titre</title><title lang="en">Subtitle</title></meta>
+                        </property>
+                        <property name="images" type="media_selection">
+                            <meta><title lang="fr">Images</title><title lang="en">Images</title></meta>
+                        </property>
+                        <property name="showImagesName" type="checkbox">
+                            <meta><title lang="fr">Afficher le nom des images</title><title lang="en">Show image names</title></meta>
+                        </property>
+                        <!-- Appearance -->
+                        <property name="variant" type="text_line">
+                            <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
+                        </property>
+                        <property name="style" type="text_line">
+                            <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                        </property>
+                        <property name="marginTop" type="text_line">
+                            <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
+                        </property>
+                        <property name="marginBottom" type="text_line">
+                            <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
+                        </property>
+                        <property name="lateralMargins" type="checkbox">
+                            <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="showBackground" type="checkbox">
+                            <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
+                        </property>
+                    </properties>
+                </type>
+
+                <!-- ═══ Block type: key_figures ═══ -->
+                <type name="key_figures">
+                    <meta>
+                        <title lang="fr">Chiffres clés</title>
+                        <title lang="en">Key figures</title>
+                    </meta>
+                    <properties>
+                        <block name="figures" default-type="figure" minOccurs="1">
+                            <meta>
+                                <title lang="fr">Chiffres</title>
+                                <title lang="en">Figures</title>
+                            </meta>
+                            <types>
+                                <type name="figure">
+                                    <meta>
+                                        <title lang="fr">Chiffre</title>
+                                        <title lang="en">Figure</title>
+                                    </meta>
+                                    <properties>
+                                        <property name="image" type="single_media_selection">
+                                            <meta><title lang="fr">Image / Icône</title><title lang="en">Image / Icon</title></meta>
+                                        </property>
+                                        <property name="title" type="text_line">
+                                            <meta><title lang="fr">Titre</title><title lang="en">Title</title></meta>
+                                        </property>
+                                        <property name="subTitle" type="text_line">
+                                            <meta><title lang="fr">Sous-titre</title><title lang="en">Subtitle</title></meta>
+                                        </property>
+                                        <property name="number" type="text_line">
+                                            <meta><title lang="fr">Nombre</title><title lang="en">Number</title></meta>
+                                        </property>
+                                    </properties>
+                                </type>
+                            </types>
+                        </block>
+                        <!-- Appearance -->
+                        <property name="variant" type="text_line">
+                            <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
+                        </property>
+                        <property name="style" type="text_line">
+                            <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                        </property>
+                        <property name="marginTop" type="text_line">
+                            <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
+                        </property>
+                        <property name="marginBottom" type="text_line">
+                            <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
+                        </property>
+                        <property name="lateralMargins" type="checkbox">
+                            <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="showBackground" type="checkbox">
+                            <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
+                        </property>
+                    </properties>
+                </type>
+
+                <!-- ═══ Block type: linked_pages ═══ -->
+                <type name="linked_pages">
+                    <meta>
+                        <title lang="fr">Pages liées</title>
+                        <title lang="en">Linked pages</title>
+                    </meta>
+                    <properties>
+                        <property name="title" type="text_line">
+                            <meta><title lang="fr">Titre</title><title lang="en">Title</title></meta>
+                        </property>
+                        <property name="subTitle" type="text_line">
+                            <meta><title lang="fr">Sous-titre</title><title lang="en">Subtitle</title></meta>
+                        </property>
+                        <block name="links" default-type="internal" minOccurs="0">
+                            <meta>
+                                <title lang="fr">Liens</title>
+                                <title lang="en">Links</title>
+                            </meta>
+                            <types>
+                                <type name="internal">
+                                    <meta>
+                                        <title lang="fr">Lien interne</title>
+                                        <title lang="en">Internal link</title>
+                                    </meta>
+                                    <properties>
+                                        <property name="pages" type="page_selection">
+                                            <meta><title lang="fr">Pages</title><title lang="en">Pages</title></meta>
+                                        </property>
+                                    </properties>
+                                </type>
+                                <type name="external">
+                                    <meta>
+                                        <title lang="fr">Lien externe</title>
+                                        <title lang="en">External link</title>
+                                    </meta>
+                                    <properties>
+                                        <property name="url" type="text_line">
+                                            <meta><title lang="fr">URL</title><title lang="en">URL</title></meta>
+                                        </property>
+                                        <property name="label" type="text_line">
+                                            <meta><title lang="fr">Libellé</title><title lang="en">Label</title></meta>
+                                        </property>
+                                        <property name="anchor" type="text_line">
+                                            <meta><title lang="fr">Ancre</title><title lang="en">Anchor</title></meta>
+                                        </property>
+                                        <property name="target" type="single_select">
+                                            <meta><title lang="fr">Cible</title><title lang="en">Target</title></meta>
+                                            <params>
+                                                <param name="default_value" type="string" value="_self"/>
+                                                <param name="values" type="collection">
+                                                    <param name="_self"><meta><title lang="fr">Même fenêtre</title><title lang="en">Same window</title></meta></param>
+                                                    <param name="_blank"><meta><title lang="fr">Nouvelle fenêtre</title><title lang="en">New window</title></meta></param>
+                                                </param>
+                                            </params>
+                                        </property>
+                                    </properties>
+                                </type>
+                            </types>
+                        </block>
+                        <!-- Appearance -->
+                        <property name="variant" type="text_line">
+                            <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
+                        </property>
+                        <property name="style" type="text_line">
+                            <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                        </property>
+                        <property name="marginTop" type="text_line">
+                            <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
+                        </property>
+                        <property name="marginBottom" type="text_line">
+                            <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
+                        </property>
+                        <property name="lateralMargins" type="checkbox">
+                            <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="showBackground" type="checkbox">
+                            <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
+                        </property>
+                    </properties>
+                </type>
+
+                <!-- ═══ Block type: location ═══ -->
+                <type name="location">
+                    <meta>
+                        <title lang="fr">Localisation</title>
+                        <title lang="en">Location</title>
+                    </meta>
+                    <properties>
+                        <property name="title" type="text_line">
+                            <meta><title lang="fr">Titre</title><title lang="en">Title</title></meta>
+                        </property>
+                        <property name="subTitle" type="text_line">
+                            <meta><title lang="fr">Sous-titre</title><title lang="en">Subtitle</title></meta>
+                        </property>
+                        <property name="text" type="text_editor">
+                            <meta><title lang="fr">Texte</title><title lang="en">Text</title></meta>
+                        </property>
+                        <property name="latitude" type="text_line">
+                            <meta><title lang="fr">Latitude</title><title lang="en">Latitude</title></meta>
+                        </property>
+                        <property name="longitude" type="text_line">
+                            <meta><title lang="fr">Longitude</title><title lang="en">Longitude</title></meta>
+                        </property>
+                        <property name="address" type="text_area">
+                            <meta><title lang="fr">Adresse</title><title lang="en">Address</title></meta>
+                        </property>
+                        <!-- Appearance -->
+                        <property name="variant" type="text_line">
+                            <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
+                        </property>
+                        <property name="style" type="text_line">
+                            <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                        </property>
+                        <property name="marginTop" type="text_line">
+                            <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
+                        </property>
+                        <property name="marginBottom" type="text_line">
+                            <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
+                        </property>
+                        <property name="lateralMargins" type="checkbox">
+                            <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="showBackground" type="checkbox">
+                            <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
+                        </property>
+                    </properties>
+                </type>
+
+                <!-- ═══ Block type: form ═══ -->
+                <type name="form">
+                    <meta>
+                        <title lang="fr">Formulaire</title>
+                        <title lang="en">Form</title>
+                    </meta>
+                    <properties>
+                        <property name="title" type="text_line">
+                            <meta><title lang="fr">Titre</title><title lang="en">Title</title></meta>
+                        </property>
+                        <property name="subTitle" type="text_line">
+                            <meta><title lang="fr">Sous-titre</title><title lang="en">Subtitle</title></meta>
+                        </property>
+                        <property name="formId" type="text_line">
+                            <meta><title lang="fr">ID du formulaire</title><title lang="en">Form ID</title></meta>
+                        </property>
+                        <!-- Appearance -->
+                        <property name="variant" type="text_line">
+                            <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
+                        </property>
+                        <property name="style" type="text_line">
+                            <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                        </property>
+                        <property name="marginTop" type="text_line">
+                            <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
+                        </property>
+                        <property name="marginBottom" type="text_line">
+                            <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
+                        </property>
+                        <property name="lateralMargins" type="checkbox">
+                            <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="showBackground" type="checkbox">
+                            <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
+                        </property>
+                    </properties>
+                </type>
+
+                <!-- ═══ Block type: document ═══ -->
+                <type name="document">
+                    <meta>
+                        <title lang="fr">Documents</title>
+                        <title lang="en">Documents</title>
+                    </meta>
+                    <properties>
+                        <property name="title" type="text_line">
+                            <meta><title lang="fr">Titre</title><title lang="en">Title</title></meta>
+                        </property>
+                        <property name="subTitle" type="text_line">
+                            <meta><title lang="fr">Sous-titre</title><title lang="en">Subtitle</title></meta>
+                        </property>
+                        <property name="documents" type="media_selection">
+                            <meta><title lang="fr">Documents</title><title lang="en">Documents</title></meta>
+                        </property>
+                        <!-- Appearance -->
+                        <property name="variant" type="text_line">
+                            <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
+                        </property>
+                        <property name="style" type="text_line">
+                            <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                        </property>
+                        <property name="marginTop" type="text_line">
+                            <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
+                        </property>
+                        <property name="marginBottom" type="text_line">
+                            <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
+                        </property>
+                        <property name="lateralMargins" type="checkbox">
+                            <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="showBackground" type="checkbox">
+                            <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
+                        </property>
+                    </properties>
+                </type>
+            </types>
+        </block>
+    </properties>
+</template>

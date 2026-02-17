@@ -1,0 +1,39 @@
+# ─── Theme Config CRUD API ────────────────────────────────────────────
+iw_sulu_theme.get_theme_configs:
+    path: /admin/api/iw-theme-configs
+    controller: ItechWorld\SuluThemeBundle\Controller\Admin\ThemeConfigController::cgetAction
+    methods: GET
+
+iw_sulu_theme.post_theme_config:
+    path: /admin/api/iw-theme-configs
+    controller: ItechWorld\SuluThemeBundle\Controller\Admin\ThemeConfigController::postAction
+    methods: POST
+
+iw_sulu_theme.get_theme_config:
+    path: /admin/api/iw-theme-configs/{id}
+    controller: ItechWorld\SuluThemeBundle\Controller\Admin\ThemeConfigController::getAction
+    methods: GET
+    requirements:
+        id: \d+
+
+iw_sulu_theme.put_theme_config:
+    path: /admin/api/iw-theme-configs/{id}
+    controller: ItechWorld\SuluThemeBundle\Controller\Admin\ThemeConfigController::putAction
+    methods: PUT
+    requirements:
+        id: \d+
+
+iw_sulu_theme.delete_theme_config:
+    path: /admin/api/iw-theme-configs/{id}
+    controller: ItechWorld\SuluThemeBundle\Controller\Admin\ThemeConfigController::deleteAction
+    methods: DELETE
+    requirements:
+        id: \d+
+
+# ─── Theme CSS serving ───────────────────────────────────────────────
+iw_sulu_theme.serve_css:
+    path: /iw-theme/css/{filename}
+    controller: ItechWorld\SuluThemeBundle\Controller\Admin\ThemeConfigController::serveCssAction
+    methods: GET
+    requirements:
+        filename: .+\.css

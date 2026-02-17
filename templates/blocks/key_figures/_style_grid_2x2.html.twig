@@ -1,0 +1,44 @@
+{# Key figures block — 2x2 grid layout #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% if figures is defined and figures is iterable %}
+        <div
+            data-controller="key-figures"
+            class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto"
+        >
+            {% for figure in figures %}
+                <div class="p-6 md:p-8 rounded-[var(--border-radius,8px)] border border-[var(--color-border,#e5e7eb)] text-center">
+                    {# Icon / Image #}
+                    {% if figure.image is defined and figure.image.id is defined %}
+                        {% set media = sulu_resolve_media(figure.image.id, app.request.locale) %}
+                        <div class="w-12 h-12 mx-auto mb-3">
+                            <img
+                                src="{{ media.thumbnails['iw_theme_1_1']|default(media.url) }}"
+                                alt="{{ media.title|default('') }}"
+                                loading="lazy"
+                                class="w-full h-full object-contain"
+                            >
+                        </div>
+                    {% endif %}
+
+                    {% if figure.number is defined and figure.number is not empty %}
+                        <span
+                            data-key-figures-target="counter"
+                            data-key-figures-end-value="{{ figure.number }}"
+                            class="block text-4xl md:text-5xl font-bold text-[var(--color-primary)]"
+                        >
+                            0
+                        </span>
+                    {% endif %}
+                    {% if figure.title is defined and figure.title is not empty %}
+                        <span class="block block-title mt-3 text-lg font-semibold">{{ figure.title }}</span>
+                    {% endif %}
+                    {% if figure.subTitle is defined and figure.subTitle is not empty %}
+                        <span class="block block-subtitle text-sm opacity-75 mt-1">{{ figure.subTitle }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

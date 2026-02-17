@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<form xmlns="http://schemas.sulu.io/template/template"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/form-1.0.xsd"
+>
+    <key>iw_theme_config_details</key>
+
+    <properties>
+        <property name="name" type="text_line" mandatory="true">
+            <meta>
+                <title>iw_sulu_theme.name</title>
+                <info_text>iw_sulu_theme.name_info</info_text>
+            </meta>
+            <params>
+                <param name="headline" value="true"/>
+            </params>
+        </property>
+
+        <property name="label" type="text_line" mandatory="true">
+            <meta>
+                <title>iw_sulu_theme.label</title>
+                <info_text>iw_sulu_theme.label_info</info_text>
+            </meta>
+        </property>
+
+        <property name="isActive" type="checkbox">
+            <meta>
+                <title>iw_sulu_theme.active</title>
+                <info_text>iw_sulu_theme.active_info</info_text>
+            </meta>
+            <params>
+                <param name="type" value="toggler"/>
+            </params>
+        </property>
+    </properties>
+</form>

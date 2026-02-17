@@ -1,0 +1,47 @@
+{# Linked pages block — vertical list #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default('')
+    } only %}
+
+    {% if links is defined and links is iterable %}
+        <ul class="divide-y divide-[var(--color-border,#e5e7eb)] max-w-3xl">
+            {% for link in links %}
+                {% if link.type == 'internal' and link.pages is defined %}
+                    {% for page in link.pages %}
+                        <li>
+                            <a href="{{ sulu_content_path(page) }}" class="flex items-center justify-between py-4 hover:text-[var(--color-link)] transition-colors no-underline group">
+                                <span class="font-medium">{{ page.title|default('') }}</span>
+                                <svg class="w-5 h-5 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
+                        </li>
+                    {% endfor %}
+                {% elseif link.type == 'external' %}
+                    {% set linkTarget = link.target|default('_self') %}
+                    {% set linkUrl = link.url|default('#') %}
+                    {% if link.anchor is defined and link.anchor is not empty %}
+                        {% set linkUrl = linkUrl ~ '#' ~ link.anchor %}
+                    {% endif %}
+                    <li>
+                        <a
+                            href="{{ linkUrl }}"
+                            target="{{ linkTarget }}"
+                            {{ linkTarget == '_blank' ? 'rel="noopener noreferrer"' : '' }}
+                            class="flex items-center justify-between py-4 hover:text-[var(--color-link)] transition-colors no-underline group"
+                        >
+                            <span class="font-medium">{{ link.label|default(link.url|default('')) }}</span>
+                            {% if linkTarget == '_blank' %}
+                                <svg class="w-5 h-5 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            {% else %}
+                                <svg class="w-5 h-5 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            {% endif %}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

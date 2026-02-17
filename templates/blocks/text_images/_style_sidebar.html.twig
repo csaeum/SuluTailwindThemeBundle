@@ -1,0 +1,36 @@
+{# Text + Images block — narrow sidebar with image, main text area #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default('')
+    } only %}
+
+    {% set formatMap = {'16:9': 'iw_theme_16_9', '4:3': 'iw_theme_4_3', '1:1': 'iw_theme_1_1', '3:4': 'iw_theme_3_4', 'original': ''} %}
+    {% set format = formatMap[imageFilter|default('original')]|default('iw_theme_3_4') %}
+    {% set position = imagePosition|default('right') %}
+
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        {# Main text area — 3 columns #}
+        <div class="{{ position == 'left' ? 'md:order-2 md:col-span-3' : 'md:order-1 md:col-span-3' }}">
+            {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
+                text: text|default('')
+            } only %}
+        </div>
+
+        {# Sidebar images — 1 column #}
+        <div class="{{ position == 'left' ? 'md:order-1 md:col-span-1' : 'md:order-2 md:col-span-1' }} space-y-4">
+            {% if images is defined and images.ids is defined %}
+                {% for mediaId in images.ids %}
+                    {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
+                    {% include '@ItechWorldSuluTheme/blocks/common/_image.html.twig' with {
+                        media: media,
+                        imageFormat: format,
+                        showName: showImagesName|default(false)
+                    } only %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

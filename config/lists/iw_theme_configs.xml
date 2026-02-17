@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<list xmlns="http://schemas.sulu.io/list-builder/list">
+    <key>iw_theme_configs</key>
+
+    <properties>
+        <property
+            name="id"
+            visibility="no"
+            searchability="yes"
+            translation="sulu_admin.id"
+        >
+            <field-name>id</field-name>
+            <entity-name>ItechWorld\SuluThemeBundle\Entity\ThemeConfig</entity-name>
+        </property>
+
+        <property
+            name="name"
+            visibility="always"
+            searchability="yes"
+            translation="iw_sulu_theme.name"
+        >
+            <field-name>name</field-name>
+            <entity-name>ItechWorld\SuluThemeBundle\Entity\ThemeConfig</entity-name>
+        </property>
+
+        <property
+            name="label"
+            visibility="always"
+            searchability="yes"
+            translation="iw_sulu_theme.label"
+        >
+            <field-name>label</field-name>
+            <entity-name>ItechWorld\SuluThemeBundle\Entity\ThemeConfig</entity-name>
+        </property>
+
+        <property
+            name="isActive"
+            visibility="yes"
+            translation="iw_sulu_theme.active"
+        >
+            <field-name>isActive</field-name>
+            <entity-name>ItechWorld\SuluThemeBundle\Entity\ThemeConfig</entity-name>
+            <transformer type="bool"/>
+        </property>
+
+        <property
+            name="updatedAt"
+            visibility="yes"
+            translation="sulu_admin.changed"
+        >
+            <field-name>updatedAt</field-name>
+            <entity-name>ItechWorld\SuluThemeBundle\Entity\ThemeConfig</entity-name>
+            <transformer type="datetime"/>
+        </property>
+    </properties>
+</list>

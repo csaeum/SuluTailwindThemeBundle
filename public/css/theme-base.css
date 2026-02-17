@@ -1,0 +1,237 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   SuluThemeBundle — Base CSS
+   Uses CSS custom properties from the compiled theme stylesheet.
+   NEVER hardcode colors here — always reference var(--*).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── Reset & Defaults ──────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* ─── Typography ────────────────────────────────────────────────────────── */
+body {
+    font-family: var(--font-family-body, sans-serif);
+    font-size: var(--font-size-base, 16px);
+    line-height: var(--line-height-base, 1.5);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1 {
+    font-family: var(--font-family-heading, var(--font-family-body, sans-serif));
+    font-weight: var(--font-h1-weight, 700);
+    font-size: var(--font-size-h1, 2.5rem);
+    line-height: 1.2;
+    margin: 0 0 0.5em;
+}
+
+h2 {
+    font-family: var(--font-family-heading, var(--font-family-body, sans-serif));
+    font-weight: var(--font-h2-weight, 600);
+    font-size: var(--font-size-h2, 2rem);
+    line-height: 1.25;
+    margin: 0 0 0.5em;
+}
+
+h3 {
+    font-family: var(--font-family-heading, var(--font-family-body, sans-serif));
+    font-weight: var(--font-h3-weight, 600);
+    font-size: var(--font-size-h3, 1.5rem);
+    line-height: 1.3;
+    margin: 0 0 0.5em;
+}
+
+h4 {
+    font-family: var(--font-family-heading, var(--font-family-body, sans-serif));
+    font-weight: var(--font-h4-weight, 600);
+    font-size: var(--font-size-h4, 1.25rem);
+    line-height: 1.35;
+    margin: 0 0 0.5em;
+}
+
+h5 {
+    font-family: var(--font-family-heading, var(--font-family-body, sans-serif));
+    font-weight: var(--font-h5-weight, 500);
+    font-size: var(--font-size-h5, 1.125rem);
+    line-height: 1.4;
+    margin: 0 0 0.5em;
+}
+
+h6 {
+    font-family: var(--font-family-heading, var(--font-family-body, sans-serif));
+    font-weight: var(--font-h6-weight, 500);
+    font-size: var(--font-size-h6, 1rem);
+    line-height: 1.4;
+    margin: 0 0 0.5em;
+}
+
+/* ─── Links ─────────────────────────────────────────────────────────────── */
+a {
+    color: var(--color-link, inherit);
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-link-hover, var(--color-link, inherit));
+}
+
+/* ─── Buttons ───────────────────────────────────────────────────────────── */
+.btn-primary {
+    display: inline-block;
+    background-color: var(--btn-primary-bg, var(--color-primary, #333));
+    color: var(--btn-primary-color, #fff);
+    border: var(--btn-primary-border, none);
+    border-radius: var(--btn-primary-borderRadius, var(--border-radius, 6px));
+    padding: var(--btn-primary-padding, 0.75rem 1.5rem);
+    font-weight: var(--btn-primary-fontWeight, 600);
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    background-color: var(--btn-primary-hoverBg, var(--btn-primary-bg, var(--color-primary, #333)));
+    opacity: 0.9;
+}
+
+.btn-secondary {
+    display: inline-block;
+    background-color: var(--btn-secondary-bg, transparent);
+    color: var(--btn-secondary-color, var(--color-primary, #333));
+    border: var(--btn-secondary-border, 2px solid currentColor);
+    border-radius: var(--btn-secondary-borderRadius, var(--border-radius, 6px));
+    padding: var(--btn-secondary-padding, 0.75rem 1.5rem);
+    font-weight: var(--btn-secondary-fontWeight, 600);
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-secondary:hover {
+    background-color: var(--btn-secondary-hoverBg, var(--btn-secondary-bg, transparent));
+    opacity: 0.9;
+}
+
+/* ─── Block Utilities ───────────────────────────────────────────────────── */
+.block {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.block-title {
+    color: var(--color-heading, inherit);
+}
+
+.block-subtitle {
+    color: var(--color-heading, inherit);
+    opacity: 0.8;
+}
+
+.block-text {
+    color: inherit;
+}
+
+.block-text p {
+    margin-bottom: 1em;
+}
+
+.block-text p:last-child {
+    margin-bottom: 0;
+}
+
+/* ─── Horizontal Rule ───────────────────────────────────────────────────── */
+hr {
+    height: 2px;
+    border: none;
+    background-color: var(--color-border, #e5e7eb);
+}
+
+/* ─── Images ────────────────────────────────────────────────────────────── */
+img {
+    border-radius: var(--radius-img, 0);
+    max-width: 100%;
+    height: auto;
+}
+
+/* ─── Prose (rich text) Overrides ───────────────────────────────────────── */
+.prose a {
+    color: var(--color-link, inherit);
+}
+
+.prose a:hover {
+    color: var(--color-link-hover, var(--color-link, inherit));
+}
+
+.prose img {
+    border-radius: var(--radius-img, 0);
+}
+
+.prose blockquote {
+    border-left: 4px solid var(--color-primary, #333);
+    padding-left: 1rem;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+/* ─── Scrollbar Hide Utility ────────────────────────────────────────────── */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* ─── Line Clamp Utility ────────────────────────────────────────────────── */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* ─── Block Variant Background Support ──────────────────────────────────── */
+.block[data-has-bg="true"] {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+}
+
+/* ─── Responsive Adjustments ────────────────────────────────────────────── */
+@media (min-width: 768px) {
+    .block {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+
+    .block[data-has-bg="true"] {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .block {
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+    }
+
+    .block[data-has-bg="true"] {
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+    }
+}

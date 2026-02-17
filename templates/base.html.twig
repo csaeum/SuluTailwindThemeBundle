@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ content.title|default('') }}{% endblock %}</title>
+    {{ iw_sulu_theme_fonts_link()|raw }}
+    <link rel="stylesheet" href="{{ iw_sulu_theme_css_path() }}">
+    <link rel="stylesheet" href="{{ asset('bundles/itechworldsulutheme/css/theme-base.css') }}">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body class="bg-[var(--color-background)] text-[var(--color-text)]">
+    {% set menuConfig = iw_sulu_theme_menu_config() %}
+    {% block header %}
+        {% include '@ItechWorldSuluTheme/menu/_' ~ (menuConfig.type|default('navbar')) ~ '.html.twig' with {config: menuConfig} %}
+    {% endblock %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block footer %}{% endblock %}
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

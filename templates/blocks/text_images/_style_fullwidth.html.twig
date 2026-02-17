@@ -1,0 +1,39 @@
+{# Text + Images block — full-width image with text below #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% set formatMap = {'16:9': 'iw_theme_16_9', '4:3': 'iw_theme_4_3', '1:1': 'iw_theme_1_1', '3:4': 'iw_theme_3_4', 'original': ''} %}
+    {% set format = formatMap[imageFilter|default('original')]|default('iw_theme_hero') %}
+
+    {# Full-width images #}
+    {% if images is defined and images.ids is defined %}
+        <div class="space-y-4 mb-8">
+            {% for mediaId in images.ids %}
+                {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
+                <figure class="block-image">
+                    <img
+                        src="{{ media.thumbnails[format]|default(media.url) }}"
+                        alt="{{ media.title|default('') }}"
+                        loading="lazy"
+                        class="w-full h-auto rounded-[var(--radius-img)]"
+                    >
+                    {% if (showImagesName|default(false)) and media.title is defined and media.title is not empty %}
+                        <figcaption class="mt-2 text-sm opacity-75">{{ media.title }}</figcaption>
+                    {% endif %}
+                </figure>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {# Text content below #}
+    <div class="max-w-4xl mx-auto">
+        {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+            title: title|default(''),
+            subTitle: subTitle|default('')
+        } only %}
+
+        {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
+            text: text|default('')
+        } only %}
+    </div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{# Menu — fullscreen overlay menu #}
+{% set menuBg = config.bg|default('var(--menu-bg)') %}
+{% set menuText = config.text|default('var(--menu-text)') %}
+
+<header
+    data-controller="menu"
+    class="sticky top-0 z-40 w-full"
+    style="background-color: {{ menuBg }}; color: {{ menuText }};"
+>
+    <nav class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16 md:h-20">
+            {# Logo / Brand #}
+            <a href="{{ sulu_content_path('/') }}" class="flex items-center no-underline relative z-50" style="color: {{ menuText }};">
+                {% if config.logo is defined and config.logo is not empty %}
+                    <img src="{{ config.logo }}" alt="{{ config.siteName|default('') }}" class="h-8 md:h-10 w-auto">
+                {% else %}
+                    <span class="text-xl font-bold">{{ config.siteName|default('Site') }}</span>
+                {% endif %}
+            </a>
+
+            {# Toggle button #}
+            <button
+                type="button"
+                data-action="menu#toggle"
+                class="w-10 h-10 flex items-center justify-center relative z-50"
+                aria-label="Menu"
+                style="color: {{ menuText }};"
+            >
+                <svg data-menu-target="iconOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                <svg data-menu-target="iconClose" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+    </nav>
+
+    {# Fullscreen overlay #}
+    <div
+        data-menu-target="panel"
+        class="hidden fixed inset-0 z-40 flex items-center justify-center"
+        style="background-color: {{ menuBg }};"
+    >
+        {% if sulu_navigation_root_tree() is defined %}
+            <nav class="text-center space-y-4 md:space-y-6">
+                {% for item in sulu_navigation_root_tree() %}
+                    <div>
+                        <a
+                            href="{{ sulu_content_path(item.url) }}"
+                            class="text-2xl md:text-4xl lg:text-5xl font-bold hover:opacity-80 transition-opacity no-underline"
+                            style="color: {{ menuText }};"
+                        >
+                            {{ item.title }}
+                        </a>
+                        {% if item.children is defined and item.children|length > 0 %}
+                            <div class="mt-2 space-y-1">
+                                {% for child in item.children %}
+                                    <a
+                                        href="{{ sulu_content_path(child.url) }}"
+                                        class="block text-base md:text-lg opacity-60 hover:opacity-100 transition-opacity no-underline"
+                                        style="color: {{ menuText }};"
+                                    >
+                                        {{ child.title }}
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </nav>
+        {% endif %}
+    </div>
+</header>

@@ -1,0 +1,16 @@
+{# Responsive image with optional caption #}
+{# Expected variables: media (single media object), imageFormat (optional), showName (optional) #}
+{% if media is defined and media is not empty %}
+    <figure class="block-image">
+        {% set format = imageFormat|default('iw_theme_16_9') %}
+        <img
+            src="{{ media.thumbnails[format]|default(media.url) }}"
+            alt="{{ media.title|default('') }}"
+            loading="lazy"
+            class="w-full h-auto rounded-[var(--radius-img)]"
+        >
+        {% if (showName|default(false)) and media.title is defined and media.title is not empty %}
+            <figcaption class="mt-2 text-sm opacity-75">{{ media.title }}</figcaption>
+        {% endif %}
+    </figure>
+{% endif %}

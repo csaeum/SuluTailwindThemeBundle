@@ -1,0 +1,40 @@
+{# Linked pages block — simple minimal links list #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default('')
+    } only %}
+
+    {% if links is defined and links is iterable %}
+        <nav class="space-y-2">
+            {% for link in links %}
+                {% if link.type == 'internal' and link.pages is defined %}
+                    {% for page in link.pages %}
+                        <a href="{{ sulu_content_path(page) }}" class="block text-[var(--color-link)] hover:text-[var(--color-link-hover)] transition-colors py-1">
+                            {{ page.title|default('') }}
+                        </a>
+                    {% endfor %}
+                {% elseif link.type == 'external' %}
+                    {% set linkTarget = link.target|default('_self') %}
+                    {% set linkUrl = link.url|default('#') %}
+                    {% if link.anchor is defined and link.anchor is not empty %}
+                        {% set linkUrl = linkUrl ~ '#' ~ link.anchor %}
+                    {% endif %}
+                    <a
+                        href="{{ linkUrl }}"
+                        target="{{ linkTarget }}"
+                        {{ linkTarget == '_blank' ? 'rel="noopener noreferrer"' : '' }}
+                        class="block text-[var(--color-link)] hover:text-[var(--color-link-hover)] transition-colors py-1"
+                    >
+                        {{ link.label|default(link.url|default('')) }}
+                        {% if linkTarget == '_blank' %}
+                            <span class="text-xs">&#8599;</span>
+                        {% endif %}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </nav>
+    {% endif %}
+{% endblock %}

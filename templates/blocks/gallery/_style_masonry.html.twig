@@ -1,0 +1,28 @@
+{# Gallery block — CSS columns masonry layout #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default('')
+    } only %}
+
+    {% if images is defined and images.ids is defined %}
+        <div class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
+            {% for mediaId in images.ids %}
+                {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
+                <figure class="block-image break-inside-avoid mb-4">
+                    <img
+                        src="{{ media.thumbnails['iw_theme_gallery_thumb']|default(media.url) }}"
+                        alt="{{ media.title|default('') }}"
+                        loading="lazy"
+                        class="w-full h-auto rounded-[var(--radius-img)]"
+                    >
+                    {% if (showImagesName|default(false)) and media.title is defined and media.title is not empty %}
+                        <figcaption class="mt-2 text-sm opacity-75">{{ media.title }}</figcaption>
+                    {% endif %}
+                </figure>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{# Text block — two-column grid layout #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default('')
+    } only %}
+
+    {% if text is defined and text is not empty %}
+        <div class="block-text prose max-w-none columns-1 md:columns-2 gap-8">
+            {{ text|raw }}
+        </div>
+    {% endif %}
+{% endblock %}

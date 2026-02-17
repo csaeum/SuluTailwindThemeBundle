@@ -1,0 +1,28 @@
+{# Gallery block — responsive CSS grid #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default('')
+    } only %}
+
+    {% if images is defined and images.ids is defined %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {% for mediaId in images.ids %}
+                {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
+                <figure class="block-image group">
+                    <img
+                        src="{{ media.thumbnails['iw_theme_gallery_thumb']|default(media.url) }}"
+                        alt="{{ media.title|default('') }}"
+                        loading="lazy"
+                        class="w-full aspect-[4/3] object-cover rounded-[var(--radius-img)] transition-transform duration-300 group-hover:scale-105"
+                    >
+                    {% if (showImagesName|default(false)) and media.title is defined and media.title is not empty %}
+                        <figcaption class="mt-2 text-sm opacity-75">{{ media.title }}</figcaption>
+                    {% endif %}
+                </figure>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

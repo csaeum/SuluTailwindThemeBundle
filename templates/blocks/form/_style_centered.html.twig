@@ -1,0 +1,25 @@
+{# Form block — centered form #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    <div class="max-w-2xl mx-auto text-center">
+        {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+            title: title|default(''),
+            subTitle: subTitle|default('')
+        } only %}
+
+        {% if formId is defined and formId is not empty %}
+            <div class="mt-8">
+                {# Sulu Form integration: renders the form identified by formId #}
+                {# The actual rendering depends on your form bundle (e.g. SuluFormBundle) #}
+                <div data-form-id="{{ formId }}" class="text-left">
+                    {# If SuluFormBundle is installed, use: #}
+                    {# {{ sulu_form(formId) }} #}
+                    <noscript>
+                        <p class="text-sm opacity-75">JavaScript is required to display this form.</p>
+                    </noscript>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

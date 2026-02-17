@@ -1,0 +1,165 @@
+<?php
+
+declare(strict_types=1);
+
+namespace ItechWorld\SuluThemeBundle\Twig;
+
+use ItechWorld\SuluThemeBundle\Service\GoogleFontsResolver;
+use ItechWorld\SuluThemeBundle\Service\ThemeCompiler;
+use ItechWorld\SuluThemeBundle\Service\ThemeProvider;
+use Twig\Extension\AbstractExtension;
+use Twig\Extension\GlobalsInterface;
+use Twig\TwigFunction;
+
+/**
+ * Twig extension providing theme-related functions and global variables.
+ *
+ * Exposes theme data (CSS path, fonts, tokens, menu config, block styles)
+ * to Twig templates for rendering themed website pages.
+ */
+class ThemeExtension extends AbstractExtension implements GlobalsInterface
+{
+    public function __construct(
+        private readonly ThemeProvider $themeProvider,
+        private readonly ThemeCompiler $compiler,
+        private readonly GoogleFontsResolver $fontsResolver,
+    ) {
+    }
+
+    /**
+     * Register Twig functions provided by this extension.
+     *
+     * @return array<TwigFunction> The list of Twig functions
+     */
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction('iw_sulu_theme_css_path', $this->getCssPath(...)),
+            new TwigFunction('iw_sulu_theme_fonts_link', $this->getFontsLink(...), [
+                'is_safe' => ['html'],
+            ]),
+            new TwigFunction('iw_sulu_block_style_template', $this->getBlockStyleTemplate(...)),
+            new TwigFunction('iw_sulu_theme_menu_config', $this->getMenuConfig(...)),
+            new TwigFunction('iw_sulu_theme_tokens', $this->getTokens(...)),
+        ];
+    }
+
+    /**
+     * Register global Twig variables.
+     *
+     * Provides `iw_sulu_theme` global containing resolved tokens
+     * for direct access in templates.
+     *
+     * @return array<string, mixed> The global variables
+     */
+    public function getGlobals(): array
+    {
+        return [
+            'iw_sulu_theme' => $this->themeProvider->getTokens(),
+        ];
+    }
+
+    /**
+     * Get the web-accessible path to the compiled CSS file.
+     *
+     * @return string The CSS path, or empty string if no theme is active
+     */
+    public function getCssPath(): string
+    {
+        return $this->themeProvider->getCssPath() ?? '';
+    }
+
+    /**
+     * Get a <link> HTML tag for loading Google Fonts.
+     *
+     * Returns a preconnect hint and the Google Fonts stylesheet link
+     * for optimal font loading performance.
+     *
+     * @return string The HTML link tags, or empty string if no fonts are configured
+     */
+    public function getFontsLink(): string
+    {
+        $tokens = $this->themeProvider->getTokens();
+        $typography = $tokens['typography'] ?? [];
+        $fontsUrl = $this->fontsResolver->resolve($typography);
+
+        if (null === $fontsUrl) {
+            return '';
+        }
+
+        $escapedUrl = htmlspecialchars($fontsUrl, \ENT_QUOTES | \ENT_HTML5, 'UTF-8');
+
+        return '<link rel="preconnect" href="https://fonts.googleapis.com">'
+            . "\n"
+            . '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+            . "\n"
+            . '<link rel="stylesheet" href="' . $escapedUrl . '">';
+    }
+
+    /**
+     * Get the Twig template filename for a block style.
+     *
+     * Looks up the block styles configuration to find the template
+     * associated with a specific block type and style key.
+     *
+     * Block styles structure:
+     *   styles: [{key, label, twig, default?}, ...]
+     *
+     * @param string      $blockType The block type identifier
+     * @param string|null $styleKey  The style variant key (null for default)
+     *
+     * @return string|null The Twig template filename, or null if not found
+     */
+    public function getBlockStyleTemplate(string $blockType, ?string $styleKey = null): ?string
+    {
+        $blockStyles = $this->themeProvider->getBlockStyles();
+        $blockConfig = $blockStyles[$blockType] ?? null;
+
+        if (null === $blockConfig || empty($blockConfig['styles'])) {
+            return null;
+        }
+
+        $styles = $blockConfig['styles'];
+
+        // Find by specific style key
+        if (null !== $styleKey) {
+            foreach ($styles as $style) {
+                if (($style['key'] ?? '') === $styleKey) {
+                    return $style['twig'] ?? null;
+                }
+            }
+
+            return null;
+        }
+
+        // Find the default style
+        foreach ($styles as $style) {
+            if (!empty($style['default'])) {
+                return $style['twig'] ?? null;
+            }
+        }
+
+        // Fallback to the first style
+        return $styles[0]['twig'] ?? null;
+    }
+
+    /**
+     * Get the menu configuration for the active theme.
+     *
+     * @return array<string, mixed> The menu configuration
+     */
+    public function getMenuConfig(): array
+    {
+        return $this->themeProvider->getMenuConfig();
+    }
+
+    /**
+     * Get the raw design tokens for the active theme.
+     *
+     * @return array<string, mixed> The design tokens
+     */
+    public function getTokens(): array
+    {
+        return $this->themeProvider->getTokens();
+    }
+}

@@ -1,0 +1,37 @@
+{# Default page template — renders content blocks using the block dispatcher pattern #}
+{% extends '@ItechWorldSuluTheme/base.html.twig' %}
+
+{% block content %}
+    {% if content.blocks is defined and content.blocks is iterable %}
+        {% for block in content.blocks %}
+            {% set blockType = block.type|default('text') %}
+            {% set blockStyle = block.style|default('') %}
+            {% set blockStyles = iw_sulu_theme_block_styles() %}
+
+            {# Resolve the style template name from theme config or use default #}
+            {% set styleTemplate = '' %}
+            {% if blockStyles[blockType] is defined and blockStyles[blockType][blockStyle] is defined %}
+                {% set styleTemplate = blockStyles[blockType][blockStyle] %}
+            {% endif %}
+
+            {# Fallback: use first available style or a default #}
+            {% if styleTemplate is empty %}
+                {% set defaultStyles = {
+                    'text': 'centered',
+                    'text_images': 'classic',
+                    'gallery': 'grid',
+                    'key_figures': 'inline',
+                    'linked_pages': 'cards',
+                    'location': 'map_with_info',
+                    'form': 'centered',
+                    'document': 'default'
+                } %}
+                {% set styleTemplate = defaultStyles[blockType]|default('default') %}
+            {% endif %}
+
+            {% set templatePath = '@ItechWorldSuluTheme/blocks/' ~ blockType ~ '/_style_' ~ styleTemplate ~ '.html.twig' %}
+
+            {% include templatePath with block %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

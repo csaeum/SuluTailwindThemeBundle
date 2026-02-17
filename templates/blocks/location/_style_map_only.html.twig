@@ -1,0 +1,21 @@
+{# Location block — map iframe only #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default('')
+    } only %}
+
+    {% if latitude is defined and latitude is not empty and longitude is defined and longitude is not empty %}
+        <div class="rounded-[var(--radius-img)] overflow-hidden">
+            <iframe
+                src="https://www.openstreetmap.org/export/embed.html?bbox={{ longitude - 0.01 }}%2C{{ latitude - 0.01 }}%2C{{ longitude + 0.01 }}%2C{{ latitude + 0.01 }}&amp;layer=mapnik&amp;marker={{ latitude }}%2C{{ longitude }}"
+                class="w-full h-[400px] md:h-[500px] border-0"
+                loading="lazy"
+                title="{{ title|default('Map') }}"
+                allowfullscreen
+            ></iframe>
+        </div>
+    {% endif %}
+{% endblock %}

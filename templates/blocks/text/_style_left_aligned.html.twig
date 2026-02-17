@@ -1,0 +1,15 @@
+{# Text block — left-aligned layout #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    <div class="max-w-4xl">
+        {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+            title: title|default(''),
+            subTitle: subTitle|default('')
+        } only %}
+
+        {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
+            text: text|default('')
+        } only %}
+    </div>
+{% endblock %}

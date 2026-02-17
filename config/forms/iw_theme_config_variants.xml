@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<form xmlns="http://schemas.sulu.io/template/template"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/form-1.0.xsd"
+>
+    <key>iw_theme_config_variants</key>
+
+    <properties>
+        <block name="blockVariants" default-type="variant" minOccurs="0">
+            <meta>
+                <title>iw_sulu_theme.variants</title>
+                <info_text>iw_sulu_theme.variants_info</info_text>
+            </meta>
+            <types>
+                <type name="variant">
+                    <meta>
+                        <title>iw_sulu_theme.variant</title>
+                    </meta>
+                    <properties>
+                        <property name="key" type="text_line" mandatory="true" colspan="6">
+                            <meta>
+                                <title>iw_sulu_theme.variant_key</title>
+                                <info_text>iw_sulu_theme.variant_key_info</info_text>
+                            </meta>
+                        </property>
+
+                        <property name="label" type="text_line" colspan="6">
+                            <meta>
+                                <title>iw_sulu_theme.variant_label</title>
+                            </meta>
+                        </property>
+
+                        <property name="title" type="color" colspan="4">
+                            <meta>
+                                <title>iw_sulu_theme.variant_title_color</title>
+                            </meta>
+                        </property>
+
+                        <property name="subtitle" type="color" colspan="4">
+                            <meta>
+                                <title>iw_sulu_theme.variant_subtitle_color</title>
+                            </meta>
+                        </property>
+
+                        <property name="paragraph" type="color" colspan="4">
+                            <meta>
+                                <title>iw_sulu_theme.variant_paragraph_color</title>
+                            </meta>
+                        </property>
+
+                        <property name="link" type="color" colspan="4">
+                            <meta>
+                                <title>iw_sulu_theme.variant_link_color</title>
+                            </meta>
+                        </property>
+
+                        <property name="list" type="color" colspan="4">
+                            <meta>
+                                <title>iw_sulu_theme.variant_list_color</title>
+                            </meta>
+                        </property>
+
+                        <property name="hr" type="color" colspan="4">
+                            <meta>
+                                <title>iw_sulu_theme.variant_hr_color</title>
+                            </meta>
+                        </property>
+
+                        <property name="paragraphBg" type="color" colspan="6">
+                            <meta>
+                                <title>iw_sulu_theme.variant_paragraphBg</title>
+                            </meta>
+                        </property>
+
+                        <property name="blockBg" type="color" colspan="6">
+                            <meta>
+                                <title>iw_sulu_theme.variant_blockBg</title>
+                            </meta>
+                        </property>
+                    </properties>
+                </type>
+            </types>
+        </block>
+    </properties>
+</form>
