@@ -57,16 +57,16 @@
                             <meta><title lang="fr">Texte</title><title lang="en">Text</title></meta>
                         </property>
                         <!-- Appearance -->
-                        <property name="variant" type="text_line">
+                        <property name="variant" type="iw_theme_variant_picker">
                             <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
                         </property>
-                        <property name="style" type="text_line">
+                        <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
                         </property>
-                        <property name="marginTop" type="text_line">
+                        <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
                         </property>
-                        <property name="marginBottom" type="text_line">
+                        <property name="marginBottom" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
                         </property>
                         <property name="lateralMargins" type="checkbox">
@@ -126,16 +126,16 @@
                             <meta><title lang="fr">Texte</title><title lang="en">Text</title></meta>
                         </property>
                         <!-- Appearance -->
-                        <property name="variant" type="text_line">
+                        <property name="variant" type="iw_theme_variant_picker">
                             <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
                         </property>
-                        <property name="style" type="text_line">
+                        <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
                         </property>
-                        <property name="marginTop" type="text_line">
+                        <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
                         </property>
-                        <property name="marginBottom" type="text_line">
+                        <property name="marginBottom" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
                         </property>
                         <property name="lateralMargins" type="checkbox">
@@ -167,16 +167,16 @@
                             <meta><title lang="fr">Afficher le nom des images</title><title lang="en">Show image names</title></meta>
                         </property>
                         <!-- Appearance -->
-                        <property name="variant" type="text_line">
+                        <property name="variant" type="iw_theme_variant_picker">
                             <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
                         </property>
-                        <property name="style" type="text_line">
+                        <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
                         </property>
-                        <property name="marginTop" type="text_line">
+                        <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
                         </property>
-                        <property name="marginBottom" type="text_line">
+                        <property name="marginBottom" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
                         </property>
                         <property name="lateralMargins" type="checkbox">
@@ -224,16 +224,16 @@
                             </types>
                         </block>
                         <!-- Appearance -->
-                        <property name="variant" type="text_line">
+                        <property name="variant" type="iw_theme_variant_picker">
                             <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
                         </property>
-                        <property name="style" type="text_line">
+                        <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
                         </property>
-                        <property name="marginTop" type="text_line">
+                        <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
                         </property>
-                        <property name="marginBottom" type="text_line">
+                        <property name="marginBottom" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
                         </property>
                         <property name="lateralMargins" type="checkbox">
@@ -305,16 +305,16 @@
                             </types>
                         </block>
                         <!-- Appearance -->
-                        <property name="variant" type="text_line">
+                        <property name="variant" type="iw_theme_variant_picker">
                             <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
                         </property>
-                        <property name="style" type="text_line">
+                        <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
                         </property>
-                        <property name="marginTop" type="text_line">
+                        <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
                         </property>
-                        <property name="marginBottom" type="text_line">
+                        <property name="marginBottom" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
                         </property>
                         <property name="lateralMargins" type="checkbox">
@@ -352,16 +352,16 @@
                             <meta><title lang="fr">Adresse</title><title lang="en">Address</title></meta>
                         </property>
                         <!-- Appearance -->
-                        <property name="variant" type="text_line">
+                        <property name="variant" type="iw_theme_variant_picker">
                             <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
                         </property>
-                        <property name="style" type="text_line">
+                        <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
                         </property>
-                        <property name="marginTop" type="text_line">
+                        <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
                         </property>
-                        <property name="marginBottom" type="text_line">
+                        <property name="marginBottom" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
                         </property>
                         <property name="lateralMargins" type="checkbox">
@@ -390,16 +390,16 @@
                             <meta><title lang="fr">ID du formulaire</title><title lang="en">Form ID</title></meta>
                         </property>
                         <!-- Appearance -->
-                        <property name="variant" type="text_line">
+                        <property name="variant" type="iw_theme_variant_picker">
                             <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
                         </property>
-                        <property name="style" type="text_line">
+                        <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
                         </property>
-                        <property name="marginTop" type="text_line">
+                        <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
                         </property>
-                        <property name="marginBottom" type="text_line">
+                        <property name="marginBottom" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
                         </property>
                         <property name="lateralMargins" type="checkbox">
@@ -428,16 +428,16 @@
                             <meta><title lang="fr">Documents</title><title lang="en">Documents</title></meta>
                         </property>
                         <!-- Appearance -->
-                        <property name="variant" type="text_line">
+                        <property name="variant" type="iw_theme_variant_picker">
                             <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
                         </property>
-                        <property name="style" type="text_line">
+                        <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
                         </property>
-                        <property name="marginTop" type="text_line">
+                        <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
                         </property>
-                        <property name="marginBottom" type="text_line">
+                        <property name="marginBottom" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
                         </property>
                         <property name="lateralMargins" type="checkbox">
