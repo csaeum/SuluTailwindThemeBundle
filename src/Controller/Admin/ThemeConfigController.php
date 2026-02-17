@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * Admin REST controller for theme configuration CRUD operations.
@@ -101,6 +102,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      *
      * @return Response JSON response with _embedded list and total count
      */
+    #[Route('/admin/api/iw-theme-configs', name: 'iw_sulu_theme.get_theme_configs', methods: ['GET'])]
     public function cgetAction(Request $request): Response
     {
         $fieldDescriptors = $this->fieldDescriptorFactory->getFieldDescriptors(
@@ -132,6 +134,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      *
      * @throws NotFoundHttpException If the theme is not found
      */
+    #[Route('/admin/api/iw-theme-configs/{id}', name: 'iw_sulu_theme.get_theme_config', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function getAction(int $id): Response
     {
         $theme = $this->repository->find($id);
@@ -150,6 +153,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      *
      * @return Response JSON response with created theme data (HTTP 201)
      */
+    #[Route('/admin/api/iw-theme-configs', name: 'iw_sulu_theme.post_theme_config', methods: ['POST'])]
     public function postAction(Request $request): Response
     {
         /** @var array<string, mixed> $data */
@@ -178,6 +182,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      *
      * @throws NotFoundHttpException If the theme is not found
      */
+    #[Route('/admin/api/iw-theme-configs/{id}', name: 'iw_sulu_theme.put_theme_config', methods: ['PUT'], requirements: ['id' => '\d+'])]
     public function putAction(Request $request, int $id): Response
     {
         $theme = $this->repository->find($id);
@@ -217,6 +222,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      *
      * @throws NotFoundHttpException If the theme is not found
      */
+    #[Route('/admin/api/iw-theme-configs/{id}', name: 'iw_sulu_theme.delete_theme_config', methods: ['DELETE'], requirements: ['id' => '\d+'])]
     public function deleteAction(int $id): Response
     {
         $theme = $this->repository->find($id);
@@ -241,6 +247,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      *
      * @throws NotFoundHttpException If the CSS file is not found
      */
+    #[Route('/iw-theme/css/{filename}', name: 'iw_sulu_theme.serve_css', methods: ['GET'], requirements: ['filename' => '.+\.css'])]
     public function serveCssAction(string $filename): Response
     {
         /** @var string $cssOutputDir */
