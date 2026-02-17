@@ -5,3 +5,5 @@
 /.env.local
 /composer.lock
 /package-lock.json
+/doc/images/
+PROMPT-CLAUDE-CODE-*.md
