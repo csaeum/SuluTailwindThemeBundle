@@ -1,16 +1,32 @@
-{# Responsive image with optional caption #}
-{# Expected variables: media (single media object), imageFormat (optional), showName (optional) #}
+{# Responsive image with lightbox support.
+   Expected variables:
+     - media: single resolved media object
+     - imageFormat: string (optional, default 'iw_theme_16_9')
+     - showName: boolean (optional, shows caption in lightbox only)
+     - lightbox: boolean (optional, default true)
+#}
 {% if media is defined and media is not empty %}
+    {% set format = imageFormat|default('iw_theme_16_9') %}
+    {% set enableLightbox = lightbox|default(true) %}
+
     <figure class="block-image">
-        {% set format = imageFormat|default('iw_theme_16_9') %}
+        {% if enableLightbox %}
+            <a
+                href="{{ media.url }}"
+                class="glightbox"
+                data-title="{{ (showName|default(false)) and media.title is defined ? media.title : '' }}"
+            >
+        {% endif %}
+
         <img
             src="{{ media.thumbnails[format]|default(media.url) }}"
             alt="{{ media.title|default('') }}"
             loading="lazy"
-            class="w-full h-auto rounded-[var(--radius-img)]"
+            class="w-full h-auto rounded-[var(--radius-img)]{{ enableLightbox ? ' cursor-pointer' : '' }}"
         >
-        {% if (showName|default(false)) and media.title is defined and media.title is not empty %}
-            <figcaption class="mt-2 text-sm opacity-75">{{ media.title }}</figcaption>
+
+        {% if enableLightbox %}
+            </a>
         {% endif %}
     </figure>
 {% endif %}

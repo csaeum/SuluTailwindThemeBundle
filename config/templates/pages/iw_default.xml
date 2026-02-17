@@ -62,6 +62,9 @@
                         </property>
                         <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                            <params>
+                                <param name="block_type" type="string" value="text"/>
+                            </params>
                         </property>
                         <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
@@ -131,6 +134,9 @@
                         </property>
                         <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                            <params>
+                                <param name="block_type" type="string" value="text_images"/>
+                            </params>
                         </property>
                         <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
@@ -172,6 +178,9 @@
                         </property>
                         <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                            <params>
+                                <param name="block_type" type="string" value="gallery"/>
+                            </params>
                         </property>
                         <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
@@ -229,6 +238,9 @@
                         </property>
                         <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                            <params>
+                                <param name="block_type" type="string" value="key_figures"/>
+                            </params>
                         </property>
                         <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
@@ -310,6 +322,9 @@
                         </property>
                         <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                            <params>
+                                <param name="block_type" type="string" value="linked_pages"/>
+                            </params>
                         </property>
                         <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
@@ -357,6 +372,9 @@
                         </property>
                         <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                            <params>
+                                <param name="block_type" type="string" value="location"/>
+                            </params>
                         </property>
                         <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
@@ -395,6 +413,9 @@
                         </property>
                         <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                            <params>
+                                <param name="block_type" type="string" value="form"/>
+                            </params>
                         </property>
                         <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
@@ -433,6 +454,9 @@
                         </property>
                         <property name="style" type="iw_theme_style_picker">
                             <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                            <params>
+                                <param name="block_type" type="string" value="document"/>
+                            </params>
                         </property>
                         <property name="marginTop" type="iw_theme_margin_selector">
                             <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>

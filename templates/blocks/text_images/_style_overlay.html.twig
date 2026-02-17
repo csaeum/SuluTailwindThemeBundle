@@ -2,29 +2,31 @@
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
-    {% set formatMap = {'16:9': 'iw_theme_16_9', '4:3': 'iw_theme_4_3', '1:1': 'iw_theme_1_1', '3:4': 'iw_theme_3_4', 'original': ''} %}
-    {% set format = formatMap[imageFilter|default('original')]|default('') %}
+    {# For overlay, prefer a wide format for best cover result #}
+    {% set formatMap = {'16:9': 'iw_theme_16_9', '4:3': 'iw_theme_4_3', '1:1': 'iw_theme_1_1', '3:4': 'iw_theme_3_4', 'original': 'iw_theme_16_9'} %}
+    {% set format = formatMap[imageFilter|default('original')]|default('iw_theme_16_9') %}
 
-    {% set bgImage = '' %}
-    {% if images is defined and images.ids is defined and images.ids|length > 0 %}
-        {% set firstMedia = sulu_resolve_media(images.ids[0], app.request.locale) %}
-        {% set bgImage = firstMedia.thumbnails[format]|default(firstMedia.url) %}
+    {% set bgImageUrl = '' %}
+    {% if images is defined and images is iterable and images|length > 0 %}
+        {% set firstMedia = sulu_resolve_media(images[0], app.request.locale) %}
+        {% set bgImageUrl = firstMedia.thumbnails[format]|default(firstMedia.url) %}
     {% endif %}
 
-    <div class="relative min-h-[400px] md:min-h-[500px] flex items-center rounded-[var(--radius-img)] overflow-hidden">
-        {# Background image #}
-        {% if bgImage is not empty %}
+    <div class="relative min-h-[400px] md:min-h-[500px] flex items-center overflow-hidden"
+         style="border-radius: var(--radius-img, 0);">
+        {# Background image — covers the entire zone #}
+        {% if bgImageUrl is not empty %}
             <img
-                src="{{ bgImage }}"
+                src="{{ bgImageUrl }}"
                 alt=""
                 loading="lazy"
                 class="absolute inset-0 w-full h-full object-cover"
-                style="border-radius: 0;"
+                style="border-radius: 0; min-width: 100%; min-height: 100%;"
             >
         {% endif %}
 
         {# Overlay gradient #}
-        <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30" style="border-radius: 0;"></div>
 
         {# Content #}
         <div class="relative z-10 max-w-2xl p-8 md:p-12 text-white">

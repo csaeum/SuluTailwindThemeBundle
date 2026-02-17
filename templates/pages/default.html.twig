@@ -6,32 +6,29 @@
         {% for block in content.blocks %}
             {% set blockType = block.type|default('text') %}
             {% set blockStyle = block.style|default('') %}
-            {% set blockStyles = iw_sulu_theme_block_styles() %}
 
-            {# Resolve the style template name from theme config or use default #}
-            {% set styleTemplate = '' %}
-            {% if blockStyles[blockType] is defined and blockStyles[blockType][blockStyle] is defined %}
-                {% set styleTemplate = blockStyles[blockType][blockStyle] %}
+            {# Use the style value directly — it matches the template file name.
+               Fallback to defaults when style is empty or template does not exist
+               (e.g. legacy values like "standard" from previous config). #}
+            {% set defaultStyles = {
+                'text': 'centered',
+                'text_images': 'classic',
+                'gallery': 'grid',
+                'key_figures': 'inline',
+                'linked_pages': 'cards',
+                'location': 'map_with_info',
+                'form': 'centered',
+                'document': 'default'
+            } %}
+
+            {% if blockStyle is empty %}
+                {% set blockStyle = defaultStyles[blockType]|default('default') %}
             {% endif %}
 
-            {# Fallback: use first available style or a default #}
-            {% if styleTemplate is empty %}
-                {% set defaultStyles = {
-                    'text': 'centered',
-                    'text_images': 'classic',
-                    'gallery': 'grid',
-                    'key_figures': 'inline',
-                    'linked_pages': 'cards',
-                    'location': 'map_with_info',
-                    'form': 'centered',
-                    'document': 'default'
-                } %}
-                {% set styleTemplate = defaultStyles[blockType]|default('default') %}
-            {% endif %}
+            {% set templatePath = '@ItechWorldSuluTheme/blocks/' ~ blockType ~ '/_style_' ~ blockStyle ~ '.html.twig' %}
+            {% set fallbackPath = '@ItechWorldSuluTheme/blocks/' ~ blockType ~ '/_style_' ~ defaultStyles[blockType]|default('default') ~ '.html.twig' %}
 
-            {% set templatePath = '@ItechWorldSuluTheme/blocks/' ~ blockType ~ '/_style_' ~ styleTemplate ~ '.html.twig' %}
-
-            {% include templatePath with block %}
+            {% include [templatePath, fallbackPath] with block %}
         {% endfor %}
     {% endif %}
 {% endblock %}

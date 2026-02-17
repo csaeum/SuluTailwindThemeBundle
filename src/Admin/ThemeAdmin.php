@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ItechWorld\SuluThemeBundle\Admin;
 
 use ItechWorld\SuluThemeBundle\Entity\ThemeConfig;
+use ItechWorld\SuluThemeBundle\Repository\ThemeConfigRepository;
 use Sulu\Bundle\AdminBundle\Admin\Admin;
 use Sulu\Bundle\AdminBundle\Admin\Navigation\NavigationItem;
 use Sulu\Bundle\AdminBundle\Admin\Navigation\NavigationItemCollection;
@@ -32,12 +33,65 @@ class ThemeAdmin extends Admin
     public const EDIT_FORM_VIEW = 'iw_sulu_theme.edit_form';
 
     /**
+     * Available layout styles per block type, matching actual Twig templates
+     * in templates/blocks/{type}/_style_{key}.html.twig.
+     *
+     * @var array<string, list<array{key: string, label: string}>>
+     */
+    private const BLOCK_STYLE_OPTIONS = [
+        'text' => [
+            ['key' => 'centered', 'label' => 'iw_sulu_theme.style.centered'],
+            ['key' => 'left_aligned', 'label' => 'iw_sulu_theme.style.left_aligned'],
+            ['key' => 'two_columns', 'label' => 'iw_sulu_theme.style.two_columns'],
+        ],
+        'text_images' => [
+            ['key' => 'classic', 'label' => 'iw_sulu_theme.style.classic'],
+            ['key' => 'overlay', 'label' => 'iw_sulu_theme.style.overlay'],
+            ['key' => 'fullwidth', 'label' => 'iw_sulu_theme.style.fullwidth'],
+            ['key' => 'mosaic', 'label' => 'iw_sulu_theme.style.mosaic'],
+            ['key' => 'sidebar', 'label' => 'iw_sulu_theme.style.sidebar'],
+        ],
+        'gallery' => [
+            ['key' => 'grid', 'label' => 'iw_sulu_theme.style.grid'],
+            ['key' => 'masonry', 'label' => 'iw_sulu_theme.style.masonry'],
+            ['key' => 'slider', 'label' => 'iw_sulu_theme.style.slider'],
+            ['key' => 'carousel', 'label' => 'iw_sulu_theme.style.carousel'],
+            ['key' => 'fullscreen_slider', 'label' => 'iw_sulu_theme.style.fullscreen_slider'],
+        ],
+        'key_figures' => [
+            ['key' => 'inline', 'label' => 'iw_sulu_theme.style.inline'],
+            ['key' => 'with_icons', 'label' => 'iw_sulu_theme.style.with_icons'],
+            ['key' => 'grid_2x2', 'label' => 'iw_sulu_theme.style.grid_2x2'],
+        ],
+        'linked_pages' => [
+            ['key' => 'cards', 'label' => 'iw_sulu_theme.style.cards'],
+            ['key' => 'list', 'label' => 'iw_sulu_theme.style.list'],
+            ['key' => 'horizontal', 'label' => 'iw_sulu_theme.style.horizontal'],
+            ['key' => 'featured', 'label' => 'iw_sulu_theme.style.featured'],
+            ['key' => 'minimal', 'label' => 'iw_sulu_theme.style.minimal'],
+        ],
+        'location' => [
+            ['key' => 'map_only', 'label' => 'iw_sulu_theme.style.map_only'],
+            ['key' => 'map_with_info', 'label' => 'iw_sulu_theme.style.map_with_info'],
+        ],
+        'form' => [
+            ['key' => 'centered', 'label' => 'iw_sulu_theme.style.centered'],
+            ['key' => 'split', 'label' => 'iw_sulu_theme.style.split'],
+        ],
+        'document' => [
+            ['key' => 'default', 'label' => 'iw_sulu_theme.style.default'],
+        ],
+    ];
+
+    /**
      * @param ViewBuilderFactoryInterface $viewBuilderFactory The Sulu view builder factory
      * @param SecurityCheckerInterface    $securityChecker    The Sulu security checker
+     * @param ThemeConfigRepository       $repository         The theme config repository
      */
     public function __construct(
         private ViewBuilderFactoryInterface $viewBuilderFactory,
         private SecurityCheckerInterface $securityChecker,
+        private ThemeConfigRepository $repository,
     ) {
     }
 
@@ -222,6 +276,50 @@ class ThemeAdmin extends Admin
                     ],
                 ],
             ],
+        ];
+    }
+
+    /**
+     * Returns the config key used by the JS initializer hook.
+     *
+     * Must match the first argument of initializer.addUpdateConfigHook() in index.js.
+     *
+     * @return string The config key
+     */
+    public function getConfigKey(): ?string
+    {
+        return 'iw_sulu_theme';
+    }
+
+    /**
+     * Returns configuration data to be passed to the frontend JavaScript.
+     *
+     * Provides the active theme's block variants (for VariantPicker)
+     * and the available layout styles per block type (for StylePicker).
+     *
+     * @return array<string, mixed>|null The config data
+     */
+    public function getConfig(): ?array
+    {
+        $variants = [];
+        $activeTheme = $this->repository->findActive();
+
+        if (null !== $activeTheme) {
+            $tokens = $activeTheme->getTokens();
+            $blockVariants = $tokens['blockVariants'] ?? [];
+
+            foreach ($blockVariants as $key => $props) {
+                if (!is_array($props)) {
+                    continue;
+                }
+
+                $variants[] = array_merge(['key' => $key], $props);
+            }
+        }
+
+        return [
+            'variants' => $variants,
+            'blockStyles' => self::BLOCK_STYLE_OPTIONS,
         ];
     }
 }

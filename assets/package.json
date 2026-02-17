@@ -3,17 +3,20 @@
     "description": "Frontend assets (Stimulus controllers, CSS) for SuluThemeBundle",
     "license": "MIT",
     "style": "styles/app.css",
+    "dependencies": {
+        "glightbox": "^3.3.0"
+    },
     "symfony": {
         "controllers": {
-            "menu": {
-                "main": "controllers/menu_controller.js",
-                "name": "menu",
+            "lightbox": {
+                "main": "controllers/lightbox_controller.js",
+                "name": "lightbox",
                 "fetch": "lazy",
                 "enabled": true
             },
-            "gallery": {
-                "main": "controllers/gallery_controller.js",
-                "name": "gallery",
+            "menu": {
+                "main": "controllers/menu_controller.js",
+                "name": "menu",
                 "fetch": "lazy",
                 "enabled": true
             },

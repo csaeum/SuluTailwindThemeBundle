@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import {getSuluPrimaryColor, getSuluPrimaryAlpha} from '../../utils/suluColors';
 
 /**
  * Default color for wireframe elements when no variant color is set.
@@ -13,13 +14,22 @@ const DEFAULT_COLOR = '#cccccc';
  * colored bars representing different text elements (title, subtitle, paragraph,
  * link, hr) over the block background color. Clicking a wireframe selects the variant.
  *
+ * Variant data is injected via the static `themeVariants` property, set by the
+ * initializer config hook in index.js from ThemeAdmin::getConfig().
+ *
  * @param {Object} props - Component props from Sulu form field
  * @param {*} props.value - Currently selected variant key
  * @param {Function} props.onChange - Callback when a variant is selected
- * @param {Object} props.fieldTypeOptions - Options passed from the form schema
- * @param {Array} props.fieldTypeOptions.variants - Array of variant objects
  */
 export default class VariantPicker extends React.Component {
+    /**
+     * Block variants from the active theme, set by the config hook.
+     * Array of objects with key, label, blockBg, title, subtitle, paragraph, link, hr, list.
+     *
+     * @type {Array<Object>}
+     */
+    static themeVariants = [];
+
     /**
      * Handle variant selection.
      *
@@ -48,16 +58,16 @@ export default class VariantPicker extends React.Component {
         const hrColor = variant.hr || DEFAULT_COLOR;
         const listColor = variant.list || DEFAULT_COLOR;
 
+        const primary = getSuluPrimaryColor();
+        const primaryShadow = getSuluPrimaryAlpha(0.3);
+
         const containerStyle = {
-            display: 'inline-block',
-            width: '180px',
-            margin: '8px',
             cursor: 'pointer',
-            border: isSelected ? '3px solid #1a73e8' : '2px solid #e0e0e0',
+            border: isSelected ? `3px solid ${primary}` : '2px solid #e0e0e0',
             borderRadius: '8px',
             overflow: 'hidden',
             transition: 'border-color 0.2s, box-shadow 0.2s',
-            boxShadow: isSelected ? '0 0 0 3px rgba(26, 115, 232, 0.3)' : 'none',
+            boxShadow: isSelected ? `0 0 0 3px ${primaryShadow}` : 'none',
         };
 
         const previewStyle = {
@@ -149,19 +159,24 @@ export default class VariantPicker extends React.Component {
     }
 
     render() {
-        const {value, fieldTypeOptions} = this.props;
-        const variants = (fieldTypeOptions && fieldTypeOptions.variants) || [];
+        const {value} = this.props;
+        const variants = VariantPicker.themeVariants || [];
 
         if (variants.length === 0) {
             return (
                 <div style={{padding: '16px', color: '#999', fontStyle: 'italic'}}>
-                    No variants configured. Add variants in the Variants tab first.
+                    No variants configured. Add variants in Settings &gt; Themes &gt; Variants tab.
                 </div>
             );
         }
 
         return (
-            <div style={{display: 'flex', flexWrap: 'wrap', padding: '8px'}}>
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                gap: '12px',
+                padding: '8px',
+            }}>
                 {variants.map((variant) =>
                     this.renderWireframe(variant, value === variant.key)
                 )}

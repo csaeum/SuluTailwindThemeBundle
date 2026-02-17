@@ -1,4 +1,4 @@
-{# Gallery block — carousel with navigation dots #}
+{# Gallery block — carousel with navigation dots and lightbox #}
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
@@ -7,45 +7,43 @@
         subTitle: subTitle|default('')
     } only %}
 
-    {% if images is defined and images.ids is defined %}
+    {% if images is defined and images is iterable %}
         <div
             data-controller="slider"
             data-slider-autoplay-value="true"
             data-slider-interval-value="5000"
             data-slider-mode-value="carousel"
             class="relative overflow-hidden rounded-[var(--radius-img)]"
+            style="aspect-ratio: 16/9;"
         >
             {# Carousel slides #}
-            <div data-slider-target="track" class="relative">
-                {% for mediaId in images.ids %}
-                    {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
-                    <div
-                        data-slider-target="slide"
-                        class="w-full {{ not loop.first ? 'hidden' : '' }}"
+            {% for mediaId in images %}
+                {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
+                <div
+                    data-slider-target="slide"
+                    class="absolute inset-0 w-full h-full {{ not loop.first ? 'hidden' : '' }}"
+                >
+                    <a
+                        href="{{ media.url }}"
+                        class="glightbox block w-full h-full"
+                        data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
                     >
-                        <figure class="block-image">
-                            <img
-                                src="{{ media.thumbnails['iw_theme_16_9']|default(media.url) }}"
-                                alt="{{ media.title|default('') }}"
-                                loading="lazy"
-                                class="w-full aspect-[16/9] object-cover"
-                                style="border-radius: 0;"
-                            >
-                            {% if (showImagesName|default(false)) and media.title is defined and media.title is not empty %}
-                                <figcaption class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 text-white text-sm">
-                                    {{ media.title }}
-                                </figcaption>
-                            {% endif %}
-                        </figure>
-                    </div>
-                {% endfor %}
-            </div>
+                        <img
+                            src="{{ media.thumbnails['iw_theme_16_9']|default(media.url) }}"
+                            alt="{{ media.title|default('') }}"
+                            loading="lazy"
+                            class="w-full h-full object-cover cursor-pointer"
+                            style="border-radius: 0;"
+                        >
+                    </a>
+                </div>
+            {% endfor %}
 
             {# Prev / Next buttons #}
             <button
                 type="button"
                 data-action="slider#prev"
-                class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 transition-colors text-white"
+                class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 transition-colors text-white z-10"
                 aria-label="Previous"
             >
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
@@ -53,15 +51,15 @@
             <button
                 type="button"
                 data-action="slider#next"
-                class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 transition-colors text-white"
+                class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 transition-colors text-white z-10"
                 aria-label="Next"
             >
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </button>
 
             {# Dot indicators #}
-            <div data-slider-target="dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {% for mediaId in images.ids %}
+            <div data-slider-target="dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                {% for mediaId in images %}
                     <button
                         type="button"
                         data-action="slider#goTo"

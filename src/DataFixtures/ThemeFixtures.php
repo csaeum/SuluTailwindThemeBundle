@@ -681,7 +681,6 @@ class ThemeFixtures
                     ['key' => 'masonry', 'label' => 'Masonry', 'twig' => '_style_masonry.html.twig'],
                     ['key' => 'slider', 'label' => 'Slider', 'twig' => '_style_slider.html.twig'],
                     ['key' => 'carousel', 'label' => 'Carrousel', 'twig' => '_style_carousel.html.twig'],
-                    ['key' => 'lightbox_grid', 'label' => 'Grille Lightbox', 'twig' => '_style_lightbox_grid.html.twig'],
                     ['key' => 'fullscreen_slider', 'label' => 'Slider plein ecran', 'twig' => '_style_fullscreen_slider.html.twig'],
                 ],
             ],

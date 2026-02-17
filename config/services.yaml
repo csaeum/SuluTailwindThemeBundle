@@ -9,6 +9,7 @@ services:
         arguments:
             - '@sulu_admin.view_builder_factory'
             - '@sulu_security.security_checker'
+            - '@itech_world.sulu_theme.repository'
         tags:
             - { name: 'sulu.admin' }
             - { name: 'sulu.context', context: 'admin' }

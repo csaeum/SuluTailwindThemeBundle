@@ -1,8 +1,8 @@
-{# Gallery block — full-screen image slider #}
+{# Gallery block — full-screen image slider with lightbox #}
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
-    {% if images is defined and images.ids is defined %}
+    {% if images is defined and images is iterable %}
         <div
             data-controller="slider"
             data-slider-autoplay-value="true"
@@ -11,36 +11,35 @@
             class="relative -mx-4 sm:-mx-6 lg:-mx-8"
         >
             {# Full-screen slides #}
-            <div data-slider-target="track" class="relative">
-                {% for mediaId in images.ids %}
-                    {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
-                    <div
-                        data-slider-target="slide"
-                        class="w-full {{ not loop.first ? 'hidden' : '' }}"
-                    >
-                        <div class="relative h-[60vh] md:h-[80vh]">
+            {% for mediaId in images %}
+                {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
+                <div
+                    data-slider-target="slide"
+                    class="w-full {{ not loop.first ? 'hidden' : '' }}"
+                >
+                    <div class="relative h-[60vh] md:h-[80vh]">
+                        <a
+                            href="{{ media.url }}"
+                            class="glightbox block w-full h-full"
+                            data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
+                        >
                             <img
                                 src="{{ media.thumbnails['iw_theme_hero']|default(media.url) }}"
                                 alt="{{ media.title|default('') }}"
                                 loading="{{ loop.first ? 'eager' : 'lazy' }}"
-                                class="w-full h-full object-cover"
+                                class="w-full h-full object-cover cursor-pointer"
                                 style="border-radius: 0;"
                             >
-                            {% if (showImagesName|default(false)) and media.title is defined and media.title is not empty %}
-                                <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60">
-                                    <p class="text-white text-lg">{{ media.title }}</p>
-                                </div>
-                            {% endif %}
-                        </div>
+                        </a>
                     </div>
-                {% endfor %}
-            </div>
+                </div>
+            {% endfor %}
 
             {# Navigation #}
             <button
                 type="button"
                 data-action="slider#prev"
-                class="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 transition-colors text-white"
+                class="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 transition-colors text-white z-10"
                 aria-label="Previous"
             >
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
@@ -48,15 +47,15 @@
             <button
                 type="button"
                 data-action="slider#next"
-                class="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 transition-colors text-white"
+                class="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 flex items-center justify-center rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/40 transition-colors text-white z-10"
                 aria-label="Next"
             >
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </button>
 
             {# Dot indicators #}
-            <div data-slider-target="dots" class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3">
-                {% for mediaId in images.ids %}
+            <div data-slider-target="dots" class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+                {% for mediaId in images %}
                     <button
                         type="button"
                         data-action="slider#goTo"

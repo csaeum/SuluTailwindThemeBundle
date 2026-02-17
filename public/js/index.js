@@ -9,9 +9,19 @@ import FontSelector from './components/FontSelector/FontSelector';
 
 /**
  * Register all custom field types for the SuluThemeBundle admin interface.
- * These field types are used in the theme configuration forms.
+ *
+ * Receives config data from ThemeAdmin::getConfig() containing:
+ * - variants: block variant definitions from the active theme
+ * - blockStyles: available layout styles per block type
  */
 initializer.addUpdateConfigHook('iw_sulu_theme', (config: Object, initialized: boolean) => {
+    if (config) {
+        // Pass active theme data to components via static properties.
+        // This data is refreshed on each admin config reload.
+        VariantPicker.themeVariants = config.variants || [];
+        StylePicker.blockStyles = config.blockStyles || {};
+    }
+
     if (initialized) {
         return;
     }

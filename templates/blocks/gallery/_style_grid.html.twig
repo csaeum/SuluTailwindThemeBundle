@@ -1,4 +1,4 @@
-{# Gallery block — responsive CSS grid #}
+{# Gallery block — responsive CSS grid with lightbox #}
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
@@ -7,20 +7,24 @@
         subTitle: subTitle|default('')
     } only %}
 
-    {% if images is defined and images.ids is defined %}
+    {% if images is defined and images is iterable %}
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {% for mediaId in images.ids %}
+            {% for mediaId in images %}
                 {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
                 <figure class="block-image group">
-                    <img
-                        src="{{ media.thumbnails['iw_theme_gallery_thumb']|default(media.url) }}"
-                        alt="{{ media.title|default('') }}"
-                        loading="lazy"
-                        class="w-full aspect-[4/3] object-cover rounded-[var(--radius-img)] transition-transform duration-300 group-hover:scale-105"
+                    <a
+                        href="{{ media.url }}"
+                        class="glightbox"
+                        data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
                     >
-                    {% if (showImagesName|default(false)) and media.title is defined and media.title is not empty %}
-                        <figcaption class="mt-2 text-sm opacity-75">{{ media.title }}</figcaption>
-                    {% endif %}
+                        <img
+                            src="{{ media.thumbnails['iw_theme_gallery_thumb']|default(media.url) }}"
+                            alt="{{ media.title|default('') }}"
+                            loading="lazy"
+                            class="w-full object-cover rounded-[var(--radius-img)] transition-transform duration-300 group-hover:scale-105 cursor-pointer"
+                            style="aspect-ratio: 4/3;"
+                        >
+                    </a>
                 </figure>
             {% endfor %}
         </div>

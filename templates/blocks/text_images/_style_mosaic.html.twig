@@ -1,4 +1,4 @@
-{# Text + Images block — mosaic layout with multiple images #}
+{# Text + Images block — mosaic layout with multiple images and lightbox #}
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
@@ -7,8 +7,9 @@
         subTitle: subTitle|default('')
     } only %}
 
-    {% set formatMap = {'16:9': 'iw_theme_16_9', '4:3': 'iw_theme_4_3', '1:1': 'iw_theme_1_1', '3:4': 'iw_theme_3_4', 'original': ''} %}
-    {% set format = formatMap[imageFilter|default('original')]|default('') %}
+    {# Mosaic uses two different formats: 16:9 for the hero image, 1:1 for the rest #}
+    {% set formatMap = {'16:9': 'iw_theme_16_9', '4:3': 'iw_theme_4_3', '1:1': 'iw_theme_1_1', '3:4': 'iw_theme_3_4', 'original': 'iw_theme_1_1'} %}
+    {% set baseFormat = formatMap[imageFilter|default('original')]|default('iw_theme_1_1') %}
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {# Text area — takes 1 column #}
@@ -19,20 +20,27 @@
         </div>
 
         {# Mosaic images — takes 2 columns #}
-        {% if images is defined and images.ids is defined %}
+        {% if images is defined and images is iterable %}
             <div class="lg:col-span-2 grid grid-cols-2 gap-3">
-                {% for mediaId in images.ids %}
+                {% for mediaId in images %}
                     {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
-                    <figure class="block-image {{ loop.first ? 'col-span-2' : '' }}">
-                        <img
-                            src="{{ media.thumbnails[format]|default(media.url) }}"
-                            alt="{{ media.title|default('') }}"
-                            loading="lazy"
-                            class="w-full h-full object-cover rounded-[var(--radius-img)] {{ loop.first ? 'aspect-[16/9]' : 'aspect-square' }}"
+                    {# First image spans full width in 16:9, others are square #}
+                    {% set isHero = loop.first %}
+                    {% set imgFormat = isHero ? 'iw_theme_16_9' : baseFormat %}
+                    <figure class="block-image {{ isHero ? 'col-span-2' : '' }}">
+                        <a
+                            href="{{ media.url }}"
+                            class="glightbox"
+                            data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
                         >
-                        {% if (showImagesName|default(false)) and media.title is defined and media.title is not empty %}
-                            <figcaption class="mt-1 text-sm opacity-75">{{ media.title }}</figcaption>
-                        {% endif %}
+                            <img
+                                src="{{ media.thumbnails[imgFormat]|default(media.url) }}"
+                                alt="{{ media.title|default('') }}"
+                                loading="lazy"
+                                class="w-full object-cover rounded-[var(--radius-img)] cursor-pointer"
+                                style="aspect-ratio: {{ isHero ? '16/9' : '1/1' }};"
+                            >
+                        </a>
                     </figure>
                 {% endfor %}
             </div>

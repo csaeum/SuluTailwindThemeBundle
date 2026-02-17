@@ -1,4 +1,4 @@
-{# Gallery block — horizontal slider with Stimulus controller #}
+{# Gallery block — horizontal scroll slider with lightbox #}
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
@@ -7,7 +7,7 @@
         subTitle: subTitle|default('')
     } only %}
 
-    {% if images is defined and images.ids is defined %}
+    {% if images is defined and images is iterable %}
         <div
             data-controller="slider"
             data-slider-autoplay-value="false"
@@ -18,18 +18,22 @@
                 data-slider-target="track"
                 class="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-4 pb-4 scrollbar-hide"
             >
-                {% for mediaId in images.ids %}
+                {% for mediaId in images %}
                     {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
                     <figure class="block-image flex-none w-[80%] sm:w-[60%] md:w-[40%] lg:w-[30%] snap-start">
-                        <img
-                            src="{{ media.thumbnails['iw_theme_16_9']|default(media.url) }}"
-                            alt="{{ media.title|default('') }}"
-                            loading="lazy"
-                            class="w-full aspect-[16/9] object-cover rounded-[var(--radius-img)]"
+                        <a
+                            href="{{ media.url }}"
+                            class="glightbox"
+                            data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
                         >
-                        {% if (showImagesName|default(false)) and media.title is defined and media.title is not empty %}
-                            <figcaption class="mt-2 text-sm opacity-75">{{ media.title }}</figcaption>
-                        {% endif %}
+                            <img
+                                src="{{ media.thumbnails['iw_theme_16_9']|default(media.url) }}"
+                                alt="{{ media.title|default('') }}"
+                                loading="lazy"
+                                class="w-full object-cover rounded-[var(--radius-img)] cursor-pointer"
+                                style="aspect-ratio: 16/9;"
+                            >
+                        </a>
                     </figure>
                 {% endfor %}
             </div>
@@ -38,7 +42,7 @@
             <button
                 type="button"
                 data-action="slider#prev"
-                class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-background)] shadow-lg opacity-80 hover:opacity-100 transition-opacity"
+                class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-background)] shadow-lg opacity-80 hover:opacity-100 transition-opacity z-10"
                 aria-label="Previous"
             >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
@@ -46,7 +50,7 @@
             <button
                 type="button"
                 data-action="slider#next"
-                class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-background)] shadow-lg opacity-80 hover:opacity-100 transition-opacity"
+                class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-background)] shadow-lg opacity-80 hover:opacity-100 transition-opacity z-10"
                 aria-label="Next"
             >
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>

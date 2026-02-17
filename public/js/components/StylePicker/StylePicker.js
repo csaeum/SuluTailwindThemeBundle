@@ -1,246 +1,407 @@
 // @flow
 import React from 'react';
+import {translate} from 'sulu-admin-bundle/utils';
+import {getSuluPrimaryColor, getSuluPrimaryAlpha, getSuluPrimaryTint} from '../../utils/suluColors';
 
 /**
- * Layout style configurations for different block types.
- * Each style has a name, label, and SVG wireframe description.
+ * SVG wireframe renderers for each layout style.
+ * Keys match the style keys from ThemeAdmin::BLOCK_STYLE_OPTIONS
+ * and Twig template filenames (_style_{key}.html.twig).
  */
-const STYLE_CONFIGS = {
-    hero: [
-        {key: 'centered', label: 'Centered'},
-        {key: 'left-aligned', label: 'Left Aligned'},
-        {key: 'split', label: 'Split'},
-        {key: 'fullscreen', label: 'Fullscreen'},
-    ],
-    text_image: [
-        {key: 'image-left', label: 'Image Left'},
-        {key: 'image-right', label: 'Image Right'},
-        {key: 'image-top', label: 'Image Top'},
-        {key: 'image-bottom', label: 'Image Bottom'},
-    ],
-    gallery: [
-        {key: 'grid', label: 'Grid'},
-        {key: 'masonry', label: 'Masonry'},
-        {key: 'carousel', label: 'Carousel'},
-        {key: 'lightbox', label: 'Lightbox'},
-    ],
-    cta: [
-        {key: 'banner', label: 'Banner'},
-        {key: 'card', label: 'Card'},
-        {key: 'inline', label: 'Inline'},
-    ],
-    default: [
-        {key: 'standard', label: 'Standard'},
-        {key: 'wide', label: 'Wide'},
-        {key: 'narrow', label: 'Narrow'},
-    ],
+const WIREFRAME_RENDERERS = {
+    // ── text styles ──────────────────────────────────────────────
+    centered: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="30" y="10" width="60" height="6" rx="2" fill={accent} />
+            <rect x="20" y="22" width="80" height="4" rx="2" fill={fill} />
+            <rect x="25" y="30" width="70" height="4" rx="2" fill={fill} />
+            <rect x="30" y="38" width="60" height="4" rx="2" fill={fill} />
+            <rect x="15" y="50" width="90" height="3" rx="2" fill={fill} />
+            <rect x="20" y="57" width="80" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+    left_aligned: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="8" y="10" width="50" height="6" rx="2" fill={accent} />
+            <rect x="8" y="22" width="95" height="4" rx="2" fill={fill} />
+            <rect x="8" y="30" width="85" height="4" rx="2" fill={fill} />
+            <rect x="8" y="38" width="90" height="4" rx="2" fill={fill} />
+            <rect x="8" y="50" width="100" height="3" rx="2" fill={fill} />
+            <rect x="8" y="57" width="80" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+    two_columns: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="30" y="5" width="60" height="6" rx="2" fill={accent} />
+            <rect x="5" y="18" width="52" height="3" rx="2" fill={fill} />
+            <rect x="5" y="24" width="50" height="3" rx="2" fill={fill} />
+            <rect x="5" y="30" width="48" height="3" rx="2" fill={fill} />
+            <rect x="5" y="36" width="52" height="3" rx="2" fill={fill} />
+            <rect x="63" y="18" width="52" height="3" rx="2" fill={fill} />
+            <rect x="63" y="24" width="50" height="3" rx="2" fill={fill} />
+            <rect x="63" y="30" width="48" height="3" rx="2" fill={fill} />
+            <rect x="63" y="36" width="52" height="3" rx="2" fill={fill} />
+            <line x1="60" y1="16" x2="60" y2="42" stroke={fill} strokeWidth="1" opacity="0.3" />
+        </svg>
+    ),
+
+    // ── text_images styles ───────────────────────────────────────
+    classic: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="10" width="45" height="60" rx="3" fill={fill} />
+            <rect x="58" y="15" width="50" height="5" rx="2" fill={accent} />
+            <rect x="58" y="26" width="55" height="3" rx="2" fill={fill} />
+            <rect x="58" y="33" width="50" height="3" rx="2" fill={fill} />
+            <rect x="58" y="40" width="45" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+    overlay: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="110" height="70" rx="3" fill={fill} opacity="0.5" />
+            <rect x="15" y="30" width="60" height="6" rx="2" fill={accent} />
+            <rect x="15" y="42" width="50" height="3" rx="2" fill="#fff" />
+            <rect x="15" y="50" width="45" height="3" rx="2" fill="#fff" />
+        </svg>
+    ),
+    fullwidth: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="0" y="0" width="120" height="45" rx="0" fill={fill} opacity="0.4" />
+            <rect x="10" y="52" width="60" height="5" rx="2" fill={accent} />
+            <rect x="10" y="62" width="100" height="3" rx="2" fill={fill} />
+            <rect x="10" y="69" width="90" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+    mosaic: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="52" height="35" rx="3" fill={fill} />
+            <rect x="63" y="5" width="52" height="35" rx="3" fill={fill} opacity="0.7" />
+            <rect x="5" y="45" width="52" height="30" rx="3" fill={fill} opacity="0.7" />
+            <rect x="63" y="45" width="52" height="30" rx="3" fill={fill} />
+        </svg>
+    ),
+    sidebar: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="30" height="70" rx="3" fill={fill} opacity="0.3" />
+            <rect x="42" y="10" width="70" height="5" rx="2" fill={accent} />
+            <rect x="42" y="20" width="72" height="3" rx="2" fill={fill} />
+            <rect x="42" y="27" width="65" height="3" rx="2" fill={fill} />
+            <rect x="42" y="34" width="70" height="3" rx="2" fill={fill} />
+            <rect x="42" y="45" width="72" height="25" rx="3" fill={fill} opacity="0.5" />
+        </svg>
+    ),
+
+    // ── gallery styles ───────────────────────────────────────────
+    grid: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="34" height="34" rx="3" fill={fill} />
+            <rect x="43" y="5" width="34" height="34" rx="3" fill={fill} />
+            <rect x="81" y="5" width="34" height="34" rx="3" fill={fill} />
+            <rect x="5" y="43" width="34" height="34" rx="3" fill={fill} />
+            <rect x="43" y="43" width="34" height="34" rx="3" fill={fill} />
+            <rect x="81" y="43" width="34" height="34" rx="3" fill={fill} />
+        </svg>
+    ),
+    masonry: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="34" height="45" rx="3" fill={fill} />
+            <rect x="43" y="5" width="34" height="30" rx="3" fill={fill} />
+            <rect x="81" y="5" width="34" height="50" rx="3" fill={fill} />
+            <rect x="5" y="54" width="34" height="22" rx="3" fill={fill} />
+            <rect x="43" y="39" width="34" height="37" rx="3" fill={fill} />
+            <rect x="81" y="59" width="34" height="17" rx="3" fill={fill} />
+        </svg>
+    ),
+    slider: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="10" y="8" width="100" height="55" rx="3" fill={fill} />
+            <polygon points="4,38 12,30 12,46" fill={accent} />
+            <polygon points="116,38 108,30 108,46" fill={accent} />
+            <rect x="45" y="70" width="30" height="3" rx="1.5" fill={fill} />
+        </svg>
+    ),
+    carousel: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="2" y="15" width="28" height="45" rx="3" fill={fill} opacity="0.4" />
+            <rect x="33" y="8" width="54" height="58" rx="3" fill={fill} />
+            <rect x="90" y="15" width="28" height="45" rx="3" fill={fill} opacity="0.4" />
+            <circle cx="52" cy="72" r="3" fill={accent} />
+            <circle cx="60" cy="72" r="3" fill={fill} />
+            <circle cx="68" cy="72" r="3" fill={fill} />
+        </svg>
+    ),
+    fullscreen_slider: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="0" y="0" width="120" height="80" rx="0" fill={fill} opacity="0.4" />
+            <rect x="25" y="30" width="70" height="8" rx="2" fill={accent} />
+            <rect x="35" y="44" width="50" height="3" rx="2" fill="#fff" />
+            <polygon points="5,40 12,34 12,46" fill={accent} />
+            <polygon points="115,40 108,34 108,46" fill={accent} />
+        </svg>
+    ),
+
+    // ── key_figures styles ───────────────────────────────────────
+    inline: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="25" width="25" height="12" rx="2" fill={accent} />
+            <rect x="5" y="42" width="20" height="3" rx="2" fill={fill} />
+            <rect x="35" y="25" width="25" height="12" rx="2" fill={accent} />
+            <rect x="35" y="42" width="20" height="3" rx="2" fill={fill} />
+            <rect x="65" y="25" width="25" height="12" rx="2" fill={accent} />
+            <rect x="65" y="42" width="20" height="3" rx="2" fill={fill} />
+            <rect x="95" y="25" width="20" height="12" rx="2" fill={accent} />
+            <rect x="95" y="42" width="18" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+    with_icons: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <circle cx="20" cy="20" r="10" fill={accent} opacity="0.3" />
+            <rect x="10" y="35" width="20" height="8" rx="2" fill={accent} />
+            <rect x="8" y="48" width="24" height="3" rx="2" fill={fill} />
+            <circle cx="60" cy="20" r="10" fill={accent} opacity="0.3" />
+            <rect x="50" y="35" width="20" height="8" rx="2" fill={accent} />
+            <rect x="48" y="48" width="24" height="3" rx="2" fill={fill} />
+            <circle cx="100" cy="20" r="10" fill={accent} opacity="0.3" />
+            <rect x="90" y="35" width="20" height="8" rx="2" fill={accent} />
+            <rect x="88" y="48" width="24" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+    grid_2x2: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="52" height="32" rx="3" fill={fill} opacity="0.15" />
+            <rect x="15" y="12" width="30" height="8" rx="2" fill={accent} />
+            <rect x="15" y="24" width="25" height="3" rx="2" fill={fill} />
+            <rect x="63" y="5" width="52" height="32" rx="3" fill={fill} opacity="0.15" />
+            <rect x="73" y="12" width="30" height="8" rx="2" fill={accent} />
+            <rect x="73" y="24" width="25" height="3" rx="2" fill={fill} />
+            <rect x="5" y="43" width="52" height="32" rx="3" fill={fill} opacity="0.15" />
+            <rect x="15" y="50" width="30" height="8" rx="2" fill={accent} />
+            <rect x="15" y="62" width="25" height="3" rx="2" fill={fill} />
+            <rect x="63" y="43" width="52" height="32" rx="3" fill={fill} opacity="0.15" />
+            <rect x="73" y="50" width="30" height="8" rx="2" fill={accent} />
+            <rect x="73" y="62" width="25" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+
+    // ── linked_pages styles ──────────────────────────────────────
+    cards: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="34" height="70" rx="4" fill="#fff" stroke={fill} strokeWidth="1" />
+            <rect x="8" y="8" width="28" height="25" rx="2" fill={fill} />
+            <rect x="8" y="38" width="25" height="4" rx="2" fill={accent} />
+            <rect x="8" y="46" width="28" height="3" rx="2" fill={fill} />
+            <rect x="43" y="5" width="34" height="70" rx="4" fill="#fff" stroke={fill} strokeWidth="1" />
+            <rect x="46" y="8" width="28" height="25" rx="2" fill={fill} />
+            <rect x="46" y="38" width="25" height="4" rx="2" fill={accent} />
+            <rect x="46" y="46" width="28" height="3" rx="2" fill={fill} />
+            <rect x="81" y="5" width="34" height="70" rx="4" fill="#fff" stroke={fill} strokeWidth="1" />
+            <rect x="84" y="8" width="28" height="25" rx="2" fill={fill} />
+            <rect x="84" y="38" width="25" height="4" rx="2" fill={accent} />
+            <rect x="84" y="46" width="28" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+    list: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="8" width="110" height="18" rx="2" fill={fill} opacity="0.1" />
+            <rect x="10" y="12" width="40" height="4" rx="2" fill={accent} />
+            <rect x="10" y="19" width="60" height="3" rx="2" fill={fill} />
+            <rect x="5" y="30" width="110" height="18" rx="2" fill={fill} opacity="0.1" />
+            <rect x="10" y="34" width="45" height="4" rx="2" fill={accent} />
+            <rect x="10" y="41" width="55" height="3" rx="2" fill={fill} />
+            <rect x="5" y="52" width="110" height="18" rx="2" fill={fill} opacity="0.1" />
+            <rect x="10" y="56" width="35" height="4" rx="2" fill={accent} />
+            <rect x="10" y="63" width="50" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+    horizontal: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="10" width="25" height="60" rx="3" fill={fill} />
+            <rect x="35" y="10" width="25" height="60" rx="3" fill={fill} />
+            <rect x="65" y="10" width="25" height="60" rx="3" fill={fill} />
+            <rect x="95" y="10" width="22" height="60" rx="3" fill={fill} opacity="0.5" />
+            <polygon points="115,40 108,34 108,46" fill={accent} />
+        </svg>
+    ),
+    featured: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="60" height="70" rx="3" fill={fill} />
+            <rect x="10" y="50" width="50" height="5" rx="2" fill={accent} />
+            <rect x="10" y="60" width="45" height="3" rx="2" fill="#fff" />
+            <rect x="70" y="5" width="45" height="32" rx="3" fill={fill} opacity="0.7" />
+            <rect x="70" y="43" width="45" height="32" rx="3" fill={fill} opacity="0.7" />
+        </svg>
+    ),
+    minimal: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="10" y="15" width="60" height="4" rx="2" fill={accent} />
+            <rect x="90" y="15" width="20" height="4" rx="2" fill={accent} opacity="0.5" />
+            <line x1="10" y1="26" x2="110" y2="26" stroke={fill} strokeWidth="0.5" opacity="0.3" />
+            <rect x="10" y="33" width="55" height="4" rx="2" fill={accent} />
+            <rect x="90" y="33" width="20" height="4" rx="2" fill={accent} opacity="0.5" />
+            <line x1="10" y1="44" x2="110" y2="44" stroke={fill} strokeWidth="0.5" opacity="0.3" />
+            <rect x="10" y="51" width="65" height="4" rx="2" fill={accent} />
+            <rect x="90" y="51" width="20" height="4" rx="2" fill={accent} opacity="0.5" />
+        </svg>
+    ),
+
+    // ── location styles ──────────────────────────────────────────
+    map_only: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="110" height="70" rx="3" fill={fill} opacity="0.3" />
+            <circle cx="60" cy="35" r="6" fill={accent} />
+            <path d="M60 41 L60 50" stroke={accent} strokeWidth="2" />
+        </svg>
+    ),
+    map_with_info: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="65" height="70" rx="3" fill={fill} opacity="0.3" />
+            <circle cx="38" cy="35" r="5" fill={accent} />
+            <rect x="75" y="10" width="40" height="5" rx="2" fill={accent} />
+            <rect x="75" y="20" width="38" height="3" rx="2" fill={fill} />
+            <rect x="75" y="27" width="35" height="3" rx="2" fill={fill} />
+            <rect x="75" y="37" width="30" height="3" rx="2" fill={fill} />
+            <rect x="75" y="44" width="38" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+
+    // ── form styles ──────────────────────────────────────────────
+    split: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="52" height="70" rx="3" fill={accent} opacity="0.15" />
+            <rect x="15" y="20" width="35" height="6" rx="2" fill={accent} />
+            <rect x="15" y="32" width="30" height="3" rx="2" fill={fill} />
+            <rect x="63" y="15" width="50" height="8" rx="3" fill={fill} opacity="0.3" />
+            <rect x="63" y="30" width="50" height="8" rx="3" fill={fill} opacity="0.3" />
+            <rect x="63" y="45" width="50" height="8" rx="3" fill={fill} opacity="0.3" />
+            <rect x="73" y="60" width="30" height="10" rx="4" fill={accent} />
+        </svg>
+    ),
+
+    // ── document styles ──────────────────────────────────────────
+    default: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="10" y="10" width="100" height="60" rx="4" fill={fill} opacity="0.1" />
+            <rect x="20" y="20" width="60" height="5" rx="2" fill={accent} />
+            <rect x="20" y="30" width="80" height="3" rx="2" fill={fill} />
+            <rect x="20" y="38" width="70" height="3" rx="2" fill={fill} />
+            <rect x="20" y="50" width="35" height="8" rx="3" fill={accent} opacity="0.5" />
+        </svg>
+    ),
 };
 
 /**
  * StylePicker field component for the Sulu admin.
  *
  * Displays layout style options as simplified SVG wireframes showing
- * text and image arrangements. The block_type parameter determines
- * which set of styles to display.
+ * text and image arrangements. The block type is detected automatically
+ * from the form data (via formInspector), with fallback to XML schema options.
+ *
+ * Available styles are injected via the static `blockStyles` property, set by the
+ * initializer config hook in index.js from ThemeAdmin::getConfig().
  *
  * @param {Object} props - Component props from Sulu form field
  * @param {string} props.value - Currently selected style key
  * @param {Function} props.onChange - Callback when a style is selected
+ * @param {Object} props.formInspector - Sulu form inspector
+ * @param {string} props.dataPath - Data path in the form (e.g. /blocks/0/style)
  * @param {Object} props.schemaOptions - Schema options from the form XML
  */
 export default class StylePicker extends React.Component {
     /**
-     * Handle style selection.
+     * Block styles from the admin config, keyed by block type name.
+     * Set by the config hook from ThemeAdmin::BLOCK_STYLE_OPTIONS.
      *
-     * @param {string} styleKey - The key of the selected style
+     * @type {Object<string, Array<{key: string, label: string}>>}
      */
-    handleSelect = (styleKey) => {
-        const {onChange} = this.props;
-        if (onChange) {
-            onChange(styleKey);
-        }
-    };
+    static blockStyles = {};
 
     /**
-     * Render a wireframe SVG for the given style.
+     * Detect the block type from the form data or schema options.
+     *
+     * Primary: reads the "type" field of the parent block via formInspector.
+     * Fallback: reads block_type from schemaOptions (XML params).
+     *
+     * @returns {string} The detected block type name
+     */
+    getBlockType() {
+        const {formInspector, dataPath, schemaOptions} = this.props;
+
+        // Primary: detect from form data via formInspector
+        // dataPath is e.g. "/blocks/0/style" → parent block is "/blocks/0"
+        if (formInspector && dataPath) {
+            const pathParts = dataPath.split('/');
+            pathParts.pop(); // Remove field name ("style")
+            const blockTypePath = pathParts.join('/') + '/type';
+
+            try {
+                const blockType = formInspector.getValueByPath(blockTypePath);
+                if (blockType && typeof blockType === 'string') {
+                    return blockType;
+                }
+            } catch (e) {
+                // formInspector may throw if path is invalid
+            }
+        }
+
+        // Fallback: read from XML schema options
+        if (schemaOptions && schemaOptions.block_type && schemaOptions.block_type.value) {
+            return schemaOptions.block_type.value;
+        }
+
+        return 'default';
+    }
+
+    /**
+     * Render a wireframe SVG for the given style key.
      *
      * @param {string} styleKey - The style identifier
      * @returns {React.Element} An SVG wireframe visualization
      */
     renderWireframeSvg(styleKey) {
         const fill = '#d1d5db';
-        const accent = '#8b5cf6';
+        const accent = getSuluPrimaryColor();
 
-        switch (styleKey) {
-            case 'centered':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="30" y="10" width="60" height="6" rx="2" fill={accent} />
-                        <rect x="20" y="22" width="80" height="4" rx="2" fill={fill} />
-                        <rect x="25" y="30" width="70" height="4" rx="2" fill={fill} />
-                        <rect x="40" y="42" width="40" height="8" rx="3" fill={accent} />
-                        <rect x="25" y="56" width="70" height="20" rx="3" fill={fill} />
-                    </svg>
-                );
-            case 'left-aligned':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="8" y="10" width="50" height="6" rx="2" fill={accent} />
-                        <rect x="8" y="22" width="70" height="4" rx="2" fill={fill} />
-                        <rect x="8" y="30" width="60" height="4" rx="2" fill={fill} />
-                        <rect x="8" y="42" width="35" height="8" rx="3" fill={accent} />
-                        <rect x="70" y="10" width="42" height="40" rx="3" fill={fill} />
-                    </svg>
-                );
-            case 'split':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="5" y="5" width="52" height="70" rx="3" fill={fill} />
-                        <rect x="63" y="15" width="40" height="6" rx="2" fill={accent} />
-                        <rect x="63" y="27" width="50" height="4" rx="2" fill={fill} />
-                        <rect x="63" y="35" width="45" height="4" rx="2" fill={fill} />
-                        <rect x="63" y="50" width="30" height="8" rx="3" fill={accent} />
-                    </svg>
-                );
-            case 'fullscreen':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="0" y="0" width="120" height="80" rx="3" fill={fill} opacity="0.5" />
-                        <rect x="25" y="25" width="70" height="8" rx="2" fill={accent} />
-                        <rect x="30" y="40" width="60" height="4" rx="2" fill="#fff" />
-                        <rect x="40" y="52" width="40" height="8" rx="3" fill={accent} />
-                    </svg>
-                );
-            case 'image-left':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="5" y="10" width="45" height="60" rx="3" fill={fill} />
-                        <rect x="58" y="15" width="50" height="5" rx="2" fill={accent} />
-                        <rect x="58" y="26" width="55" height="3" rx="2" fill={fill} />
-                        <rect x="58" y="33" width="50" height="3" rx="2" fill={fill} />
-                        <rect x="58" y="40" width="45" height="3" rx="2" fill={fill} />
-                    </svg>
-                );
-            case 'image-right':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="70" y="10" width="45" height="60" rx="3" fill={fill} />
-                        <rect x="8" y="15" width="50" height="5" rx="2" fill={accent} />
-                        <rect x="8" y="26" width="55" height="3" rx="2" fill={fill} />
-                        <rect x="8" y="33" width="50" height="3" rx="2" fill={fill} />
-                        <rect x="8" y="40" width="45" height="3" rx="2" fill={fill} />
-                    </svg>
-                );
-            case 'image-top':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="10" y="5" width="100" height="35" rx="3" fill={fill} />
-                        <rect x="10" y="46" width="60" height="5" rx="2" fill={accent} />
-                        <rect x="10" y="55" width="90" height="3" rx="2" fill={fill} />
-                        <rect x="10" y="62" width="80" height="3" rx="2" fill={fill} />
-                    </svg>
-                );
-            case 'image-bottom':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="10" y="5" width="60" height="5" rx="2" fill={accent} />
-                        <rect x="10" y="14" width="90" height="3" rx="2" fill={fill} />
-                        <rect x="10" y="21" width="80" height="3" rx="2" fill={fill} />
-                        <rect x="10" y="32" width="100" height="43" rx="3" fill={fill} />
-                    </svg>
-                );
-            case 'grid':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="5" y="5" width="34" height="34" rx="3" fill={fill} />
-                        <rect x="43" y="5" width="34" height="34" rx="3" fill={fill} />
-                        <rect x="81" y="5" width="34" height="34" rx="3" fill={fill} />
-                        <rect x="5" y="43" width="34" height="34" rx="3" fill={fill} />
-                        <rect x="43" y="43" width="34" height="34" rx="3" fill={fill} />
-                        <rect x="81" y="43" width="34" height="34" rx="3" fill={fill} />
-                    </svg>
-                );
-            case 'masonry':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="5" y="5" width="34" height="45" rx="3" fill={fill} />
-                        <rect x="43" y="5" width="34" height="30" rx="3" fill={fill} />
-                        <rect x="81" y="5" width="34" height="50" rx="3" fill={fill} />
-                        <rect x="5" y="54" width="34" height="22" rx="3" fill={fill} />
-                        <rect x="43" y="39" width="34" height="37" rx="3" fill={fill} />
-                        <rect x="81" y="59" width="34" height="17" rx="3" fill={fill} />
-                    </svg>
-                );
-            case 'carousel':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="15" y="10" width="90" height="55" rx="3" fill={fill} />
-                        <polygon points="8,38 15,32 15,44" fill={accent} />
-                        <polygon points="112,38 105,32 105,44" fill={accent} />
-                        <circle cx="52" cy="72" r="3" fill={accent} />
-                        <circle cx="60" cy="72" r="3" fill={fill} />
-                        <circle cx="68" cy="72" r="3" fill={fill} />
-                    </svg>
-                );
-            case 'lightbox':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="5" y="5" width="25" height="25" rx="2" fill={fill} />
-                        <rect x="34" y="5" width="25" height="25" rx="2" fill={fill} />
-                        <rect x="63" y="5" width="25" height="25" rx="2" fill={accent} opacity="0.7" />
-                        <rect x="92" y="5" width="25" height="25" rx="2" fill={fill} />
-                        <rect x="20" y="35" width="80" height="40" rx="3" fill={accent} opacity="0.3" />
-                        <rect x="25" y="38" width="70" height="34" rx="2" fill={fill} />
-                    </svg>
-                );
-            case 'banner':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="5" y="15" width="110" height="50" rx="4" fill={accent} opacity="0.2" />
-                        <rect x="15" y="25" width="60" height="6" rx="2" fill={accent} />
-                        <rect x="15" y="37" width="50" height="3" rx="2" fill={fill} />
-                        <rect x="80" y="30" width="28" height="10" rx="4" fill={accent} />
-                    </svg>
-                );
-            case 'card':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="20" y="5" width="80" height="70" rx="5" fill="#fff" stroke={fill} strokeWidth="1" />
-                        <rect x="30" y="15" width="60" height="6" rx="2" fill={accent} />
-                        <rect x="30" y="27" width="55" height="3" rx="2" fill={fill} />
-                        <rect x="30" y="34" width="50" height="3" rx="2" fill={fill} />
-                        <rect x="35" y="48" width="50" height="10" rx="4" fill={accent} />
-                    </svg>
-                );
-            case 'inline':
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="5" y="30" width="50" height="5" rx="2" fill={accent} />
-                        <rect x="5" y="40" width="60" height="3" rx="2" fill={fill} />
-                        <rect x="80" y="32" width="35" height="10" rx="4" fill={accent} />
-                    </svg>
-                );
-            default:
-                return (
-                    <svg viewBox="0 0 120 80" width="120" height="80">
-                        <rect x="10" y="10" width="100" height="60" rx="4" fill={fill} />
-                        <rect x="20" y="20" width="60" height="5" rx="2" fill={accent} />
-                        <rect x="20" y="30" width="80" height="3" rx="2" fill={fill} />
-                        <rect x="20" y="38" width="70" height="3" rx="2" fill={fill} />
-                    </svg>
-                );
+        const renderer = WIREFRAME_RENDERERS[styleKey];
+        if (renderer) {
+            return renderer(fill, accent);
         }
+
+        // Fallback for unknown styles
+        return (
+            <svg viewBox="0 0 120 80" width="120" height="80">
+                <rect x="10" y="10" width="100" height="60" rx="4" fill={fill} />
+                <rect x="20" y="20" width="60" height="5" rx="2" fill={accent} />
+                <rect x="20" y="30" width="80" height="3" rx="2" fill={fill} />
+                <rect x="20" y="38" width="70" height="3" rx="2" fill={fill} />
+            </svg>
+        );
     }
 
     render() {
-        const {value, onChange, schemaOptions} = this.props;
-        const blockType = (schemaOptions && schemaOptions.block_type && schemaOptions.block_type.value) || 'default';
-        const styles = STYLE_CONFIGS[blockType] || STYLE_CONFIGS.default;
+        const {value, onChange} = this.props;
+        const blockType = this.getBlockType();
+        const styles = StylePicker.blockStyles[blockType] || [];
+
+        if (styles.length === 0) {
+            return (
+                <div style={{padding: '16px', color: '#999', fontStyle: 'italic'}}>
+                    No styles available for block type "{blockType}".
+                </div>
+            );
+        }
 
         return (
-            <div style={{display: 'flex', flexWrap: 'wrap', gap: '12px', padding: '8px'}}>
+            <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+                gap: '12px',
+                padding: '8px',
+            }}>
                 {styles.map((style) => {
                     const isSelected = value === style.key;
+                    const primary = getSuluPrimaryColor();
+                    const primaryShadow = getSuluPrimaryAlpha(0.3);
+                    const primaryTint = getSuluPrimaryTint();
+
                     return (
                         <div
                             key={style.key}
@@ -254,23 +415,25 @@ export default class StylePicker extends React.Component {
                             }}
                             style={{
                                 cursor: 'pointer',
-                                border: isSelected ? '3px solid #8b5cf6' : '2px solid #e0e0e0',
+                                border: isSelected ? `3px solid ${primary}` : '2px solid #e0e0e0',
                                 borderRadius: '8px',
                                 padding: '8px',
-                                backgroundColor: isSelected ? '#f5f3ff' : '#fafafa',
+                                backgroundColor: isSelected ? primaryTint : '#fafafa',
                                 transition: 'all 0.2s',
                                 textAlign: 'center',
-                                boxShadow: isSelected ? '0 0 0 3px rgba(139, 92, 246, 0.3)' : 'none',
+                                boxShadow: isSelected ? `0 0 0 3px ${primaryShadow}` : 'none',
                             }}
                         >
-                            {this.renderWireframeSvg(style.key)}
+                            <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+                                {this.renderWireframeSvg(style.key)}
+                            </div>
                             <div style={{
                                 marginTop: '6px',
                                 fontSize: '11px',
                                 fontWeight: isSelected ? 'bold' : 'normal',
-                                color: isSelected ? '#8b5cf6' : '#666',
+                                color: isSelected ? primary : '#666',
                             }}>
-                                {style.label}
+                                {translate(style.label)}
                             </div>
                         </div>
                     );

@@ -7,9 +7,9 @@
         subTitle: subTitle|default('')
     } only %}
 
-    {% if documents is defined and documents.ids is defined %}
+    {% if documents is defined and documents is iterable %}
         <div class="space-y-3">
-            {% for mediaId in documents.ids %}
+            {% for mediaId in documents %}
                 {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
                 <a
                     href="{{ media.url }}"
