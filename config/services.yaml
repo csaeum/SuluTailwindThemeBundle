@@ -18,6 +18,10 @@ services:
         autowire: true
         autoconfigure: true
         public: true
+        arguments:
+            $fieldDescriptorFactory: '@sulu_core.list_builder.field_descriptor_factory'
+            $listBuilderFactory: '@sulu_core.doctrine_list_builder_factory'
+            $restHelper: '@sulu_core.doctrine_rest_helper'
         tags:
             - { name: 'controller.service_arguments' }
 

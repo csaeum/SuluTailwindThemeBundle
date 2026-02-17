@@ -8,9 +8,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use ItechWorld\SuluThemeBundle\Entity\ThemeConfig;
 use ItechWorld\SuluThemeBundle\Repository\ThemeConfigRepository;
 use ItechWorld\SuluThemeBundle\Service\ThemeCompiler;
-use Sulu\Bundle\AdminBundle\Metadata\FieldDescriptor\FieldDescriptorFactoryInterface;
-use Sulu\Bundle\AdminBundle\Metadata\ListMetadata\DoctrineListBuilderFactoryInterface;
-use Sulu\Component\Rest\ListBuilder\ListRepresentation;
+use Sulu\Component\Rest\ListBuilder\Doctrine\DoctrineListBuilderFactoryInterface;
+use Sulu\Component\Rest\ListBuilder\Metadata\FieldDescriptorFactoryInterface;
+use Sulu\Component\Rest\ListBuilder\PaginatedRepresentation;
 use Sulu\Component\Rest\RestHelperInterface;
 use Sulu\Component\Security\SecuredControllerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -110,14 +110,12 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         $listBuilder = $this->listBuilderFactory->create(ThemeConfig::class);
         $this->restHelper->initializeListBuilder($listBuilder, $fieldDescriptors);
 
-        $listRepresentation = new ListRepresentation(
+        $listRepresentation = new PaginatedRepresentation(
             $listBuilder->execute(),
             ThemeConfig::RESOURCE_KEY,
-            'iw_sulu_theme.get_theme_configs',
-            $request->query->all(),
-            $listBuilder->getCurrentPage(),
-            $listBuilder->getLimit(),
-            $listBuilder->count(),
+            (int) $listBuilder->getCurrentPage(),
+            (int) $listBuilder->getLimit(),
+            (int) $listBuilder->count(),
         );
 
         return new JsonResponse($listRepresentation->toArray());
