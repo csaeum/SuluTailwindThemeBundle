@@ -1,6 +1,5 @@
 {
     "name": "itech-world/sulu-theme-bundle",
-    "version": "1.0.0",
     "description": "Complete theming system for Sulu CMS 3.x",
     "license": "MIT",
     "symfony": {

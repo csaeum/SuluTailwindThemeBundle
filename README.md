@@ -89,38 +89,20 @@ itech_world_sulu_theme:
 
 The bundle provides Stimulus controllers and CSS that need to be compiled by Webpack Encore.
 
+**Add the npm package** to your project's `package.json`:
+
+```json
+{
+    "devDependencies": {
+        "@itech-world/sulu-theme-bundle": "file:vendor/itech-world/sulu-theme-bundle/assets"
+    }
+}
+```
+
 **Import the CSS** in your `assets/styles/app.css`:
 
 ```css
 @import "@itech-world/sulu-theme-bundle";
-```
-
-**Register the Stimulus controllers** in your `assets/controllers.json`:
-
-```json
-{
-    "controllers": {
-        "@itech-world/sulu-theme-bundle": {
-            "menu": {
-                "enabled": true,
-                "fetch": "lazy"
-            },
-            "gallery": {
-                "enabled": true,
-                "fetch": "lazy"
-            },
-            "slider": {
-                "enabled": true,
-                "fetch": "lazy"
-            },
-            "key_figures": {
-                "enabled": true,
-                "fetch": "lazy"
-            }
-        }
-    },
-    "entrypoints": []
-}
 ```
 
 **Configure Webpack** to disable symlink resolution in your `webpack.config.js`:
@@ -137,9 +119,12 @@ module.exports = config;
 
 > This is required so that Webpack treats the bundle's Stimulus controllers as `node_modules` files (skipping Babel transpilation) and resolves their dependencies correctly.
 
-Then rebuild your assets:
+The bundle's **Stimulus controllers are auto-discovered** by `@symfony/stimulus-bridge` via the `symfony.controllers` section in the package's `package.json`. No manual entry in `assets/controllers.json` is required.
+
+Then install and rebuild your assets:
 
 ```bash
+npm install
 npm run build
 ```
 
@@ -480,7 +465,8 @@ SuluThemeBundle/
 │   └── Twig/               # ThemeExtension
 ├── templates/              # Twig templates (blocks, menus, base)
 ├── translations/           # Admin translations (fr, en)
-└── assets/admin/           # React components for admin forms
+├── assets/                 # Frontend assets (Stimulus controllers, CSS)
+└── public/js/              # Admin React components
 ```
 
 ## Available translations
