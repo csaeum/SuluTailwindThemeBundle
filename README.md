@@ -105,6 +105,34 @@ The bundle provides Stimulus controllers and CSS that need to be compiled by Web
 @import "@itech-world/sulu-theme-bundle";
 ```
 
+**Register the Stimulus controllers** in your `assets/controllers.json`:
+
+```json
+{
+    "controllers": {
+        "@itech-world/sulu-theme-bundle": {
+            "menu": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
+            "gallery": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
+            "slider": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
+            "key_figures": {
+                "enabled": true,
+                "fetch": "lazy"
+            }
+        }
+    },
+    "entrypoints": []
+}
+```
+
 **Configure Webpack** to disable symlink resolution in your `webpack.config.js`:
 
 ```js
@@ -118,8 +146,6 @@ module.exports = config;
 ```
 
 > This is required so that Webpack treats the bundle's Stimulus controllers as `node_modules` files (skipping Babel transpilation) and resolves their dependencies correctly.
-
-The bundle's **Stimulus controllers are auto-discovered** by `@symfony/stimulus-bridge` via the `symfony.controllers` section in the package's `package.json`. No manual entry in `assets/controllers.json` is required.
 
 Then install and rebuild your assets:
 

@@ -7,21 +7,25 @@
         "controllers": {
             "menu": {
                 "main": "controllers/menu_controller.js",
+                "name": "menu",
                 "fetch": "lazy",
                 "enabled": true
             },
             "gallery": {
                 "main": "controllers/gallery_controller.js",
+                "name": "gallery",
                 "fetch": "lazy",
                 "enabled": true
             },
             "slider": {
                 "main": "controllers/slider_controller.js",
+                "name": "slider",
                 "fetch": "lazy",
                 "enabled": true
             },
             "key_figures": {
                 "main": "controllers/key_figures_controller.js",
+                "name": "key-figures",
                 "fetch": "lazy",
                 "enabled": true
             }
