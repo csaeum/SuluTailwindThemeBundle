@@ -274,6 +274,20 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         return 'sulu.iw_sulu_theme.themes';
     }
 
+    /**
+     * Get the locale from the request.
+     *
+     * Theme configs are not localized, so we return a default locale.
+     *
+     * @param Request $request The HTTP request
+     *
+     * @return string The locale
+     */
+    public function getLocale(Request $request): string
+    {
+        return $request->query->getString('locale', 'en');
+    }
+
     // ─── Serialization (Entity → flat form keys) ────────────────────────
 
     /**
