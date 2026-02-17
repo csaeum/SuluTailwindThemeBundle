@@ -198,13 +198,21 @@ class ThemeConfigController extends AbstractController implements SecuredControl
 
         $this->mapDataToEntity($data, $theme);
 
-        // Handle activation: deactivate all others first
-        if ($theme->isActive()) {
-            $this->repository->deactivateAll();
-            $theme->setIsActive(true);
-        }
-
+        // Handle activation: deactivate all others first.
+        // deactivateAll() uses DQL which bypasses the UnitOfWork, so Doctrine
+        // still thinks the entity has isActive=true (original loaded value).
+        // We must refresh() the entity so Doctrine sees the DB state (is_active=0),
+        // then re-apply our changes so the UPDATE includes is_active=1.
+        $wasActive = $theme->isActive();
         $this->entityManager->flush();
+
+        if ($wasActive) {
+            $this->repository->deactivateAll();
+            $this->entityManager->refresh($theme);
+            $this->mapDataToEntity($data, $theme);
+            $theme->setIsActive(true);
+            $this->entityManager->flush();
+        }
 
         if ($theme->isActive()) {
             $this->compiler->compile($theme);

@@ -52,18 +52,37 @@ class ThemeCompiler
     /**
      * Get the web-accessible CSS path for a theme.
      *
-     * Returns the relative URL path that can be used in a <link> tag
-     * to reference the compiled CSS file.
+     * Looks for the actual compiled file on disk rather than computing
+     * the filename from updatedAt, to avoid hash mismatches caused by
+     * DateTime precision differences between compile-time and render-time.
+     *
+     * If no compiled file is found, triggers a compilation automatically.
      *
      * @param ThemeConfig $theme The theme configuration
      *
-     * @return string The web-accessible path (e.g. "/iw-theme/css/theme-1-abc123.css")
+     * @return string The web-accessible path (e.g. "/iw-theme/css/theme-1-abc123.css"),
+     *                or empty string if compilation fails
      */
     public function getCssPath(ThemeConfig $theme): string
     {
-        $filename = $this->buildFilename($theme);
+        if (null === $theme->getId()) {
+            return '';
+        }
 
-        return '/iw-theme/css/' . $filename;
+        $pattern = $this->cssOutputDir . '/theme-' . $theme->getId() . '-*.css';
+        $files = glob($pattern);
+
+        // Auto-compile if no file found
+        if (empty($files)) {
+            $this->compile($theme);
+            $files = glob($pattern);
+        }
+
+        if (empty($files) || false === $files) {
+            return '';
+        }
+
+        return '/iw-theme/css/' . basename(end($files));
     }
 
     /**

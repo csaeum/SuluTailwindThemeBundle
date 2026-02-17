@@ -92,7 +92,7 @@ The bundle provides Stimulus controllers and CSS that need to be compiled by Web
 **Import the CSS** in your `assets/styles/app.css`:
 
 ```css
-@import "itech-world/sulu-theme-bundle/styles/app";
+@import "@itech-world/sulu-theme-bundle";
 ```
 
 **Register the Stimulus controllers** in your `assets/controllers.json`:
@@ -100,7 +100,7 @@ The bundle provides Stimulus controllers and CSS that need to be compiled by Web
 ```json
 {
     "controllers": {
-        "itech-world/sulu-theme-bundle": {
+        "@itech-world/sulu-theme-bundle": {
             "menu": {
                 "enabled": true,
                 "fetch": "lazy"
@@ -123,19 +123,63 @@ The bundle provides Stimulus controllers and CSS that need to be compiled by Web
 }
 ```
 
+**Configure Webpack** to disable symlink resolution in your `webpack.config.js`:
+
+```js
+// Replace the last line:
+// module.exports = Encore.getWebpackConfig();
+
+// With:
+const config = Encore.getWebpackConfig();
+config.resolve.symlinks = false;
+module.exports = config;
+```
+
+> This is required so that Webpack treats the bundle's Stimulus controllers as `node_modules` files (skipping Babel transpilation) and resolves their dependencies correctly.
+
 Then rebuild your assets:
 
 ```bash
 npm run build
 ```
 
-### 5. Update the database schema
+### 5. Register admin assets
+
+Edit the `assets/admin/package.json` to add the bundle to the list of bundles:
+```json
+{
+    "dependencies": {
+        // ...
+        "sulu-itech-world-sulu-theme-bundle": "file:../../vendor/itech-world/sulu-theme-bundle/public/js"
+    }
+}
+```
+
+Edit the `assets/admin/app.js` to add the bundle in imports:
+```js
+import 'sulu-itech-world-sulu-theme-bundle';
+```
+
+In the `assets/admin/` folder, run the following command:
+```bash
+npm install
+npm run build
+```
+
+or
+
+```bash
+yarn install
+yarn build
+```
+
+### 6. Update the database schema
 
 ```bash
 php bin/adminconsole doctrine:schema:update --force
 ```
 
-### 6. Install a preset theme (optional)
+### 7. Install a preset theme (optional)
 
 ```bash
 php bin/adminconsole iw-sulu:theme:install corporate
@@ -143,7 +187,7 @@ php bin/adminconsole iw-sulu:theme:install corporate
 
 Available presets: `corporate`, `creative`, `minimal`, `nature`.
 
-### 7. Clear the cache
+### 8. Clear the cache
 
 ```bash
 php bin/adminconsole cache:clear

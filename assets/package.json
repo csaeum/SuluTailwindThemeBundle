@@ -1,31 +1,10 @@
 {
-  "name": "@itech-world/sulu-theme-bundle",
+  "name": "sulu-itech-world-sulu-theme-bundle",
+  "description": "Theme integration for Sulu CMS admin",
   "license": "MIT",
-  "config": {
-    "css_source": "styles/app.css"
-  },
-  "symfony": {
-    "controllers": {
-      "menu": {
-        "main": "controllers/menu_controller.js",
-        "enabled": true,
-        "fetch": "lazy"
-      },
-      "gallery": {
-        "main": "controllers/gallery_controller.js",
-        "enabled": true,
-        "fetch": "lazy"
-      },
-      "key_figures": {
-        "main": "controllers/key_figures_controller.js",
-        "enabled": true,
-        "fetch": "lazy"
-      },
-      "slider": {
-        "main": "controllers/slider_controller.js",
-        "enabled": true,
-        "fetch": "lazy"
-      }
-    }
+  "main": "public/js/index.js",
+  "private": true,
+  "peerDependencies": {
+    "sulu-admin-bundle": "*"
   }
 }
