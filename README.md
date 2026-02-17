@@ -99,11 +99,14 @@ The bundle provides Stimulus controllers and CSS that need to be compiled by Web
 }
 ```
 
-**Import the CSS** in your `assets/styles/app.css`:
+**Import the CSS** and add the bundle's templates as a Tailwind source in your `assets/styles/app.css`:
 
 ```css
 @import "@itech-world/sulu-theme-bundle";
+@source "../../vendor/itech-world/sulu-theme-bundle/templates";
 ```
+
+> The `@source` directive tells Tailwind CSS 4 to scan the bundle's Twig templates for utility classes. Without it, classes used in menu and block templates won't be compiled.
 
 **Register the Stimulus controllers** in your `assets/controllers.json`:
 
