@@ -1,0 +1,34 @@
+{
+    "name": "itech-world/sulu-theme-bundle",
+    "version": "1.0.0",
+    "description": "Complete theming system for Sulu CMS 3.x",
+    "license": "MIT",
+    "symfony": {
+        "controllers": {
+            "menu": {
+                "main": "assets/controllers/menu_controller.js",
+                "fetch": "lazy",
+                "enabled": true
+            },
+            "gallery": {
+                "main": "assets/controllers/gallery_controller.js",
+                "fetch": "lazy",
+                "enabled": true
+            },
+            "slider": {
+                "main": "assets/controllers/slider_controller.js",
+                "fetch": "lazy",
+                "enabled": true
+            },
+            "key_figures": {
+                "main": "assets/controllers/key_figures_controller.js",
+                "fetch": "lazy",
+                "enabled": true
+            }
+        }
+    },
+    "exports": {
+        "./styles/*": "./assets/styles/*",
+        "./controllers/*": "./assets/controllers/*"
+    }
+}

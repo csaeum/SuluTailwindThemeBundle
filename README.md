@@ -85,13 +85,57 @@ itech_world_sulu_theme:
     type: attribute
 ```
 
-### 4. Update the database schema
+### 4. Register frontend assets
+
+The bundle provides Stimulus controllers and CSS that need to be compiled by Webpack Encore.
+
+**Import the CSS** in your `assets/styles/app.css`:
+
+```css
+@import "itech-world/sulu-theme-bundle/styles/app";
+```
+
+**Register the Stimulus controllers** in your `assets/controllers.json`:
+
+```json
+{
+    "controllers": {
+        "itech-world/sulu-theme-bundle": {
+            "menu": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
+            "gallery": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
+            "slider": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
+            "key_figures": {
+                "enabled": true,
+                "fetch": "lazy"
+            }
+        }
+    },
+    "entrypoints": []
+}
+```
+
+Then rebuild your assets:
+
+```bash
+npm run build
+```
+
+### 5. Update the database schema
 
 ```bash
 php bin/adminconsole doctrine:schema:update --force
 ```
 
-### 5. Install a preset theme (optional)
+### 6. Install a preset theme (optional)
 
 ```bash
 php bin/adminconsole iw-sulu:theme:install corporate
@@ -99,7 +143,7 @@ php bin/adminconsole iw-sulu:theme:install corporate
 
 Available presets: `corporate`, `creative`, `minimal`, `nature`.
 
-### 6. Clear the cache
+### 7. Clear the cache
 
 ```bash
 php bin/adminconsole cache:clear

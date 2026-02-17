@@ -6,7 +6,6 @@
     <title>{% block title %}{{ content.title|default('') }}{% endblock %}</title>
     {{ iw_sulu_theme_fonts_link()|raw }}
     <link rel="stylesheet" href="{{ iw_sulu_theme_css_path() }}">
-    <link rel="stylesheet" href="{{ asset('bundles/itechworldsulutheme/css/theme-base.css') }}">
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="bg-[var(--color-background)] text-[var(--color-text)]">
