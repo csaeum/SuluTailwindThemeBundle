@@ -112,8 +112,10 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         $listBuilder = $this->listBuilderFactory->create(ThemeConfig::class);
         $this->restHelper->initializeListBuilder($listBuilder, $fieldDescriptors);
 
+        $results = array_map([$this, 'normalizeDateFields'], $listBuilder->execute());
+
         $listRepresentation = new PaginatedRepresentation(
-            $listBuilder->execute(),
+            $results,
             ThemeConfig::RESOURCE_KEY,
             (int) $listBuilder->getCurrentPage(),
             (int) $listBuilder->getLimit(),
@@ -291,6 +293,27 @@ class ThemeConfigController extends AbstractController implements SecuredControl
     public function getLocale(Request $request): string
     {
         return $request->query->getString('locale', 'en');
+    }
+
+    /**
+     * Convert any DateTimeInterface values in a row to ISO 8601 strings.
+     *
+     * DoctrineListBuilder returns DateTime objects which json_encode()
+     * serializes as {date, timezone_type, timezone} instead of ISO strings.
+     *
+     * @param array<string, mixed> $row A single result row from the list builder
+     *
+     * @return array<string, mixed> The row with dates as ISO 8601 strings
+     */
+    private function normalizeDateFields(array $row): array
+    {
+        foreach ($row as $key => $value) {
+            if ($value instanceof \DateTimeInterface) {
+                $row[$key] = $value->format('c');
+            }
+        }
+
+        return $row;
     }
 
     // ─── Serialization (Entity → flat form keys) ────────────────────────
