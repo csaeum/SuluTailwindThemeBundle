@@ -1,0 +1,19 @@
+{# Text block — hero layout with large typography #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    <div class="max-w-5xl mx-auto text-center py-8 md:py-12 lg:py-16">
+        {% if title is defined and title is not empty %}
+            <h2 class="block-title text-4xl md:text-5xl lg:text-6xl font-[var(--font-h2-weight)] leading-tight">{{ title }}</h2>
+        {% endif %}
+        {% if subTitle is defined and subTitle is not empty %}
+            <h3 class="block-subtitle text-xl md:text-2xl mt-4 opacity-75">{{ subTitle }}</h3>
+        {% endif %}
+
+        {% if text is defined and text is not empty %}
+            <div class="block-text prose prose-lg md:prose-xl max-w-3xl mx-auto mt-8">
+                {{ text|raw }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

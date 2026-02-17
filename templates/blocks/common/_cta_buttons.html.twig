@@ -1,0 +1,19 @@
+{# CTA buttons — renders primary and optional secondary action buttons.
+   Expected variables:
+     - primaryButtonLabel: string
+     - primaryButtonUrl: string
+     - secondaryButtonLabel: string (optional)
+     - secondaryButtonUrl: string (optional)
+#}
+{% if primaryButtonLabel|default('') is not empty and primaryButtonUrl|default('') is not empty %}
+    <div class="flex flex-wrap items-center gap-4 mt-6">
+        <a href="{{ primaryButtonUrl }}" class="btn-primary inline-block px-6 py-3 text-center no-underline">
+            {{ primaryButtonLabel }}
+        </a>
+        {% if secondaryButtonLabel|default('') is not empty and secondaryButtonUrl|default('') is not empty %}
+            <a href="{{ secondaryButtonUrl }}" class="btn-secondary inline-block px-6 py-3 text-center no-underline">
+                {{ secondaryButtonLabel }}
+            </a>
+        {% endif %}
+    </div>
+{% endif %}

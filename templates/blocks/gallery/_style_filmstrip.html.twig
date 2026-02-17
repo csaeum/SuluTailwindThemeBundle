@@ -1,0 +1,62 @@
+{# Gallery block — filmstrip layout with main image and thumbnail strip #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default('')
+    } only %}
+
+    {% if images is defined and images is iterable and images|length > 0 %}
+        <div
+            data-controller="slider"
+            data-slider-mode-value="carousel"
+            data-slider-autoplay-value="false"
+        >
+            {# Main image display #}
+            <div class="relative overflow-hidden rounded-[var(--radius-img)] mb-4" style="aspect-ratio: 16/9;">
+                {% for mediaId in images %}
+                    {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
+                    <div
+                        data-slider-target="slide"
+                        class="absolute inset-0 w-full h-full {{ loop.first ? '' : 'hidden' }}"
+                    >
+                        <a
+                            href="{{ media.url }}"
+                            class="glightbox block w-full h-full"
+                            data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
+                        >
+                            <img
+                                src="{{ media.thumbnails['iw_theme_16_9']|default(media.url) }}"
+                                alt="{{ media.title|default('') }}"
+                                loading="{{ loop.first ? 'eager' : 'lazy' }}"
+                                class="w-full h-full object-cover cursor-pointer"
+                            >
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+
+            {# Thumbnail strip #}
+            <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
+                {% for mediaId in images %}
+                    {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
+                    <button
+                        type="button"
+                        data-slider-target="thumbnail"
+                        data-action="slider#selectThumbnail"
+                        data-slider-index-param="{{ loop.index0 }}"
+                        class="flex-none w-20 h-20 rounded-[var(--border-radius,4px)] overflow-hidden cursor-pointer transition-all {{ loop.first ? 'ring-2 ring-[var(--color-primary)] opacity-100' : 'opacity-60' }}"
+                    >
+                        <img
+                            src="{{ media.thumbnails['iw_theme_1_1']|default(media.url) }}"
+                            alt="{{ media.title|default('') }}"
+                            loading="lazy"
+                            class="w-full h-full object-cover"
+                        >
+                    </button>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -11,7 +11,7 @@ import { Controller } from '@hotwired/stimulus';
  * and runs a smooth count-up over a configurable duration.
  */
 export default class extends Controller {
-    static targets = ['counter'];
+    static targets = ['counter', 'progressBar'];
 
     /** @type {IntersectionObserver|null} */
     observer = null;
@@ -51,6 +51,7 @@ export default class extends Controller {
             const endValue = el.dataset.keyFiguresEndValue || '0';
             this._animateCounter(el, endValue);
         });
+        this._animateProgressBars();
     }
 
     /**
@@ -110,5 +111,26 @@ export default class extends Controller {
         };
 
         requestAnimationFrame(step);
+    }
+
+    /**
+     * Animate progress bar widths from 0 to their target values.
+     *
+     * Each progress bar element should have:
+     *   - data-key-figures-target="progressBar"
+     *   - data-value="75" (percentage 0-100)
+     *
+     * @private
+     */
+    _animateProgressBars() {
+        this.progressBarTargets.forEach((bar) => {
+            const targetValue = parseInt(bar.dataset.value || '0', 10);
+            bar.style.width = '0%';
+            bar.style.transition = 'width 1.5s ease-out';
+
+            // Trigger reflow before setting target width
+            bar.offsetWidth;
+            bar.style.width = Math.min(targetValue, 100) + '%';
+        });
     }
 }

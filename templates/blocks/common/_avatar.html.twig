@@ -1,0 +1,33 @@
+{# Avatar — circular image with optional fallback initials.
+   Expected variables:
+     - avatar: media object (from sulu_resolve_media) or null
+     - name: string (used for alt text and initials fallback)
+     - size: string (optional, default 'md' — sm: w-8 h-8, md: w-12 h-12, lg: w-16 h-16)
+#}
+{% set sizeClass = {
+    'sm': 'w-8 h-8 text-xs',
+    'md': 'w-12 h-12 text-sm',
+    'lg': 'w-16 h-16 text-base'
+}[size|default('md')]|default('w-12 h-12 text-sm') %}
+
+{% if avatar is defined and avatar is not empty and avatar.thumbnails is defined %}
+    <img
+        src="{{ avatar.thumbnails['iw_theme_1_1']|default(avatar.url) }}"
+        alt="{{ name|default('') }}"
+        loading="lazy"
+        class="{{ sizeClass }} rounded-full object-cover"
+    >
+{% else %}
+    {# Fallback: initials circle #}
+    {% set initials = '' %}
+    {% if name|default('') is not empty %}
+        {% set parts = name|split(' ') %}
+        {% set initials = parts[0]|first|upper %}
+        {% if parts|length > 1 %}
+            {% set initials = initials ~ parts[1]|first|upper %}
+        {% endif %}
+    {% endif %}
+    <div class="{{ sizeClass }} rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center font-semibold">
+        {{ initials }}
+    </div>
+{% endif %}

@@ -472,6 +472,209 @@
                         </property>
                     </properties>
                 </type>
+
+                <!-- ═══ Block type: cta ═══ -->
+                <type name="cta">
+                    <meta>
+                        <title lang="fr">Appel à l'action</title>
+                        <title lang="en">Call to action</title>
+                    </meta>
+                    <properties>
+                        <property name="title" type="text_line">
+                            <meta><title lang="fr">Titre</title><title lang="en">Title</title></meta>
+                        </property>
+                        <property name="subTitle" type="text_line">
+                            <meta><title lang="fr">Sous-titre</title><title lang="en">Subtitle</title></meta>
+                        </property>
+                        <property name="text" type="text_editor">
+                            <meta><title lang="fr">Texte</title><title lang="en">Text</title></meta>
+                        </property>
+                        <property name="primaryButtonLabel" type="text_line">
+                            <meta><title lang="fr">Bouton principal — Libellé</title><title lang="en">Primary button — Label</title></meta>
+                        </property>
+                        <property name="primaryButtonUrl" type="text_line">
+                            <meta><title lang="fr">Bouton principal — URL</title><title lang="en">Primary button — URL</title></meta>
+                        </property>
+                        <property name="secondaryButtonLabel" type="text_line">
+                            <meta><title lang="fr">Bouton secondaire — Libellé</title><title lang="en">Secondary button — Label</title></meta>
+                        </property>
+                        <property name="secondaryButtonUrl" type="text_line">
+                            <meta><title lang="fr">Bouton secondaire — URL</title><title lang="en">Secondary button — URL</title></meta>
+                        </property>
+                        <property name="image" type="single_media_selection">
+                            <meta><title lang="fr">Image</title><title lang="en">Image</title></meta>
+                        </property>
+                        <property name="imagePosition" type="single_select">
+                            <meta><title lang="fr">Position de l'image</title><title lang="en">Image position</title></meta>
+                            <params>
+                                <param name="default_value" type="string" value="right"/>
+                                <param name="values" type="collection">
+                                    <param name="left"><meta><title lang="fr">Gauche</title><title lang="en">Left</title></meta></param>
+                                    <param name="right"><meta><title lang="fr">Droite</title><title lang="en">Right</title></meta></param>
+                                </param>
+                            </params>
+                        </property>
+                        <!-- Appearance -->
+                        <property name="variant" type="iw_theme_variant_picker">
+                            <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
+                        </property>
+                        <property name="style" type="iw_theme_style_picker">
+                            <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                            <params>
+                                <param name="block_type" type="string" value="cta"/>
+                            </params>
+                        </property>
+                        <property name="marginTop" type="iw_theme_margin_selector">
+                            <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
+                        </property>
+                        <property name="marginBottom" type="iw_theme_margin_selector">
+                            <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
+                        </property>
+                        <property name="lateralMargins" type="checkbox">
+                            <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="showBackground" type="checkbox">
+                            <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
+                        </property>
+                    </properties>
+                </type>
+
+                <!-- ═══ Block type: testimonial ═══ -->
+                <type name="testimonial">
+                    <meta>
+                        <title lang="fr">Témoignages</title>
+                        <title lang="en">Testimonials</title>
+                    </meta>
+                    <properties>
+                        <property name="title" type="text_line">
+                            <meta><title lang="fr">Titre</title><title lang="en">Title</title></meta>
+                        </property>
+                        <property name="subTitle" type="text_line">
+                            <meta><title lang="fr">Sous-titre</title><title lang="en">Subtitle</title></meta>
+                        </property>
+                        <block name="testimonials" default-type="testimonial" minOccurs="1">
+                            <meta>
+                                <title lang="fr">Témoignages</title>
+                                <title lang="en">Testimonials</title>
+                            </meta>
+                            <types>
+                                <type name="testimonial">
+                                    <meta>
+                                        <title lang="fr">Témoignage</title>
+                                        <title lang="en">Testimonial</title>
+                                    </meta>
+                                    <properties>
+                                        <property name="quote" type="text_area">
+                                            <meta><title lang="fr">Citation</title><title lang="en">Quote</title></meta>
+                                        </property>
+                                        <property name="author" type="text_line">
+                                            <meta><title lang="fr">Auteur</title><title lang="en">Author</title></meta>
+                                        </property>
+                                        <property name="role" type="text_line">
+                                            <meta><title lang="fr">Fonction</title><title lang="en">Role</title></meta>
+                                        </property>
+                                        <property name="avatar" type="single_media_selection">
+                                            <meta><title lang="fr">Photo</title><title lang="en">Photo</title></meta>
+                                        </property>
+                                        <property name="rating" type="number">
+                                            <meta><title lang="fr">Note (1-5)</title><title lang="en">Rating (1-5)</title></meta>
+                                        </property>
+                                    </properties>
+                                </type>
+                            </types>
+                        </block>
+                        <!-- Appearance -->
+                        <property name="variant" type="iw_theme_variant_picker">
+                            <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
+                        </property>
+                        <property name="style" type="iw_theme_style_picker">
+                            <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                            <params>
+                                <param name="block_type" type="string" value="testimonial"/>
+                            </params>
+                        </property>
+                        <property name="marginTop" type="iw_theme_margin_selector">
+                            <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
+                        </property>
+                        <property name="marginBottom" type="iw_theme_margin_selector">
+                            <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
+                        </property>
+                        <property name="lateralMargins" type="checkbox">
+                            <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="showBackground" type="checkbox">
+                            <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
+                        </property>
+                    </properties>
+                </type>
+
+                <!-- ═══ Block type: separator ═══ -->
+                <type name="separator">
+                    <meta>
+                        <title lang="fr">Séparateur</title>
+                        <title lang="en">Separator</title>
+                    </meta>
+                    <properties>
+                        <property name="height" type="single_select">
+                            <meta><title lang="fr">Hauteur</title><title lang="en">Height</title></meta>
+                            <params>
+                                <param name="default_value" type="string" value="md"/>
+                                <param name="values" type="collection">
+                                    <param name="xs"><meta><title lang="fr">Très petit</title><title lang="en">Extra small</title></meta></param>
+                                    <param name="sm"><meta><title lang="fr">Petit</title><title lang="en">Small</title></meta></param>
+                                    <param name="md"><meta><title lang="fr">Moyen</title><title lang="en">Medium</title></meta></param>
+                                    <param name="lg"><meta><title lang="fr">Grand</title><title lang="en">Large</title></meta></param>
+                                    <param name="xl"><meta><title lang="fr">Très grand</title><title lang="en">Extra large</title></meta></param>
+                                </param>
+                            </params>
+                        </property>
+                        <property name="lineStyle" type="single_select">
+                            <meta><title lang="fr">Style de ligne</title><title lang="en">Line style</title></meta>
+                            <params>
+                                <param name="default_value" type="string" value="solid"/>
+                                <param name="values" type="collection">
+                                    <param name="solid"><meta><title lang="fr">Continue</title><title lang="en">Solid</title></meta></param>
+                                    <param name="dashed"><meta><title lang="fr">Tirets</title><title lang="en">Dashed</title></meta></param>
+                                    <param name="dotted"><meta><title lang="fr">Pointillés</title><title lang="en">Dotted</title></meta></param>
+                                    <param name="none"><meta><title lang="fr">Aucune</title><title lang="en">None</title></meta></param>
+                                </param>
+                            </params>
+                        </property>
+                        <property name="lineWidth" type="single_select">
+                            <meta><title lang="fr">Épaisseur</title><title lang="en">Line width</title></meta>
+                            <params>
+                                <param name="default_value" type="string" value="thin"/>
+                                <param name="values" type="collection">
+                                    <param name="thin"><meta><title lang="fr">Fine</title><title lang="en">Thin</title></meta></param>
+                                    <param name="medium"><meta><title lang="fr">Moyenne</title><title lang="en">Medium</title></meta></param>
+                                    <param name="thick"><meta><title lang="fr">Épaisse</title><title lang="en">Thick</title></meta></param>
+                                </param>
+                            </params>
+                        </property>
+                        <property name="text" type="text_line">
+                            <meta><title lang="fr">Texte central</title><title lang="en">Center text</title></meta>
+                        </property>
+                        <property name="icon" type="single_media_selection">
+                            <meta><title lang="fr">Icône centrale</title><title lang="en">Center icon</title></meta>
+                        </property>
+                        <!-- Appearance -->
+                        <property name="variant" type="iw_theme_variant_picker">
+                            <meta><title lang="fr">Variante de couleur</title><title lang="en">Color variant</title></meta>
+                        </property>
+                        <property name="style" type="iw_theme_style_picker">
+                            <meta><title lang="fr">Style d'agencement</title><title lang="en">Layout style</title></meta>
+                            <params>
+                                <param name="block_type" type="string" value="separator"/>
+                            </params>
+                        </property>
+                        <property name="marginTop" type="iw_theme_margin_selector">
+                            <meta><title lang="fr">Marge haute</title><title lang="en">Top margin</title></meta>
+                        </property>
+                        <property name="marginBottom" type="iw_theme_margin_selector">
+                            <meta><title lang="fr">Marge basse</title><title lang="en">Bottom margin</title></meta>
+                        </property>
+                    </properties>
+                </type>
             </types>
         </block>
     </properties>

@@ -1,0 +1,17 @@
+{# Separator block — empty vertical spacer #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{# No padding — the spacer IS the spacing #}
+{% block block_padding %}{% endblock %}
+
+{% block block_content %}
+    {% set heightMap = {
+        'xs': 'h-8',
+        'sm': 'h-16',
+        'md': 'h-24',
+        'lg': 'h-32',
+        'xl': 'h-48'
+    } %}
+
+    <div class="{{ heightMap[height|default('md')]|default('h-24') }}" aria-hidden="true"></div>
+{% endblock %}

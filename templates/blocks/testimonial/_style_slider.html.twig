@@ -1,0 +1,86 @@
+{# Testimonial block — carousel slider #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default('')
+    } only %}
+
+    {% if testimonials is defined and testimonials is iterable %}
+        <div
+            data-controller="slider"
+            data-slider-mode-value="carousel"
+            data-slider-autoplay-value="true"
+            data-slider-interval-value="6000"
+            class="relative max-w-3xl mx-auto"
+        >
+            {% for item in testimonials %}
+                {% if item.type|default('testimonial') == 'testimonial' %}
+                    <div data-slider-target="slide" class="text-center {{ loop.first ? '' : 'hidden' }}">
+                        {# Large quote #}
+                        <svg class="w-12 h-12 text-[var(--color-primary)] opacity-20 mx-auto mb-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10H14.017zM0 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151C7.546 6.068 5.983 8.789 5.983 11h4v10H0z"/>
+                        </svg>
+
+                        {% if item.quote is defined and item.quote is not empty %}
+                            <p class="text-xl md:text-2xl italic leading-relaxed">{{ item.quote }}</p>
+                        {% endif %}
+
+                        <div class="flex items-center justify-center gap-3 mt-6">
+                            {% if item.avatar is defined and item.avatar.id is defined %}
+                                {% set avatarMedia = sulu_resolve_media(item.avatar.id, app.request.locale) %}
+                                {% include '@ItechWorldSuluTheme/blocks/common/_avatar.html.twig' with {
+                                    avatar: avatarMedia,
+                                    name: item.author|default(''),
+                                    size: 'lg'
+                                } only %}
+                            {% endif %}
+                            <div class="text-left">
+                                {% if item.author is defined and item.author is not empty %}
+                                    <span class="block font-semibold">{{ item.author }}</span>
+                                {% endif %}
+                                {% if item.role is defined and item.role is not empty %}
+                                    <span class="block text-sm opacity-60">{{ item.role }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            {# Navigation #}
+            <button
+                type="button"
+                data-action="slider#prev"
+                class="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-primary)]/10 hover:bg-[var(--color-primary)]/20 transition-colors"
+                aria-label="Previous"
+            >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button
+                type="button"
+                data-action="slider#next"
+                class="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-primary)]/10 hover:bg-[var(--color-primary)]/20 transition-colors"
+                aria-label="Next"
+            >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+
+            {# Dots #}
+            <div data-slider-target="dots" class="flex items-center justify-center gap-2 mt-8">
+                {% for item in testimonials %}
+                    {% if item.type|default('testimonial') == 'testimonial' %}
+                        <button
+                            type="button"
+                            data-action="slider#goTo"
+                            data-slider-index-param="{{ loop.index0 }}"
+                            class="w-2.5 h-2.5 rounded-full {{ loop.first ? 'bg-[var(--color-primary)]' : 'bg-[var(--color-primary)]/30' }} transition-colors"
+                            aria-label="Slide {{ loop.index }}"
+                        ></button>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

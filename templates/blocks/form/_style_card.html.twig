@@ -1,0 +1,23 @@
+{# Form block — card layout #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    <div class="max-w-xl mx-auto rounded-[var(--border-radius,8px)] shadow-lg bg-white p-8 md:p-10">
+        {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+            title: title|default(''),
+            subTitle: subTitle|default('')
+        } only %}
+
+        {% if formId is defined and formId is not empty %}
+            <div class="mt-6">
+                <div data-form-id="{{ formId }}" class="text-left">
+                    {# If SuluFormBundle is installed, use: #}
+                    {# {{ sulu_form(formId) }} #}
+                    <noscript>
+                        <p class="text-sm opacity-75">JavaScript is required to display this form.</p>
+                    </noscript>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

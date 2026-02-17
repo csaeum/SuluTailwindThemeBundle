@@ -54,15 +54,14 @@
             >
                 <a
                     href="{{ media.url }}"
-                    class="glightbox block w-full h-full"
+                    class="glightbox relative block w-full h-full"
                     data-title="{{ (showName|default(false)) and media.title is defined ? media.title : '' }}"
                 >
                     <img
                         src="{{ media.thumbnails[imageFormat|default('iw_theme_4_3')]|default(media.url) }}"
                         alt="{{ media.title|default('') }}"
                         loading="lazy"
-                        class="w-full h-full object-cover cursor-pointer"
-                        style="border-radius: 0;"
+                        class="absolute inset-0 w-full h-full object-cover cursor-pointer"
                     >
                 </a>
             </div>
@@ -90,8 +89,8 @@
             </svg>
         </button>
 
-        {# Dot indicators #}
-        <div data-slider-target="dots" class="absolute bottom-3 left-0 right-0 flex justify-center gap-2 z-10">
+        {# Dot indicators — overlaid on the image, a few pixels from the bottom edge #}
+        <div data-slider-target="dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/30 backdrop-blur-sm z-20">
             {% for media in resolvedImages %}
                 <button
                     type="button"

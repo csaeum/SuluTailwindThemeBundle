@@ -1,0 +1,31 @@
+{# Testimonial block — minimal text-only layout #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default('')
+    } only %}
+
+    {% if testimonials is defined and testimonials is iterable %}
+        <div class="max-w-3xl mx-auto divide-y divide-[var(--color-border,#e5e7eb)]">
+            {% for item in testimonials %}
+                {% if item.type|default('testimonial') == 'testimonial' %}
+                    <div class="py-6 {{ loop.first ? 'pt-0' : '' }}">
+                        {% if item.quote is defined and item.quote is not empty %}
+                            <p class="italic text-lg leading-relaxed">"{{ item.quote }}"</p>
+                        {% endif %}
+                        <div class="mt-3 text-right">
+                            {% if item.author is defined and item.author is not empty %}
+                                <span class="font-semibold text-sm">{{ item.author }}</span>
+                            {% endif %}
+                            {% if item.role is defined and item.role is not empty %}
+                                <span class="text-sm opacity-60"> — {{ item.role }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

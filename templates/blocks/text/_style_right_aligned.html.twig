@@ -1,0 +1,17 @@
+{# Text block — right-aligned layout #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    <div class="max-w-4xl ml-auto text-right">
+        {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+            title: title|default(''),
+            subTitle: subTitle|default('')
+        } only %}
+
+        {% if text is defined and text is not empty %}
+            <div class="block-text prose max-w-none ml-auto text-right">
+                {{ text|raw }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

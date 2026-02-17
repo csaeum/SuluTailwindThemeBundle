@@ -42,7 +42,11 @@ class ThemeAdmin extends Admin
         'text' => [
             ['key' => 'centered', 'label' => 'iw_sulu_theme.style.centered'],
             ['key' => 'left_aligned', 'label' => 'iw_sulu_theme.style.left_aligned'],
+            ['key' => 'right_aligned', 'label' => 'iw_sulu_theme.style.right_aligned'],
             ['key' => 'two_columns', 'label' => 'iw_sulu_theme.style.two_columns'],
+            ['key' => 'hero', 'label' => 'iw_sulu_theme.style.hero'],
+            ['key' => 'quote', 'label' => 'iw_sulu_theme.style.quote'],
+            ['key' => 'accordion', 'label' => 'iw_sulu_theme.style.accordion'],
         ],
         'text_images' => [
             ['key' => 'classic', 'label' => 'iw_sulu_theme.style.classic'],
@@ -50,18 +54,26 @@ class ThemeAdmin extends Admin
             ['key' => 'fullwidth', 'label' => 'iw_sulu_theme.style.fullwidth'],
             ['key' => 'mosaic', 'label' => 'iw_sulu_theme.style.mosaic'],
             ['key' => 'sidebar', 'label' => 'iw_sulu_theme.style.sidebar'],
+            ['key' => 'hero_banner', 'label' => 'iw_sulu_theme.style.hero_banner'],
+            ['key' => 'zigzag', 'label' => 'iw_sulu_theme.style.zigzag'],
+            ['key' => 'card', 'label' => 'iw_sulu_theme.style.card'],
+            ['key' => 'split_screen', 'label' => 'iw_sulu_theme.style.split_screen'],
         ],
         'gallery' => [
             ['key' => 'grid', 'label' => 'iw_sulu_theme.style.grid'],
             ['key' => 'masonry', 'label' => 'iw_sulu_theme.style.masonry'],
             ['key' => 'slider', 'label' => 'iw_sulu_theme.style.slider'],
             ['key' => 'carousel', 'label' => 'iw_sulu_theme.style.carousel'],
-            ['key' => 'fullscreen_slider', 'label' => 'iw_sulu_theme.style.fullscreen_slider'],
+            ['key' => 'wide_carousel', 'label' => 'iw_sulu_theme.style.wide_carousel'],
+            ['key' => 'lightbox_grid', 'label' => 'iw_sulu_theme.style.lightbox_grid'],
+            ['key' => 'filmstrip', 'label' => 'iw_sulu_theme.style.filmstrip'],
         ],
         'key_figures' => [
             ['key' => 'inline', 'label' => 'iw_sulu_theme.style.inline'],
             ['key' => 'with_icons', 'label' => 'iw_sulu_theme.style.with_icons'],
             ['key' => 'grid_2x2', 'label' => 'iw_sulu_theme.style.grid_2x2'],
+            ['key' => 'progress', 'label' => 'iw_sulu_theme.style.progress'],
+            ['key' => 'timeline', 'label' => 'iw_sulu_theme.style.timeline'],
         ],
         'linked_pages' => [
             ['key' => 'cards', 'label' => 'iw_sulu_theme.style.cards'],
@@ -69,17 +81,41 @@ class ThemeAdmin extends Admin
             ['key' => 'horizontal', 'label' => 'iw_sulu_theme.style.horizontal'],
             ['key' => 'featured', 'label' => 'iw_sulu_theme.style.featured'],
             ['key' => 'minimal', 'label' => 'iw_sulu_theme.style.minimal'],
+            ['key' => 'image_cards', 'label' => 'iw_sulu_theme.style.image_cards'],
+            ['key' => 'carousel', 'label' => 'iw_sulu_theme.style.carousel'],
         ],
         'location' => [
             ['key' => 'map_only', 'label' => 'iw_sulu_theme.style.map_only'],
             ['key' => 'map_with_info', 'label' => 'iw_sulu_theme.style.map_with_info'],
+            ['key' => 'fullwidth', 'label' => 'iw_sulu_theme.style.fullwidth'],
+            ['key' => 'overlay', 'label' => 'iw_sulu_theme.style.overlay'],
         ],
         'form' => [
             ['key' => 'centered', 'label' => 'iw_sulu_theme.style.centered'],
             ['key' => 'split', 'label' => 'iw_sulu_theme.style.split'],
+            ['key' => 'card', 'label' => 'iw_sulu_theme.style.card'],
         ],
         'document' => [
             ['key' => 'default', 'label' => 'iw_sulu_theme.style.default'],
+            ['key' => 'grid', 'label' => 'iw_sulu_theme.style.grid'],
+            ['key' => 'accordion', 'label' => 'iw_sulu_theme.style.accordion'],
+        ],
+        'cta' => [
+            ['key' => 'banner', 'label' => 'iw_sulu_theme.style.banner'],
+            ['key' => 'centered', 'label' => 'iw_sulu_theme.style.centered'],
+            ['key' => 'split', 'label' => 'iw_sulu_theme.style.split'],
+            ['key' => 'floating', 'label' => 'iw_sulu_theme.style.floating'],
+        ],
+        'testimonial' => [
+            ['key' => 'cards', 'label' => 'iw_sulu_theme.style.cards'],
+            ['key' => 'slider', 'label' => 'iw_sulu_theme.style.slider'],
+            ['key' => 'single', 'label' => 'iw_sulu_theme.style.single'],
+            ['key' => 'minimal', 'label' => 'iw_sulu_theme.style.minimal'],
+        ],
+        'separator' => [
+            ['key' => 'line', 'label' => 'iw_sulu_theme.style.line'],
+            ['key' => 'spacer', 'label' => 'iw_sulu_theme.style.spacer'],
+            ['key' => 'divider', 'label' => 'iw_sulu_theme.style.divider'],
         ],
     ];
 

@@ -1,0 +1,29 @@
+{# Location block — full-width map #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{# Edge-to-edge display #}
+{% block block_container_class %}{% endblock %}
+{% block block_padding %}{% endblock %}
+
+{% block block_content %}
+    {% if latitude is defined and latitude is not empty and longitude is defined and longitude is not empty %}
+        <div class="relative">
+            <iframe
+                src="https://www.openstreetmap.org/export/embed.html?bbox={{ longitude - 0.02 }}%2C{{ latitude - 0.01 }}%2C{{ longitude + 0.02 }}%2C{{ latitude + 0.01 }}&amp;layer=mapnik&amp;marker={{ latitude }}%2C{{ longitude }}"
+                class="w-full h-[500px] md:h-[600px] border-0"
+                loading="lazy"
+                title="{{ title|default('Map') }}"
+                allowfullscreen
+            ></iframe>
+            {# Title overlay #}
+            {% if title is defined and title is not empty %}
+                <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-[var(--border-radius,8px)] px-4 py-2 shadow-md">
+                    <h2 class="block-title text-lg font-[var(--font-h2-weight)]">{{ title }}</h2>
+                    {% if subTitle is defined and subTitle is not empty %}
+                        <h3 class="block-subtitle text-sm opacity-75">{{ subTitle }}</h3>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,47 @@
+{# Location block — map with floating info card overlay #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% if latitude is defined and latitude is not empty and longitude is defined and longitude is not empty %}
+        <div class="relative">
+            {# Map background #}
+            <div class="rounded-[var(--radius-img)] overflow-hidden">
+                <iframe
+                    src="https://www.openstreetmap.org/export/embed.html?bbox={{ longitude - 0.02 }}%2C{{ latitude - 0.01 }}%2C{{ longitude + 0.02 }}%2C{{ latitude + 0.01 }}&amp;layer=mapnik&amp;marker={{ latitude }}%2C{{ longitude }}"
+                    class="w-full h-[400px] md:h-[500px] border-0"
+                    loading="lazy"
+                    title="{{ title|default('Map') }}"
+                    allowfullscreen
+                ></iframe>
+            </div>
+
+            {# Floating info card #}
+            {% if (title is defined and title is not empty) or (address is defined and address is not empty) or (text is defined and text is not empty) %}
+                <div class="absolute bottom-6 right-6 max-w-sm bg-white rounded-[var(--border-radius,8px)] shadow-xl p-6 space-y-4">
+                    {% if title is defined and title is not empty %}
+                        <h3 class="text-lg font-semibold">{{ title }}</h3>
+                    {% endif %}
+                    {% if address is defined and address is not empty %}
+                        <div class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-[var(--color-primary)] flex-none mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <p class="text-sm whitespace-pre-line opacity-75">{{ address }}</p>
+                        </div>
+                    {% endif %}
+                    {% if text is defined and text is not empty %}
+                        <div class="block-text prose prose-sm max-w-none">
+                            {{ text|raw }}
+                        </div>
+                    {% endif %}
+                    <a
+                        href="https://www.openstreetmap.org/?mlat={{ latitude }}&mlon={{ longitude }}#map=16/{{ latitude }}/{{ longitude }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="btn-primary inline-block px-4 py-2 text-sm text-center no-underline"
+                    >
+                        {{ 'iw_theme.open_map'|trans({}, 'messages')|default('Open in maps') }} &#8599;
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}

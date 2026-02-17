@@ -30,6 +30,16 @@ const WIREFRAME_RENDERERS = {
             <rect x="8" y="57" width="80" height="3" rx="2" fill={fill} />
         </svg>
     ),
+    right_aligned: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="62" y="10" width="50" height="6" rx="2" fill={accent} />
+            <rect x="17" y="22" width="95" height="4" rx="2" fill={fill} />
+            <rect x="27" y="30" width="85" height="4" rx="2" fill={fill} />
+            <rect x="22" y="38" width="90" height="4" rx="2" fill={fill} />
+            <rect x="12" y="50" width="100" height="3" rx="2" fill={fill} />
+            <rect x="32" y="57" width="80" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
     two_columns: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
             <rect x="30" y="5" width="60" height="6" rx="2" fill={accent} />
@@ -42,6 +52,39 @@ const WIREFRAME_RENDERERS = {
             <rect x="63" y="30" width="48" height="3" rx="2" fill={fill} />
             <rect x="63" y="36" width="52" height="3" rx="2" fill={fill} />
             <line x1="60" y1="16" x2="60" y2="42" stroke={fill} strokeWidth="1" opacity="0.3" />
+        </svg>
+    ),
+    hero: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="15" y="10" width="90" height="10" rx="2" fill={accent} />
+            <rect x="25" y="28" width="70" height="5" rx="2" fill={fill} opacity="0.6" />
+            <rect x="20" y="42" width="80" height="3" rx="2" fill={fill} />
+            <rect x="25" y="50" width="70" height="3" rx="2" fill={fill} />
+            <rect x="30" y="58" width="60" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+    quote: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="10" y="10" width="4" height="50" rx="2" fill={accent} />
+            <rect x="22" y="15" width="80" height="5" rx="2" fill={fill} />
+            <rect x="22" y="25" width="70" height="5" rx="2" fill={fill} />
+            <rect x="22" y="35" width="75" height="5" rx="2" fill={fill} />
+            <rect x="22" y="50" width="40" height="4" rx="2" fill={accent} opacity="0.5" />
+        </svg>
+    ),
+    accordion: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="110" height="14" rx="2" fill={fill} opacity="0.15" />
+            <rect x="10" y="9" width="60" height="5" rx="2" fill={accent} />
+            <polygon points="108,12 102,8 102,16" fill={fill} />
+            <rect x="5" y="23" width="110" height="14" rx="2" fill={fill} opacity="0.15" />
+            <rect x="10" y="27" width="55" height="5" rx="2" fill={accent} />
+            <polygon points="108,30 102,26 102,34" fill={fill} />
+            <rect x="5" y="41" width="110" height="14" rx="2" fill={accent} opacity="0.2" />
+            <rect x="10" y="45" width="50" height="5" rx="2" fill={accent} />
+            <polygon points="108,43 102,48 114,48" fill={accent} />
+            <rect x="10" y="59" width="90" height="3" rx="2" fill={fill} />
+            <rect x="10" y="65" width="80" height="3" rx="2" fill={fill} />
         </svg>
     ),
 
@@ -89,6 +132,45 @@ const WIREFRAME_RENDERERS = {
             <rect x="42" y="45" width="72" height="25" rx="3" fill={fill} opacity="0.5" />
         </svg>
     ),
+    hero_banner: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="0" y="0" width="120" height="80" rx="0" fill={fill} opacity="0.3" />
+            <rect x="0" y="40" width="120" height="40" rx="0" fill={fill} opacity="0.3" />
+            <rect x="25" y="20" width="70" height="8" rx="2" fill="#fff" />
+            <rect x="30" y="34" width="60" height="4" rx="2" fill="#fff" opacity="0.7" />
+            <rect x="40" y="52" width="40" height="10" rx="4" fill={accent} />
+        </svg>
+    ),
+    zigzag: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="50" height="30" rx="3" fill={fill} />
+            <rect x="60" y="8" width="50" height="5" rx="2" fill={accent} />
+            <rect x="60" y="17" width="45" height="3" rx="2" fill={fill} />
+            <rect x="60" y="24" width="48" height="3" rx="2" fill={fill} />
+            <rect x="65" y="42" width="50" height="30" rx="3" fill={fill} />
+            <rect x="10" y="45" width="50" height="5" rx="2" fill={accent} />
+            <rect x="10" y="54" width="45" height="3" rx="2" fill={fill} />
+            <rect x="10" y="61" width="48" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+    card: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="25" y="2" width="70" height="76" rx="5" fill="#fff" stroke={fill} strokeWidth="1" />
+            <rect x="28" y="5" width="64" height="35" rx="3" fill={fill} opacity="0.5" />
+            <rect x="32" y="46" width="45" height="5" rx="2" fill={accent} />
+            <rect x="32" y="55" width="56" height="3" rx="2" fill={fill} />
+            <rect x="32" y="62" width="50" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+    split_screen: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="0" y="0" width="60" height="80" rx="0" fill={fill} opacity="0.4" />
+            <rect x="68" y="20" width="45" height="6" rx="2" fill={accent} />
+            <rect x="68" y="32" width="48" height="3" rx="2" fill={fill} />
+            <rect x="68" y="39" width="42" height="3" rx="2" fill={fill} />
+            <rect x="68" y="46" width="45" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
 
     // ── gallery styles ───────────────────────────────────────────
     grid: (fill, accent) => (
@@ -129,7 +211,7 @@ const WIREFRAME_RENDERERS = {
             <circle cx="68" cy="72" r="3" fill={fill} />
         </svg>
     ),
-    fullscreen_slider: (fill, accent) => (
+    wide_carousel: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
             <rect x="0" y="0" width="120" height="80" rx="0" fill={fill} opacity="0.4" />
             <rect x="25" y="30" width="70" height="8" rx="2" fill={accent} />
@@ -138,8 +220,59 @@ const WIREFRAME_RENDERERS = {
             <polygon points="115,40 108,34 108,46" fill={accent} />
         </svg>
     ),
+    lightbox_grid: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="25" height="25" rx="3" fill={fill} />
+            <rect x="34" y="5" width="25" height="25" rx="3" fill={fill} />
+            <rect x="63" y="5" width="25" height="25" rx="3" fill={fill} />
+            <rect x="92" y="5" width="25" height="25" rx="3" fill={fill} />
+            <rect x="5" y="34" width="25" height="25" rx="3" fill={fill} />
+            <rect x="34" y="34" width="25" height="25" rx="3" fill={fill} />
+            <rect x="63" y="34" width="25" height="25" rx="3" fill={fill} />
+            <rect x="92" y="34" width="25" height="25" rx="3" fill={fill} />
+            <circle cx="104" cy="46" r="6" fill={accent} opacity="0.6" />
+            <path d="M102 46 L106 46 M104 44 L104 48" stroke="#fff" strokeWidth="1.5" />
+        </svg>
+    ),
+    filmstrip: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="110" height="48" rx="3" fill={fill} />
+            <rect x="5" y="58" width="20" height="16" rx="2" fill={accent} opacity="0.8" />
+            <rect x="28" y="58" width="20" height="16" rx="2" fill={fill} opacity="0.5" />
+            <rect x="51" y="58" width="20" height="16" rx="2" fill={fill} opacity="0.5" />
+            <rect x="74" y="58" width="20" height="16" rx="2" fill={fill} opacity="0.5" />
+            <rect x="97" y="58" width="20" height="16" rx="2" fill={fill} opacity="0.5" />
+        </svg>
+    ),
 
     // ── key_figures styles ───────────────────────────────────────
+    progress: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="8" y="12" width="40" height="4" rx="2" fill={accent} />
+            <rect x="8" y="20" width="100" height="6" rx="3" fill={fill} opacity="0.2" />
+            <rect x="8" y="20" width="75" height="6" rx="3" fill={accent} />
+            <rect x="8" y="34" width="35" height="4" rx="2" fill={accent} />
+            <rect x="8" y="42" width="100" height="6" rx="3" fill={fill} opacity="0.2" />
+            <rect x="8" y="42" width="50" height="6" rx="3" fill={accent} />
+            <rect x="8" y="56" width="45" height="4" rx="2" fill={accent} />
+            <rect x="8" y="64" width="100" height="6" rx="3" fill={fill} opacity="0.2" />
+            <rect x="8" y="64" width="90" height="6" rx="3" fill={accent} />
+        </svg>
+    ),
+    timeline: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <line x1="60" y1="5" x2="60" y2="75" stroke={fill} strokeWidth="2" opacity="0.3" />
+            <circle cx="60" cy="15" r="4" fill={accent} />
+            <rect x="68" y="10" width="40" height="4" rx="2" fill={accent} />
+            <rect x="68" y="17" width="35" height="3" rx="2" fill={fill} />
+            <circle cx="60" cy="40" r="4" fill={accent} />
+            <rect x="12" y="35" width="40" height="4" rx="2" fill={accent} />
+            <rect x="12" y="42" width="35" height="3" rx="2" fill={fill} />
+            <circle cx="60" cy="65" r="4" fill={accent} />
+            <rect x="68" y="60" width="40" height="4" rx="2" fill={accent} />
+            <rect x="68" y="67" width="35" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
     inline: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
             <rect x="5" y="25" width="25" height="12" rx="2" fill={accent} />
@@ -183,6 +316,22 @@ const WIREFRAME_RENDERERS = {
     ),
 
     // ── linked_pages styles ──────────────────────────────────────
+    image_cards: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="34" height="70" rx="4" fill="#fff" stroke={fill} strokeWidth="1" />
+            <rect x="8" y="8" width="28" height="18" rx="2" fill={fill} opacity="0.5" />
+            <rect x="8" y="30" width="25" height="4" rx="2" fill={accent} />
+            <rect x="8" y="38" width="28" height="3" rx="2" fill={fill} />
+            <rect x="43" y="5" width="34" height="70" rx="4" fill="#fff" stroke={fill} strokeWidth="1" />
+            <rect x="46" y="8" width="28" height="18" rx="2" fill={fill} opacity="0.5" />
+            <rect x="46" y="30" width="25" height="4" rx="2" fill={accent} />
+            <rect x="46" y="38" width="28" height="3" rx="2" fill={fill} />
+            <rect x="81" y="5" width="34" height="70" rx="4" fill="#fff" stroke={fill} strokeWidth="1" />
+            <rect x="84" y="8" width="28" height="18" rx="2" fill={fill} opacity="0.5" />
+            <rect x="84" y="30" width="25" height="4" rx="2" fill={accent} />
+            <rect x="84" y="38" width="28" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
     cards: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
             <rect x="5" y="5" width="34" height="70" rx="4" fill="#fff" stroke={fill} strokeWidth="1" />
@@ -276,6 +425,9 @@ const WIREFRAME_RENDERERS = {
         </svg>
     ),
 
+    // ── form styles (card) ──────────────────────────────────────
+    // Note: 'centered' and 'split' wireframes are shared with text/form blocks above
+
     // ── document styles ──────────────────────────────────────────
     default: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
@@ -284,6 +436,60 @@ const WIREFRAME_RENDERERS = {
             <rect x="20" y="30" width="80" height="3" rx="2" fill={fill} />
             <rect x="20" y="38" width="70" height="3" rx="2" fill={fill} />
             <rect x="20" y="50" width="35" height="8" rx="3" fill={accent} opacity="0.5" />
+        </svg>
+    ),
+
+    // ── cta styles ───────────────────────────────────────────────
+    banner: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="0" y="0" width="120" height="80" rx="0" fill={accent} opacity="0.2" />
+            <rect x="25" y="15" width="70" height="8" rx="2" fill={accent} />
+            <rect x="30" y="30" width="60" height="4" rx="2" fill={fill} />
+            <rect x="35" y="38" width="50" height="4" rx="2" fill={fill} />
+            <rect x="38" y="52" width="44" height="12" rx="5" fill={accent} />
+        </svg>
+    ),
+    floating: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="15" y="8" width="90" height="64" rx="8" fill={accent} opacity="0.15" />
+            <rect x="20" y="12" width="80" height="56" rx="6" fill="#fff" stroke={accent} strokeWidth="1" opacity="0.5" />
+            <rect x="35" y="22" width="50" height="6" rx="2" fill={accent} />
+            <rect x="30" y="34" width="60" height="3" rx="2" fill={fill} />
+            <rect x="35" y="41" width="50" height="3" rx="2" fill={fill} />
+            <rect x="40" y="52" width="40" height="10" rx="4" fill={accent} />
+        </svg>
+    ),
+
+    // ── testimonial styles ───────────────────────────────────────
+    single: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <text x="20" y="20" fontSize="24" fill={accent} opacity="0.3">"</text>
+            <rect x="25" y="25" width="70" height="5" rx="2" fill={fill} />
+            <rect x="30" y="34" width="60" height="5" rx="2" fill={fill} />
+            <rect x="35" y="43" width="50" height="5" rx="2" fill={fill} />
+            <circle cx="60" cy="62" r="7" fill={fill} opacity="0.3" />
+            <rect x="45" y="72" width="30" height="3" rx="2" fill={accent} />
+        </svg>
+    ),
+
+    // ── separator styles ─────────────────────────────────────────
+    line: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <line x1="15" y1="40" x2="105" y2="40" stroke={fill} strokeWidth="2" opacity="0.4" />
+        </svg>
+    ),
+    spacer: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="55" y="10" width="10" height="60" rx="2" fill={fill} opacity="0.1" />
+            <path d="M60 15 L55 22 L65 22 Z" fill={fill} opacity="0.3" />
+            <path d="M60 65 L55 58 L65 58 Z" fill={fill} opacity="0.3" />
+        </svg>
+    ),
+    divider: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <line x1="10" y1="40" x2="45" y2="40" stroke={fill} strokeWidth="2" opacity="0.3" />
+            <rect x="48" y="35" width="24" height="10" rx="3" fill={accent} opacity="0.5" />
+            <line x1="75" y1="40" x2="110" y2="40" stroke={fill} strokeWidth="2" opacity="0.3" />
         </svg>
     ),
 };

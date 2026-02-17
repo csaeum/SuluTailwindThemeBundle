@@ -1,0 +1,97 @@
+{# Linked pages block — carousel of page cards #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default('')
+    } only %}
+
+    {% if links is defined and links is iterable %}
+        {# Collect all page items into a flat list #}
+        {% set allPages = [] %}
+        {% for link in links %}
+            {% if link.type == 'internal' and link.pages is defined %}
+                {% for page in link.pages %}
+                    {% set allPages = allPages|merge([{type: 'internal', page: page}]) %}
+                {% endfor %}
+            {% elseif link.type == 'external' %}
+                {% set allPages = allPages|merge([{type: 'external', link: link}]) %}
+            {% endif %}
+        {% endfor %}
+
+        {% if allPages|length > 0 %}
+            <div
+                data-controller="slider"
+                data-slider-mode-value="carousel"
+                data-slider-autoplay-value="true"
+                data-slider-interval-value="5000"
+                class="relative"
+            >
+                {# Slides #}
+                <div class="overflow-hidden">
+                    {% for item in allPages %}
+                        <div
+                            data-slider-target="slide"
+                            class="{{ loop.first ? '' : 'hidden' }}"
+                        >
+                            <div class="max-w-2xl mx-auto p-8 text-center">
+                                {% if item.type == 'internal' %}
+                                    <a href="{{ sulu_content_path(item.page) }}" class="block no-underline group">
+                                        <h4 class="text-xl md:text-2xl font-semibold group-hover:text-[var(--color-link)]">
+                                            {{ item.page.title|default('') }}
+                                        </h4>
+                                        {% if item.page.excerpt is defined and item.page.excerpt.description is defined %}
+                                            <p class="mt-3 opacity-75 line-clamp-3">{{ item.page.excerpt.description }}</p>
+                                        {% endif %}
+                                    </a>
+                                {% else %}
+                                    {% set linkUrl = item.link.url|default('#') %}
+                                    {% if item.link.anchor is defined and item.link.anchor is not empty %}
+                                        {% set linkUrl = linkUrl ~ '#' ~ item.link.anchor %}
+                                    {% endif %}
+                                    <a href="{{ linkUrl }}" target="{{ item.link.target|default('_self') }}" class="block no-underline group">
+                                        <h4 class="text-xl md:text-2xl font-semibold group-hover:text-[var(--color-link)]">
+                                            {{ item.link.label|default(item.link.url|default('')) }}
+                                        </h4>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {# Navigation #}
+                <button
+                    type="button"
+                    data-action="slider#prev"
+                    class="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-primary)]/10 hover:bg-[var(--color-primary)]/20 transition-colors"
+                    aria-label="Previous"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button
+                    type="button"
+                    data-action="slider#next"
+                    class="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-primary)]/10 hover:bg-[var(--color-primary)]/20 transition-colors"
+                    aria-label="Next"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+
+                {# Dots #}
+                <div data-slider-target="dots" class="flex items-center justify-center gap-2 mt-6">
+                    {% for item in allPages %}
+                        <button
+                            type="button"
+                            data-action="slider#goTo"
+                            data-slider-index-param="{{ loop.index0 }}"
+                            class="w-2.5 h-2.5 rounded-full {{ loop.first ? 'bg-[var(--color-primary)]' : 'bg-[var(--color-primary)]/30' }} transition-colors"
+                            aria-label="Slide {{ loop.index }}"
+                        ></button>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

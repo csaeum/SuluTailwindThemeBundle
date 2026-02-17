@@ -25,15 +25,14 @@
                 >
                     <a
                         href="{{ media.url }}"
-                        class="glightbox block w-full h-full"
+                        class="glightbox relative block w-full h-full"
                         data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
                     >
                         <img
                             src="{{ media.thumbnails['iw_theme_16_9']|default(media.url) }}"
                             alt="{{ media.title|default('') }}"
                             loading="lazy"
-                            class="w-full h-full object-cover cursor-pointer"
-                            style="border-radius: 0;"
+                            class="absolute inset-0 w-full h-full object-cover cursor-pointer"
                         >
                     </a>
                 </div>
@@ -57,14 +56,14 @@
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </button>
 
-            {# Dot indicators #}
-            <div data-slider-target="dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+            {# Dot indicators — overlaid on the image, a few pixels from the bottom edge #}
+            <div data-slider-target="dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/30 backdrop-blur-sm z-20">
                 {% for mediaId in images %}
                     <button
                         type="button"
                         data-action="slider#goTo"
                         data-slider-index-param="{{ loop.index0 }}"
-                        class="w-3 h-3 rounded-full {{ loop.first ? 'bg-white' : 'bg-white/50' }} transition-colors"
+                        class="w-2.5 h-2.5 rounded-full {{ loop.first ? 'bg-white' : 'bg-white/50' }} transition-colors"
                         aria-label="Slide {{ loop.index }}"
                     ></button>
                 {% endfor %}

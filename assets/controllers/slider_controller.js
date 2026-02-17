@@ -18,7 +18,7 @@ import { Controller } from '@hotwired/stimulus';
  *   - dots: Container for dot indicators
  */
 export default class extends Controller {
-    static targets = ['track', 'slide', 'dots'];
+    static targets = ['track', 'slide', 'dots', 'thumbnail'];
     static values = {
         autoplay: { type: Boolean, default: false },
         interval: { type: Number, default: 5000 },
@@ -94,6 +94,7 @@ export default class extends Controller {
         });
 
         this._updateDots();
+        this._updateThumbnails();
         this._resetAutoplay();
     }
 
@@ -115,6 +116,38 @@ export default class extends Controller {
                 dot.classList.add('bg-white/50');
             }
         });
+    }
+
+    /**
+     * Highlight the active thumbnail (filmstrip mode).
+     *
+     * @private
+     */
+    _updateThumbnails() {
+        if (!this.hasThumbnailTarget) return;
+
+        this.thumbnailTargets.forEach((thumb, idx) => {
+            if (idx === this.currentSlide) {
+                thumb.classList.add('ring-2', 'ring-[var(--color-primary)]', 'opacity-100');
+                thumb.classList.remove('opacity-60');
+            } else {
+                thumb.classList.remove('ring-2', 'ring-[var(--color-primary)]', 'opacity-100');
+                thumb.classList.add('opacity-60');
+            }
+        });
+    }
+
+    /**
+     * Navigate to the slide matching the clicked thumbnail.
+     *
+     * @param {Event} event - Event with params.index
+     */
+    selectThumbnail(event) {
+        const index = parseInt(event.params.index, 10);
+        if (!isNaN(index) && index >= 0 && index < this.slideTargets.length) {
+            this.currentSlide = index;
+            this._showSlide();
+        }
     }
 
     /**

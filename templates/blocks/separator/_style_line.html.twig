@@ -1,0 +1,20 @@
+{# Separator block — horizontal line #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{# Minimal padding for a separator #}
+{% block block_padding %}py-2{% endblock %}
+
+{% block block_content %}
+    {% set widthMap = {
+        'thin': 'border-t',
+        'medium': 'border-t-2',
+        'thick': 'border-t-4'
+    } %}
+    {% set styleMap = {
+        'solid': 'border-solid',
+        'dashed': 'border-dashed',
+        'dotted': 'border-dotted'
+    } %}
+
+    <hr class="{{ widthMap[lineWidth|default('thin')]|default('border-t') }} {{ styleMap[lineStyle|default('solid')]|default('border-solid') }} border-current opacity-20">
+{% endblock %}

@@ -1,5 +1,15 @@
-{# Gallery block — full-screen image slider with lightbox #}
+{# Gallery block — wide carousel with lightbox.
+   Overrides wrapper to remove container and margins for true edge-to-edge display. #}
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{# No container — full viewport width #}
+{% block block_container_class %}{% endblock %}
+
+{# No default margins — user margins still apply via marginTop/marginBottom fields #}
+{% block block_classes %}{{ marginTop|default('mt-0') }} {{ marginBottom|default('mb-0') }}{% endblock %}
+
+{# No padding — edge-to-edge display #}
+{% block block_padding %}{% endblock %}
 
 {% block block_content %}
     {% if images is defined and images is iterable %}
@@ -8,30 +18,28 @@
             data-slider-autoplay-value="true"
             data-slider-interval-value="6000"
             data-slider-mode-value="carousel"
-            class="relative -mx-4 sm:-mx-6 lg:-mx-8"
+            class="relative overflow-hidden w-full"
+            style="aspect-ratio: 16/9;"
         >
-            {# Full-screen slides #}
+            {# Full-screen slides — absolute positioned #}
             {% for mediaId in images %}
                 {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
                 <div
                     data-slider-target="slide"
-                    class="w-full {{ not loop.first ? 'hidden' : '' }}"
+                    class="absolute inset-0 w-full h-full {{ not loop.first ? 'hidden' : '' }}"
                 >
-                    <div class="relative h-[60vh] md:h-[80vh]">
-                        <a
-                            href="{{ media.url }}"
-                            class="glightbox block w-full h-full"
-                            data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
+                    <a
+                        href="{{ media.url }}"
+                        class="glightbox relative block w-full h-full"
+                        data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
+                    >
+                        <img
+                            src="{{ media.thumbnails['iw_theme_16_9']|default(media.url) }}"
+                            alt="{{ media.title|default('') }}"
+                            loading="{{ loop.first ? 'eager' : 'lazy' }}"
+                            class="absolute inset-0 w-full h-full object-cover cursor-pointer"
                         >
-                            <img
-                                src="{{ media.thumbnails['iw_theme_hero']|default(media.url) }}"
-                                alt="{{ media.title|default('') }}"
-                                loading="{{ loop.first ? 'eager' : 'lazy' }}"
-                                class="w-full h-full object-cover cursor-pointer"
-                                style="border-radius: 0;"
-                            >
-                        </a>
-                    </div>
+                    </a>
                 </div>
             {% endfor %}
 
@@ -53,14 +61,14 @@
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
             </button>
 
-            {# Dot indicators #}
-            <div data-slider-target="dots" class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+            {# Dot indicators — overlaid on the image, a few pixels from the bottom edge #}
+            <div data-slider-target="dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/30 backdrop-blur-sm z-20">
                 {% for mediaId in images %}
                     <button
                         type="button"
                         data-action="slider#goTo"
                         data-slider-index-param="{{ loop.index0 }}"
-                        class="w-3 h-3 rounded-full {{ loop.first ? 'bg-white' : 'bg-white/50' }} transition-colors"
+                        class="w-2.5 h-2.5 rounded-full {{ loop.first ? 'bg-white' : 'bg-white/50' }} transition-colors"
                         aria-label="Slide {{ loop.index }}"
                     ></button>
                 {% endfor %}

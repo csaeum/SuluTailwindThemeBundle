@@ -1,0 +1,42 @@
+{# CTA block — split layout with image and text #}
+{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        {# Image side #}
+        <div class="{{ (imagePosition|default('right')) == 'left' ? 'lg:order-1' : 'lg:order-2' }}">
+            {% if image is defined and image.id is defined %}
+                {% set resolvedImage = sulu_resolve_media(image.id, app.request.locale) %}
+                <img
+                    src="{{ resolvedImage.thumbnails['iw_theme_4_3']|default(resolvedImage.url) }}"
+                    alt="{{ resolvedImage.title|default('') }}"
+                    loading="lazy"
+                    class="w-full rounded-[var(--radius-img)] object-cover"
+                    style="aspect-ratio: 4/3;"
+                >
+            {% endif %}
+        </div>
+
+        {# Text side #}
+        <div class="{{ (imagePosition|default('right')) == 'left' ? 'lg:order-2' : 'lg:order-1' }}">
+            {% if title is defined and title is not empty %}
+                <h2 class="block-title text-2xl md:text-3xl lg:text-4xl font-[var(--font-h2-weight)]">{{ title }}</h2>
+            {% endif %}
+            {% if subTitle is defined and subTitle is not empty %}
+                <h3 class="block-subtitle text-lg md:text-xl mt-2 opacity-75">{{ subTitle }}</h3>
+            {% endif %}
+            {% if text is defined and text is not empty %}
+                <div class="block-text prose max-w-none mt-6">
+                    {{ text|raw }}
+                </div>
+            {% endif %}
+
+            {% include '@ItechWorldSuluTheme/blocks/common/_cta_buttons.html.twig' with {
+                primaryButtonLabel: primaryButtonLabel|default(''),
+                primaryButtonUrl: primaryButtonUrl|default(''),
+                secondaryButtonLabel: secondaryButtonLabel|default(''),
+                secondaryButtonUrl: secondaryButtonUrl|default('')
+            } only %}
+        </div>
+    </div>
+{% endblock %}

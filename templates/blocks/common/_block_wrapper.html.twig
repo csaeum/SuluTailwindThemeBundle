@@ -1,16 +1,30 @@
-{# Block wrapper — applies variant, margins, container and lightbox support #}
+{# Block wrapper — applies variant, margins, padding, container and lightbox support.
+   Child templates can override:
+     - block_classes: to replace or remove margin classes (e.g. fullscreen blocks)
+     - block_padding: to replace or remove vertical padding (e.g. edge-to-edge blocks)
+     - block_container_class: to replace or remove the container (e.g. full-width blocks)
+       When overridden to empty, the wrapper <div> is not rendered at all.
+#}
 {% set variantClass = 'block-variant-' ~ (variant|default('clair')) %}
 {% set mtClass = marginTop|default('mt-0') %}
 {% set mbClass = marginBottom|default('mb-0') %}
+{% set ptClass = paddingTop|default('pt-8 md:pt-12 lg:pt-16') %}
+{% set pbClass = paddingBottom|default('pb-8 md:pb-12 lg:pb-16') %}
 {% set containerClass = (lateralMargins|default(true)) ? 'container mx-auto px-4 sm:px-6 lg:px-8' : '' %}
 {% set bgAttr = (showBackground|default(true)) ? 'data-has-bg="true"' : '' %}
 
+{% set _containerClass %}{% block block_container_class %}{{ containerClass }}{% endblock %}{% endset %}
+
 <section
-    class="block {{ variantClass }} {{ mtClass }} {{ mbClass }}"
+    class="block {{ variantClass }} {% block block_classes %}{{ mtClass }} {{ mbClass }}{% endblock %} {% block block_padding %}{{ ptClass }} {{ pbClass }}{% endblock %}"
     {{ bgAttr|raw }}
     data-controller="lightbox"
 >
-    <div class="{{ containerClass }}">
+    {% if _containerClass|trim is not empty %}
+        <div class="{{ _containerClass|trim }}">
+            {{ block('block_content') }}
+        </div>
+    {% else %}
         {{ block('block_content') }}
-    </div>
+    {% endif %}
 </section>
