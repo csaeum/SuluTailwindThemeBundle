@@ -13,7 +13,7 @@
                 {% if link.type == 'internal' and link.pages is defined %}
                     {% for page in link.pages %}
                         <a
-                            href="{{ sulu_content_path(page) }}"
+                            href="{{ sulu_content_path(page.url|default('/')) }}"
                             class="flex-none w-[250px] md:w-[300px] snap-start p-6 rounded-[var(--border-radius,8px)] border border-[var(--color-border,#e5e7eb)] hover:shadow-lg transition-shadow no-underline"
                         >
                             <h4 class="text-base font-semibold truncate">{{ page.title|default('') }}</h4>

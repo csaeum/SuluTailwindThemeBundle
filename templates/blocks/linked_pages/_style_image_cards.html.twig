@@ -12,7 +12,7 @@
             {% for link in links %}
                 {% if link.type == 'internal' and link.pages is defined %}
                     {% for page in link.pages %}
-                        <a href="{{ sulu_content_path(page) }}" class="group block no-underline">
+                        <a href="{{ sulu_content_path(page.url|default('/')) }}" class="group block no-underline">
                             <div class="rounded-[var(--border-radius,8px)] border border-[var(--color-border,#e5e7eb)] overflow-hidden transition-shadow duration-300 hover:shadow-lg h-full">
                                 {# Excerpt image #}
                                 {% if page.excerpt is defined and page.excerpt.images is defined and page.excerpt.images|length > 0 %}

@@ -13,7 +13,7 @@
                 {% if link.type == 'internal' and link.pages is defined %}
                     {% for page in link.pages %}
                         <li>
-                            <a href="{{ sulu_content_path(page) }}" class="flex items-center justify-between py-4 hover:text-[var(--color-link)] transition-colors no-underline group">
+                            <a href="{{ sulu_content_path(page.url|default('/')) }}" class="flex items-center justify-between py-4 hover:text-[var(--color-link)] transition-colors no-underline group">
                                 <span class="font-medium">{{ page.title|default('') }}</span>
                                 <svg class="w-5 h-5 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                             </a>

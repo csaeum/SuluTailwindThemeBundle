@@ -37,7 +37,7 @@
                         >
                             <div class="max-w-2xl mx-auto p-8 text-center">
                                 {% if item.type == 'internal' %}
-                                    <a href="{{ sulu_content_path(item.page) }}" class="block no-underline group">
+                                    <a href="{{ sulu_content_path(item.page.url|default('/')) }}" class="block no-underline group">
                                         <h4 class="text-xl md:text-2xl font-semibold group-hover:text-[var(--color-link)]">
                                             {{ item.page.title|default('') }}
                                         </h4>
