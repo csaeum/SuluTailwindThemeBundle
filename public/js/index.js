@@ -6,6 +6,7 @@ import StylePicker from './components/StylePicker/StylePicker';
 import MarginSelector from './components/MarginSelector/MarginSelector';
 import ColorTokenEditor from './components/ColorTokenEditor/ColorTokenEditor';
 import FontSelector from './components/FontSelector/FontSelector';
+import RadiusSelector from './components/RadiusSelector/RadiusSelector';
 
 /**
  * Register all custom field types for the SuluThemeBundle admin interface.
@@ -49,5 +50,10 @@ initializer.addUpdateConfigHook('iw_sulu_theme', (config: Object, initialized: b
     fieldRegistry.add(
         'iw_theme_font_selector',
         FontSelector
+    );
+
+    fieldRegistry.add(
+        'iw_theme_radius_selector',
+        RadiusSelector
     );
 });

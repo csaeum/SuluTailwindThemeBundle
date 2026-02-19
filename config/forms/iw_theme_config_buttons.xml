@@ -12,40 +12,39 @@
                 <title>iw_sulu_theme.buttons_primary</title>
             </meta>
             <properties>
-                <property name="buttons_primary_bg" type="color" colspan="4">
+                <property name="buttons_primary_bg" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.buttons_bg</title>
                     </meta>
                 </property>
-                <property name="buttons_primary_text" type="color" colspan="4">
+                <property name="buttons_primary_text" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.buttons_text</title>
                     </meta>
                 </property>
-                <property name="buttons_primary_border" type="color" colspan="4">
+                <property name="buttons_primary_border" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.buttons_border</title>
                     </meta>
                 </property>
-                <property name="buttons_primary_hoverBg" type="color" colspan="4">
+                <property name="buttons_primary_hoverBg" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.buttons_hoverBg</title>
                     </meta>
                 </property>
-                <property name="buttons_primary_hoverText" type="color" colspan="4">
+                <property name="buttons_primary_hoverText" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.buttons_hoverText</title>
                     </meta>
                 </property>
-                <property name="buttons_primary_hoverBorder" type="color" colspan="4">
+                <property name="buttons_primary_hoverBorder" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.buttons_hoverBorder</title>
                     </meta>
                 </property>
-                <property name="buttons_primary_radius" type="text_line" colspan="4">
+                <property name="buttons_primary_radius" type="iw_theme_radius_selector" colspan="12">
                     <meta>
                         <title>iw_sulu_theme.buttons_radius</title>
-                        <info_text>iw_sulu_theme.buttons_radius_info</info_text>
                     </meta>
                 </property>
             </properties>
@@ -57,40 +56,39 @@
                 <title>iw_sulu_theme.buttons_secondary</title>
             </meta>
             <properties>
-                <property name="buttons_secondary_bg" type="color" colspan="4">
+                <property name="buttons_secondary_bg" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.buttons_bg</title>
                     </meta>
                 </property>
-                <property name="buttons_secondary_text" type="color" colspan="4">
+                <property name="buttons_secondary_text" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.buttons_text</title>
                     </meta>
                 </property>
-                <property name="buttons_secondary_border" type="color" colspan="4">
+                <property name="buttons_secondary_border" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.buttons_border</title>
                     </meta>
                 </property>
-                <property name="buttons_secondary_hoverBg" type="color" colspan="4">
+                <property name="buttons_secondary_hoverBg" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.buttons_hoverBg</title>
                     </meta>
                 </property>
-                <property name="buttons_secondary_hoverText" type="color" colspan="4">
+                <property name="buttons_secondary_hoverText" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.buttons_hoverText</title>
                     </meta>
                 </property>
-                <property name="buttons_secondary_hoverBorder" type="color" colspan="4">
+                <property name="buttons_secondary_hoverBorder" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.buttons_hoverBorder</title>
                     </meta>
                 </property>
-                <property name="buttons_secondary_radius" type="text_line" colspan="4">
+                <property name="buttons_secondary_radius" type="iw_theme_radius_selector" colspan="12">
                     <meta>
                         <title>iw_sulu_theme.buttons_radius</title>
-                        <info_text>iw_sulu_theme.buttons_radius_info</info_text>
                     </meta>
                 </property>
             </properties>

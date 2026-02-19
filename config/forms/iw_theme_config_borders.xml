@@ -11,33 +11,13 @@
                 <title>iw_sulu_theme.borders_radii</title>
             </meta>
             <properties>
-                <property name="borders_radius" type="text_line" colspan="4">
+                <property name="borders_radius" type="iw_theme_radius_selector" colspan="12">
                     <meta>
                         <title>iw_sulu_theme.borders_radius</title>
-                        <info_text>iw_sulu_theme.borders_radius_info</info_text>
                     </meta>
                 </property>
 
-                <property name="borders_radiusSm" type="text_line" colspan="4">
-                    <meta>
-                        <title>iw_sulu_theme.borders_radiusSm</title>
-                    </meta>
-                </property>
-
-                <property name="borders_radiusLg" type="text_line" colspan="4">
-                    <meta>
-                        <title>iw_sulu_theme.borders_radiusLg</title>
-                    </meta>
-                </property>
-
-                <property name="borders_radiusFull" type="text_line" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.borders_radiusFull</title>
-                        <info_text>iw_sulu_theme.borders_radiusFull_info</info_text>
-                    </meta>
-                </property>
-
-                <property name="borders_imageRadius" type="text_line" colspan="6">
+                <property name="borders_imageRadius" type="iw_theme_radius_selector" colspan="12">
                     <meta>
                         <title>iw_sulu_theme.borders_imageRadius</title>
                     </meta>

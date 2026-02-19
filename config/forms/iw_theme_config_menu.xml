@@ -119,79 +119,79 @@
                 <title>iw_sulu_theme.menu_colors</title>
             </meta>
             <properties>
-                <property name="menuConfig_colors_bg" type="color" colspan="4">
+                <property name="menuConfig_colors_bg" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.menu_colors_bg</title>
                     </meta>
                 </property>
 
-                <property name="menuConfig_colors_text" type="color" colspan="4">
+                <property name="menuConfig_colors_text" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.menu_colors_text</title>
                     </meta>
                 </property>
 
-                <property name="menuConfig_colors_textHover" type="color" colspan="4">
+                <property name="menuConfig_colors_textHover" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.menu_colors_textHover</title>
                     </meta>
                 </property>
 
-                <property name="menuConfig_colors_secondBg" type="color" colspan="4">
+                <property name="menuConfig_colors_secondBg" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.menu_colors_secondBg</title>
                     </meta>
                 </property>
 
-                <property name="menuConfig_colors_secondText" type="color" colspan="4">
+                <property name="menuConfig_colors_secondText" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.menu_colors_secondText</title>
                     </meta>
                 </property>
 
-                <property name="menuConfig_colors_secondTextHover" type="color" colspan="4">
+                <property name="menuConfig_colors_secondTextHover" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.menu_colors_secondTextHover</title>
                     </meta>
                 </property>
 
-                <property name="menuConfig_colors_thirdBg" type="color" colspan="4">
+                <property name="menuConfig_colors_thirdBg" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.menu_colors_thirdBg</title>
                     </meta>
                 </property>
 
-                <property name="menuConfig_colors_thirdText" type="color" colspan="4">
+                <property name="menuConfig_colors_thirdText" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.menu_colors_thirdText</title>
                     </meta>
                 </property>
 
-                <property name="menuConfig_colors_divider" type="color" colspan="4">
+                <property name="menuConfig_colors_divider" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.menu_colors_divider</title>
                     </meta>
                 </property>
 
-                <property name="menuConfig_colors_burgerOpen" type="color" colspan="4">
+                <property name="menuConfig_colors_burgerOpen" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.menu_colors_burgerOpen</title>
                     </meta>
                 </property>
 
-                <property name="menuConfig_colors_burgerClose" type="color" colspan="4">
+                <property name="menuConfig_colors_burgerClose" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.menu_colors_burgerClose</title>
                     </meta>
                 </property>
 
-                <property name="menuConfig_colors_socialMedia" type="color" colspan="6">
+                <property name="menuConfig_colors_socialMedia" type="iw_theme_color_token_editor" colspan="6">
                     <meta>
                         <title>iw_sulu_theme.menu_colors_socialMedia</title>
                     </meta>
                 </property>
 
-                <property name="menuConfig_colors_socialMediaHover" type="color" colspan="6">
+                <property name="menuConfig_colors_socialMediaHover" type="iw_theme_color_token_editor" colspan="6">
                     <meta>
                         <title>iw_sulu_theme.menu_colors_socialMediaHover</title>
                     </meta>

@@ -1,27 +1,30 @@
-{# Block wrapper — applies variant, margins, padding, container and lightbox support.
+{# Block wrapper — applies variant, margins, padding, radius, container and lightbox support.
    Child templates can override:
      - block_classes: to replace or remove margin classes (e.g. fullscreen blocks)
      - block_padding: to replace or remove vertical padding (e.g. edge-to-edge blocks)
-     - block_container_class: to replace or remove the container (e.g. full-width blocks)
-       When overridden to empty, the wrapper <div> is not rendered at all.
+     - block_container_class: to replace or remove the inner padding wrapper (e.g. full-width blocks)
+       When overridden to empty, the inner wrapper <div> is not rendered at all.
 #}
 {% set variantClass = 'block-variant-' ~ (variant|default('clair')) %}
 {% set mtClass = marginTop|default('mt-0') %}
 {% set mbClass = marginBottom|default('mb-0') %}
 {% set ptClass = paddingTop|default('pt-8 md:pt-12 lg:pt-16') %}
 {% set pbClass = paddingBottom|default('pb-8 md:pb-12 lg:pb-16') %}
-{% set containerClass = (lateralMargins|default(true)) ? 'container mx-auto px-4 sm:px-6 lg:px-8' : '' %}
+{% set hasLateralMargins = lateralMargins is defined and lateralMargins %}
+{% set containerClass = hasLateralMargins ? 'container-xl mx-auto' : '' %}
+{% set radiusClass = (hasLateralMargins and blockRadius|default('') is not empty) ? blockRadius : '' %}
+{% set innerPadding = hasLateralMargins ? 'px-4 sm:px-6 lg:px-8' : '' %}
 {% set bgAttr = (showBackground|default(true)) ? 'data-has-bg="true"' : '' %}
 
-{% set _containerClass %}{% block block_container_class %}{{ containerClass }}{% endblock %}{% endset %}
+{% set _innerPadding %}{% block block_container_class %}{{ innerPadding }}{% endblock %}{% endset %}
 
 <section
-    class="block {{ variantClass }} {% block block_classes %}{{ mtClass }} {{ mbClass }}{% endblock %} {% block block_padding %}{{ ptClass }} {{ pbClass }}{% endblock %}"
+    class="block {{ variantClass }} {{ containerClass }} {% block block_classes %}{{ mtClass }} {{ mbClass }}{% endblock %} {% block block_padding %}{{ ptClass }} {{ pbClass }}{% endblock %} {{ radiusClass }} {% if radiusClass %}overflow-hidden{% endif %}"
     {{ bgAttr|raw }}
     data-controller="lightbox"
 >
-    {% if _containerClass|trim is not empty %}
-        <div class="{{ _containerClass|trim }}">
+    {% if _innerPadding|trim is not empty %}
+        <div class="{{ _innerPadding|trim }}">
             {{ block('block_content') }}
         </div>
     {% else %}

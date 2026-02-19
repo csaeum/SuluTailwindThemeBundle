@@ -19,7 +19,8 @@
         {# Main text area — 3/5 = 60% #}
         <div class="{{ position == 'left' ? 'md:order-2 md:col-span-3' : 'md:order-1 md:col-span-3' }}">
             {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
-                text: text|default('')
+                text: text|default(''),
+                paragraphRadius: paragraphRadius|default('')
             } only %}
         </div>
 

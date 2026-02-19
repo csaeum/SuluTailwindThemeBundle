@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import {getSuluPrimaryColor, getSuluPrimaryTint} from '../../utils/suluColors';
 
 /**
  * Available margin values for selection.
@@ -21,18 +22,41 @@ const MARGIN_VALUES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 16, 20, 24, 32];
  */
 export default class MarginSelector extends React.Component {
     /**
-     * Handle a margin value selection.
+     * Resolve the Tailwind margin prefix from schema options or field name.
      *
-     * @param {number} marginValue - The selected spacing value
+     * Priority: explicit schemaOptions.prefix > inferred from dataPath prop > 'mt' fallback.
+     *
+     * @returns {string} The Tailwind prefix (e.g., "mt", "mb", "my", "mx")
      */
+    resolvePrefix() {
+        const {schemaOptions, dataPath} = this.props;
+
+        // 1. Explicit prefix in schema options
+        if (schemaOptions && schemaOptions.prefix && schemaOptions.prefix.value) {
+            return schemaOptions.prefix.value;
+        }
+
+        // 2. Infer from field name via dataPath (e.g. "/blocks/0/marginBottom" → "mb")
+        if (dataPath) {
+            const fieldName = String(dataPath).split('/').pop();
+            if (fieldName && fieldName.toLowerCase().includes('bottom')) {
+                return 'mb';
+            }
+            if (fieldName && fieldName.toLowerCase().includes('top')) {
+                return 'mt';
+            }
+        }
+
+        return 'mt';
+    }
+
     handleSelect = (marginValue) => {
-        const {onChange, schemaOptions} = this.props;
+        const {onChange} = this.props;
         if (!onChange) {
             return;
         }
 
-        // Determine the prefix from schema options (e.g., "mt", "mb", "my", "mx")
-        const prefix = (schemaOptions && schemaOptions.prefix && schemaOptions.prefix.value) || 'mt';
+        const prefix = this.resolvePrefix();
         onChange(`${prefix}-${marginValue}`);
     };
 
@@ -59,6 +83,8 @@ export default class MarginSelector extends React.Component {
     render() {
         const {value} = this.props;
         const currentValue = this.parseCurrentValue(value);
+        const primary = getSuluPrimaryColor();
+        const tint = getSuluPrimaryTint();
 
         const containerStyle = {
             display: 'flex',
@@ -78,10 +104,10 @@ export default class MarginSelector extends React.Component {
                         justifyContent: 'center',
                         width: '36px',
                         height: '32px',
-                        border: isSelected ? '2px solid #1a73e8' : '1px solid #d0d0d0',
+                        border: isSelected ? `2px solid ${primary}` : '1px solid #d0d0d0',
                         borderRadius: '4px',
-                        backgroundColor: isSelected ? '#e8f0fe' : '#fff',
-                        color: isSelected ? '#1a73e8' : '#333',
+                        backgroundColor: isSelected ? tint : '#fff',
+                        color: isSelected ? primary : '#333',
                         fontSize: '12px',
                         fontWeight: isSelected ? 'bold' : 'normal',
                         cursor: 'pointer',

@@ -18,10 +18,37 @@ use ItechWorld\SuluThemeBundle\Entity\ThemeConfig;
  */
 class ThemeCompiler
 {
+    /**
+     * Mapping from Tailwind rounded-* class suffixes to CSS border-radius values.
+     */
+    private const RADIUS_MAP = [
+        'rounded-none' => '0',
+        'rounded-xs' => '0.125rem',
+        'rounded-sm' => '0.25rem',
+        'rounded-md' => '0.375rem',
+        'rounded-lg' => '0.5rem',
+        'rounded-xl' => '0.75rem',
+        'rounded-2xl' => '1rem',
+        'rounded-3xl' => '1.5rem',
+        'rounded-4xl' => '2rem',
+        'rounded-full' => 'calc(infinity * 1px)',
+    ];
+
     public function __construct(
         private readonly string $cssOutputDir,
         private readonly GoogleFontsResolver $googleFontsResolver,
     ) {
+    }
+
+    /**
+     * Convert a Tailwind rounded-* class to a CSS border-radius value.
+     *
+     * Falls back to returning the raw value if it does not match a known class
+     * (for backwards compatibility with older "8px" / "0.5rem" values).
+     */
+    private function resolveRadius(string $value): string
+    {
+        return self::RADIUS_MAP[$value] ?? $value;
     }
 
     /**
@@ -221,10 +248,12 @@ class ThemeCompiler
         foreach ($borders as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $subKey => $subValue) {
-                    $css .= "  --border-{$key}-{$subKey}: {$subValue};\n";
+                    $resolved = str_starts_with((string) $subValue, 'rounded-') ? $this->resolveRadius((string) $subValue) : $subValue;
+                    $css .= "  --border-{$key}-{$subKey}: {$resolved};\n";
                 }
             } else {
-                $css .= "  --border-{$key}: {$value};\n";
+                $resolved = str_starts_with((string) $value, 'rounded-') ? $this->resolveRadius((string) $value) : $value;
+                $css .= "  --border-{$key}: {$resolved};\n";
             }
         }
 
@@ -302,7 +331,7 @@ class ThemeCompiler
                 $css .= "  color: {$props['text']};\n";
             }
             if (isset($props['radius'])) {
-                $css .= "  border-radius: {$props['radius']};\n";
+                $css .= "  border-radius: {$this->resolveRadius((string) $props['radius'])};\n";
             }
             if (isset($props['border']) && 'none' !== $props['border']) {
                 $css .= "  border: 1px solid {$props['border']};\n";
@@ -354,6 +383,7 @@ class ThemeCompiler
             'subtitle' => '--variant-subtitle-color',
             'paragraph' => '--variant-paragraph-color',
             'link' => '--variant-link-color',
+            'linkHover' => '--variant-link-hover',
             'list' => '--variant-list-color',
             'hr' => '--variant-hr-color',
             'paragraphBg' => '--variant-paragraph-bg',
@@ -405,14 +435,29 @@ class ThemeCompiler
             $css .= "  color: var(--variant-link-color, inherit);\n";
             $css .= "}\n";
 
+            $css .= ".block-variant-{$variantName} a:hover {\n";
+            $css .= "  color: var(--variant-link-hover, var(--variant-link-color, inherit));\n";
+            $css .= "}\n";
+
             $css .= ".block-variant-{$variantName} ul,\n";
             $css .= ".block-variant-{$variantName} ol {\n";
             $css .= "  color: var(--variant-list-color, inherit);\n";
             $css .= "}\n";
 
             $css .= ".block-variant-{$variantName} hr {\n";
-            $css .= "  border-color: var(--variant-hr-color, currentColor);\n";
-            $css .= "}\n\n";
+            $css .= "  background-color: var(--variant-hr-color, var(--color-border, #e5e7eb));\n";
+            $css .= "}\n";
+
+            // Apply paragraph background only when the variant defines it
+            // Border-radius is controlled per-block via the paragraphRadius Tailwind class
+            if (isset($props['paragraphBg'])) {
+                $css .= ".block-variant-{$variantName} .block-text {\n";
+                $css .= "  background-color: var(--variant-paragraph-bg);\n";
+                $css .= "  padding: 1rem 1.5rem;\n";
+                $css .= "}\n";
+            }
+
+            $css .= "\n";
         }
 
         return $css;

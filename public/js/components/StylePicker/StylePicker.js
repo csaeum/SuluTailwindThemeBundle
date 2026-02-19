@@ -10,34 +10,16 @@ import {getSuluPrimaryColor, getSuluPrimaryAlpha, getSuluPrimaryTint} from '../.
  */
 const WIREFRAME_RENDERERS = {
     // ── text styles ──────────────────────────────────────────────
-    centered: (fill, accent) => (
+    one_column: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="30" y="10" width="60" height="6" rx="2" fill={accent} />
-            <rect x="20" y="22" width="80" height="4" rx="2" fill={fill} />
-            <rect x="25" y="30" width="70" height="4" rx="2" fill={fill} />
-            <rect x="30" y="38" width="60" height="4" rx="2" fill={fill} />
-            <rect x="15" y="50" width="90" height="3" rx="2" fill={fill} />
-            <rect x="20" y="57" width="80" height="3" rx="2" fill={fill} />
-        </svg>
-    ),
-    left_aligned: (fill, accent) => (
-        <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="8" y="10" width="50" height="6" rx="2" fill={accent} />
-            <rect x="8" y="22" width="95" height="4" rx="2" fill={fill} />
-            <rect x="8" y="30" width="85" height="4" rx="2" fill={fill} />
-            <rect x="8" y="38" width="90" height="4" rx="2" fill={fill} />
-            <rect x="8" y="50" width="100" height="3" rx="2" fill={fill} />
-            <rect x="8" y="57" width="80" height="3" rx="2" fill={fill} />
-        </svg>
-    ),
-    right_aligned: (fill, accent) => (
-        <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="62" y="10" width="50" height="6" rx="2" fill={accent} />
-            <rect x="17" y="22" width="95" height="4" rx="2" fill={fill} />
-            <rect x="27" y="30" width="85" height="4" rx="2" fill={fill} />
-            <rect x="22" y="38" width="90" height="4" rx="2" fill={fill} />
-            <rect x="12" y="50" width="100" height="3" rx="2" fill={fill} />
-            <rect x="32" y="57" width="80" height="3" rx="2" fill={fill} />
+            <rect x="8" y="8" width="55" height="6" rx="2" fill={accent} />
+            <rect x="8" y="18" width="40" height="4" rx="2" fill={fill} opacity="0.6" />
+            <line x1="8" y1="28" x2="112" y2="28" stroke={fill} strokeWidth="1" opacity="0.3" />
+            <rect x="8" y="34" width="100" height="3" rx="2" fill={fill} />
+            <rect x="8" y="41" width="95" height="3" rx="2" fill={fill} />
+            <rect x="8" y="48" width="88" height="3" rx="2" fill={fill} />
+            <rect x="8" y="58" width="104" height="3" rx="2" fill={fill} />
+            <rect x="8" y="65" width="80" height="3" rx="2" fill={fill} />
         </svg>
     ),
     two_columns: (fill, accent) => (
@@ -54,15 +36,6 @@ const WIREFRAME_RENDERERS = {
             <line x1="60" y1="16" x2="60" y2="42" stroke={fill} strokeWidth="1" opacity="0.3" />
         </svg>
     ),
-    hero: (fill, accent) => (
-        <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="15" y="10" width="90" height="10" rx="2" fill={accent} />
-            <rect x="25" y="28" width="70" height="5" rx="2" fill={fill} opacity="0.6" />
-            <rect x="20" y="42" width="80" height="3" rx="2" fill={fill} />
-            <rect x="25" y="50" width="70" height="3" rx="2" fill={fill} />
-            <rect x="30" y="58" width="60" height="3" rx="2" fill={fill} />
-        </svg>
-    ),
     quote: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
             <rect x="10" y="10" width="4" height="50" rx="2" fill={accent} />
@@ -72,22 +45,6 @@ const WIREFRAME_RENDERERS = {
             <rect x="22" y="50" width="40" height="4" rx="2" fill={accent} opacity="0.5" />
         </svg>
     ),
-    accordion: (fill, accent) => (
-        <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="5" y="5" width="110" height="14" rx="2" fill={fill} opacity="0.15" />
-            <rect x="10" y="9" width="60" height="5" rx="2" fill={accent} />
-            <polygon points="108,12 102,8 102,16" fill={fill} />
-            <rect x="5" y="23" width="110" height="14" rx="2" fill={fill} opacity="0.15" />
-            <rect x="10" y="27" width="55" height="5" rx="2" fill={accent} />
-            <polygon points="108,30 102,26 102,34" fill={fill} />
-            <rect x="5" y="41" width="110" height="14" rx="2" fill={accent} opacity="0.2" />
-            <rect x="10" y="45" width="50" height="5" rx="2" fill={accent} />
-            <polygon points="108,43 102,48 114,48" fill={accent} />
-            <rect x="10" y="59" width="90" height="3" rx="2" fill={fill} />
-            <rect x="10" y="65" width="80" height="3" rx="2" fill={fill} />
-        </svg>
-    ),
-
     // ── text_images styles ───────────────────────────────────────
     classic: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">

@@ -19,7 +19,8 @@
         {# Text column #}
         <div class="{{ position == 'left' ? 'md:order-2' : 'md:order-1' }}">
             {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
-                text: text|default('')
+                text: text|default(''),
+                paragraphRadius: paragraphRadius|default('')
             } only %}
         </div>
 

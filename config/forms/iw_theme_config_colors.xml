@@ -11,19 +11,19 @@
                 <title>iw_sulu_theme.colors_section_main</title>
             </meta>
             <properties>
-                <property name="colors_primary" type="color" colspan="4">
+                <property name="colors_primary" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.colors_primary</title>
                     </meta>
                 </property>
 
-                <property name="colors_secondary" type="color" colspan="4">
+                <property name="colors_secondary" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.colors_secondary</title>
                     </meta>
                 </property>
 
-                <property name="colors_background" type="color" colspan="4">
+                <property name="colors_background" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.colors_background</title>
                     </meta>
@@ -36,19 +36,19 @@
                 <title>iw_sulu_theme.colors_section_text</title>
             </meta>
             <properties>
-                <property name="colors_text" type="color" colspan="4">
+                <property name="colors_text" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.colors_text</title>
                     </meta>
                 </property>
 
-                <property name="colors_link" type="color" colspan="4">
+                <property name="colors_link" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.colors_link</title>
                     </meta>
                 </property>
 
-                <property name="colors_linkHover" type="color" colspan="4">
+                <property name="colors_linkHover" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
                         <title>iw_sulu_theme.colors_linkHover</title>
                     </meta>

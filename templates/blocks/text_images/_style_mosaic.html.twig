@@ -15,7 +15,8 @@
         {# Text area — takes 1 column #}
         <div class="lg:col-span-1">
             {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
-                text: text|default('')
+                text: text|default(''),
+                paragraphRadius: paragraphRadius|default('')
             } only %}
         </div>
 

@@ -30,7 +30,7 @@
                     {# Text column #}
                     <div class="{{ loop.index is even ? 'md:order-1' : 'md:order-2' }}">
                         {% if loop.first and text is defined and text is not empty %}
-                            <div class="block-text prose max-w-none">
+                            <div class="block-text prose max-w-none {% if paragraphRadius is defined and paragraphRadius %}{{ paragraphRadius }}{% endif %}">
                                 {{ text|raw }}
                             </div>
                         {% elseif showImagesName|default(false) and media.title is defined %}
@@ -45,7 +45,8 @@
         </div>
     {% else %}
         {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
-            text: text|default('')
+            text: text|default(''),
+            paragraphRadius: paragraphRadius|default('')
         } only %}
     {% endif %}
 {% endblock %}

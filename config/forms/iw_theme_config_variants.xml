@@ -17,62 +17,68 @@
                         <title>iw_sulu_theme.variant</title>
                     </meta>
                     <properties>
-                        <property name="key" type="text_line" mandatory="true" colspan="6">
+                        <property name="key" type="text_line" visibleCondition="false">
                             <meta>
                                 <title>iw_sulu_theme.variant_key</title>
-                                <info_text>iw_sulu_theme.variant_key_info</info_text>
+                                <info_text>iw_sulu_theme.variant_key_auto_info</info_text>
                             </meta>
                         </property>
 
-                        <property name="label" type="text_line" colspan="6">
+                        <property name="label" type="text_line" colspan="12" mandatory="true">
                             <meta>
                                 <title>iw_sulu_theme.variant_label</title>
                             </meta>
                         </property>
 
-                        <property name="title" type="color" colspan="4">
+                        <property name="title" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_title_color</title>
                             </meta>
                         </property>
 
-                        <property name="subtitle" type="color" colspan="4">
+                        <property name="subtitle" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_subtitle_color</title>
                             </meta>
                         </property>
 
-                        <property name="paragraph" type="color" colspan="4">
+                        <property name="paragraph" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_paragraph_color</title>
                             </meta>
                         </property>
 
-                        <property name="link" type="color" colspan="4">
+                        <property name="link" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_link_color</title>
                             </meta>
                         </property>
 
-                        <property name="list" type="color" colspan="4">
+                        <property name="linkHover" type="iw_theme_color_token_editor" colspan="4">
+                            <meta>
+                                <title>iw_sulu_theme.variant_link_hover_color</title>
+                            </meta>
+                        </property>
+
+                        <property name="list" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_list_color</title>
                             </meta>
                         </property>
 
-                        <property name="hr" type="color" colspan="4">
+                        <property name="hr" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_hr_color</title>
                             </meta>
                         </property>
 
-                        <property name="paragraphBg" type="color" colspan="6">
+                        <property name="paragraphBg" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_paragraphBg</title>
                             </meta>
                         </property>
 
-                        <property name="blockBg" type="color" colspan="6">
+                        <property name="blockBg" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_blockBg</title>
                             </meta>

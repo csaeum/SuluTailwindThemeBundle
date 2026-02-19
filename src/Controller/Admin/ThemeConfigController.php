@@ -638,6 +638,8 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      * Form: [{type: "variant", key: "clair", label: ..., title: ...}, ...]
      * DB: {clair: {label: ..., title: ...}, ...}
      *
+     * When the key is empty, it is auto-generated from the label (slugified).
+     *
      * @param array<string, mixed>                     $data     Source flat data
      * @param array<string, array<string, mixed>> $existing Existing variants
      *
@@ -650,18 +652,70 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         }
 
         $result = [];
+        $usedKeys = [];
+
         foreach ($data['blockVariants'] as $blockItem) {
-            if (!is_array($blockItem) || !isset($blockItem['key'])) {
+            if (!is_array($blockItem)) {
                 continue;
             }
-            $key = $blockItem['key'];
+
+            $key = trim($blockItem['key'] ?? '');
+
+            // Auto-generate key from label when empty
+            if ('' === $key) {
+                $label = trim($blockItem['label'] ?? '');
+                $key = $this->generateVariantKey($label, $usedKeys);
+            }
+
             $props = $blockItem;
             // Remove Sulu block metadata keys
             unset($props['type'], $props['key']);
             $result[$key] = $props;
+            $usedKeys[] = $key;
         }
 
         return !empty($result) ? $result : $existing;
+    }
+
+    /**
+     * Generate a CSS-safe variant key from a label.
+     *
+     * Transliterates to ASCII, lowercases, replaces non-alphanumeric with underscores,
+     * and appends a counter suffix if the key already exists.
+     *
+     * @param string        $label       The human-readable label
+     * @param array<string> $existingKeys Keys already in use
+     *
+     * @return string A unique, CSS-safe variant key
+     */
+    private function generateVariantKey(string $label, array $existingKeys): string
+    {
+        if ('' === $label) {
+            $label = 'variant';
+        }
+
+        // Transliterate accented characters to ASCII
+        $slug = transliterator_transliterate('Any-Latin; Latin-ASCII; Lower()', $label);
+        if (false === $slug || '' === $slug) {
+            $slug = $label;
+        }
+
+        $slug = (string) preg_replace('/[^a-z0-9]+/', '_', strtolower($slug));
+        $slug = trim($slug, '_');
+
+        if ('' === $slug) {
+            $slug = 'variant';
+        }
+
+        // Ensure uniqueness among current batch
+        $baseSlug = $slug;
+        $counter = 1;
+        while (\in_array($slug, $existingKeys, true)) {
+            $slug = $baseSlug . '_' . $counter;
+            ++$counter;
+        }
+
+        return $slug;
     }
 
     /**

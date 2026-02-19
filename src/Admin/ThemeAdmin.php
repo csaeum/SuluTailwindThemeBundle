@@ -40,13 +40,9 @@ class ThemeAdmin extends Admin
      */
     private const BLOCK_STYLE_OPTIONS = [
         'text' => [
-            ['key' => 'centered', 'label' => 'iw_sulu_theme.style.centered'],
-            ['key' => 'left_aligned', 'label' => 'iw_sulu_theme.style.left_aligned'],
-            ['key' => 'right_aligned', 'label' => 'iw_sulu_theme.style.right_aligned'],
+            ['key' => 'one_column', 'label' => 'iw_sulu_theme.style.one_column'],
             ['key' => 'two_columns', 'label' => 'iw_sulu_theme.style.two_columns'],
-            ['key' => 'hero', 'label' => 'iw_sulu_theme.style.hero'],
             ['key' => 'quote', 'label' => 'iw_sulu_theme.style.quote'],
-            ['key' => 'accordion', 'label' => 'iw_sulu_theme.style.accordion'],
         ],
         'text_images' => [
             ['key' => 'classic', 'label' => 'iw_sulu_theme.style.classic'],

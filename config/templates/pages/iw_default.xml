@@ -75,8 +75,11 @@
                         <property name="lateralMargins" type="checkbox">
                             <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
                         </property>
-                        <property name="showBackground" type="checkbox">
-                            <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
+                        <property name="blockRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du bloc</title><title lang="en">Block radius</title></meta>
+                        </property>
+                        <property name="paragraphRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du paragraphe</title><title lang="en">Paragraph radius</title></meta>
                         </property>
                     </properties>
                 </type>
@@ -147,6 +150,12 @@
                         <property name="lateralMargins" type="checkbox">
                             <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
                         </property>
+                        <property name="blockRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du bloc</title><title lang="en">Block radius</title></meta>
+                        </property>
+                        <property name="paragraphRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du paragraphe</title><title lang="en">Paragraph radius</title></meta>
+                        </property>
                         <property name="showBackground" type="checkbox">
                             <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
                         </property>
@@ -190,6 +199,9 @@
                         </property>
                         <property name="lateralMargins" type="checkbox">
                             <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="blockRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du bloc</title><title lang="en">Block radius</title></meta>
                         </property>
                         <property name="showBackground" type="checkbox">
                             <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
@@ -250,6 +262,9 @@
                         </property>
                         <property name="lateralMargins" type="checkbox">
                             <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="blockRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du bloc</title><title lang="en">Block radius</title></meta>
                         </property>
                         <property name="showBackground" type="checkbox">
                             <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
@@ -335,6 +350,9 @@
                         <property name="lateralMargins" type="checkbox">
                             <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
                         </property>
+                        <property name="blockRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du bloc</title><title lang="en">Block radius</title></meta>
+                        </property>
                         <property name="showBackground" type="checkbox">
                             <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
                         </property>
@@ -385,6 +403,12 @@
                         <property name="lateralMargins" type="checkbox">
                             <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
                         </property>
+                        <property name="blockRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du bloc</title><title lang="en">Block radius</title></meta>
+                        </property>
+                        <property name="paragraphRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du paragraphe</title><title lang="en">Paragraph radius</title></meta>
+                        </property>
                         <property name="showBackground" type="checkbox">
                             <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
                         </property>
@@ -426,6 +450,9 @@
                         <property name="lateralMargins" type="checkbox">
                             <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
                         </property>
+                        <property name="blockRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du bloc</title><title lang="en">Block radius</title></meta>
+                        </property>
                         <property name="showBackground" type="checkbox">
                             <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
                         </property>
@@ -466,6 +493,9 @@
                         </property>
                         <property name="lateralMargins" type="checkbox">
                             <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="blockRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du bloc</title><title lang="en">Block radius</title></meta>
                         </property>
                         <property name="showBackground" type="checkbox">
                             <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
@@ -532,6 +562,12 @@
                         </property>
                         <property name="lateralMargins" type="checkbox">
                             <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="blockRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du bloc</title><title lang="en">Block radius</title></meta>
+                        </property>
+                        <property name="paragraphRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du paragraphe</title><title lang="en">Paragraph radius</title></meta>
                         </property>
                         <property name="showBackground" type="checkbox">
                             <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>
@@ -601,6 +637,9 @@
                         </property>
                         <property name="lateralMargins" type="checkbox">
                             <meta><title lang="fr">Marges latérales</title><title lang="en">Lateral margins</title></meta>
+                        </property>
+                        <property name="blockRadius" type="iw_theme_radius_selector">
+                            <meta><title lang="fr">Arrondi du bloc</title><title lang="en">Block radius</title></meta>
                         </property>
                         <property name="showBackground" type="checkbox">
                             <meta><title lang="fr">Couleur de fond</title><title lang="en">Background color</title></meta>

@@ -8,7 +8,7 @@
         {% endif %}
 
         {% if text is defined and text is not empty %}
-            <blockquote class="border-l-4 border-[var(--color-primary)] pl-6 md:pl-8">
+            <blockquote class="border-l-4 border-[var(--variant-hr-color,var(--color-primary))] pl-6 md:pl-8">
                 <div class="block-text prose max-w-none text-xl md:text-2xl italic leading-relaxed">
                     {{ text|raw }}
                 </div>

@@ -130,15 +130,21 @@ export default class VariantPicker extends React.Component {
                     <div style={barStyle(titleColor, '10px', '70%')} />
                     {/* Subtitle bar (medium) */}
                     <div style={barStyle(subtitleColor, '7px', '50%')} />
+                    {/* HR separator */}
+                    <div style={barStyle(hrColor, '2px', '100%', '8px')} />
                     {/* Paragraph bars (thin) */}
                     <div style={barStyle(paragraphColor, '4px', '90%')} />
                     <div style={barStyle(paragraphColor, '4px', '85%')} />
-                    <div style={barStyle(paragraphColor, '4px', '75%')} />
-                    {/* HR line */}
-                    <div style={barStyle(hrColor, '2px', '100%', '8px')} />
-                    {/* List items */}
-                    <div style={barStyle(listColor, '4px', '60%')} />
-                    <div style={barStyle(listColor, '4px', '55%')} />
+                    <div style={barStyle(paragraphColor, '4px', '75%', '8px')} />
+                    {/* List items (with bullet dots) */}
+                    <div style={{display: 'flex', alignItems: 'center', marginBottom: '4px'}}>
+                        <div style={{width: '4px', height: '4px', borderRadius: '50%', backgroundColor: listColor, marginRight: '6px', flexShrink: 0}} />
+                        <div style={barStyle(listColor, '4px', '55%', '0')} />
+                    </div>
+                    <div style={{display: 'flex', alignItems: 'center', marginBottom: '6px'}}>
+                        <div style={{width: '4px', height: '4px', borderRadius: '50%', backgroundColor: listColor, marginRight: '6px', flexShrink: 0}} />
+                        <div style={barStyle(listColor, '4px', '50%', '0')} />
+                    </div>
                     {/* Link bar */}
                     <div style={barStyle(linkColor, '5px', '30%', '0')} />
                 </div>

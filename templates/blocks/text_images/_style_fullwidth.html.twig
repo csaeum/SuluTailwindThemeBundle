@@ -31,7 +31,8 @@
         } only %}
 
         {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
-            text: text|default('')
+            text: text|default(''),
+            paragraphRadius: paragraphRadius|default('')
         } only %}
     </div>
 {% endblock %}
