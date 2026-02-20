@@ -8,7 +8,7 @@
    Dynamic classes generated at runtime (MarginSelector, Twig expressions)
    that Tailwind cannot detect from static source scanning.
    ──────────────────────────────────────────────────────────────────────── */
-@source inline("mt-0 mt-1 mt-2 mt-3 mt-4 mt-5 mt-6 mt-7 mt-8 mt-9 mt-10 mt-12 mt-16 mt-20 mt-24 mt-32 mb-0 mb-1 mb-2 mb-3 mb-4 mb-5 mb-6 mb-7 mb-8 mb-9 mb-10 mb-12 mb-16 mb-20 mb-24 mb-32 pt-0 pt-1 pt-2 pt-3 pt-4 pt-5 pt-6 pt-7 pt-8 pt-9 pt-10 pt-12 pt-16 pt-20 pt-24 pt-32 pb-0 pb-1 pb-2 pb-3 pb-4 pb-5 pb-6 pb-7 pb-8 pb-9 pb-10 pb-12 pb-16 pb-20 pb-24 pb-32 md:pt-8 md:pt-10 md:pt-12 md:pt-16 md:pt-20 md:pb-8 md:pb-10 md:pb-12 md:pb-16 md:pb-20 lg:pt-8 lg:pt-10 lg:pt-12 lg:pt-16 lg:pt-20 lg:pb-8 lg:pb-10 lg:pb-12 lg:pb-16 lg:pb-20 grid-cols-1 grid-cols-2 grid-cols-3 grid-cols-4 grid-cols-5 sm:grid-cols-2 sm:grid-cols-3 sm:grid-cols-4 md:grid-cols-2 md:grid-cols-3 md:grid-cols-4 md:grid-cols-5 lg:grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 col-span-1 col-span-2 col-span-3 col-span-4 col-span-5 md:col-span-1 md:col-span-2 md:col-span-3 md:col-span-4 md:col-span-5 lg:col-span-1 lg:col-span-2 lg:col-span-3 gap-1 gap-2 gap-3 gap-4 gap-5 gap-6 gap-8 gap-10 gap-12 md:order-1 md:order-2 lg:order-1 lg:order-2 flex-row-reverse md:flex-row-reverse text-center text-left text-right text-justify rounded rounded-xs rounded-sm rounded-md rounded-lg rounded-xl rounded-2xl rounded-3xl rounded-4xl rounded-full rounded-none h-8 h-16 h-24 h-32 h-48 border-t border-t-2 border-t-4 border-solid border-dashed border-dotted container-xl");
+@source inline("mt-0 mt-1 mt-2 mt-3 mt-4 mt-5 mt-6 mt-7 mt-8 mt-9 mt-10 mt-12 mt-16 mt-20 mt-24 mt-32 mb-0 mb-1 mb-2 mb-3 mb-4 mb-5 mb-6 mb-7 mb-8 mb-9 mb-10 mb-12 mb-16 mb-20 mb-24 mb-32 pt-0 pt-1 pt-2 pt-3 pt-4 pt-5 pt-6 pt-7 pt-8 pt-9 pt-10 pt-12 pt-16 pt-20 pt-24 pt-32 pb-0 pb-1 pb-2 pb-3 pb-4 pb-5 pb-6 pb-7 pb-8 pb-9 pb-10 pb-12 pb-16 pb-20 pb-24 pb-32 pl-0 pl-1 pl-2 pl-3 pl-4 pl-5 pl-6 pl-7 pl-8 pl-9 pl-10 pl-12 pl-16 pl-20 pl-24 pl-32 pr-0 pr-1 pr-2 pr-3 pr-4 pr-5 pr-6 pr-7 pr-8 pr-9 pr-10 pr-12 pr-16 pr-20 pr-24 pr-32 grid-cols-1 grid-cols-2 grid-cols-3 grid-cols-4 grid-cols-5 sm:grid-cols-2 sm:grid-cols-3 sm:grid-cols-4 md:grid-cols-2 md:grid-cols-3 md:grid-cols-4 md:grid-cols-5 lg:grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 col-span-1 col-span-2 col-span-3 col-span-4 col-span-5 md:col-span-1 md:col-span-2 md:col-span-3 md:col-span-4 md:col-span-5 lg:col-span-1 lg:col-span-2 lg:col-span-3 gap-1 gap-2 gap-3 gap-4 gap-5 gap-6 gap-8 gap-10 gap-12 md:order-1 md:order-2 lg:order-1 lg:order-2 flex-row-reverse md:flex-row-reverse text-center text-left text-right text-justify rounded rounded-xs rounded-sm rounded-md rounded-lg rounded-xl rounded-2xl rounded-3xl rounded-4xl rounded-full rounded-none h-8 h-16 h-24 h-32 h-48 border-t border-t-2 border-t-4 border-solid border-dashed border-dotted container");
 
 /* ─── Reset & Defaults ──────────────────────────────────────────────────── */
 *,
@@ -43,7 +43,7 @@ h2 {
 }
 
 h3 {
-    font-family: var(--font-family-heading, var(--font-family-body, sans-serif));
+    font-family: var(--font-family-heading, var(--font-family-body, sans-serif)), serif;
     font-weight: var(--font-h3-weight, 600);
     font-size: var(--font-size-h3, 1.5rem);
     line-height: 1.3;
@@ -126,7 +126,7 @@ a:hover {
 }
 
 /* ─── Block Utilities ───────────────────────────────────────────────────── */
-/* Block padding is now controlled per-block via Tailwind classes in _block_wrapper.html.twig */
+/* Block spacing is controlled per-block via paddingTop, paddingBottom, paddingLeft, paddingRight on the <section> */
 
 .block-title {
     color: var(--color-heading, inherit);
@@ -215,5 +215,5 @@ img.object-cover {
     overflow: hidden;
 }
 
-/* Block variant background and responsive padding are now handled
-   via Tailwind classes in _block_wrapper.html.twig (block_padding block). */
+/* Block variant background and padding are handled
+   via Tailwind classes (py-*, px-*) directly on the <section> in _block_wrapper.html.twig. */

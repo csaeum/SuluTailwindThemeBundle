@@ -1,11 +1,10 @@
 {# Text + Images block — full-width hero banner with background image #}
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
 
-{# Edge-to-edge display #}
-{% block block_container_class %}{% endblock %}
-{% block block_padding %}{% endblock %}
-
 {% block block_content %}
+    {% set alignMap = {'left': 'text-left', 'center': 'text-center', 'right': 'text-right'} %}
+    {% set titleAlignClass = alignMap[titleAlignment|default('center')]|default('text-center') %}
+
     {% set formatMap = {'16:9': 'iw_theme_16_9', '4:3': 'iw_theme_4_3', '1:1': 'iw_theme_1_1', '3:4': 'iw_theme_3_4', 'original': 'iw_theme_16_9'} %}
     {% set format = formatMap[imageFilter|default('original')]|default('iw_theme_16_9') %}
 
@@ -33,10 +32,10 @@
         <div class="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4 sm:px-6 lg:px-8">
             <div class="max-w-4xl mx-auto">
                 {% if title is defined and title is not empty %}
-                    <h2 class="block-title text-3xl md:text-4xl lg:text-5xl font-[var(--font-h2-weight)] text-white leading-tight">{{ title }}</h2>
+                    <h2 class="block-title text-3xl md:text-4xl lg:text-5xl font-[var(--font-h2-weight)] text-white leading-tight {{ titleAlignClass }}">{{ title }}</h2>
                 {% endif %}
                 {% if subTitle is defined and subTitle is not empty %}
-                    <h3 class="block-subtitle text-lg md:text-xl lg:text-2xl mt-4 text-white/80">{{ subTitle }}</h3>
+                    <h3 class="block-subtitle text-lg md:text-xl lg:text-2xl mt-4 text-white/80 {{ titleAlignClass }}">{{ subTitle }}</h3>
                 {% endif %}
                 {% if text is defined and text is not empty %}
                     <div class="block-text prose prose-invert prose-lg max-w-2xl mx-auto mt-6">

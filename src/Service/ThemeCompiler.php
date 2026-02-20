@@ -444,20 +444,153 @@ class ThemeCompiler
             $css .= "  color: var(--variant-list-color, inherit);\n";
             $css .= "}\n";
 
-            $css .= ".block-variant-{$variantName} hr {\n";
-            $css .= "  background-color: var(--variant-hr-color, var(--color-border, #e5e7eb));\n";
-            $css .= "}\n";
+            $css .= $this->generateSeparatorCss($variantName, $props);
 
             // Apply paragraph background only when the variant defines it
-            // Border-radius is controlled per-block via the paragraphRadius Tailwind class
+            // When a background is set, add margin so the bg doesn't touch block edges
             if (isset($props['paragraphBg'])) {
                 $css .= ".block-variant-{$variantName} .block-text {\n";
                 $css .= "  background-color: var(--variant-paragraph-bg);\n";
                 $css .= "  padding: 1rem 1.5rem;\n";
+                $css .= "  margin: 1rem;\n";
                 $css .= "}\n";
             }
 
             $css .= "\n";
+        }
+
+        return $css;
+    }
+
+    /**
+     * Generate CSS for block variant separator (hr) styles.
+     *
+     * Supports three modes:
+     * - "style" (default): Predefined CSS styles (solid, dashed, dotted, double, gradient, wave, zigzag, dots, diamond)
+     * - "image": The separator image is rendered via Twig, CSS just hides the default hr
+     * - "none": Hides the hr completely
+     *
+     * @param string               $variantName The variant key
+     * @param array<string, mixed> $props       The variant properties
+     *
+     * @return string CSS rules for the separator
+     */
+    private function generateSeparatorCss(string $variantName, array $props): string
+    {
+        $css = '';
+        $prefix = ".block-variant-{$variantName}";
+        $hrColor = 'var(--variant-hr-color, var(--color-border, #e5e7eb))';
+        $mode = $props['separatorMode'] ?? 'style';
+        $style = $props['separatorStyle'] ?? 'solid';
+
+        // Hide hr when mode is "none" or "image" (image mode renders via Twig)
+        if ('none' === $mode) {
+            $css .= "{$prefix} hr,\n{$prefix} .block-separator {\n";
+            $css .= "  display: none;\n";
+            $css .= "}\n";
+
+            return $css;
+        }
+
+        if ('image' === $mode) {
+            $css .= "{$prefix} hr {\n";
+            $css .= "  display: none;\n";
+            $css .= "}\n";
+
+            return $css;
+        }
+
+        // Style mode — generate CSS based on selected style
+        switch ($style) {
+            case 'dashed':
+                $css .= "{$prefix} hr {\n";
+                $css .= "  border: none;\n";
+                $css .= "  border-top: 2px dashed {$hrColor};\n";
+                $css .= "  background: none;\n";
+                $css .= "  height: auto;\n";
+                $css .= "}\n";
+                break;
+
+            case 'dotted':
+                $css .= "{$prefix} hr {\n";
+                $css .= "  border: none;\n";
+                $css .= "  border-top: 2px dotted {$hrColor};\n";
+                $css .= "  background: none;\n";
+                $css .= "  height: auto;\n";
+                $css .= "}\n";
+                break;
+
+            case 'double':
+                $css .= "{$prefix} hr {\n";
+                $css .= "  border: none;\n";
+                $css .= "  border-top: 3px double {$hrColor};\n";
+                $css .= "  background: none;\n";
+                $css .= "  height: auto;\n";
+                $css .= "}\n";
+                break;
+
+            case 'gradient':
+                $css .= "{$prefix} hr {\n";
+                $css .= "  border: none;\n";
+                $css .= "  height: 2px;\n";
+                $css .= "  background: linear-gradient(to right, transparent, {$hrColor}, transparent);\n";
+                $css .= "}\n";
+                break;
+
+            case 'wave':
+                $css .= "{$prefix} hr {\n";
+                $css .= "  border: none;\n";
+                $css .= "  height: 12px;\n";
+                $css .= "  background: none;\n";
+                $css .= "  background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 12'%3E%3Cpath d='M0 6 Q12.5 0 25 6 T50 6 T75 6 T100 6' fill='none' stroke='currentColor' stroke-width='2'/%3E%3C/svg%3E\");\n";
+                $css .= "  background-size: 100px 12px;\n";
+                $css .= "  background-repeat: repeat-x;\n";
+                $css .= "  color: {$hrColor};\n";
+                $css .= "}\n";
+                break;
+
+            case 'zigzag':
+                $css .= "{$prefix} hr {\n";
+                $css .= "  border: none;\n";
+                $css .= "  height: 10px;\n";
+                $css .= "  background: none;\n";
+                $css .= "  background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 10'%3E%3Cpath d='M0 5 L10 0 L20 5 L30 0 L40 5 L30 10 L20 5 L10 10 Z' fill='none' stroke='currentColor' stroke-width='1.5'/%3E%3C/svg%3E\");\n";
+                $css .= "  background-size: 40px 10px;\n";
+                $css .= "  background-repeat: repeat-x;\n";
+                $css .= "  color: {$hrColor};\n";
+                $css .= "}\n";
+                break;
+
+            case 'dots':
+                $css .= "{$prefix} hr {\n";
+                $css .= "  border: none;\n";
+                $css .= "  height: 6px;\n";
+                $css .= "  background: none;\n";
+                $css .= "  background-image: radial-gradient(circle, {$hrColor} 1.5px, transparent 1.5px);\n";
+                $css .= "  background-size: 16px 6px;\n";
+                $css .= "  background-repeat: repeat-x;\n";
+                $css .= "  background-position: center;\n";
+                $css .= "}\n";
+                break;
+
+            case 'diamond':
+                $css .= "{$prefix} hr {\n";
+                $css .= "  border: none;\n";
+                $css .= "  height: 10px;\n";
+                $css .= "  background: none;\n";
+                $css .= "  background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 10'%3E%3Cpath d='M10 0 L15 5 L10 10 L5 5 Z' fill='currentColor'/%3E%3C/svg%3E\");\n";
+                $css .= "  background-size: 20px 10px;\n";
+                $css .= "  background-repeat: repeat-x;\n";
+                $css .= "  color: {$hrColor};\n";
+                $css .= "}\n";
+                break;
+
+            case 'solid':
+            default:
+                $css .= "{$prefix} hr {\n";
+                $css .= "  background-color: {$hrColor};\n";
+                $css .= "}\n";
+                break;
         }
 
         return $css;

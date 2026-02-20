@@ -4,7 +4,9 @@
 {% block block_content %}
     {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
         title: title|default(''),
-        subTitle: subTitle|default('')
+        subTitle: subTitle|default(''),
+        titleAlignment: titleAlignment|default('left'),
+        variant: variant|default('clair')
     } only %}
 
     {# Mosaic uses two different formats: 16:9 for the hero image, 1:1 for the rest #}

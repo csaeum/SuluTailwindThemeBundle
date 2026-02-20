@@ -33,6 +33,20 @@ class ThemeAdmin extends Admin
     public const EDIT_FORM_VIEW = 'iw_sulu_theme.edit_form';
 
     /**
+     * Section collapsibility configuration for block forms.
+     *
+     * Each entry maps a section name to its translation key and default open/closed state.
+     * The JS module uses the translated label text to match sections in the DOM.
+     *
+     * @var array<string, array{translationKey: string, defaultOpen: bool}>
+     */
+    private const COLLAPSIBLE_SECTIONS = [
+        'content' => ['translationKey' => 'iw_sulu_theme.content', 'defaultOpen' => true],
+        'appearance' => ['translationKey' => 'iw_sulu_theme.appearance', 'defaultOpen' => false],
+        'settings' => ['translationKey' => 'iw_sulu_theme.settings', 'defaultOpen' => false],
+    ];
+
+    /**
      * Available layout styles per block type, matching actual Twig templates
      * in templates/blocks/{type}/_style_{key}.html.twig.
      *
@@ -352,6 +366,7 @@ class ThemeAdmin extends Admin
         return [
             'variants' => $variants,
             'blockStyles' => self::BLOCK_STYLE_OPTIONS,
+            'collapsibleSections' => self::COLLAPSIBLE_SECTIONS,
         ];
     }
 }

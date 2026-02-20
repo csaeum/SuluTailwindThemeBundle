@@ -1,0 +1,103 @@
+<?xml version="1.0" ?>
+<!-- Global block type: Separator -->
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+
+    <key>separator</key>
+    <meta>
+        <title>iw_sulu_theme.block.separator</title>
+    </meta>
+
+    <properties>
+        <!-- ── Content ── -->
+        <section name="content">
+            <meta><title>iw_sulu_theme.content</title></meta>
+            <properties>
+                <property name="height" type="single_select">
+                    <meta><title>iw_sulu_theme.height</title></meta>
+                    <params>
+                        <param name="default_value" type="string" value="md"/>
+                        <param name="values" type="collection">
+                            <param name="xs"><meta><title>iw_sulu_theme.height_xs</title></meta></param>
+                            <param name="sm"><meta><title>iw_sulu_theme.height_sm</title></meta></param>
+                            <param name="md"><meta><title>iw_sulu_theme.height_md</title></meta></param>
+                            <param name="lg"><meta><title>iw_sulu_theme.height_lg</title></meta></param>
+                            <param name="xl"><meta><title>iw_sulu_theme.height_xl</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="lineStyle" type="single_select">
+                    <meta><title>iw_sulu_theme.line_style</title></meta>
+                    <params>
+                        <param name="default_value" type="string" value="solid"/>
+                        <param name="values" type="collection">
+                            <param name="solid"><meta><title>iw_sulu_theme.line_solid</title></meta></param>
+                            <param name="dashed"><meta><title>iw_sulu_theme.line_dashed</title></meta></param>
+                            <param name="dotted"><meta><title>iw_sulu_theme.line_dotted</title></meta></param>
+                            <param name="none"><meta><title>iw_sulu_theme.line_none</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="lineWidth" type="single_select">
+                    <meta><title>iw_sulu_theme.line_width</title></meta>
+                    <params>
+                        <param name="default_value" type="string" value="thin"/>
+                        <param name="values" type="collection">
+                            <param name="thin"><meta><title>iw_sulu_theme.line_thin</title></meta></param>
+                            <param name="medium"><meta><title>iw_sulu_theme.line_medium</title></meta></param>
+                            <param name="thick"><meta><title>iw_sulu_theme.line_thick</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="text" type="text_line">
+                    <meta><title>iw_sulu_theme.center_text</title></meta>
+                </property>
+                <property name="icon" type="single_media_selection">
+                    <meta><title>iw_sulu_theme.center_icon</title></meta>
+                </property>
+            </properties>
+        </section>
+
+        <!-- ── Appearance ── -->
+        <section name="appearance">
+            <meta><title>iw_sulu_theme.appearance</title></meta>
+            <properties>
+                <property name="variant" type="iw_theme_variant_picker" colspan="6">
+                    <meta><title>iw_sulu_theme.color_variant</title></meta>
+                </property>
+                <property name="style" type="iw_theme_style_picker" colspan="6">
+                    <meta><title>iw_sulu_theme.layout_style</title></meta>
+                    <params>
+                        <param name="block_type" type="string" value="separator"/>
+                    </params>
+                </property>
+            </properties>
+        </section>
+
+        <!-- ── Settings ── -->
+        <section name="settings">
+            <meta><title>iw_sulu_theme.settings</title></meta>
+            <properties>
+                <property name="marginTop" type="iw_theme_margin_selector" colspan="6">
+                    <meta><title>iw_sulu_theme.margin_top</title></meta>
+                </property>
+                <property name="marginBottom" type="iw_theme_margin_selector" colspan="6">
+                    <meta><title>iw_sulu_theme.margin_bottom</title></meta>
+                </property>
+                <property name="paddingTop" type="iw_theme_margin_selector" colspan="6">
+                    <meta><title>iw_sulu_theme.padding_top</title></meta>
+                </property>
+                <property name="paddingBottom" type="iw_theme_margin_selector" colspan="6">
+                    <meta><title>iw_sulu_theme.padding_bottom</title></meta>
+                </property>
+                <property name="paddingLateral" type="iw_theme_margin_selector">
+                    <meta><title>iw_sulu_theme.padding_lateral</title></meta>
+                    <params>
+                        <param name="prefix" type="string" value="px"/>
+                    </params>
+                </property>
+            </properties>
+        </section>
+    </properties>
+</template>

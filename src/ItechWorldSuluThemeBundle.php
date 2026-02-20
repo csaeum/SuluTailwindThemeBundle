@@ -92,6 +92,17 @@ class ItechWorldSuluThemeBundle extends AbstractBundle
                     ],
                 ],
             ]);
+
+            // Register global block type directories
+            $builder->prependExtensionConfig('sulu_admin', [
+                'templates' => [
+                    'block' => [
+                        'directories' => [
+                            'iw_sulu_theme' => __DIR__ . '/../config/templates/blocks',
+                        ],
+                    ],
+                ],
+            ]);
         }
     }
 

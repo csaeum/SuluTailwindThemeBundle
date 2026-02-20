@@ -2,6 +2,9 @@
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
+    {% set alignMap = {'left': 'text-left', 'center': 'text-center', 'right': 'text-right'} %}
+    {% set titleAlignClass = alignMap[titleAlignment|default('left')]|default('text-left') %}
+
     {# For overlay, prefer a wide format for best cover result #}
     {% set formatMap = {'16:9': 'iw_theme_16_9', '4:3': 'iw_theme_4_3', '1:1': 'iw_theme_1_1', '3:4': 'iw_theme_3_4', 'original': 'iw_theme_16_9'} %}
     {% set format = formatMap[imageFilter|default('original')]|default('iw_theme_16_9') %}
@@ -32,10 +35,10 @@
         {# Content — positioned opposite to the image #}
         <div class="relative z-10 max-w-2xl p-8 md:p-12 text-white {{ position == 'left' ? 'ml-auto text-right' : '' }}">
             {% if title is defined and title is not empty %}
-                <h2 class="block-title text-2xl md:text-3xl lg:text-4xl font-[var(--font-h2-weight)] text-white">{{ title }}</h2>
+                <h2 class="block-title text-2xl md:text-3xl lg:text-4xl font-[var(--font-h2-weight)] text-white {{ titleAlignClass }}">{{ title }}</h2>
             {% endif %}
             {% if subTitle is defined and subTitle is not empty %}
-                <h3 class="block-subtitle text-lg md:text-xl mt-2 text-white/80">{{ subTitle }}</h3>
+                <h3 class="block-subtitle text-lg md:text-xl mt-2 text-white/80 {{ titleAlignClass }}">{{ subTitle }}</h3>
             {% endif %}
 
             {% if text is defined and text is not empty %}

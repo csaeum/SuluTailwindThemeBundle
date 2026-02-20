@@ -83,6 +83,54 @@
                                 <title>iw_sulu_theme.variant_blockBg</title>
                             </meta>
                         </property>
+
+                        <property name="separatorMode" type="single_select" colspan="4">
+                            <meta>
+                                <title>iw_sulu_theme.variant_separator_mode</title>
+                            </meta>
+                            <params>
+                                <param name="default_value" type="string" value="style"/>
+                                <param name="values" type="collection">
+                                    <param name="style">
+                                        <meta><title>iw_sulu_theme.variant_separator_mode_style</title></meta>
+                                    </param>
+                                    <param name="image">
+                                        <meta><title>iw_sulu_theme.variant_separator_mode_image</title></meta>
+                                    </param>
+                                    <param name="none">
+                                        <meta><title>iw_sulu_theme.variant_separator_mode_none</title></meta>
+                                    </param>
+                                </param>
+                            </params>
+                        </property>
+
+                        <property name="separatorStyle" type="single_select" colspan="4"
+                                  visibleCondition="__parent.separatorMode == 'style' OR __parent.separatorMode == null">
+                            <meta>
+                                <title>iw_sulu_theme.variant_separator_style</title>
+                            </meta>
+                            <params>
+                                <param name="default_value" type="string" value="solid"/>
+                                <param name="values" type="collection">
+                                    <param name="solid"><meta><title>iw_sulu_theme.separator_solid</title></meta></param>
+                                    <param name="dashed"><meta><title>iw_sulu_theme.separator_dashed</title></meta></param>
+                                    <param name="dotted"><meta><title>iw_sulu_theme.separator_dotted</title></meta></param>
+                                    <param name="double"><meta><title>iw_sulu_theme.separator_double</title></meta></param>
+                                    <param name="gradient"><meta><title>iw_sulu_theme.separator_gradient</title></meta></param>
+                                    <param name="wave"><meta><title>iw_sulu_theme.separator_wave</title></meta></param>
+                                    <param name="zigzag"><meta><title>iw_sulu_theme.separator_zigzag</title></meta></param>
+                                    <param name="dots"><meta><title>iw_sulu_theme.separator_dots</title></meta></param>
+                                    <param name="diamond"><meta><title>iw_sulu_theme.separator_diamond</title></meta></param>
+                                </param>
+                            </params>
+                        </property>
+
+                        <property name="separatorImage" type="single_media_selection" colspan="4"
+                                  visibleCondition="__parent.separatorMode == 'image'">
+                            <meta>
+                                <title>iw_sulu_theme.variant_separator_image</title>
+                            </meta>
+                        </property>
                     </properties>
                 </type>
             </types>

@@ -82,7 +82,7 @@ export default class RadiusSelector extends React.Component {
                         justifyContent: 'flex-end',
                         gap: '4px',
                         width: '150px',
-                        height: '100px',
+                        height: '120px',
                         border: isSelected ? `2px solid ${primary}` : '1px solid #d0d0d0',
                         borderRadius: '6px',
                         backgroundColor: isSelected ? tint : '#fff',
@@ -97,7 +97,7 @@ export default class RadiusSelector extends React.Component {
 
                     const previewStyle = {
                         width: '100%',
-                        height: '70px',
+                        height: '90px',
                         backgroundColor: isSelected ? primary : '#bbb',
                         borderRadius: option.css,
                         transition: 'all 0.15s',

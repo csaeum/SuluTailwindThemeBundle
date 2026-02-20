@@ -1,0 +1,132 @@
+<?xml version="1.0" ?>
+<!-- Global block type: Text and images -->
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+
+    <key>text_images</key>
+    <meta>
+        <title>iw_sulu_theme.block.text_images</title>
+    </meta>
+
+    <properties>
+        <!-- ── Content ── -->
+        <section name="content">
+            <meta><title>iw_sulu_theme.content</title></meta>
+            <properties>
+                <property name="title" type="text_line">
+                    <meta><title>iw_sulu_theme.title</title></meta>
+                </property>
+                <property name="subTitle" type="text_line">
+                    <meta><title>iw_sulu_theme.subtitle</title></meta>
+                </property>
+                <property name="titleAlignment" type="single_select">
+                    <meta><title>iw_sulu_theme.title_alignment</title></meta>
+                    <params>
+                        <param name="default_value" type="string" value="left"/>
+                        <param name="values" type="collection">
+                            <param name="left"><meta><title>iw_sulu_theme.align_left</title></meta></param>
+                            <param name="center"><meta><title>iw_sulu_theme.align_center</title></meta></param>
+                            <param name="right"><meta><title>iw_sulu_theme.align_right</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="images" type="media_selection">
+                    <meta><title>iw_sulu_theme.images</title></meta>
+                </property>
+                <property name="imageFilter" type="single_select">
+                    <meta><title>iw_sulu_theme.image_format</title></meta>
+                    <params>
+                        <param name="default_value" type="string" value="original"/>
+                        <param name="values" type="collection">
+                            <param name="16_9"><meta><title>16:9</title></meta></param>
+                            <param name="4_3"><meta><title>4:3</title></meta></param>
+                            <param name="1_1"><meta><title>1:1</title></meta></param>
+                            <param name="3_4"><meta><title>3:4</title></meta></param>
+                            <param name="original"><meta><title>iw_sulu_theme.format_original</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="imagePosition" type="single_select">
+                    <meta><title>iw_sulu_theme.image_position</title></meta>
+                    <params>
+                        <param name="default_value" type="string" value="right"/>
+                        <param name="values" type="collection">
+                            <param name="left"><meta><title>iw_sulu_theme.position_left</title></meta></param>
+                            <param name="right"><meta><title>iw_sulu_theme.position_right</title></meta></param>
+                            <param name="top"><meta><title>iw_sulu_theme.position_top</title></meta></param>
+                            <param name="background"><meta><title>iw_sulu_theme.position_background</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="showImagesName" type="checkbox">
+                    <meta><title>iw_sulu_theme.show_images_name</title></meta>
+                </property>
+                <property name="text" type="text_editor">
+                    <meta><title>iw_sulu_theme.text</title></meta>
+                </property>
+            </properties>
+        </section>
+
+        <!-- ── Appearance ── -->
+        <section name="appearance">
+            <meta><title>iw_sulu_theme.appearance</title></meta>
+            <properties>
+                <property name="variant" type="iw_theme_variant_picker" colspan="6">
+                    <meta><title>iw_sulu_theme.color_variant</title></meta>
+                </property>
+                <property name="style" type="iw_theme_style_picker" colspan="6">
+                    <meta><title>iw_sulu_theme.layout_style</title></meta>
+                    <params>
+                        <param name="block_type" type="string" value="text_images"/>
+                    </params>
+                </property>
+            </properties>
+        </section>
+
+        <!-- ── Settings ── -->
+        <section name="settings">
+            <meta><title>iw_sulu_theme.settings</title></meta>
+            <properties>
+                <property name="marginTop" type="iw_theme_margin_selector" colspan="6">
+                    <meta><title>iw_sulu_theme.margin_top</title></meta>
+                </property>
+                <property name="marginBottom" type="iw_theme_margin_selector" colspan="6">
+                    <meta><title>iw_sulu_theme.margin_bottom</title></meta>
+                </property>
+                <property name="lateralMargins" type="single_select">
+                    <meta><title>iw_sulu_theme.lateral_margins</title></meta>
+                    <params>
+                        <param name="default_value" type="string" value="interior"/>
+                        <param name="values" type="collection">
+                            <param name="exterior"><meta><title>iw_sulu_theme.lateral_margins_exterior</title></meta></param>
+                            <param name="interior"><meta><title>iw_sulu_theme.lateral_margins_interior</title></meta></param>
+                            <param name="none"><meta><title>iw_sulu_theme.lateral_margins_none</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="paddingTop" type="iw_theme_margin_selector" colspan="6">
+                    <meta><title>iw_sulu_theme.padding_top</title></meta>
+                </property>
+                <property name="paddingBottom" type="iw_theme_margin_selector" colspan="6">
+                    <meta><title>iw_sulu_theme.padding_bottom</title></meta>
+                </property>
+                <property name="paddingLateral" type="iw_theme_margin_selector">
+                    <meta><title>iw_sulu_theme.padding_lateral</title></meta>
+                    <params>
+                        <param name="prefix" type="string" value="px"/>
+                    </params>
+                </property>
+                <property name="blockRadius" type="iw_theme_radius_selector" colspan="6">
+                    <meta><title>iw_sulu_theme.block_radius</title></meta>
+                </property>
+                <property name="paragraphRadius" type="iw_theme_radius_selector" colspan="6">
+                    <meta><title>iw_sulu_theme.paragraph_radius</title></meta>
+                </property>
+                <property name="showBackground" type="checkbox">
+                    <meta><title>iw_sulu_theme.show_background</title></meta>
+                </property>
+            </properties>
+        </section>
+    </properties>
+</template>

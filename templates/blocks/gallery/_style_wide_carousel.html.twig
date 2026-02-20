@@ -1,15 +1,5 @@
-{# Gallery block — wide carousel with lightbox.
-   Overrides wrapper to remove container and margins for true edge-to-edge display. #}
+{# Gallery block — wide carousel with lightbox #}
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
-
-{# No container — full viewport width #}
-{% block block_container_class %}{% endblock %}
-
-{# No default margins — user margins still apply via marginTop/marginBottom fields #}
-{% block block_classes %}{{ marginTop|default('mt-0') }} {{ marginBottom|default('mb-0') }}{% endblock %}
-
-{# No padding — edge-to-edge display #}
-{% block block_padding %}{% endblock %}
 
 {% block block_content %}
     {% if images is defined and images is iterable %}

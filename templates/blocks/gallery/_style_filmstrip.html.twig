@@ -4,7 +4,9 @@
 {% block block_content %}
     {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
         title: title|default(''),
-        subTitle: subTitle|default('')
+        subTitle: subTitle|default(''),
+        titleAlignment: titleAlignment|default('left'),
+        variant: variant|default('clair')
     } only %}
 
     {% if images is defined and images is iterable and images|length > 0 %}

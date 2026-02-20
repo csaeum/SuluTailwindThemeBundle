@@ -4,11 +4,13 @@
 {% block block_content %}
     {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
         title: title|default(''),
-        subTitle: subTitle|default('')
+        subTitle: subTitle|default(''),
+        titleAlignment: titleAlignment|default('left'),
+        variant: variant|default('clair')
     } only %}
 
     {% if text is defined and text is not empty %}
-        <div class="block-text prose max-w-none columns-1 md:columns-2 gap-8">
+        <div class="block-text prose max-w-none columns-1 md:columns-2 gap-8 {% if paragraphRadius is defined and paragraphRadius %}{{ paragraphRadius }}{% endif %}">
             {{ text|raw }}
         </div>
     {% endif %}

@@ -25,7 +25,9 @@
             <div class="p-8 md:p-12 lg:p-16 w-full">
                 {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
                     title: title|default(''),
-                    subTitle: subTitle|default('')
+                    subTitle: subTitle|default(''),
+                    titleAlignment: titleAlignment|default('left'),
+                    variant: variant|default('clair')
                 } only %}
 
                 {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {

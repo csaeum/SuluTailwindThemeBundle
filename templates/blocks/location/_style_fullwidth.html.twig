@@ -1,11 +1,10 @@
 {# Location block — full-width map #}
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
 
-{# Edge-to-edge display #}
-{% block block_container_class %}{% endblock %}
-{% block block_padding %}{% endblock %}
-
 {% block block_content %}
+    {% set alignMap = {'left': 'text-left', 'center': 'text-center', 'right': 'text-right'} %}
+    {% set titleAlignClass = alignMap[titleAlignment|default('left')]|default('text-left') %}
+
     {% if latitude is defined and latitude is not empty and longitude is defined and longitude is not empty %}
         <div class="relative">
             <iframe
@@ -18,9 +17,9 @@
             {# Title overlay #}
             {% if title is defined and title is not empty %}
                 <div class="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-[var(--border-radius,8px)] px-4 py-2 shadow-md">
-                    <h2 class="block-title text-lg font-[var(--font-h2-weight)]">{{ title }}</h2>
+                    <h2 class="block-title text-lg font-[var(--font-h2-weight)] {{ titleAlignClass }}">{{ title }}</h2>
                     {% if subTitle is defined and subTitle is not empty %}
-                        <h3 class="block-subtitle text-sm opacity-75">{{ subTitle }}</h3>
+                        <h3 class="block-subtitle text-sm opacity-75 {{ titleAlignClass }}">{{ subTitle }}</h3>
                     {% endif %}
                 </div>
             {% endif %}

@@ -7,6 +7,7 @@ import MarginSelector from './components/MarginSelector/MarginSelector';
 import ColorTokenEditor from './components/ColorTokenEditor/ColorTokenEditor';
 import FontSelector from './components/FontSelector/FontSelector';
 import RadiusSelector from './components/RadiusSelector/RadiusSelector';
+import collapsibleSections from './components/CollapsibleSections/CollapsibleSections';
 
 /**
  * Register all custom field types for the SuluThemeBundle admin interface.
@@ -21,6 +22,7 @@ initializer.addUpdateConfigHook('iw_sulu_theme', (config: Object, initialized: b
         // This data is refreshed on each admin config reload.
         VariantPicker.themeVariants = config.variants || [];
         StylePicker.blockStyles = config.blockStyles || {};
+        collapsibleSections.init(config.collapsibleSections || {});
     }
 
     if (initialized) {

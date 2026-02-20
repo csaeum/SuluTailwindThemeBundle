@@ -39,11 +39,16 @@ export default class MarginSelector extends React.Component {
         // 2. Infer from field name via dataPath (e.g. "/blocks/0/marginBottom" → "mb")
         if (dataPath) {
             const fieldName = String(dataPath).split('/').pop();
-            if (fieldName && fieldName.toLowerCase().includes('bottom')) {
-                return 'mb';
-            }
-            if (fieldName && fieldName.toLowerCase().includes('top')) {
-                return 'mt';
+            if (fieldName) {
+                const lower = fieldName.toLowerCase();
+                if (lower.includes('paddingtop')) return 'pt';
+                if (lower.includes('paddingbottom')) return 'pb';
+                if (lower.includes('paddingleft')) return 'pl';
+                if (lower.includes('paddingright')) return 'pr';
+                if (lower.includes('paddingx') || lower.includes('padding_x')) return 'px';
+                if (lower.includes('paddingy') || lower.includes('padding_y')) return 'py';
+                if (lower.includes('bottom')) return 'mb';
+                if (lower.includes('top')) return 'mt';
             }
         }
 

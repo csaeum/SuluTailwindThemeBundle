@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<!--
+    Fragment: Block settings properties (single source of truth).
+    Each block picks individual properties from this file.
+
+    Base properties (all blocks): marginTop, marginBottom, paddingTop, paddingBottom, paddingLateral
+    Optional properties per block: lateralMargins, blockRadius, paragraphRadius, showBackground
+-->
+<properties xmlns="http://schemas.sulu.io/template/template">
+    <property name="marginTop" type="iw_theme_margin_selector" colspan="6">
+        <meta><title>iw_sulu_theme.margin_top</title></meta>
+    </property>
+
+    <property name="marginBottom" type="iw_theme_margin_selector" colspan="6">
+        <meta><title>iw_sulu_theme.margin_bottom</title></meta>
+    </property>
+
+    <property name="lateralMargins" type="single_select">
+        <meta><title>iw_sulu_theme.lateral_margins</title></meta>
+        <params>
+            <param name="default_value" type="string" value="interior"/>
+            <param name="values" type="collection">
+                <param name="exterior"><meta><title>iw_sulu_theme.lateral_margins_exterior</title></meta></param>
+                <param name="interior"><meta><title>iw_sulu_theme.lateral_margins_interior</title></meta></param>
+                <param name="none"><meta><title>iw_sulu_theme.lateral_margins_none</title></meta></param>
+            </param>
+        </params>
+    </property>
+
+    <property name="paddingTop" type="iw_theme_margin_selector" colspan="6">
+        <meta><title>iw_sulu_theme.padding_top</title></meta>
+    </property>
+
+    <property name="paddingBottom" type="iw_theme_margin_selector" colspan="6">
+        <meta><title>iw_sulu_theme.padding_bottom</title></meta>
+    </property>
+
+    <property name="paddingLateral" type="iw_theme_margin_selector">
+        <meta><title>iw_sulu_theme.padding_lateral</title></meta>
+        <params>
+            <param name="prefix" type="string" value="px"/>
+        </params>
+    </property>
+
+    <property name="blockRadius" type="iw_theme_radius_selector" colspan="6">
+        <meta><title>iw_sulu_theme.block_radius</title></meta>
+    </property>
+
+    <property name="paragraphRadius" type="iw_theme_radius_selector" colspan="6">
+        <meta><title>iw_sulu_theme.paragraph_radius</title></meta>
+    </property>
+
+    <property name="showBackground" type="checkbox">
+        <meta><title>iw_sulu_theme.show_background</title></meta>
+    </property>
+</properties>

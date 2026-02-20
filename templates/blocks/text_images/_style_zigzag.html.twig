@@ -4,7 +4,9 @@
 {% block block_content %}
     {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
         title: title|default(''),
-        subTitle: subTitle|default('')
+        subTitle: subTitle|default(''),
+        titleAlignment: titleAlignment|default('left'),
+        variant: variant|default('clair')
     } only %}
 
     {% set formatMap = {'16:9': 'iw_theme_16_9', '4:3': 'iw_theme_4_3', '1:1': 'iw_theme_1_1', '3:4': 'iw_theme_3_4', 'original': 'iw_theme_16_9'} %}

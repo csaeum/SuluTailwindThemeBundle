@@ -5,7 +5,9 @@
     <div class="max-w-xl mx-auto rounded-[var(--border-radius,8px)] shadow-lg bg-white p-8 md:p-10">
         {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
             title: title|default(''),
-            subTitle: subTitle|default('')
+            subTitle: subTitle|default(''),
+            titleAlignment: titleAlignment|default('left'),
+            variant: variant|default('clair')
         } only %}
 
         {% if formId is defined and formId is not empty %}
