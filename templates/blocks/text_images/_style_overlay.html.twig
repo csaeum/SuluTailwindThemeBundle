@@ -1,52 +1,116 @@
 {# Text + Images block — image background with text overlay #}
-{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+{# Custom section: image covers the full block, padding applies to content only. #}
+{# Does NOT extend _block_wrapper because padding must be on the content div, #}
+{# not the section, so the image always fills the entire block edge-to-edge. #}
 
-{% block block_content %}
-    {% set alignMap = {'left': 'text-left', 'center': 'text-center', 'right': 'text-right'} %}
-    {% set titleAlignClass = alignMap[titleAlignment|default('left')]|default('text-left') %}
+{# ── Wrapper logic (replicated from _block_wrapper) ───────────────────────── #}
+{% set variantClass = 'block-variant-' ~ (variant|default('clair')) %}
+{% set mtClass = marginTop|default('mt-0') %}
+{% set mbClass = marginBottom|default('mb-0') %}
 
-    {# For overlay, prefer a wide format for best cover result #}
-    {# Fix: XML stores values with underscores (16_9, 4_3…), not colons #}
-    {% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_16_9'} %}
-    {% set format = formatMap[imageFilter|default('original')]|default('iw_theme_16_9') %}
+{# Padding values — applied to the CONTENT div, not the section.
+   Content must ALWAYS have padding so text never touches the edges.
+   If a value is undefined, null, empty or explicitly 0 → force default (pt-3/pb-3/pl-3/pr-3). #}
+{% set ptVal = paddingTop|default('') %}
+{% set ptClass = (ptVal is empty or ptVal == 'pt-0') ? 'pt-3' : ptVal %}
+{% set pbVal = paddingBottom|default('') %}
+{% set pbClass = (pbVal is empty or pbVal == 'pb-0') ? 'pb-3' : pbVal %}
+{% set pxVal = paddingLateral|default('') %}
+{% if pxVal is not empty and pxVal != 'px-0' %}
+    {% set plClass = pxVal|replace({'px-': 'pl-'}) %}
+    {% set prClass = pxVal|replace({'px-': 'pr-'}) %}
+{% else %}
+    {% set plClass = 'pl-3' %}
+    {% set prClass = 'pr-3' %}
+{% endif %}
 
-    {% set bgImageUrl = '' %}
-    {% if images is defined and images is iterable and images|length > 0 %}
-        {% set firstMedia = sulu_resolve_media(images[0], app.request.locale) %}
-        {% set bgImageUrl = firstMedia.thumbnails[format]|default(firstMedia.url) %}
+{% set lateralMode = lateralMargins|default('interior') %}
+{% if lateralMode is same as(true) or lateralMode == '1' %}
+    {% set lateralMode = 'exterior' %}
+{% elseif lateralMode is same as(false) or lateralMode == '0' or lateralMode == '' %}
+    {% set lateralMode = 'interior' %}
+{% endif %}
+
+{% set sectionContainerClass = (lateralMode == 'exterior') ? 'container mx-auto' : '' %}
+{% set bgAttr = (showBackground|default(true)) ? 'data-has-bg="true"' : '' %}
+
+{# Block radius: only in exterior mode (interior = image fills full width, no radius).
+   Applied from sm: breakpoint only (edge-to-edge on mobile). #}
+{% set blockRadiusVal = blockRadius|default('') %}
+{% set radiusClasses = (lateralMode == 'exterior' and blockRadiusVal) ? ('sm:' ~ blockRadiusVal ~ ' sm:overflow-hidden') : '' %}
+
+{# Paragraph radius: only when variant has visible paragraphBg #}
+{% set radius = paragraphRadius|default('') %}
+{% set variantConfig = iw_sulu_theme.blockVariants[variant|default('clair')]|default({}) %}
+{% set pgBg = variantConfig.paragraphBg|default('') %}
+{% set hasParagraphBg = pgBg is not empty and pgBg|lower != 'transparent' %}
+
+{# Fix: XML stores values with underscores (16_9, 4_3…), not colons #}
+{% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_16_9'} %}
+{% set format = formatMap[imageFilter|default('original')]|default('iw_theme_16_9') %}
+
+{# Resolve background image — single media (overlay) or first from collection (backward compat) #}
+{% set bgImageUrl = '' %}
+{% if image is defined and image.id is defined %}
+    {% set firstMedia = sulu_resolve_media(image.id, app.request.locale) %}
+    {% set bgImageUrl = firstMedia.thumbnails[format]|default(firstMedia.url) %}
+{% elseif images is defined and images is iterable and images|length > 0 %}
+    {% set firstMedia = sulu_resolve_media(images[0], app.request.locale) %}
+    {% set bgImageUrl = firstMedia.thumbnails[format]|default(firstMedia.url) %}
+{% endif %}
+
+{# ── Section: no padding, image fills edge-to-edge ────────────────────────── #}
+<section
+    class="block {{ variantClass }} {{ sectionContainerClass }} {{ mtClass }} {{ mbClass }} {{ radiusClasses }} relative overflow-hidden"
+    {{ bgAttr|raw }}
+    data-controller="lightbox"
+>
+    {# Background image — covers the entire section #}
+    {% if bgImageUrl is not empty %}
+        <img
+            src="{{ bgImageUrl }}"
+            alt=""
+            loading="lazy"
+            class="absolute inset-0 w-full h-full object-cover"
+        >
     {% endif %}
 
-    <div class="relative min-h-[400px] md:min-h-[500px] flex items-center overflow-hidden"
-         style="border-radius: var(--radius-img, 0);">
-        {# Background image — covers the entire zone #}
-        {% if bgImageUrl is not empty %}
-            <img
-                src="{{ bgImageUrl }}"
-                alt=""
-                loading="lazy"
-                class="absolute inset-0 w-full h-full object-cover"
-                style="border-radius: 0; min-width: 100%; min-height: 100%;"
-            >
+    {# Content position: left (default) or right #}
+    {% set isRight = contentRight|default(false) %}
+
+    {# Overlay — below lg: uniform dark cover (content spans full width).
+       From lg: directional gradient, dark on the text side, transparent on the image side. #}
+    {% set gradientDir = isRight ? 'to left' : 'to right' %}
+    <div class="block-bg-overlay absolute inset-0 bg-black/60 lg:hidden"></div>
+    <div
+        class="block-bg-overlay absolute inset-0 hidden lg:block"
+        style="background: linear-gradient({{ gradientDir }}, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.15) 70%, transparent 100%);"
+    ></div>
+
+    {# Content — gets the section padding, container wraps only the text #}
+    <div class="relative z-10 {{ ptClass }} {{ pbClass }} {{ plClass }} {{ prClass }}">
+        {% if lateralMode == 'interior' %}
+        <div class="container mx-auto">
         {% endif %}
+            <div class="min-h-[300px] md:min-h-[400px] flex items-center{{ isRight ? ' lg:justify-end' : '' }}">
+                <div class="lg:max-w-2xl text-white">
+                    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+                        title: title|default(''),
+                        subTitle: subTitle|default(''),
+                        titleAlignment: titleAlignment|default('left'),
+                        variant: variant|default('clair')
+                    } only %}
 
-        {# Overlay gradient — direction depends on image position #}
-        {% set position = imagePosition|default('right') %}
-        <div class="absolute inset-0 {{ position == 'left' ? 'bg-gradient-to-l from-black/70 to-black/30' : 'bg-gradient-to-r from-black/70 to-black/30' }}" style="border-radius: 0;"></div>
-
-        {# Content — positioned opposite to the image #}
-        <div class="relative z-10 max-w-2xl p-8 md:p-12 text-white {{ position == 'left' ? 'ml-auto text-right' : '' }}">
-            {% if title is defined and title is not empty %}
-                <h2 class="block-title text-2xl md:text-3xl lg:text-4xl font-[var(--font-h2-weight)] text-white {{ titleAlignClass }}">{{ title }}</h2>
-            {% endif %}
-            {% if subTitle is defined and subTitle is not empty %}
-                <h3 class="block-subtitle text-lg md:text-xl mt-2 text-white/80 {{ titleAlignClass }}">{{ subTitle }}</h3>
-            {% endif %}
-
-            {% if text is defined and text is not empty %}
-                <div class="block-text prose prose-invert max-w-none mt-6">
-                    {{ text|raw }}
+                    {% if text is defined and text is not empty %}
+                        <div class="block-text prose prose-invert max-w-none{% if hasParagraphBg and radius %} {{ radius }}{% endif %}" style="margin-block: 0;">
+                            {{ text|raw }}
+                        </div>
+                    {% endif %}
                 </div>
-            {% endif %}
+            </div>
+
+        {% if lateralMode == 'interior' %}
         </div>
+        {% endif %}
     </div>
-{% endblock %}
+</section>

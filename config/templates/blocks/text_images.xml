@@ -31,10 +31,18 @@
                         </param>
                     </params>
                 </property>
-                <property name="images" type="media_selection">
+                <!-- Multiple images: hidden for overlay (uses single image) -->
+                <property name="images" type="media_selection"
+                          visibleCondition="__parent.style != 'overlay'">
                     <meta><title>iw_sulu_theme.images</title></meta>
                 </property>
-                <property name="imageFilter" type="single_select">
+                <!-- Single image: only for overlay layout -->
+                <property name="image" type="single_media_selection"
+                          visibleCondition="__parent.style == 'overlay'">
+                    <meta><title>iw_sulu_theme.image</title></meta>
+                </property>
+                <property name="imageFilter" type="single_select"
+                          visibleCondition="__parent.style != 'overlay'">
                     <meta><title>iw_sulu_theme.image_format</title></meta>
                     <params>
                         <param name="default_value" type="string" value="original"/>
@@ -47,7 +55,8 @@
                         </param>
                     </params>
                 </property>
-                <property name="imagePosition" type="single_select">
+                <property name="imagePosition" type="single_select"
+                          visibleCondition="__parent.style != 'overlay'">
                     <meta><title>iw_sulu_theme.image_position</title></meta>
                     <params>
                         <param name="default_value" type="string" value="right"/>
@@ -60,8 +69,21 @@
                         </param>
                     </params>
                 </property>
-                <property name="showImagesName" type="checkbox">
+                <property name="showImagesName" type="checkbox"
+                          visibleCondition="__parent.style != 'overlay'">
                     <meta><title>iw_sulu_theme.show_images_name</title></meta>
+                </property>
+                <!-- Overlay: toggle content position left/right -->
+                <property name="contentRight" type="checkbox"
+                          visibleCondition="__parent.style == 'overlay'">
+                    <params>
+                        <param name="type" value="toggler"/>
+                        <param name="label">
+                            <meta>
+                                <title>iw_sulu_theme.content_position_right</title>
+                            </meta>
+                        </param>
+                    </params>
                 </property>
                 <property name="text" type="text_editor">
                     <meta><title>iw_sulu_theme.text</title></meta>
