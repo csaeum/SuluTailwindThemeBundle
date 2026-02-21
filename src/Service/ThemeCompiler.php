@@ -396,14 +396,14 @@ class ThemeCompiler
             $css .= ".block-variant-{$variantName} {\n";
 
             foreach ($propertyMap as $tokenKey => $cssProperty) {
+                // blockBg is handled separately with the [data-has-bg] selector
+                if ($tokenKey === 'blockBg') {
+                    continue;
+                }
                 if (!isset($props[$tokenKey])) {
                     continue;
                 }
-                if (str_starts_with($cssProperty, '--')) {
-                    $css .= "  {$cssProperty}: {$props[$tokenKey]};\n";
-                } else {
-                    $css .= "  {$cssProperty}: {$props[$tokenKey]};\n";
-                }
+                $css .= "  {$cssProperty}: {$props[$tokenKey]};\n";
             }
 
             // Apply title color as default text color for the block
@@ -412,6 +412,13 @@ class ThemeCompiler
             }
 
             $css .= "}\n";
+
+            // Block background only visible when showBackground is checked (data-has-bg)
+            if (!empty($props['blockBg'])) {
+                $css .= ".block-variant-{$variantName}[data-has-bg=\"true\"] {\n";
+                $css .= "  background-color: {$props['blockBg']};\n";
+                $css .= "}\n";
+            }
 
             // Child element selectors using custom properties
             $css .= ".block-variant-{$variantName} h1,\n";
@@ -446,13 +453,22 @@ class ThemeCompiler
 
             $css .= $this->generateSeparatorCss($variantName, $props);
 
-            // Apply paragraph background only when the variant defines it
-            // When a background is set, add margin so the bg doesn't touch block edges
-            if (isset($props['paragraphBg'])) {
+            // Apply paragraph background + padding only when paragraphBg is a real
+            // visible color (not empty, not "transparent").
+            // Vertical margin only (margin-block): lateral margin is handled by the
+            // template (mx-4) when the block has no lateral padding — adding it here
+            // would stack with the block's own paddingLateral.
+            // No visible paragraphBg → no background, no padding, no margin.
+            $pgBg = trim($props['paragraphBg'] ?? '');
+            if ($pgBg !== '' && strtolower($pgBg) !== 'transparent') {
                 $css .= ".block-variant-{$variantName} .block-text {\n";
                 $css .= "  background-color: var(--variant-paragraph-bg);\n";
                 $css .= "  padding: 1rem 1.5rem;\n";
-                $css .= "  margin: 1rem;\n";
+                $css .= "  margin-block: 1rem;\n";
+                $css .= "}\n";
+                // Hide the dark overlay on background images when paragraph has its own bg
+                $css .= ".block-variant-{$variantName} .block-bg-overlay {\n";
+                $css .= "  display: none;\n";
                 $css .= "}\n";
             }
 

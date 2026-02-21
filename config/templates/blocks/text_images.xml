@@ -55,6 +55,7 @@
                             <param name="left"><meta><title>iw_sulu_theme.position_left</title></meta></param>
                             <param name="right"><meta><title>iw_sulu_theme.position_right</title></meta></param>
                             <param name="top"><meta><title>iw_sulu_theme.position_top</title></meta></param>
+                            <param name="bottom"><meta><title>iw_sulu_theme.position_bottom</title></meta></param>
                             <param name="background"><meta><title>iw_sulu_theme.position_background</title></meta></param>
                         </param>
                     </params>
