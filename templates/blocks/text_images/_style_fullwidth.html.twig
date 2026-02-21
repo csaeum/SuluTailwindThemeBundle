@@ -1,17 +1,82 @@
-{# Text + Images block — full-width image with text below #}
-{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+{# Text + Images block — full-width image with text content #}
+{# Custom section: image always edge-to-edge, padding applies to content only. #}
+{# Does NOT extend _block_wrapper because padding must not affect the image, #}
+{# so the image always fills the full block width (top/left/right or bottom/left/right). #}
 
-{% block block_content %}
-    {# Fix: XML stores values with underscores (16_9, 4_3…), not colons #}
-    {% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_16_9'} %}
-    {% set format = formatMap[imageFilter|default('original')]|default('iw_theme_16_9') %}
+{# ── Wrapper logic (replicated from _block_wrapper) ───────────────────────── #}
+{% set variantClass = 'block-variant-' ~ (variant|default('clair')) %}
+{% set mtClass = marginTop|default('mt-0') %}
+{% set mbClass = marginBottom|default('mb-0') %}
 
-    {# Map image format to CSS aspect-ratio #}
-    {% set ratioMap = {'iw_theme_16_9': '16/9', 'iw_theme_4_3': '4/3', 'iw_theme_1_1': '1/1', 'iw_theme_3_4': '3/4', 'iw_theme_hero': '12/5'} %}
-    {% set ratio = ratioMap[format]|default('16/9') %}
+{% set lateralMode = lateralMargins|default('interior') %}
+{% if lateralMode is same as(true) or lateralMode == '1' %}
+    {% set lateralMode = 'exterior' %}
+{% elseif lateralMode is same as(false) or lateralMode == '0' or lateralMode == '' %}
+    {% set lateralMode = 'interior' %}
+{% endif %}
 
-    {# Full-width images — slider when multiple images #}
-    <div class="mb-8">
+{% set sectionContainerClass = (lateralMode == 'exterior') ? 'container mx-auto' : '' %}
+{% set bgAttr = (showBackground|default(true)) ? 'data-has-bg="true"' : '' %}
+
+{# Block radius: only in exterior mode (interior = image fills full width, no radius).
+   Applied from sm: breakpoint only (edge-to-edge on mobile). #}
+{% set blockRadiusVal = blockRadius|default('') %}
+{% set radiusClasses = (lateralMode == 'exterior' and blockRadiusVal) ? ('sm:' ~ blockRadiusVal ~ ' sm:overflow-hidden') : '' %}
+
+{# Fix: XML stores values with underscores (16_9, 4_3…), not colons #}
+{% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_16_9'} %}
+{% set format = formatMap[imageFilter|default('original')]|default('iw_theme_16_9') %}
+
+{# Map image format to CSS aspect-ratio #}
+{% set ratioMap = {'iw_theme_16_9': '16/9', 'iw_theme_4_3': '4/3', 'iw_theme_1_1': '1/1', 'iw_theme_3_4': '3/4', 'iw_theme_hero': '12/5'} %}
+{% set ratio = ratioMap[format]|default('16/9') %}
+
+{% set radius = paragraphRadius|default('') %}
+
+{# Image position: top (default) or bottom #}
+{% set isBottom = imageBottom|default(false) %}
+
+{# ── Padding & paragraph margin logic (same as classic TOP) ───────────────── #}
+{% set hasTopPad = paddingTop is defined and paddingTop is not empty and paddingTop != 'pt-0' %}
+{% set hasBotPad = paddingBottom is defined and paddingBottom is not empty and paddingBottom != 'pb-0' %}
+{% set hasLatPad = paddingLateral is defined and paddingLateral is not empty and paddingLateral != 'px-0' %}
+
+{# Vertical padding for content area #}
+{% set ptClass = hasTopPad ? paddingTop : 'pt-3' %}
+{% set pbClass = hasBotPad ? paddingBottom : 'pb-3' %}
+
+{# Lateral padding for content area #}
+{% if hasLatPad %}
+    {% set plClass = paddingLateral|replace({'px-': 'pl-'}) %}
+    {% set prClass = paddingLateral|replace({'px-': 'pr-'}) %}
+{% else %}
+    {% set plClass = '' %}
+    {% set prClass = '' %}
+{% endif %}
+
+{# Paragraph lateral margin: ALWAYS present when no lateral padding,
+   value matches pb or pt so it aligns with the image. Fallback to 4. #}
+{% set paraMargin = '' %}
+{% if not hasLatPad %}
+    {% if hasBotPad %}
+        {% set paraMargin = 'mx-' ~ (paddingBottom|split('-')|last) %}
+    {% elseif hasTopPad %}
+        {% set paraMargin = 'mx-' ~ (paddingTop|split('-')|last) %}
+    {% else %}
+        {% set paraMargin = 'mx-4' %}
+    {% endif %}
+{% endif %}
+
+{# ── Section: no padding, image fills edge-to-edge ────────────────────────── #}
+{# Image NEVER has its own radius — it follows the section edges.
+   In exterior mode the section's overflow-hidden + blockRadius handle rounding. #}
+<section
+    class="block {{ variantClass }} {{ sectionContainerClass }} {{ mtClass }} {{ mbClass }} {{ radiusClasses }} overflow-hidden"
+    {{ bgAttr|raw }}
+    data-controller="lightbox"
+>
+    {% if not isBottom %}
+        {# Image first — edge-to-edge, no radius (follows section edges) #}
         {% include '@ItechWorldSuluTheme/blocks/common/_image_slider.html.twig' with {
             images: images|default([]),
             imageFormat: format,
@@ -19,20 +84,49 @@
             autoplay: true,
             aspectRatio: ratio
         } only %}
+    {% endif %}
+
+    {# Content: titles + paragraph with padding #}
+    <div class="{{ ptClass }} {{ pbClass }} {{ plClass }} {{ prClass }}">
+        {% if lateralMode == 'interior' %}
+        <div class="container mx-auto">
+        {% endif %}
+
+            {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+                title: title|default(''),
+                subTitle: subTitle|default(''),
+                titleAlignment: titleAlignment|default('left'),
+                variant: variant|default('clair')
+            } only %}
+
+            {# Paragraph: lateral margin when no paddingLateral (reset at sm in interior mode) #}
+            {% if paraMargin %}
+                <div class="{{ paraMargin }}{% if lateralMode == 'interior' %} sm:mx-0{% endif %}">
+                    {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
+                        text: text|default(''),
+                        paragraphRadius: radius
+                    } only %}
+                </div>
+            {% else %}
+                {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
+                    text: text|default(''),
+                    paragraphRadius: radius
+                } only %}
+            {% endif %}
+
+        {% if lateralMode == 'interior' %}
+        </div>
+        {% endif %}
     </div>
 
-    {# Text content below #}
-    <div class="max-w-4xl mx-auto">
-        {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
-            title: title|default(''),
-            subTitle: subTitle|default(''),
-            titleAlignment: titleAlignment|default('left'),
-            variant: variant|default('clair')
+    {% if isBottom %}
+        {# Image last — edge-to-edge, no radius (follows section edges) #}
+        {% include '@ItechWorldSuluTheme/blocks/common/_image_slider.html.twig' with {
+            images: images|default([]),
+            imageFormat: format,
+            showName: showImagesName|default(false),
+            autoplay: true,
+            aspectRatio: ratio
         } only %}
-
-        {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
-            text: text|default(''),
-            paragraphRadius: paragraphRadius|default('')
-        } only %}
-    </div>
-{% endblock %}
+    {% endif %}
+</section>
