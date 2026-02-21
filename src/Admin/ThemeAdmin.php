@@ -65,8 +65,6 @@ class ThemeAdmin extends Admin
             ['key' => 'mosaic', 'label' => 'iw_sulu_theme.style.mosaic'],
             ['key' => 'sidebar', 'label' => 'iw_sulu_theme.style.sidebar'],
             ['key' => 'hero_banner', 'label' => 'iw_sulu_theme.style.hero_banner'],
-            ['key' => 'zigzag', 'label' => 'iw_sulu_theme.style.zigzag'],
-            ['key' => 'card', 'label' => 'iw_sulu_theme.style.card'],
             ['key' => 'split_screen', 'label' => 'iw_sulu_theme.style.split_screen'],
         ],
         'gallery' => [

@@ -102,27 +102,6 @@ const WIREFRAME_RENDERERS = {
             <rect x="40" y="52" width="40" height="10" rx="4" fill={accent} />
         </svg>
     ),
-    zigzag: (fill, accent) => (
-        <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="5" y="5" width="50" height="30" rx="3" fill={fill} />
-            <rect x="60" y="8" width="50" height="5" rx="2" fill={accent} />
-            <rect x="60" y="17" width="45" height="3" rx="2" fill={fill} />
-            <rect x="60" y="24" width="48" height="3" rx="2" fill={fill} />
-            <rect x="65" y="42" width="50" height="30" rx="3" fill={fill} />
-            <rect x="10" y="45" width="50" height="5" rx="2" fill={accent} />
-            <rect x="10" y="54" width="45" height="3" rx="2" fill={fill} />
-            <rect x="10" y="61" width="48" height="3" rx="2" fill={fill} />
-        </svg>
-    ),
-    card: (fill, accent) => (
-        <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="25" y="2" width="70" height="76" rx="5" fill="#fff" stroke={fill} strokeWidth="1" />
-            <rect x="28" y="5" width="64" height="35" rx="3" fill={fill} opacity="0.5" />
-            <rect x="32" y="46" width="45" height="5" rx="2" fill={accent} />
-            <rect x="32" y="55" width="56" height="3" rx="2" fill={fill} />
-            <rect x="32" y="62" width="50" height="3" rx="2" fill={fill} />
-        </svg>
-    ),
     split_screen: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
             <rect x="0" y="0" width="60" height="80" rx="0" fill={fill} opacity="0.4" />
