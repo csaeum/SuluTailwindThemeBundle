@@ -56,7 +56,7 @@
                     </params>
                 </property>
                 <property name="imagePosition" type="single_select"
-                          visibleCondition="__parent.style != 'overlay' AND __parent.style != 'mosaic'">
+                          visibleCondition="__parent.style != 'overlay' AND __parent.style != 'mosaic' AND __parent.style != 'sidebar'">
                     <meta><title>iw_sulu_theme.image_position</title></meta>
                     <params>
                         <param name="default_value" type="string" value="right"/>
@@ -73,9 +73,9 @@
                           visibleCondition="__parent.style != 'overlay'">
                     <meta><title>iw_sulu_theme.show_images_name</title></meta>
                 </property>
-                <!-- Overlay: toggle content position left/right -->
+                <!-- Overlay / Sidebar: toggle content position left/right -->
                 <property name="contentRight" type="checkbox"
-                          visibleCondition="__parent.style == 'overlay'">
+                          visibleCondition="__parent.style == 'overlay' OR __parent.style == 'sidebar'">
                     <params>
                         <param name="type" value="toggler"/>
                         <param name="label">

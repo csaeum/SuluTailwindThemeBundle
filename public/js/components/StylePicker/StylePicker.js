@@ -81,12 +81,16 @@ const WIREFRAME_RENDERERS = {
     ),
     sidebar: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="5" y="5" width="30" height="70" rx="3" fill={fill} opacity="0.3" />
-            <rect x="42" y="10" width="70" height="5" rx="2" fill={accent} />
-            <rect x="42" y="20" width="72" height="3" rx="2" fill={fill} />
-            <rect x="42" y="27" width="65" height="3" rx="2" fill={fill} />
-            <rect x="42" y="34" width="70" height="3" rx="2" fill={fill} />
-            <rect x="42" y="45" width="72" height="25" rx="3" fill={fill} opacity="0.5" />
+            <rect x="5" y="5" width="30" height="40" rx="3" fill={fill} />
+            <rect x="42" y="5" width="50" height="5" rx="2" fill={accent} />
+            <rect x="42" y="15" width="72" height="3" rx="2" fill={fill} />
+            <rect x="42" y="22" width="65" height="3" rx="2" fill={fill} />
+            <rect x="42" y="29" width="70" height="3" rx="2" fill={fill} />
+            <rect x="42" y="36" width="68" height="3" rx="2" fill={fill} />
+            <rect x="42" y="43" width="72" height="3" rx="2" fill={fill} />
+            <rect x="42" y="50" width="60" height="3" rx="2" fill={fill} />
+            <rect x="42" y="57" width="66" height="3" rx="2" fill={fill} />
+            <rect x="42" y="64" width="55" height="3" rx="2" fill={fill} />
         </svg>
     ),
     hero_banner: (fill, accent) => (

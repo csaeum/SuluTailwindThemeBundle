@@ -1,41 +1,96 @@
-{# Text + Images block — narrow sidebar with image, main text area #}
-{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+{# Text + Images block — sticky sidebar with image, scrollable text area #}
+{# Does NOT extend _block_wrapper so we can enforce minimum padding defaults
+   (padding always present even when explicitly set to 0). #}
 
-{% block block_content %}
-    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
-        title: title|default(''),
-        subTitle: subTitle|default(''),
-        titleAlignment: titleAlignment|default('left'),
-        variant: variant|default('clair')
-    } only %}
+{# ── Wrapper logic (replicated from _block_wrapper) ───────────────────────── #}
+{% set variantClass = 'block-variant-' ~ (variant|default('clair')) %}
+{% set mtClass = marginTop|default('mt-0') %}
+{% set mbClass = marginBottom|default('mb-0') %}
 
-    {# Fix: XML stores values with underscores (16_9, 4_3…), not colons #}
-    {% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_3_4'} %}
-    {% set format = formatMap[imageFilter|default('original')]|default('iw_theme_3_4') %}
-    {% set position = imagePosition|default('right') %}
+{# Padding values — section ALWAYS has padding.
+   If a value is undefined, null, empty or explicitly 0 → force default (pt-3/pb-3/pl-3/pr-3). #}
+{% set ptVal = paddingTop|default('') %}
+{% set ptClass = (ptVal is empty or ptVal == 'pt-0') ? 'pt-3' : ptVal %}
+{% set pbVal = paddingBottom|default('') %}
+{% set pbClass = (pbVal is empty or pbVal == 'pb-0') ? 'pb-3' : pbVal %}
+{% set pxVal = paddingLateral|default('') %}
+{% if pxVal is not empty and pxVal != 'px-0' %}
+    {% set plClass = pxVal|replace({'px-': 'pl-'}) %}
+    {% set prClass = pxVal|replace({'px-': 'pr-'}) %}
+{% else %}
+    {% set plClass = 'pl-3' %}
+    {% set prClass = 'pr-3' %}
+{% endif %}
 
-    {# Map image format to CSS aspect-ratio #}
-    {% set ratioMap = {'iw_theme_16_9': '16/9', 'iw_theme_4_3': '4/3', 'iw_theme_1_1': '1/1', 'iw_theme_3_4': '3/4', 'iw_theme_hero': '12/5'} %}
-    {% set ratio = ratioMap[format]|default('3/4') %}
+{% set lateralMode = lateralMargins|default('interior') %}
+{% if lateralMode is same as(true) or lateralMode == '1' %}
+    {% set lateralMode = 'exterior' %}
+{% elseif lateralMode is same as(false) or lateralMode == '0' or lateralMode == '' %}
+    {% set lateralMode = 'interior' %}
+{% endif %}
 
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
-        {# Main text area — 3/5 = 60% #}
-        <div class="{{ position == 'left' ? 'md:order-2 md:col-span-3' : 'md:order-1 md:col-span-3' }}">
-            {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
-                text: text|default(''),
-                paragraphRadius: paragraphRadius|default('')
-            } only %}
+{% set sectionContainerClass = (lateralMode == 'exterior') ? 'container mx-auto' : '' %}
+{% set bgAttr = (showBackground|default(true)) ? 'data-has-bg="true"' : '' %}
+
+{# Block radius: only in exterior mode. #}
+{% set blockRadiusVal = blockRadius|default('') %}
+{% set radiusClass = (lateralMode == 'exterior' and blockRadiusVal) ? blockRadiusVal : '' %}
+
+{% set radius = paragraphRadius|default('') %}
+
+{# Fix: XML stores values with underscores (16_9, 4_3…), not colons #}
+{% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_3_4'} %}
+{% set format = formatMap[imageFilter|default('original')]|default('iw_theme_3_4') %}
+{# Content position: contentRight = true → text right, image left (default: text left, image right) #}
+{% set isRight = contentRight|default(false) %}
+
+{# Map image format to CSS aspect-ratio #}
+{% set ratioMap = {'iw_theme_16_9': '16/9', 'iw_theme_4_3': '4/3', 'iw_theme_1_1': '1/1', 'iw_theme_3_4': '3/4', 'iw_theme_hero': '12/5'} %}
+{% set ratio = ratioMap[format]|default('3/4') %}
+
+{# ── Section ──────────────────────────────────────────────────────────────── #}
+<section
+    class="block {{ variantClass }} {{ sectionContainerClass }} {{ mtClass }} {{ mbClass }} {{ ptClass }} {{ pbClass }} {{ plClass }} {{ prClass }} {{ radiusClass }}"
+    {{ bgAttr|raw }}
+    data-controller="lightbox"
+>
+    {% if lateralMode == 'interior' %}
+    <div class="container mx-auto">
+    {% endif %}
+
+        {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+            title: title|default(''),
+            subTitle: subTitle|default(''),
+            titleAlignment: titleAlignment|default('left'),
+            variant: variant|default('clair')
+        } only %}
+
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-2 md:gap-5">
+            {# Main text area — 3/5 = 60% #}
+            <div class="md:col-span-3{{ isRight ? ' md:order-2' : ' md:order-1' }}">
+                {% if text is defined and text is not empty %}
+                    <div class="block-text prose max-w-none{% if radius %} {{ radius }}{% endif %}" style="margin-block: 0;">
+                        {{ text|raw }}
+                    </div>
+                {% endif %}
+            </div>
+
+            {# Sidebar images — 2/5 = 40%.
+               Grid cell stretches to full row height; sticky child stays visible while text scrolls. #}
+            <div class="md:col-span-2{{ isRight ? ' md:order-1' : ' md:order-2' }}">
+                <div class="{% if radius %}{{ radius }} overflow-hidden{% endif %}" style="position: sticky; top: 6rem;">
+                    {% include '@ItechWorldSuluTheme/blocks/common/_image_slider.html.twig' with {
+                        images: images|default([]),
+                        imageFormat: format,
+                        showName: showImagesName|default(false),
+                        autoplay: true,
+                        aspectRatio: ratio
+                    } only %}
+                </div>
+            </div>
         </div>
 
-        {# Sidebar images — 2/5 = 40% #}
-        <div class="{{ position == 'left' ? 'md:order-1 md:col-span-2' : 'md:order-2 md:col-span-2' }}">
-            {% include '@ItechWorldSuluTheme/blocks/common/_image_slider.html.twig' with {
-                images: images|default([]),
-                imageFormat: format,
-                showName: showImagesName|default(false),
-                autoplay: true,
-                aspectRatio: ratio
-            } only %}
-        </div>
+    {% if lateralMode == 'interior' %}
     </div>
-{% endblock %}
+    {% endif %}
+</section>
