@@ -31,18 +31,18 @@
                         </param>
                     </params>
                 </property>
-                <!-- Multiple images: hidden for overlay (uses single image) -->
+                <!-- Multiple images: hidden for overlay and hero_banner (use single image) -->
                 <property name="images" type="media_selection"
-                          visibleCondition="__parent.style != 'overlay'">
+                          visibleCondition="__parent.style != 'overlay' AND __parent.style != 'hero_banner'">
                     <meta><title>iw_sulu_theme.images</title></meta>
                 </property>
-                <!-- Single image: only for overlay layout -->
+                <!-- Single image: only for overlay and hero_banner layouts -->
                 <property name="image" type="single_media_selection"
-                          visibleCondition="__parent.style == 'overlay'">
+                          visibleCondition="__parent.style == 'overlay' OR __parent.style == 'hero_banner'">
                     <meta><title>iw_sulu_theme.image</title></meta>
                 </property>
                 <property name="imageFilter" type="single_select"
-                          visibleCondition="__parent.style != 'overlay' AND __parent.style != 'mosaic'">
+                          visibleCondition="__parent.style != 'overlay' AND __parent.style != 'mosaic' AND __parent.style != 'hero_banner'">
                     <meta><title>iw_sulu_theme.image_format</title></meta>
                     <params>
                         <param name="default_value" type="string" value="original"/>
@@ -56,7 +56,7 @@
                     </params>
                 </property>
                 <property name="imagePosition" type="single_select"
-                          visibleCondition="__parent.style != 'overlay' AND __parent.style != 'mosaic' AND __parent.style != 'sidebar'">
+                          visibleCondition="__parent.style != 'overlay' AND __parent.style != 'mosaic' AND __parent.style != 'sidebar' AND __parent.style != 'hero_banner'">
                     <meta><title>iw_sulu_theme.image_position</title></meta>
                     <params>
                         <param name="default_value" type="string" value="right"/>
@@ -70,7 +70,7 @@
                     </params>
                 </property>
                 <property name="showImagesName" type="checkbox"
-                          visibleCondition="__parent.style != 'overlay'">
+                          visibleCondition="__parent.style != 'overlay' AND __parent.style != 'hero_banner'">
                     <meta><title>iw_sulu_theme.show_images_name</title></meta>
                 </property>
                 <!-- Overlay / Sidebar: toggle content position left/right -->
@@ -129,7 +129,8 @@
                 <property name="marginBottom" type="iw_theme_margin_selector" colspan="6">
                     <meta><title>iw_sulu_theme.margin_bottom</title></meta>
                 </property>
-                <property name="lateralMargins" type="single_select">
+                <property name="lateralMargins" type="single_select"
+                          visibleCondition="__parent.style != 'hero_banner'">
                     <meta><title>iw_sulu_theme.lateral_margins</title></meta>
                     <params>
                         <param name="default_value" type="string" value="interior"/>

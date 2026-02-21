@@ -1,49 +1,86 @@
-{# Text + Images block — full-width hero banner with background image #}
-{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+{# Text + Images block — hero banner with full-background single image #}
+{# Based on fullwidth wrapper conditions but image covers the full section as background.
+   Content is always centered (interior container forced).
+   Does NOT extend _block_wrapper for full control over padding and overflow. #}
 
-{% block block_content %}
-    {% set alignMap = {'left': 'text-left', 'center': 'text-center', 'right': 'text-right'} %}
-    {% set titleAlignClass = alignMap[titleAlignment|default('center')]|default('text-center') %}
+{# ── Wrapper logic (replicated from _block_wrapper) ───────────────────────── #}
+{% set variantClass = 'block-variant-' ~ (variant|default('clair')) %}
+{% set mtClass = marginTop|default('mt-0') %}
+{% set mbClass = marginBottom|default('mb-0') %}
 
-    {# Fix: XML stores values with underscores (16_9, 4_3…), not colons #}
-    {% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_16_9'} %}
-    {% set format = formatMap[imageFilter|default('original')]|default('iw_theme_16_9') %}
+{% set bgAttr = (showBackground|default(true)) ? 'data-has-bg="true"' : '' %}
 
-    {% set bgImageUrl = '' %}
-    {% if images is defined and images is iterable and images|length > 0 %}
-        {% set firstMedia = sulu_resolve_media(images[0], app.request.locale) %}
-        {% set bgImageUrl = firstMedia.thumbnails[format]|default(firstMedia.url) %}
+{# Block radius: applied from sm: breakpoint only (edge-to-edge on mobile). #}
+{% set blockRadiusVal = blockRadius|default('') %}
+{% set radiusClasses = blockRadiusVal ? ('sm:' ~ blockRadiusVal ~ ' sm:overflow-hidden') : '' %}
+
+{% set radius = paragraphRadius|default('') %}
+
+{# Fixed hero format — 12/5 aspect ratio #}
+{% set format = 'iw_theme_hero' %}
+
+{# Resolve single image (single_media_selection) #}
+{% set heroImageUrl = '' %}
+{% set heroImageAlt = '' %}
+{% if image is defined and image.id is defined %}
+    {% set media = sulu_resolve_media(image.id, app.request.locale) %}
+    {% set heroImageUrl = media.thumbnails[format]|default(media.url) %}
+    {% set heroImageAlt = media.title|default('') %}
+{% endif %}
+
+{# ── Padding for content overlay ──────────────────────────────────────────── #}
+{# Content must ALWAYS have padding so text never touches the edges.
+   If a value is undefined, null, empty or explicitly 0 → force default. #}
+{% set ptVal = paddingTop|default('') %}
+{% set ptClass = (ptVal is empty or ptVal == 'pt-0') ? 'pt-3' : ptVal %}
+{% set pbVal = paddingBottom|default('') %}
+{% set pbClass = (pbVal is empty or pbVal == 'pb-0') ? 'pb-3' : pbVal %}
+{% set pxVal = paddingLateral|default('') %}
+{% if pxVal is not empty and pxVal != 'px-0' %}
+    {% set plClass = pxVal|replace({'px-': 'pl-'}) %}
+    {% set prClass = pxVal|replace({'px-': 'pr-'}) %}
+{% else %}
+    {% set plClass = 'pl-3' %}
+    {% set prClass = 'pr-3' %}
+{% endif %}
+
+{# ── Section: image as full background, content overlaid ──────────────────── #}
+<section
+    class="block {{ variantClass }} {{ mtClass }} {{ mbClass }} {{ radiusClasses }} relative overflow-hidden"
+    {{ bgAttr|raw }}
+>
+    {# Background image — covers the entire section #}
+    {% if heroImageUrl is not empty %}
+        <img
+            src="{{ heroImageUrl }}"
+            alt="{{ heroImageAlt }}"
+            loading="lazy"
+            class="absolute inset-0 w-full h-full object-cover"
+        >
     {% endif %}
 
-    <div class="relative overflow-hidden" style="aspect-ratio: 16/9;">
-        {# Background image #}
-        {% if bgImageUrl is not empty %}
-            <img
-                src="{{ bgImageUrl }}"
-                alt=""
-                loading="lazy"
-                class="absolute inset-0 w-full h-full object-cover"
-            >
-        {% endif %}
+    {# Uniform dark overlay for text readability (content is always centered) #}
+    <div class="absolute inset-0 bg-black/60"></div>
 
-        {# Gradient overlay #}
-        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
+    {# Content — centered over the image, always interior container #}
+    <div class="relative z-10 {{ ptClass }} {{ pbClass }} {{ plClass }} {{ prClass }}">
+        <div class="container mx-auto">
+            <div class="min-h-[300px] md:min-h-[400px] flex flex-col items-center justify-center text-center text-white">
+                <div class="max-w-4xl mx-auto">
+                    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+                        title: title|default(''),
+                        subTitle: subTitle|default(''),
+                        titleAlignment: titleAlignment|default('center'),
+                        variant: variant|default('clair')
+                    } only %}
 
-        {# Content — centered over the image #}
-        <div class="relative z-10 flex flex-col items-center justify-center h-full text-center text-white px-4 sm:px-6 lg:px-8">
-            <div class="max-w-4xl mx-auto">
-                {% if title is defined and title is not empty %}
-                    <h2 class="block-title text-3xl md:text-4xl lg:text-5xl font-[var(--font-h2-weight)] text-white leading-tight {{ titleAlignClass }}">{{ title }}</h2>
-                {% endif %}
-                {% if subTitle is defined and subTitle is not empty %}
-                    <h3 class="block-subtitle text-lg md:text-xl lg:text-2xl mt-4 text-white/80 {{ titleAlignClass }}">{{ subTitle }}</h3>
-                {% endif %}
-                {% if text is defined and text is not empty %}
-                    <div class="block-text prose prose-invert prose-lg max-w-2xl mx-auto mt-6">
-                        {{ text|raw }}
-                    </div>
-                {% endif %}
+                    {% if text is defined and text is not empty %}
+                        <div class="block-text prose prose-invert prose-lg max-w-2xl mx-auto{% if radius %} {{ radius }}{% endif %}" style="margin-block: 0;">
+                            {{ text|raw }}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
-{% endblock %}
+</section>
