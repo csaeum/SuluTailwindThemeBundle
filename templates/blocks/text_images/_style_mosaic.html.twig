@@ -1,53 +1,104 @@
 {# Text + Images block — mosaic layout with multiple images and lightbox #}
-{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+{# Does NOT extend _block_wrapper so we can enforce minimum padding defaults
+   (padding always present even when explicitly set to 0). #}
 
-{% block block_content %}
-    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
-        title: title|default(''),
-        subTitle: subTitle|default(''),
-        titleAlignment: titleAlignment|default('left'),
-        variant: variant|default('clair')
-    } only %}
+{# ── Wrapper logic (replicated from _block_wrapper) ───────────────────────── #}
+{% set variantClass = 'block-variant-' ~ (variant|default('clair')) %}
+{% set mtClass = marginTop|default('mt-0') %}
+{% set mbClass = marginBottom|default('mb-0') %}
 
-    {# Mosaic uses two different formats: 16:9 for the hero image, 1:1 for the rest #}
-    {# Fix: XML stores values with underscores (16_9, 4_3…), not colons #}
-    {% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_1_1'} %}
-    {% set baseFormat = formatMap[imageFilter|default('original')]|default('iw_theme_1_1') %}
+{# Padding values — section ALWAYS has padding.
+   If a value is undefined, null, empty or explicitly 0 → force default (pt-3/pb-3/pl-3/pr-3). #}
+{% set ptVal = paddingTop|default('') %}
+{% set ptClass = (ptVal is empty or ptVal == 'pt-0') ? 'pt-3' : ptVal %}
+{% set pbVal = paddingBottom|default('') %}
+{% set pbClass = (pbVal is empty or pbVal == 'pb-0') ? 'pb-3' : pbVal %}
+{% set pxVal = paddingLateral|default('') %}
+{% if pxVal is not empty and pxVal != 'px-0' %}
+    {% set plClass = pxVal|replace({'px-': 'pl-'}) %}
+    {% set prClass = pxVal|replace({'px-': 'pr-'}) %}
+{% else %}
+    {% set plClass = 'pl-3' %}
+    {% set prClass = 'pr-3' %}
+{% endif %}
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {# Text area — takes 1 column #}
-        <div class="lg:col-span-1">
-            {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
-                text: text|default(''),
-                paragraphRadius: paragraphRadius|default('')
-            } only %}
+{% set lateralMode = lateralMargins|default('interior') %}
+{% if lateralMode is same as(true) or lateralMode == '1' %}
+    {% set lateralMode = 'exterior' %}
+{% elseif lateralMode is same as(false) or lateralMode == '0' or lateralMode == '' %}
+    {% set lateralMode = 'interior' %}
+{% endif %}
+
+{% set sectionContainerClass = (lateralMode == 'exterior') ? 'container mx-auto' : '' %}
+{% set bgAttr = (showBackground|default(true)) ? 'data-has-bg="true"' : '' %}
+
+{# Block radius: only in exterior mode. #}
+{% set blockRadiusVal = blockRadius|default('') %}
+{% set radiusClass = (lateralMode == 'exterior' and blockRadiusVal) ? blockRadiusVal : '' %}
+
+{% set radius = paragraphRadius|default('') %}
+
+{# Mosaic uses two different formats: 16:9 for the hero image, user-selected for the rest #}
+{# Fix: XML stores values with underscores (16_9, 4_3…), not colons #}
+{% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_1_1'} %}
+{% set baseFormat = formatMap[imageFilter|default('original')]|default('iw_theme_1_1') %}
+
+{# ── Section ──────────────────────────────────────────────────────────────── #}
+<section
+    class="block {{ variantClass }} {{ sectionContainerClass }} {{ mtClass }} {{ mbClass }} {{ ptClass }} {{ pbClass }} {{ plClass }} {{ prClass }} {{ radiusClass }} {% if radiusClass %}overflow-hidden{% endif %}"
+    {{ bgAttr|raw }}
+    data-controller="lightbox"
+>
+    {% if lateralMode == 'interior' %}
+    <div class="container mx-auto">
+    {% endif %}
+
+        {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+            title: title|default(''),
+            subTitle: subTitle|default(''),
+            titleAlignment: titleAlignment|default('left'),
+            variant: variant|default('clair')
+        } only %}
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 md:gap-5">
+            {# Text area — takes 1 column #}
+            <div class="lg:col-span-1">
+                {% if text is defined and text is not empty %}
+                    <div class="block-text prose max-w-none{% if radius %} {{ radius }}{% endif %}" style="margin-block: 0;">
+                        {{ text|raw }}
+                    </div>
+                {% endif %}
+            </div>
+
+            {# Mosaic images — takes 2 columns #}
+            {% if images is defined and images is iterable %}
+                <div class="lg:col-span-2 grid grid-cols-2 gap-2 md:gap-5">
+                    {% for mediaId in images %}
+                        {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
+                        {# First image spans full width in 16:9, others use selected format #}
+                        {% set isHero = loop.first %}
+                        {% set imgFormat = isHero ? 'iw_theme_16_9' : baseFormat %}
+                        <figure class="block-image {{ isHero ? 'col-span-2' : '' }}{% if radius %} {{ radius }} overflow-hidden{% endif %}">
+                            <a
+                                href="{{ media.url }}"
+                                class="glightbox"
+                                data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
+                            >
+                                <img
+                                    src="{{ media.thumbnails[imgFormat]|default(media.url) }}"
+                                    alt="{{ media.title|default('') }}"
+                                    loading="lazy"
+                                    class="w-full object-cover cursor-pointer"
+                                    style="aspect-ratio: {{ isHero ? '16/9' : '1/1' }};"
+                                >
+                            </a>
+                        </figure>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
 
-        {# Mosaic images — takes 2 columns #}
-        {% if images is defined and images is iterable %}
-            <div class="lg:col-span-2 grid grid-cols-2 gap-3">
-                {% for mediaId in images %}
-                    {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
-                    {# First image spans full width in 16:9, others are square #}
-                    {% set isHero = loop.first %}
-                    {% set imgFormat = isHero ? 'iw_theme_16_9' : baseFormat %}
-                    <figure class="block-image {{ isHero ? 'col-span-2' : '' }}">
-                        <a
-                            href="{{ media.url }}"
-                            class="glightbox"
-                            data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
-                        >
-                            <img
-                                src="{{ media.thumbnails[imgFormat]|default(media.url) }}"
-                                alt="{{ media.title|default('') }}"
-                                loading="lazy"
-                                class="w-full object-cover rounded-[var(--radius-img)] cursor-pointer"
-                                style="aspect-ratio: {{ isHero ? '16/9' : '1/1' }};"
-                            >
-                        </a>
-                    </figure>
-                {% endfor %}
-            </div>
-        {% endif %}
+    {% if lateralMode == 'interior' %}
     </div>
-{% endblock %}
+    {% endif %}
+</section>

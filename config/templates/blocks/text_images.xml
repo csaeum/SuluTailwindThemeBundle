@@ -42,7 +42,7 @@
                     <meta><title>iw_sulu_theme.image</title></meta>
                 </property>
                 <property name="imageFilter" type="single_select"
-                          visibleCondition="__parent.style != 'overlay'">
+                          visibleCondition="__parent.style != 'overlay' AND __parent.style != 'mosaic'">
                     <meta><title>iw_sulu_theme.image_format</title></meta>
                     <params>
                         <param name="default_value" type="string" value="original"/>
@@ -56,7 +56,7 @@
                     </params>
                 </property>
                 <property name="imagePosition" type="single_select"
-                          visibleCondition="__parent.style != 'overlay'">
+                          visibleCondition="__parent.style != 'overlay' AND __parent.style != 'mosaic'">
                     <meta><title>iw_sulu_theme.image_position</title></meta>
                     <params>
                         <param name="default_value" type="string" value="right"/>
