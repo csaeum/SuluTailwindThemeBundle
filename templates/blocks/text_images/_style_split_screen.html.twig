@@ -1,29 +1,155 @@
-{# Text + Images block — 50/50 split screen layout #}
-{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+{# Text + Images block — 50/50 split screen with full-height image slider #}
+{# Does NOT extend _block_wrapper because padding applies to content only,
+   not the section, so the image always fills its half edge-to-edge. #}
 
-{% block block_content %}
-    {% set position = imagePosition|default('right') %}
-    {# Fix: XML stores values with underscores (16_9, 4_3…), not colons #}
-    {% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_16_9'} %}
-    {% set format = formatMap[imageFilter|default('original')]|default('iw_theme_16_9') %}
+{# ── Wrapper logic (replicated from _block_wrapper) ───────────────────────── #}
+{% set variantClass = 'block-variant-' ~ (variant|default('clair')) %}
+{% set mtClass = marginTop|default('mt-0') %}
+{% set mbClass = marginBottom|default('mb-0') %}
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 min-h-[400px]">
-        {# Image side — full height cover #}
-        <div class="{{ position == 'left' ? 'lg:order-1' : 'lg:order-2' }} relative min-h-[300px] lg:min-h-[400px]">
-            {% if images is defined and images is iterable and images|length > 0 %}
-                {% set firstMedia = sulu_resolve_media(images[0], app.request.locale) %}
-                <img
-                    src="{{ firstMedia.thumbnails[format]|default(firstMedia.url) }}"
-                    alt="{{ firstMedia.title|default('') }}"
-                    loading="lazy"
-                    class="absolute inset-0 w-full h-full object-cover"
+{% set lateralMode = lateralMargins|default('interior') %}
+{% if lateralMode is same as(true) or lateralMode == '1' %}
+    {% set lateralMode = 'exterior' %}
+{% elseif lateralMode is same as(false) or lateralMode == '0' or lateralMode == '' %}
+    {% set lateralMode = 'interior' %}
+{% endif %}
+
+{% set sectionContainerClass = (lateralMode == 'exterior') ? 'container mx-auto' : '' %}
+{% set bgAttr = (showBackground|default(true)) ? 'data-has-bg="true"' : '' %}
+
+{# Block radius: only in exterior mode.
+   Applied from sm: breakpoint only (edge-to-edge on mobile). #}
+{% set blockRadiusVal = blockRadius|default('') %}
+{% set radiusClasses = (lateralMode == 'exterior' and blockRadiusVal) ? ('sm:' ~ blockRadiusVal ~ ' sm:overflow-hidden') : '' %}
+
+{% set radius = paragraphRadius|default('') %}
+
+{# Fix: XML stores values with underscores (16_9, 4_3…), not colons #}
+{% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_16_9'} %}
+{% set format = formatMap[imageFilter|default('original')]|default('iw_theme_16_9') %}
+
+{# Content position: contentRight = true → text right, image left (default: text left, image right) #}
+{% set isRight = contentRight|default(false) %}
+
+{# ── Padding for content area only ────────────────────────────────────────── #}
+{# Content must ALWAYS have padding so text never touches the edges.
+   If a value is undefined, null, empty or explicitly 0 → force default. #}
+{% set ptVal = paddingTop|default('') %}
+{% set ptClass = (ptVal is empty or ptVal == 'pt-0') ? 'pt-3' : ptVal %}
+{% set pbVal = paddingBottom|default('') %}
+{% set pbClass = (pbVal is empty or pbVal == 'pb-0') ? 'pb-3' : pbVal %}
+{% set pxVal = paddingLateral|default('') %}
+{% if pxVal is not empty and pxVal != 'px-0' %}
+    {% set plClass = pxVal|replace({'px-': 'pl-'}) %}
+    {% set prClass = pxVal|replace({'px-': 'pr-'}) %}
+{% else %}
+    {% set plClass = 'pl-3' %}
+    {% set prClass = 'pr-3' %}
+{% endif %}
+
+{# ── Resolve images for slider ────────────────────────────────────────────── #}
+{% set resolvedImages = [] %}
+{% if images is defined and images is iterable %}
+    {% for mediaId in images %}
+        {% set resolvedImages = resolvedImages|merge([sulu_resolve_media(mediaId, app.request.locale)]) %}
+    {% endfor %}
+{% endif %}
+
+{# ── Section: no padding, image fills its half edge-to-edge ───────────────── #}
+<section
+    class="block {{ variantClass }} {{ sectionContainerClass }} {{ mtClass }} {{ mbClass }} {{ radiusClasses }} overflow-hidden"
+    {{ bgAttr|raw }}
+    data-controller="lightbox"
+>
+    <div class="grid grid-cols-1 lg:grid-cols-2">
+        {# Image side — full-height cover with slider support.
+           Custom rendering (not _image_slider partial) because images must fill
+           the full grid cell height with no aspect-ratio constraint. #}
+        <div class="{{ isRight ? 'lg:order-2' : 'lg:order-1' }} relative min-h-[300px] lg:min-h-[400px]"
+            {% if resolvedImages|length > 1 %}
+                data-controller="slider"
+                data-slider-mode-value="carousel"
+                data-slider-autoplay-value="true"
+                data-slider-interval-value="5000"
+            {% endif %}
+        >
+            {% if resolvedImages|length == 1 %}
+                {% set media = resolvedImages[0] %}
+                <a
+                    href="{{ media.url }}"
+                    class="glightbox absolute inset-0 block w-full h-full"
+                    data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
                 >
+                    <img
+                        src="{{ media.thumbnails[format]|default(media.url) }}"
+                        alt="{{ media.title|default('') }}"
+                        loading="lazy"
+                        class="absolute inset-0 w-full h-full object-cover cursor-pointer"
+                    >
+                </a>
+
+            {% elseif resolvedImages|length > 1 %}
+                {# Slides #}
+                {% for media in resolvedImages %}
+                    <div
+                        data-slider-target="slide"
+                        class="absolute inset-0 w-full h-full {{ loop.first ? '' : 'hidden' }}"
+                    >
+                        <a
+                            href="{{ media.url }}"
+                            class="glightbox block w-full h-full"
+                            data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
+                        >
+                            <img
+                                src="{{ media.thumbnails[format]|default(media.url) }}"
+                                alt="{{ media.title|default('') }}"
+                                loading="lazy"
+                                class="absolute inset-0 w-full h-full object-cover cursor-pointer"
+                            >
+                        </a>
+                    </div>
+                {% endfor %}
+
+                {# Navigation arrows #}
+                <button
+                    type="button"
+                    class="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/40 hover:bg-black/60 text-white rounded-full w-9 h-9 flex items-center justify-center transition-colors"
+                    data-action="slider#prev"
+                    aria-label="Previous"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+                </button>
+                <button
+                    type="button"
+                    class="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/40 hover:bg-black/60 text-white rounded-full w-9 h-9 flex items-center justify-center transition-colors"
+                    data-action="slider#next"
+                    aria-label="Next"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </button>
+
+                {# Dot indicators #}
+                <div data-slider-target="dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/30 backdrop-blur-sm z-20">
+                    {% for media in resolvedImages %}
+                        <button
+                            type="button"
+                            class="w-2.5 h-2.5 rounded-full transition-colors {{ loop.first ? 'bg-white' : 'bg-white/50' }}"
+                            data-action="slider#goTo"
+                            data-slider-index-param="{{ loop.index0 }}"
+                            aria-label="Slide {{ loop.index }}"
+                        ></button>
+                    {% endfor %}
+                </div>
             {% endif %}
         </div>
 
-        {# Text side — vertically centered #}
-        <div class="{{ position == 'left' ? 'lg:order-2' : 'lg:order-1' }} flex items-center">
-            <div class="p-8 md:p-12 lg:p-16 w-full">
+        {# Text side — vertically centered with padding, max-w to keep lines readable on wide screens #}
+        <div class="{{ isRight ? 'lg:order-1' : 'lg:order-2' }} flex items-center {{ ptClass }} {{ pbClass }} {{ plClass }} {{ prClass }}">
+            <div class="w-full max-w-2xl{{ isRight ? ' ml-auto' : '' }}">
                 {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
                     title: title|default(''),
                     subTitle: subTitle|default(''),
@@ -31,11 +157,12 @@
                     variant: variant|default('clair')
                 } only %}
 
-                {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
-                    text: text|default(''),
-                    paragraphRadius: paragraphRadius|default('')
-                } only %}
+                {% if text is defined and text is not empty %}
+                    <div class="block-text prose max-w-none{% if radius %} {{ radius }}{% endif %}" style="margin-block: 0;">
+                        {{ text|raw }}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
-{% endblock %}
+</section>
