@@ -2,6 +2,29 @@
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
+    {# Resolve lateral mode and image radius #}
+    {% set imageRadius = paragraphImageRadius|default('') %}
+    {% set lateralMode = lateralMargins|default('interior') %}
+    {% if lateralMode is same as(true) or lateralMode == '1' %}
+        {% set lateralMode = 'exterior' %}
+    {% elseif lateralMode is same as(false) or lateralMode == '0' or lateralMode == '' %}
+        {% set lateralMode = 'interior' %}
+    {% endif %}
+
+    {# If paddingLateral is 0 or empty: seamless layout #}
+    {% set pxVal = paddingLateral|default('') %}
+    {% set noGap = (pxVal is empty or pxVal == 'px-0') %}
+
+    {# Interior mode: always apply image radius from sm: breakpoint.
+       Other modes: radius only when there is a gap (padding). #}
+    {% if lateralMode == 'interior' and imageRadius %}
+        {% set imageRadiusClass = 'sm:' ~ imageRadius ~ ' sm:overflow-hidden' %}
+    {% elseif not noGap and imageRadius %}
+        {% set imageRadiusClass = imageRadius ~ ' overflow-hidden' %}
+    {% else %}
+        {% set imageRadiusClass = '' %}
+    {% endif %}
+
     {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
         title: title|default(''),
         subTitle: subTitle|default(''),
@@ -10,13 +33,19 @@
     } only %}
 
     {% if images is defined and images is iterable and images|length > 0 %}
+        {# Map imageFilter value to Sulu thumbnail name and CSS aspect-ratio #}
+        {% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_16_9'} %}
+        {% set format = formatMap[imageFilter|default('original')]|default('iw_theme_16_9') %}
+        {% set ratioMap = {'iw_theme_16_9': '16/9', 'iw_theme_4_3': '4/3', 'iw_theme_1_1': '1/1', 'iw_theme_3_4': '3/4'} %}
+        {% set aspectRatio = ratioMap[format]|default('16/9') %}
+
         <div
             data-controller="slider"
             data-slider-mode-value="carousel"
             data-slider-autoplay-value="false"
         >
             {# Main image display #}
-            <div class="relative overflow-hidden rounded-[var(--radius-img)] mb-4" style="aspect-ratio: 16/9;">
+            <div class="relative overflow-hidden{{ imageRadiusClass ? ' ' ~ imageRadiusClass : '' }} mb-4" style="aspect-ratio: {{ aspectRatio }};">
                 {% for mediaId in images %}
                     {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
                     <div
@@ -29,35 +58,85 @@
                             data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
                         >
                             <img
-                                src="{{ media.thumbnails['iw_theme_16_9']|default(media.url) }}"
+                                src="{{ media.thumbnails[format]|default(media.url) }}"
                                 alt="{{ media.title|default('') }}"
-                                loading="{{ loop.first ? 'eager' : 'lazy' }}"
+                                loading="eager"
                                 class="w-full h-full object-cover cursor-pointer"
                             >
                         </a>
                     </div>
                 {% endfor %}
+
+                {# Prev / Next arrows on the main image #}
+                <button
+                    type="button"
+                    data-action="slider#prev"
+                    class="gallery-nav absolute left-4 top-1/2 -translate-y-1/2 z-10"
+                    aria-label="Previous"
+                >
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button
+                    type="button"
+                    data-action="slider#next"
+                    class="gallery-nav absolute right-4 top-1/2 -translate-y-1/2 z-10"
+                    aria-label="Next"
+                >
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
             </div>
 
-            {# Thumbnail strip #}
-            <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-thin">
-                {% for mediaId in images %}
-                    {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
-                    <button
-                        type="button"
-                        data-slider-target="thumbnail"
-                        data-action="slider#selectThumbnail"
-                        data-slider-index-param="{{ loop.index0 }}"
-                        class="flex-none w-20 h-20 rounded-[var(--border-radius,4px)] overflow-hidden cursor-pointer transition-all {{ loop.first ? 'ring-2 ring-[var(--color-primary)] opacity-100' : 'opacity-60' }}"
-                    >
-                        <img
-                            src="{{ media.thumbnails['iw_theme_1_1']|default(media.url) }}"
-                            alt="{{ media.title|default('') }}"
-                            loading="lazy"
-                            class="w-full h-full object-cover"
+            {# Thumbnail strip with navigation arrows.
+               When paddingLateral is absent or 0, add horizontal padding so
+               the arrows and thumbnails don't touch the block edges. #}
+            <div class="flex items-center gap-2{{ noGap ? ' px-4' : '' }}">
+                {# Prev thumbnails #}
+                <button
+                    type="button"
+                    data-action="slider#scrollThumbnailsBy"
+                    data-slider-direction-param="-1"
+                    class="gallery-nav gallery-nav--sm"
+                    style="--gallery-nav-bg: rgba(0,0,0,0.08); --gallery-nav-bg-hover: rgba(0,0,0,0.2); --gallery-nav-color: currentColor;"
+                    aria-label="Previous thumbnails"
+                >
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+
+                {# Scrollable thumbnail track (no visible scrollbar) #}
+                <div
+                    data-slider-target="thumbnailTrack"
+                    class="flex gap-2 overflow-x-auto flex-1 min-w-0 scrollbar-hide py-1"
+                >
+                    {% for mediaId in images %}
+                        {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
+                        <button
+                            type="button"
+                            data-slider-target="thumbnail"
+                            data-action="slider#selectThumbnail"
+                            data-slider-index-param="{{ loop.index0 }}"
+                            class="flex-none w-20 h-14 overflow-hidden cursor-pointer transition-opacity {{ imageRadiusClass ? imageRadiusClass : '' }} {{ loop.first ? 'is-active opacity-100' : 'opacity-50' }}"
                         >
-                    </button>
-                {% endfor %}
+                            <img
+                                src="{{ media.thumbnails[format]|default(media.url) }}"
+                                alt="{{ media.title|default('') }}"
+                                loading="lazy"
+                                class="w-full h-full object-cover"
+                            >
+                        </button>
+                    {% endfor %}
+                </div>
+
+                {# Next thumbnails #}
+                <button
+                    type="button"
+                    data-action="slider#scrollThumbnailsBy"
+                    data-slider-direction-param="1"
+                    class="gallery-nav gallery-nav--sm"
+                    style="--gallery-nav-bg: rgba(0,0,0,0.08); --gallery-nav-bg-hover: rgba(0,0,0,0.2); --gallery-nav-color: currentColor;"
+                    aria-label="Next thumbnails"
+                >
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
             </div>
         </div>
     {% endif %}

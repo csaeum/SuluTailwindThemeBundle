@@ -36,7 +36,7 @@
 {% set blockRadiusVal = blockRadius|default('') %}
 {% set radiusClass = (lateralMode == 'exterior' and blockRadiusVal) ? blockRadiusVal : '' %}
 
-{% set radius = paragraphRadius|default('') %}
+{% set radius = paragraphImageRadius|default('') %}
 
 {# Fix: XML stores values with underscores (16_9, 4_3…), not colons #}
 {% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_3_4'} %}

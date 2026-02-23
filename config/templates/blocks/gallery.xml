@@ -34,6 +34,27 @@
                 <property name="images" type="media_selection">
                     <meta><title>iw_sulu_theme.images</title></meta>
                 </property>
+                <property name="imageFilter" type="single_select">
+                    <meta><title>iw_sulu_theme.image_format</title></meta>
+                    <params>
+                        <param name="default_value" type="string" value="original"/>
+                        <param name="values" type="collection">
+                            <param name="16_9"><meta><title>16:9</title></meta></param>
+                            <param name="4_3"><meta><title>4:3</title></meta></param>
+                            <param name="1_1"><meta><title>1:1</title></meta></param>
+                            <param name="3_4"><meta><title>3:4</title></meta></param>
+                            <param name="original"><meta><title>iw_sulu_theme.format_original</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="singleImage" type="checkbox"
+                          visibleCondition="__parent.style == 'slider'">
+                    <meta><title>iw_sulu_theme.single_image_display</title></meta>
+                </property>
+                <property name="enableParallax" type="checkbox"
+                          visibleCondition="__parent.style == 'wide_carousel'">
+                    <meta><title>iw_sulu_theme.enable_parallax</title></meta>
+                </property>
                 <property name="showImagesName" type="checkbox">
                     <meta><title>iw_sulu_theme.show_images_name</title></meta>
                 </property>
@@ -91,6 +112,9 @@
                 </property>
                 <property name="blockRadius" type="iw_theme_radius_selector" colspan="6">
                     <meta><title>iw_sulu_theme.block_radius</title></meta>
+                </property>
+                <property name="paragraphImageRadius" type="iw_theme_radius_selector" colspan="6">
+                    <meta><title>iw_sulu_theme.paragraph_image_radius</title></meta>
                 </property>
                 <property name="showBackground" type="checkbox">
                     <meta><title>iw_sulu_theme.show_background</title></meta>

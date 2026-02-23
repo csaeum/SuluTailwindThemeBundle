@@ -160,20 +160,6 @@ const WIREFRAME_RENDERERS = {
             <polygon points="115,40 108,34 108,46" fill={accent} />
         </svg>
     ),
-    lightbox_grid: (fill, accent) => (
-        <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="5" y="5" width="25" height="25" rx="3" fill={fill} />
-            <rect x="34" y="5" width="25" height="25" rx="3" fill={fill} />
-            <rect x="63" y="5" width="25" height="25" rx="3" fill={fill} />
-            <rect x="92" y="5" width="25" height="25" rx="3" fill={fill} />
-            <rect x="5" y="34" width="25" height="25" rx="3" fill={fill} />
-            <rect x="34" y="34" width="25" height="25" rx="3" fill={fill} />
-            <rect x="63" y="34" width="25" height="25" rx="3" fill={fill} />
-            <rect x="92" y="34" width="25" height="25" rx="3" fill={fill} />
-            <circle cx="104" cy="46" r="6" fill={accent} opacity="0.6" />
-            <path d="M102 46 L106 46 M104 44 L104 48" stroke="#fff" strokeWidth="1.5" />
-        </svg>
-    ),
     filmstrip: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
             <rect x="5" y="5" width="110" height="48" rx="3" fill={fill} />

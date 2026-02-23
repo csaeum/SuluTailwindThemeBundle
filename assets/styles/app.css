@@ -215,5 +215,324 @@ img.object-cover {
     overflow: hidden;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════════
+   Shared gallery navigation arrows
+   Used across all gallery layouts.  Override the --gallery-nav-* custom
+   properties on a parent element to theme all arrows inside it at once.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.gallery-nav {
+    --_size: var(--gallery-nav-size, 3rem);
+    --_bg: var(--gallery-nav-bg, rgba(255, 255, 255, 0.2));
+    --_bg-hover: var(--gallery-nav-bg-hover, rgba(255, 255, 255, 0.4));
+    --_color: var(--gallery-nav-color, white);
+    --_icon: var(--gallery-nav-icon-size, 1.5rem);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--_size);
+    height: var(--_size);
+    border-radius: 9999px;
+    background: var(--_bg);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--_color);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.gallery-nav:hover {
+    background: var(--_bg-hover);
+}
+
+.gallery-nav svg {
+    width: var(--_icon);
+    height: var(--_icon);
+}
+
+/* Smaller variant for inline contexts (thumbnail strip, etc.) */
+.gallery-nav--sm {
+    --_size: 2rem;
+    --_icon: 1rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   3D Carousel
+   Immersive card carousel with perspective transforms, blurred background
+   and parallax tilt on hover.
+
+   The .carousel-3d__bgs container is moved by JS to the parent <section>
+   so the blurred image covers the entire block (titles + carousel).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.carousel-3d {
+    --slide-width: min(25vw, 300px);
+    --slide-aspect: 2 / 3;
+    --slide-transition-duration: 800ms;
+    --slide-transition-easing: ease;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    position: relative;
+    padding: 2rem 0;
+    z-index: 1;
+}
+
+/* Navigation buttons reuse .gallery-nav — only layout specifics here */
+
+/* ── Wrapper (stacked grid) ── */
+.carousel-3d__wrapper {
+    display: grid;
+    place-items: center;
+    flex: 1;
+    min-width: 0;
+    max-width: calc(var(--slide-width) * 3 + 4rem);
+    perspective: 1200px;
+    position: relative;
+    min-height: calc(var(--slide-width) * 1.6);
+}
+
+.carousel-3d__wrapper > * {
+    grid-area: 1 / 1;
+}
+
+/* ── Slides container ── */
+.carousel-3d__slides {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 10;
+    transform-style: preserve-3d;
+}
+
+.carousel-3d__slides > * {
+    grid-area: 1 / 1;
+}
+
+/* ── Individual slide ── */
+.carousel-3d__slide {
+    width: var(--slide-width);
+    aspect-ratio: var(--slide-aspect);
+    transition:
+        transform var(--slide-transition-duration) var(--slide-transition-easing),
+        opacity var(--slide-transition-duration) var(--slide-transition-easing),
+        filter var(--slide-transition-duration) var(--slide-transition-easing);
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
+    pointer-events: none;
+    opacity: 0;
+    filter: brightness(0.6);
+}
+
+.carousel-3d__slide[data-current] {
+    transform: translateX(0) scale(1.2) rotateY(0deg);
+    opacity: 1;
+    filter: brightness(1);
+    z-index: 5;
+    pointer-events: auto;
+}
+
+.carousel-3d__slide[data-previous] {
+    transform: translateX(calc(var(--slide-width) * -0.9)) scale(0.85) rotateY(45deg);
+    opacity: 1;
+    filter: brightness(0.6);
+    z-index: 3;
+}
+
+.carousel-3d__slide[data-next] {
+    transform: translateX(calc(var(--slide-width) * 0.9)) scale(0.85) rotateY(-45deg);
+    opacity: 1;
+    filter: brightness(0.6);
+    z-index: 3;
+}
+
+.carousel-3d__slide[data-hidden] {
+    transform: scale(0.5);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ── Slide inner (for tilt) ── */
+.carousel-3d__slide-inner {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.15s ease-out;
+    transform-style: preserve-3d;
+}
+
+/* ── Image wrapper ── */
+.carousel-3d__image-wrapper {
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.carousel-3d__image-wrapper img {
+    border-radius: 0;
+}
+
+/* ── Blurred backgrounds (lives at section level via JS) ── */
+.carousel-3d__bgs {
+    display: grid;
+    place-items: center;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.carousel-3d__bgs > * {
+    grid-area: 1 / 1;
+}
+
+.carousel-3d__bg {
+    width: 100%;
+    height: 100%;
+    background-image: var(--bg);
+    background-size: cover;
+    background-position: center;
+    filter: blur(12px) brightness(0.75);
+    transform: scale(1.1);
+    transition: opacity var(--slide-transition-duration) var(--slide-transition-easing);
+    opacity: 0;
+}
+
+.carousel-3d__bg[data-current] {
+    opacity: 1;
+}
+
+.carousel-3d__bg[data-previous],
+.carousel-3d__bg[data-next],
+.carousel-3d__bg[data-hidden] {
+    opacity: 0;
+}
+
+/* Subtle dark veil so text stays readable */
+.carousel-3d__bgs::after {
+    content: '';
+    grid-area: 1 / 1;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 2;
+}
+
+/* ── Info overlays ── */
+.carousel-3d__infos {
+    display: grid;
+    place-items: end start;
+    width: var(--slide-width);
+    aspect-ratio: var(--slide-aspect);
+    position: relative;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.carousel-3d__infos > * {
+    grid-area: 1 / 1;
+}
+
+.carousel-3d__info {
+    width: 100%;
+    padding: 1rem;
+    transition:
+        opacity var(--slide-transition-duration) var(--slide-transition-easing),
+        transform var(--slide-transition-duration) var(--slide-transition-easing);
+    opacity: 0;
+    transform: translateY(1rem);
+}
+
+.carousel-3d__info[data-current] {
+    opacity: 1;
+    transform: translateY(0) scale(1.2);
+}
+
+.carousel-3d__info[data-previous],
+.carousel-3d__info[data-next],
+.carousel-3d__info[data-hidden] {
+    opacity: 0;
+    transform: translateY(1rem);
+}
+
+.carousel-3d__info-inner {
+    transition: transform 0.15s ease-out;
+}
+
+.carousel-3d__title {
+    display: inline-block;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.25rem 0.75rem;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 0.375rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Responsive adjustments ── */
+@media (max-width: 768px) {
+    .carousel-3d {
+        --slide-width: min(55vw, 260px);
+        gap: 0.5rem;
+        padding: 1.5rem 0;
+    }
+
+    .carousel-3d .gallery-nav {
+        --_size: 2.5rem;
+    }
+
+    .carousel-3d__slide[data-previous] {
+        transform: translateX(calc(var(--slide-width) * -0.7)) scale(0.8) rotateY(35deg);
+    }
+
+    .carousel-3d__slide[data-next] {
+        transform: translateX(calc(var(--slide-width) * 0.7)) scale(0.8) rotateY(-35deg);
+    }
+
+    .carousel-3d__wrapper {
+        min-height: calc(var(--slide-width) * 1.8);
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-3d {
+        --slide-width: min(65vw, 220px);
+    }
+
+    .carousel-3d__slide[data-previous],
+    .carousel-3d__slide[data-next] {
+        opacity: 0.5;
+    }
+}
+
+/* ── Parallax slide image ──
+   Taller than its container so the JS scroll handler can
+   translate it vertically for a parallax scrolling effect. */
+.parallax-slide-img {
+    inset-inline: 0;
+    height: 130%;
+    top: -15%;
+    will-change: transform;
+    transition: transform 0.1s linear;
+}
+
+/* ── Fullbleed baseline (CSS-only, no JS required) ──
+   When a slider has fullbleed enabled, the parent <section> must be the
+   positioned ancestor so absolute slides fill it edge-to-edge, ignoring
+   padding. The :has() selector provides this without needing JS. */
+section.block:has([data-slider-fullbleed-value]) {
+    position: relative;
+    overflow: hidden;
+}
+
 /* Block variant background and padding are handled
    via Tailwind classes (py-*, px-*) directly on the <section> in _block_wrapper.html.twig. */

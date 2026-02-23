@@ -2,6 +2,36 @@
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
+    {# Resolve lateral mode and image radius #}
+    {% set imageRadius = paragraphImageRadius|default('') %}
+    {% set lateralMode = lateralMargins|default('interior') %}
+    {% if lateralMode is same as(true) or lateralMode == '1' %}
+        {% set lateralMode = 'exterior' %}
+    {% elseif lateralMode is same as(false) or lateralMode == '0' or lateralMode == '' %}
+        {% set lateralMode = 'interior' %}
+    {% endif %}
+
+    {# If paddingLateral is 0 or empty: seamless layout — no gap, no radius, no margin-bottom #}
+    {% set pxVal = paddingLateral|default('') %}
+    {% set noGap = (pxVal is empty or pxVal == 'px-0') %}
+    {% if noGap %}
+        {% set imageRadius = '' %}
+        {% set gapClass = 'gap-0' %}
+        {% set mbClass = 'mb-0' %}
+    {% else %}
+        {% set gapClass = 'gap-4' %}
+        {% set mbClass = 'mb-4' %}
+    {% endif %}
+
+    {# In interior mode, apply radius from sm: breakpoint only #}
+    {% if lateralMode == 'interior' and imageRadius %}
+        {% set imageRadiusClass = 'sm:' ~ imageRadius ~ ' sm:overflow-hidden' %}
+    {% elseif imageRadius %}
+        {% set imageRadiusClass = imageRadius ~ ' overflow-hidden' %}
+    {% else %}
+        {% set imageRadiusClass = '' %}
+    {% endif %}
+
     {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
         title: title|default(''),
         subTitle: subTitle|default(''),
@@ -10,10 +40,10 @@
     } only %}
 
     {% if images is defined and images is iterable %}
-        <div class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-4">
+        <div class="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 {{ gapClass }}">
             {% for mediaId in images %}
                 {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
-                <figure class="block-image break-inside-avoid mb-4">
+                <figure class="block-image break-inside-avoid {{ mbClass }}{{ imageRadiusClass ? ' ' ~ imageRadiusClass : '' }}">
                     <a
                         href="{{ media.url }}"
                         class="glightbox"
@@ -23,7 +53,7 @@
                             src="{{ media.thumbnails['iw_theme_gallery_thumb']|default(media.url) }}"
                             alt="{{ media.title|default('') }}"
                             loading="lazy"
-                            class="w-full h-auto rounded-[var(--radius-img)] cursor-pointer"
+                            class="w-full h-auto cursor-pointer"
                         >
                     </a>
                 </figure>

@@ -19,11 +19,11 @@
     {% set lateralMode = 'interior' %}
 {% endif %}
 {% set sectionContainerClass = (lateralMode == 'exterior') ? 'container mx-auto' : '' %}
-{% set radiusClass = (lateralMode == 'exterior' and blockRadius|default('') is not empty) ? blockRadius : '' %}
+{% set radiusClass = (lateralMode == 'exterior' and blockRadius|default('') is not empty) ? 'sm:' ~ blockRadius : '' %}
 {% set bgAttr = (showBackground|default(true)) ? 'data-has-bg="true"' : '' %}
 
 <section
-    class="block {{ variantClass }} {{ sectionContainerClass }} {{ mtClass }} {{ mbClass }} {{ ptClass }} {{ pbClass }} {{ plClass }} {{ prClass }} {{ radiusClass }} {% if radiusClass %}overflow-hidden{% endif %}"
+    class="block {{ variantClass }} {{ sectionContainerClass }} {{ mtClass }} {{ mbClass }} {{ ptClass }} {{ pbClass }} {{ plClass }} {{ prClass }} {{ radiusClass }} {% if radiusClass %}sm:overflow-hidden{% endif %}"
     {{ bgAttr|raw }}
     data-controller="lightbox"
 >

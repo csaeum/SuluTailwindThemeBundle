@@ -11,6 +11,12 @@ import { Controller } from '@hotwired/stimulus';
  *   - autoplay (Boolean): Whether to auto-advance slides
  *   - interval (Number): Milliseconds between auto-advances (default: 5000)
  *   - mode (String): "scroll" or "carousel"
+ *   - fullbleed (Boolean): When true, slides fill the parent <section>
+ *     instead of the controller element. The controller element becomes
+ *     position:static so absolute children reference the section.
+ *   - parallax (Boolean): When true, visible slide images translate
+ *     vertically on scroll for a parallax scrolling effect. Requires
+ *     images with the .parallax-slide-img class (taller than container).
  *
  * Targets:
  *   - track: The scrollable container or slide wrapper
@@ -18,11 +24,13 @@ import { Controller } from '@hotwired/stimulus';
  *   - dots: Container for dot indicators
  */
 export default class extends Controller {
-    static targets = ['track', 'slide', 'dots', 'thumbnail'];
+    static targets = ['track', 'slide', 'dots', 'thumbnail', 'thumbnailTrack'];
     static values = {
         autoplay: { type: Boolean, default: false },
         interval: { type: Number, default: 5000 },
         mode: { type: String, default: 'scroll' },
+        fullbleed: { type: Boolean, default: false },
+        parallax: { type: Boolean, default: false },
     };
 
     /** @type {number} Current slide index (carousel mode) */
@@ -34,9 +42,23 @@ export default class extends Controller {
     /** @type {number} Touch start X position */
     touchStartX = 0;
 
+    /** @type {HTMLElement|null} Reference to the parent section (fullbleed mode) */
+    section = null;
+
     connect() {
+        if (this.fullbleedValue) {
+            this._setupFullbleed();
+        }
+
         if (this.modeValue === 'carousel' && this.autoplayValue) {
             this._startAutoplay();
+        }
+
+        // Parallax scroll effect
+        if (this.parallaxValue) {
+            this._boundParallaxScroll = this._onParallaxScroll.bind(this);
+            window.addEventListener('scroll', this._boundParallaxScroll, { passive: true });
+            this._onParallaxScroll();
         }
 
         // Touch support
@@ -46,6 +68,14 @@ export default class extends Controller {
 
     disconnect() {
         this._stopAutoplay();
+
+        if (this.parallaxValue && this._boundParallaxScroll) {
+            window.removeEventListener('scroll', this._boundParallaxScroll);
+        }
+
+        if (this.fullbleedValue) {
+            this._teardownFullbleed();
+        }
     }
 
     /** Navigate to the previous slide/position. */
@@ -119,7 +149,7 @@ export default class extends Controller {
     }
 
     /**
-     * Highlight the active thumbnail (filmstrip mode).
+     * Highlight the active thumbnail and scroll it into view.
      *
      * @private
      */
@@ -127,14 +157,19 @@ export default class extends Controller {
         if (!this.hasThumbnailTarget) return;
 
         this.thumbnailTargets.forEach((thumb, idx) => {
-            if (idx === this.currentSlide) {
-                thumb.classList.add('ring-2', 'ring-[var(--color-primary)]', 'opacity-100');
-                thumb.classList.remove('opacity-60');
-            } else {
-                thumb.classList.remove('ring-2', 'ring-[var(--color-primary)]', 'opacity-100');
-                thumb.classList.add('opacity-60');
-            }
+            const isActive = idx === this.currentSlide;
+            thumb.classList.toggle('is-active', isActive);
+            thumb.classList.toggle('opacity-100', isActive);
+            thumb.classList.toggle('opacity-50', !isActive);
         });
+
+        // Scroll the active thumbnail into the visible area of the track
+        const active = this.thumbnailTargets[this.currentSlide];
+        if (active && this.hasThumbnailTrackTarget) {
+            const track = this.thumbnailTrackTarget;
+            const scrollLeft = active.offsetLeft - track.offsetWidth / 2 + active.offsetWidth / 2;
+            track.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+        }
     }
 
     /**
@@ -148,6 +183,53 @@ export default class extends Controller {
             this.currentSlide = index;
             this._showSlide();
         }
+    }
+
+    /**
+     * Scroll the thumbnail track left or right.
+     *
+     * @param {Event} event - Event with params.direction (-1 or 1)
+     */
+    scrollThumbnailsBy(event) {
+        if (!this.hasThumbnailTrackTarget) return;
+
+        const direction = parseInt(event.params.direction, 10) || 1;
+        const scrollAmount = this.thumbnailTrackTarget.offsetWidth * 0.6;
+        this.thumbnailTrackTarget.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    }
+
+    /**
+     * Set up fullbleed mode: the parent section becomes the containing
+     * block for absolute children, so slides fill the entire section
+     * (ignoring its padding).
+     *
+     * @private
+     */
+    _setupFullbleed() {
+        this.section = this.element.closest('section.block');
+        if (!this.section) return;
+
+        this.section.style.position = 'relative';
+        this.section.style.overflow = 'hidden';
+
+        // Make this element transparent to absolute positioning so
+        // children with position:absolute reference the section instead
+        this.element.style.position = 'static';
+    }
+
+    /**
+     * Tear down fullbleed mode and restore original section state.
+     *
+     * @private
+     */
+    _teardownFullbleed() {
+        this.element.style.position = '';
+
+        if (!this.section) return;
+
+        this.section.style.position = '';
+        this.section.style.overflow = '';
+        this.section = null;
     }
 
     /**
@@ -213,5 +295,42 @@ export default class extends Controller {
                 this.prev();
             }
         }
+    }
+
+    /**
+     * Apply parallax translation to visible slide images based on
+     * the section's position within the viewport.
+     *
+     * Uses the distance between the section center and the viewport
+     * center to compute a smooth -1 to +1 offset, then maps it to
+     * pixel translation.  The image is 130% tall (30% extra), so the
+     * safe translation range is ±15% of the section height.
+     *
+     * @private
+     */
+    _onParallaxScroll() {
+        const section = this.section || this.element.closest('section.block');
+        if (!section) return;
+
+        const rect = section.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+
+        // How far the section center is from the viewport center (-1 … +1)
+        const sectionCenter = rect.top + rect.height / 2;
+        const offset = (viewportHeight / 2 - sectionCenter) / (viewportHeight / 2);
+        const clamped = Math.max(-1, Math.min(1, offset));
+
+        // Translate the image within the 15% headroom (image is 130% tall)
+        const maxShift = rect.height * 0.15;
+        const translateY = clamped * maxShift;
+
+        this.slideTargets.forEach((slide) => {
+            if (slide.classList.contains('hidden')) return;
+
+            const img = slide.querySelector('img');
+            if (img) {
+                img.style.transform = `translateY(${translateY}px)`;
+            }
+        });
     }
 }

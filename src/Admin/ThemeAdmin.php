@@ -73,7 +73,6 @@ class ThemeAdmin extends Admin
             ['key' => 'slider', 'label' => 'iw_sulu_theme.style.slider'],
             ['key' => 'carousel', 'label' => 'iw_sulu_theme.style.carousel'],
             ['key' => 'wide_carousel', 'label' => 'iw_sulu_theme.style.wide_carousel'],
-            ['key' => 'lightbox_grid', 'label' => 'iw_sulu_theme.style.lightbox_grid'],
             ['key' => 'filmstrip', 'label' => 'iw_sulu_theme.style.filmstrip'],
         ],
         'key_figures' => [

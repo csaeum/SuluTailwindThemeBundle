@@ -156,7 +156,7 @@
     "iw_sulu_theme.style.slider": "Défilement",
     "iw_sulu_theme.style.carousel": "Carrousel",
     "iw_sulu_theme.style.wide_carousel": "Carrousel large",
-    "iw_sulu_theme.style.lightbox_grid": "Grille lightbox",
+
     "iw_sulu_theme.style.filmstrip": "Pellicule",
     "iw_sulu_theme.style.inline": "En ligne",
     "iw_sulu_theme.style.with_icons": "Avec icônes",
@@ -203,7 +203,7 @@
     "iw_sulu_theme.padding_bottom": "Padding bas",
     "iw_sulu_theme.padding_lateral": "Padding latéral",
     "iw_sulu_theme.block_radius": "Arrondi du bloc",
-    "iw_sulu_theme.paragraph_radius": "Arrondi du paragraphe",
+    "iw_sulu_theme.paragraph_image_radius": "Arrondi paragraphe / image",
     "iw_sulu_theme.show_background": "Couleur de fond",
 
     "iw_sulu_theme.block.text": "Texte",
@@ -228,6 +228,8 @@
     "iw_sulu_theme.position_top": "Haut",
     "iw_sulu_theme.position_bottom": "Bas",
     "iw_sulu_theme.position_background": "Arrière-plan",
+    "iw_sulu_theme.single_image_display": "Afficher une seule image",
+    "iw_sulu_theme.enable_parallax": "Activer l'effet parallaxe",
     "iw_sulu_theme.show_images_name": "Afficher le nom des images",
     "iw_sulu_theme.content_position_right": "Contenu à droite",
     "iw_sulu_theme.image_position_bottom": "Image en bas",

@@ -36,7 +36,7 @@
 {% set blockRadiusVal = blockRadius|default('') %}
 {% set radiusClass = (lateralMode == 'exterior' and blockRadiusVal) ? blockRadiusVal : '' %}
 
-{% set radius = paragraphRadius|default('') %}
+{% set radius = paragraphImageRadius|default('') %}
 
 {# Mosaic uses two different formats: 16:9 for the hero image, user-selected for the rest #}
 {# Fix: XML stores values with underscores (16_9, 4_3…), not colons #}

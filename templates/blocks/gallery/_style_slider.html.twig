@@ -1,7 +1,31 @@
-{# Gallery block — horizontal scroll slider with lightbox #}
+{# Gallery block — horizontal scroll slider with lightbox (+ single image mode) #}
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
+    {# Resolve lateral mode and image radius #}
+    {% set imageRadius = paragraphImageRadius|default('') %}
+    {% set lateralMode = lateralMargins|default('interior') %}
+    {% if lateralMode is same as(true) or lateralMode == '1' %}
+        {% set lateralMode = 'exterior' %}
+    {% elseif lateralMode is same as(false) or lateralMode == '0' or lateralMode == '' %}
+        {% set lateralMode = 'interior' %}
+    {% endif %}
+
+    {# If paddingLateral is 0 or empty: seamless layout — no gap #}
+    {% set pxVal = paddingLateral|default('') %}
+    {% set noGap = (pxVal is empty or pxVal == 'px-0') %}
+    {% set gapClass = noGap ? 'gap-0' : 'gap-4' %}
+
+    {# Interior mode: always apply image radius from sm: breakpoint.
+       Other modes: radius only when there is a gap (padding). #}
+    {% if lateralMode == 'interior' and imageRadius %}
+        {% set imageRadiusClass = 'sm:' ~ imageRadius ~ ' sm:overflow-hidden' %}
+    {% elseif not noGap and imageRadius %}
+        {% set imageRadiusClass = imageRadius ~ ' overflow-hidden' %}
+    {% else %}
+        {% set imageRadiusClass = '' %}
+    {% endif %}
+
     {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
         title: title|default(''),
         subTitle: subTitle|default(''),
@@ -10,53 +34,127 @@
     } only %}
 
     {% if images is defined and images is iterable %}
-        <div
-            data-controller="slider"
-            data-slider-autoplay-value="false"
-            class="relative"
-        >
-            {# Slider track #}
+        {# Map imageFilter value to Sulu thumbnail name and CSS aspect-ratio #}
+        {% set formatMap = {'16_9': 'iw_theme_16_9', '4_3': 'iw_theme_4_3', '1_1': 'iw_theme_1_1', '3_4': 'iw_theme_3_4', 'original': 'iw_theme_16_9'} %}
+        {% set format = formatMap[imageFilter|default('original')]|default('iw_theme_16_9') %}
+        {% set ratioMap = {'iw_theme_16_9': '16/9', 'iw_theme_4_3': '4/3', 'iw_theme_1_1': '1/1', 'iw_theme_3_4': '3/4'} %}
+        {% set aspectRatio = ratioMap[format]|default('16/9') %}
+
+        {% set isSingleImage = singleImage|default(false) %}
+
+        {% if isSingleImage %}
+            {# ── Single-image carousel mode ── #}
             <div
-                data-slider-target="track"
-                class="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-4 pb-4 scrollbar-hide"
+                data-controller="slider"
+                data-slider-autoplay-value="true"
+                data-slider-interval-value="5000"
+                data-slider-mode-value="carousel"
+                class="relative overflow-hidden{{ imageRadiusClass ? ' ' ~ imageRadiusClass : '' }}"
+                style="aspect-ratio: {{ aspectRatio }};"
             >
+                {# Carousel slides #}
                 {% for mediaId in images %}
                     {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
-                    <figure class="block-image flex-none w-[80%] sm:w-[60%] md:w-[40%] lg:w-[30%] snap-start">
+                    <div
+                        data-slider-target="slide"
+                        class="absolute inset-0 w-full h-full {{ not loop.first ? 'hidden' : '' }}"
+                    >
                         <a
                             href="{{ media.url }}"
-                            class="glightbox"
+                            class="glightbox relative block w-full h-full"
                             data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
                         >
                             <img
-                                src="{{ media.thumbnails['iw_theme_16_9']|default(media.url) }}"
+                                src="{{ media.thumbnails[format]|default(media.url) }}"
                                 alt="{{ media.title|default('') }}"
                                 loading="lazy"
-                                class="w-full object-cover rounded-[var(--radius-img)] cursor-pointer"
-                                style="aspect-ratio: 16/9;"
+                                class="absolute inset-0 w-full h-full object-cover cursor-pointer"
                             >
                         </a>
-                    </figure>
+                    </div>
                 {% endfor %}
-            </div>
 
-            {# Navigation buttons #}
-            <button
-                type="button"
-                data-action="slider#prev"
-                class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-background)] shadow-lg opacity-80 hover:opacity-100 transition-opacity z-10"
-                aria-label="Previous"
+                {# Prev / Next buttons #}
+                <button
+                    type="button"
+                    data-action="slider#prev"
+                    class="gallery-nav absolute left-4 top-1/2 -translate-y-1/2 z-10"
+                    aria-label="Previous"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button
+                    type="button"
+                    data-action="slider#next"
+                    class="gallery-nav absolute right-4 top-1/2 -translate-y-1/2 z-10"
+                    aria-label="Next"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+
+                {# Dot indicators #}
+                <div data-slider-target="dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/30 backdrop-blur-sm z-20">
+                    {% for mediaId in images %}
+                        <button
+                            type="button"
+                            data-action="slider#goTo"
+                            data-slider-index-param="{{ loop.index0 }}"
+                            class="w-2.5 h-2.5 rounded-full {{ loop.first ? 'bg-white' : 'bg-white/50' }} transition-colors"
+                            aria-label="Slide {{ loop.index }}"
+                        ></button>
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            {# ── Default horizontal scroll mode ── #}
+            <div
+                data-controller="slider"
+                data-slider-autoplay-value="false"
+                class="relative"
             >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-            </button>
-            <button
-                type="button"
-                data-action="slider#next"
-                class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-background)] shadow-lg opacity-80 hover:opacity-100 transition-opacity z-10"
-                aria-label="Next"
-            >
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
-            </button>
-        </div>
+                {# Slider track #}
+                <div
+                    data-slider-target="track"
+                    class="flex overflow-x-auto scroll-smooth snap-x snap-mandatory {{ gapClass }} pb-4 scrollbar-hide"
+                >
+                    {% for mediaId in images %}
+                        {% set media = sulu_resolve_media(mediaId, app.request.locale) %}
+                        <figure class="block-image flex-none w-[80%] sm:w-[60%] md:w-[40%] lg:w-[30%] snap-start{{ imageRadiusClass ? ' ' ~ imageRadiusClass : '' }}">
+                            <a
+                                href="{{ media.url }}"
+                                class="glightbox"
+                                data-title="{{ (showImagesName|default(false)) and media.title is defined ? media.title : '' }}"
+                            >
+                                <img
+                                    src="{{ media.thumbnails[format]|default(media.url) }}"
+                                    alt="{{ media.title|default('') }}"
+                                    loading="lazy"
+                                    class="w-full object-cover cursor-pointer"
+                                    style="aspect-ratio: {{ aspectRatio }};"
+                                >
+                            </a>
+                        </figure>
+                    {% endfor %}
+                </div>
+
+                {# Navigation buttons #}
+                <button
+                    type="button"
+                    data-action="slider#prev"
+                    class="gallery-nav absolute left-4 top-1/2 -translate-y-1/2 z-10"
+                    aria-label="Previous"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button
+                    type="button"
+                    data-action="slider#next"
+                    class="gallery-nav absolute right-4 top-1/2 -translate-y-1/2 z-10"
+                    aria-label="Next"
+                >
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+        {% endif %}
     {% endif %}
 {% endblock %}

@@ -40,7 +40,7 @@
 {% set radiusClasses = (lateralMode == 'exterior' and blockRadiusVal) ? ('sm:' ~ blockRadiusVal ~ ' sm:overflow-hidden') : '' %}
 
 {# Paragraph radius: only when variant has visible paragraphBg #}
-{% set radius = paragraphRadius|default('') %}
+{% set radius = paragraphImageRadius|default('') %}
 {% set variantConfig = iw_sulu_theme.blockVariants[variant|default('clair')]|default({}) %}
 {% set pgBg = variantConfig.paragraphBg|default('') %}
 {% set hasParagraphBg = pgBg is not empty and pgBg|lower != 'transparent' %}

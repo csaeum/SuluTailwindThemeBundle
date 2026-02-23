@@ -26,6 +26,12 @@
                 "fetch": "lazy",
                 "enabled": true
             },
+            "carousel3d": {
+                "main": "controllers/carousel3d_controller.js",
+                "name": "carousel3d",
+                "fetch": "lazy",
+                "enabled": true
+            },
             "key_figures": {
                 "main": "controllers/key_figures_controller.js",
                 "name": "key-figures",
