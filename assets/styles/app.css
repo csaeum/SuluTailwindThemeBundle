@@ -536,3 +536,171 @@ section.block:has([data-slider-fullbleed-value]) {
 
 /* Block variant background and padding are handled
    via Tailwind classes (py-*, px-*) directly on the <section> in _block_wrapper.html.twig. */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Location Overlay — Collapsible info card
+   Floats over the map on desktop, full-width bottom sheet on mobile.
+   Header always on top, body below with capped scroll on desktop.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.location-overlay-card {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: min(22rem, calc(100% - 3rem));
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-img, 0.5rem);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #000;
+}
+
+/* Force black text on all children — overrides variant selectors like .block-variant-* p */
+.location-overlay-card p,
+.location-overlay-card span,
+.location-overlay-card a:not(.btn-variant),
+.location-overlay-card li,
+.location-overlay-card h1,
+.location-overlay-card h2,
+.location-overlay-card h3,
+.location-overlay-card h4,
+.location-overlay-card h5,
+.location-overlay-card h6 {
+    color: #000;
+}
+
+/* ── Header (always visible, always on top) ── */
+.location-overlay-card__header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    text-align: left;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    border-radius: inherit;
+}
+
+.location-overlay-card__header:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.location-overlay-card__header-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+/* ── Chevron ── */
+.location-overlay-card__chevron {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+    color: black;
+    opacity: 0.5;
+}
+
+/* ── Body (collapsible) ── */
+.location-overlay-card__body {
+    padding: 0 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    /* Hide scrollbar — scroll via arrow indicator */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.location-overlay-card__body::-webkit-scrollbar {
+    display: none;
+}
+
+/* Subtle separator between header and body */
+.location-overlay-card__body::before {
+    content: '';
+    display: block;
+    flex-shrink: 0;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.15);
+    opacity: 0.5;
+}
+
+/* ── Scroll hint arrow ── */
+.location-overlay-card__scroll-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0 0.5rem;
+    cursor: pointer;
+    color: black;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+}
+
+.location-overlay-card__scroll-hint svg {
+    animation: location-overlay-bounce 1.5s ease-in-out infinite;
+}
+
+@keyframes location-overlay-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(4px); }
+}
+
+/* ── Responsive: mobile ── */
+@media (max-width: 768px) {
+    .location-overlay-card {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        width: 100%;
+        margin-top: -2rem;
+        border-radius: 0;
+        box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    /* White solid background on mobile — no blur */
+    .location-overlay-card__header {
+        background: #fff;
+        border-radius: 0 0 var(--radius-img, 0.5rem) var(--radius-img, 0.5rem);
+    }
+
+    /* Lose bottom radius when open */
+    .location-overlay-card__header[aria-expanded="true"] {
+        border-radius: 0;
+    }
+
+    .location-overlay-card__body {
+        max-height: none;
+        overflow-y: visible;
+        background: #fff;
+        margin-top: -1px;
+        border-radius: 0 0 var(--radius-img, 0.5rem) var(--radius-img, 0.5rem);
+    }
+
+    /* No separator on mobile */
+    .location-overlay-card__body::before {
+        display: none;
+    }
+
+    /* Hide scroll hint on mobile */
+    .location-overlay-card__scroll-hint {
+        display: none;
+    }
+}

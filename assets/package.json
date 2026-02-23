@@ -37,6 +37,12 @@
                 "name": "key-figures",
                 "fetch": "lazy",
                 "enabled": true
+            },
+            "location_overlay": {
+                "main": "controllers/location_overlay_controller.js",
+                "name": "location-overlay",
+                "fetch": "lazy",
+                "enabled": true
             }
         },
         "importmap": {

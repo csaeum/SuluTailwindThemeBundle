@@ -9,53 +9,72 @@
         variant: variant|default('clair')
     } only %}
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {# Map — 2 columns #}
-        <div class="lg:col-span-2">
-            {% if latitude is defined and latitude is not empty and longitude is defined and longitude is not empty %}
-                <div class="rounded-[var(--radius-img)] overflow-hidden h-full min-h-[300px]">
+    {% if location is defined and location.lat is defined and location.long is defined %}
+        {% set zoom = location.zoom|default(15) %}
+        {% set offset = 0.01 * (2 ** (15 - zoom)) %}
+
+        {# Build formatted address from structured location fields #}
+        {% set addressParts = [] %}
+        {% if location.street is defined and location.street is not empty %}
+            {% set streetLine = location.street %}
+            {% if location.number is defined and location.number is not empty %}
+                {% set streetLine = location.number ~ ' ' ~ streetLine %}
+            {% endif %}
+            {% set addressParts = addressParts|merge([streetLine]) %}
+        {% endif %}
+        {% set cityLine = [location.code|default(''), location.town|default('')]|filter(v => v is not empty)|join(' ') %}
+        {% if cityLine is not empty %}
+            {% set addressParts = addressParts|merge([cityLine]) %}
+        {% endif %}
+        {% if location.country is defined and location.country is not empty %}
+            {% set addressParts = addressParts|merge([location.country]) %}
+        {% endif %}
+        {% set formattedAddress = addressParts|join("\n") %}
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8"
+             style="--card-border: var(--variant-hr-color, var(--color-border, #e5e7eb)); --card-bg: color-mix(in srgb, var(--card-border) 60%, transparent);"
+        >
+            {# Map — 2 columns #}
+            <div class="lg:col-span-2">
+                <div class="{{ paragraphImageRadius|default('') }} overflow-hidden h-full min-h-[300px]">
                     <iframe
-                        src="https://www.openstreetmap.org/export/embed.html?bbox={{ longitude - 0.01 }}%2C{{ latitude - 0.01 }}%2C{{ longitude + 0.01 }}%2C{{ latitude + 0.01 }}&amp;layer=mapnik&amp;marker={{ latitude }}%2C{{ longitude }}"
+                        src="https://www.openstreetmap.org/export/embed.html?bbox={{ location.long - offset }}%2C{{ location.lat - offset }}%2C{{ location.long + offset }}%2C{{ location.lat + offset }}&amp;layer=mapnik&amp;marker={{ location.lat }}%2C{{ location.long }}"
                         class="w-full h-full min-h-[300px] border-0"
                         loading="lazy"
                         title="{{ title|default('Map') }}"
                         allowfullscreen
                     ></iframe>
                 </div>
-            {% endif %}
-        </div>
+            </div>
 
-        {# Info sidebar — 1 column #}
-        <div class="lg:col-span-1 space-y-6">
-            {% if address is defined and address is not empty %}
-                <div>
-                    <h4 class="font-semibold mb-2 flex items-center gap-2">
-                        <svg class="w-5 h-5 text-[var(--color-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                        {{ 'iw_theme.address'|trans({}, 'messages')|default('Address') }}
-                    </h4>
-                    <p class="whitespace-pre-line opacity-75">{{ address }}</p>
-                </div>
-            {% endif %}
+            {# Info sidebar — 1 column #}
+            <div class="lg:col-span-1 space-y-6">
+                {% if formattedAddress is not empty %}
+                    <div class="{{ paragraphImageRadius|default('') }} border border-[var(--card-border)] bg-[var(--card-bg)] p-5">
+                        <span class="block font-semibold mb-2 flex items-center gap-2 text-[var(--variant-title-color,inherit)]">
+                            <svg class="w-5 h-5 text-[var(--variant-link-color,var(--color-primary))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            {{ 'iw_sulu_theme.address'|trans|default('Address') }}
+                        </span>
+                        <p class="whitespace-pre-line text-[var(--variant-paragraph-color,inherit)] opacity-75">{{ formattedAddress }}</p>
+                    </div>
+                {% endif %}
 
-            {% if text is defined and text is not empty %}
-                <div>
-                    <div class="block-text prose max-w-none">
+                {% if text is defined and text is not empty %}
+                    <div class="block-text prose max-w-none text-[var(--variant-paragraph-color,inherit)] {{ paragraphImageRadius|default('') }} overflow-hidden">
                         {{ text|raw }}
                     </div>
-                </div>
-            {% endif %}
+                {% endif %}
 
-            {# Link to open in external maps app #}
-            {% if latitude is defined and latitude is not empty and longitude is defined and longitude is not empty %}
+                {# Link to open in external maps app #}
                 <a
-                    href="https://www.openstreetmap.org/?mlat={{ latitude }}&mlon={{ longitude }}#map=16/{{ latitude }}/{{ longitude }}"
+                    href="https://www.openstreetmap.org/?mlat={{ location.lat }}&mlon={{ location.long }}#map={{ zoom }}/{{ location.lat }}/{{ location.long }}"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="btn-primary inline-block px-6 py-3 text-center no-underline"
+                    class="btn-variant inline-block px-6 py-3 text-center no-underline"
                 >
-                    {{ 'iw_theme.open_map'|trans({}, 'messages')|default('Open in maps') }} &#8599;
+                    {{ 'iw_sulu_theme.open_map'|trans|default('Open in maps') }} &#8599;
                 </a>
-            {% endif %}
+            </div>
         </div>
-    </div>
+    {% endif %}
 {% endblock %}
