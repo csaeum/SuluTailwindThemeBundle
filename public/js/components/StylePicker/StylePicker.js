@@ -285,22 +285,48 @@ const WIREFRAME_RENDERERS = {
     ),
 
     // ── location styles ──────────────────────────────────────────
-    map_only: (fill, accent) => (
+    location_map_only: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
             <rect x="5" y="5" width="110" height="70" rx="3" fill={fill} opacity="0.3" />
-            <circle cx="60" cy="35" r="6" fill={accent} />
-            <path d="M60 41 L60 50" stroke={accent} strokeWidth="2" />
+            <circle cx="60" cy="32" r="5" fill={accent} />
+            <circle cx="60" cy="32" r="2" fill="#fff" />
+            <polygon points="60,44 57,36 63,36" fill={accent} />
         </svg>
     ),
-    map_with_info: (fill, accent) => (
+    location_map_with_info: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
             <rect x="5" y="5" width="65" height="70" rx="3" fill={fill} opacity="0.3" />
-            <circle cx="38" cy="35" r="5" fill={accent} />
+            <circle cx="38" cy="32" r="5" fill={accent} />
+            <circle cx="38" cy="32" r="2" fill="#fff" />
+            <polygon points="38,44 35,36 41,36" fill={accent} />
             <rect x="75" y="10" width="40" height="5" rx="2" fill={accent} />
             <rect x="75" y="20" width="38" height="3" rx="2" fill={fill} />
             <rect x="75" y="27" width="35" height="3" rx="2" fill={fill} />
             <rect x="75" y="37" width="30" height="3" rx="2" fill={fill} />
             <rect x="75" y="44" width="38" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+    location_fullwidth: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="0" y="0" width="120" height="48" rx="0" fill={fill} opacity="0.3" />
+            <circle cx="60" cy="18" r="5" fill={accent} />
+            <circle cx="60" cy="18" r="2" fill="#fff" />
+            <polygon points="60,30 57,22 63,22" fill={accent} />
+            <rect x="10" y="54" width="50" height="5" rx="2" fill={accent} />
+            <rect x="10" y="63" width="80" height="3" rx="2" fill={fill} />
+            <rect x="10" y="70" width="70" height="3" rx="2" fill={fill} />
+        </svg>
+    ),
+    location_overlay: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            <rect x="5" y="5" width="110" height="70" rx="3" fill={fill} opacity="0.3" />
+            <circle cx="45" cy="30" r="5" fill={accent} />
+            <circle cx="45" cy="30" r="2" fill="#fff" />
+            <polygon points="45,42 42,34 48,34" fill={accent} />
+            <rect x="62" y="42" width="48" height="30" rx="3" fill="#fff" stroke={fill} strokeWidth="0.5" />
+            <rect x="67" y="48" width="30" height="4" rx="2" fill={accent} />
+            <rect x="67" y="55" width="38" height="3" rx="2" fill={fill} />
+            <rect x="67" y="61" width="35" height="3" rx="2" fill={fill} />
         </svg>
     ),
 
@@ -451,13 +477,25 @@ export default class StylePicker extends React.Component {
     /**
      * Render a wireframe SVG for the given style key.
      *
-     * @param {string} styleKey - The style identifier
+     * Tries a block-type-specific renderer first (e.g. "location_fullwidth"),
+     * then falls back to the generic style key (e.g. "fullwidth").
+     *
+     * @param {string} styleKey - The style identifier (e.g. "fullwidth")
+     * @param {string} blockType - The block type (e.g. "location")
      * @returns {React.Element} An SVG wireframe visualization
      */
-    renderWireframeSvg(styleKey) {
+    renderWireframeSvg(styleKey, blockType) {
         const fill = '#d1d5db';
         const accent = getSuluPrimaryColor();
 
+        // Try block-type-specific renderer first (e.g. location_fullwidth)
+        const prefixedKey = blockType + '_' + styleKey;
+        const prefixedRenderer = WIREFRAME_RENDERERS[prefixedKey];
+        if (prefixedRenderer) {
+            return prefixedRenderer(fill, accent);
+        }
+
+        // Fall back to generic style key
         const renderer = WIREFRAME_RENDERERS[styleKey];
         if (renderer) {
             return renderer(fill, accent);
@@ -523,7 +561,7 @@ export default class StylePicker extends React.Component {
                             }}
                         >
                             <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-                                {this.renderWireframeSvg(style.key)}
+                                {this.renderWireframeSvg(style.key, blockType)}
                             </div>
                             <div style={{
                                 marginTop: '6px',
