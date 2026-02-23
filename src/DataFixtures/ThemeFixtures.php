@@ -697,8 +697,6 @@ class ThemeFixtures
                 'styles' => [
                     ['key' => 'cards', 'label' => 'Cartes', 'twig' => '_style_cards.html.twig', 'default' => true],
                     ['key' => 'list', 'label' => 'Liste', 'twig' => '_style_list.html.twig'],
-                    ['key' => 'horizontal', 'label' => 'Horizontal', 'twig' => '_style_horizontal.html.twig'],
-                    ['key' => 'featured', 'label' => 'Mis en avant', 'twig' => '_style_featured.html.twig'],
                     ['key' => 'minimal', 'label' => 'Minimal', 'twig' => '_style_minimal.html.twig'],
                 ],
             ],

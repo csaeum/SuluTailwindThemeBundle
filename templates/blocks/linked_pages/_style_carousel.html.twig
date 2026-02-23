@@ -29,6 +29,7 @@
                 data-slider-autoplay-value="true"
                 data-slider-interval-value="5000"
                 class="relative"
+                style="--nav-color: var(--variant-hr-color, var(--color-primary)); --dot-color: var(--variant-hr-color, var(--color-primary));"
             >
                 {# Slides #}
                 <div class="overflow-hidden">
@@ -40,9 +41,9 @@
                             <div class="max-w-2xl mx-auto p-8 text-center">
                                 {% if item.type == 'internal' %}
                                     <a href="{{ sulu_content_path(item.page.url|default('/')) }}" class="block no-underline group">
-                                        <h4 class="text-xl md:text-2xl font-semibold group-hover:text-[var(--color-link)]">
+                                        <span class="block text-xl md:text-2xl font-semibold group-hover:text-[var(--variant-link-hover,inherit)]">
                                             {{ item.page.title|default('') }}
-                                        </h4>
+                                        </span>
                                         {% if item.page.excerpt is defined and item.page.excerpt.description is defined %}
                                             <p class="mt-3 opacity-75 line-clamp-3">{{ item.page.excerpt.description }}</p>
                                         {% endif %}
@@ -53,9 +54,9 @@
                                         {% set linkUrl = linkUrl ~ '#' ~ item.link.anchor %}
                                     {% endif %}
                                     <a href="{{ linkUrl }}" target="{{ item.link.target|default('_self') }}" class="block no-underline group">
-                                        <h4 class="text-xl md:text-2xl font-semibold group-hover:text-[var(--color-link)]">
+                                        <span class="block text-xl md:text-2xl font-semibold group-hover:text-[var(--variant-link-hover,inherit)]">
                                             {{ item.link.label|default(item.link.url|default('')) }}
-                                        </h4>
+                                        </span>
                                     </a>
                                 {% endif %}
                             </div>
@@ -67,7 +68,7 @@
                 <button
                     type="button"
                     data-action="slider#prev"
-                    class="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-primary)]/10 hover:bg-[var(--color-primary)]/20 transition-colors"
+                    class="absolute left-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--nav-color)]/10 hover:bg-[var(--nav-color)]/20 transition-colors"
                     aria-label="Previous"
                 >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
@@ -75,7 +76,7 @@
                 <button
                     type="button"
                     data-action="slider#next"
-                    class="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--color-primary)]/10 hover:bg-[var(--color-primary)]/20 transition-colors"
+                    class="absolute right-0 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center rounded-full bg-[var(--nav-color)]/10 hover:bg-[var(--nav-color)]/20 transition-colors"
                     aria-label="Next"
                 >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -88,7 +89,7 @@
                             type="button"
                             data-action="slider#goTo"
                             data-slider-index-param="{{ loop.index0 }}"
-                            class="w-2.5 h-2.5 rounded-full {{ loop.first ? 'bg-[var(--color-primary)]' : 'bg-[var(--color-primary)]/30' }} transition-colors"
+                            class="w-2.5 h-2.5 rounded-full {{ loop.first ? 'bg-[var(--dot-color)]' : 'bg-[var(--dot-color)]/30' }} transition-colors"
                             aria-label="Slide {{ loop.index }}"
                         ></button>
                     {% endfor %}

@@ -3,7 +3,9 @@
 
 {% block block_content %}
     {% if figures is defined and figures is iterable %}
-        <div class="max-w-3xl mx-auto space-y-6" data-controller="key-figures">
+        <div class="max-w-3xl mx-auto space-y-6" data-controller="key-figures"
+             style="--progress-color: var(--variant-hr-color, var(--color-primary));"
+        >
             {% for item in figures %}
                 {% if item.type|default('figure') == 'figure' %}
                     {% set percentage = item.number|default('0')|replace({',': '', '%': ''})|number_format(0) %}
@@ -12,16 +14,16 @@
                             <span class="font-semibold">{{ item.title|default('') }}</span>
                             <span class="text-sm opacity-75" data-key-figures-target="counter" data-key-figures-end-value="{{ percentage }}%">0%</span>
                         </div>
-                        <div class="w-full h-3 bg-[var(--color-primary)]/10 rounded-full overflow-hidden">
+                        <div class="w-full h-3 bg-[var(--progress-color)]/10 rounded-full overflow-hidden">
                             <div
                                 data-key-figures-target="progressBar"
                                 data-value="{{ percentage }}"
-                                class="h-full bg-[var(--color-primary)] rounded-full"
+                                class="h-full bg-[var(--progress-color)] rounded-full"
                                 style="width: 0%;"
                             ></div>
                         </div>
                         {% if item.subTitle is defined and item.subTitle is not empty %}
-                            <p class="text-sm opacity-60 mt-1">{{ item.subTitle }}</p>
+                            <p class="block-subtitle text-sm opacity-60 mt-1">{{ item.subTitle }}</p>
                         {% endif %}
                     </div>
                 {% endif %}

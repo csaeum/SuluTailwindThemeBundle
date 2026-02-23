@@ -242,36 +242,20 @@ const WIREFRAME_RENDERERS = {
     ),
 
     // ── linked_pages styles ──────────────────────────────────────
-    image_cards: (fill, accent) => (
-        <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="5" y="5" width="34" height="70" rx="4" fill="#fff" stroke={fill} strokeWidth="1" />
-            <rect x="8" y="8" width="28" height="18" rx="2" fill={fill} opacity="0.5" />
-            <rect x="8" y="30" width="25" height="4" rx="2" fill={accent} />
-            <rect x="8" y="38" width="28" height="3" rx="2" fill={fill} />
-            <rect x="43" y="5" width="34" height="70" rx="4" fill="#fff" stroke={fill} strokeWidth="1" />
-            <rect x="46" y="8" width="28" height="18" rx="2" fill={fill} opacity="0.5" />
-            <rect x="46" y="30" width="25" height="4" rx="2" fill={accent} />
-            <rect x="46" y="38" width="28" height="3" rx="2" fill={fill} />
-            <rect x="81" y="5" width="34" height="70" rx="4" fill="#fff" stroke={fill} strokeWidth="1" />
-            <rect x="84" y="8" width="28" height="18" rx="2" fill={fill} opacity="0.5" />
-            <rect x="84" y="30" width="25" height="4" rx="2" fill={accent} />
-            <rect x="84" y="38" width="28" height="3" rx="2" fill={fill} />
-        </svg>
-    ),
     cards: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="5" y="5" width="34" height="70" rx="4" fill="#fff" stroke={fill} strokeWidth="1" />
-            <rect x="8" y="8" width="28" height="25" rx="2" fill={fill} />
-            <rect x="8" y="38" width="25" height="4" rx="2" fill={accent} />
-            <rect x="8" y="46" width="28" height="3" rx="2" fill={fill} />
-            <rect x="43" y="5" width="34" height="70" rx="4" fill="#fff" stroke={fill} strokeWidth="1" />
-            <rect x="46" y="8" width="28" height="25" rx="2" fill={fill} />
-            <rect x="46" y="38" width="25" height="4" rx="2" fill={accent} />
-            <rect x="46" y="46" width="28" height="3" rx="2" fill={fill} />
-            <rect x="81" y="5" width="34" height="70" rx="4" fill="#fff" stroke={fill} strokeWidth="1" />
-            <rect x="84" y="8" width="28" height="25" rx="2" fill={fill} />
-            <rect x="84" y="38" width="25" height="4" rx="2" fill={accent} />
-            <rect x="84" y="46" width="28" height="3" rx="2" fill={fill} />
+            <rect x="5" y="10" width="34" height="28" rx="4" fill="none" stroke={fill} strokeWidth="1" />
+            <rect x="10" y="20" width="24" height="4" rx="2" fill={accent} />
+            <rect x="43" y="10" width="34" height="28" rx="4" fill="none" stroke={fill} strokeWidth="1" />
+            <rect x="48" y="20" width="24" height="4" rx="2" fill={accent} />
+            <rect x="81" y="10" width="34" height="28" rx="4" fill="none" stroke={fill} strokeWidth="1" />
+            <rect x="86" y="20" width="24" height="4" rx="2" fill={accent} />
+            <rect x="5" y="44" width="34" height="28" rx="4" fill="none" stroke={fill} strokeWidth="1" />
+            <rect x="10" y="54" width="24" height="4" rx="2" fill={accent} />
+            <rect x="43" y="44" width="34" height="28" rx="4" fill="none" stroke={fill} strokeWidth="1" />
+            <rect x="48" y="54" width="24" height="4" rx="2" fill={accent} />
+            <rect x="81" y="44" width="34" height="28" rx="4" fill="none" stroke={fill} strokeWidth="1" />
+            <rect x="86" y="54" width="24" height="4" rx="2" fill={accent} />
         </svg>
     ),
     list: (fill, accent) => (
@@ -285,24 +269,6 @@ const WIREFRAME_RENDERERS = {
             <rect x="5" y="52" width="110" height="18" rx="2" fill={fill} opacity="0.1" />
             <rect x="10" y="56" width="35" height="4" rx="2" fill={accent} />
             <rect x="10" y="63" width="50" height="3" rx="2" fill={fill} />
-        </svg>
-    ),
-    horizontal: (fill, accent) => (
-        <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="5" y="10" width="25" height="60" rx="3" fill={fill} />
-            <rect x="35" y="10" width="25" height="60" rx="3" fill={fill} />
-            <rect x="65" y="10" width="25" height="60" rx="3" fill={fill} />
-            <rect x="95" y="10" width="22" height="60" rx="3" fill={fill} opacity="0.5" />
-            <polygon points="115,40 108,34 108,46" fill={accent} />
-        </svg>
-    ),
-    featured: (fill, accent) => (
-        <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="5" y="5" width="60" height="70" rx="3" fill={fill} />
-            <rect x="10" y="50" width="50" height="5" rx="2" fill={accent} />
-            <rect x="10" y="60" width="45" height="3" rx="2" fill="#fff" />
-            <rect x="70" y="5" width="45" height="32" rx="3" fill={fill} opacity="0.7" />
-            <rect x="70" y="43" width="45" height="32" rx="3" fill={fill} opacity="0.7" />
         </svg>
     ),
     minimal: (fill, accent) => (

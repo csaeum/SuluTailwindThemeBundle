@@ -10,15 +10,18 @@
     } only %}
 
     {% if links is defined and links is iterable %}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            style="--card-border: var(--variant-hr-color, var(--color-border, #e5e7eb)); --card-bg: color-mix(in srgb, var(--card-border) 60%, transparent);"
+        >
             {% for link in links %}
                 {% if link.type == 'internal' and link.pages is defined %}
                     {% for page in link.pages %}
                         <a href="{{ sulu_content_path(page.url|default('/')) }}" class="group block no-underline">
-                            <div class="p-6 rounded-[var(--border-radius,8px)] border border-[var(--color-border,#e5e7eb)] transition-shadow duration-300 hover:shadow-lg h-full">
-                                <h4 class="text-lg font-semibold group-hover:text-[var(--color-link)]">
+                            <div class="p-6 {{ paragraphImageRadius|default('') }} border border-[var(--card-border)] bg-[var(--card-bg)] text-[var(--variant-link-color,inherit)] transition-shadow duration-300 hover:shadow-lg h-full">
+                                <span class="block text-lg font-semibold group-hover:text-[var(--variant-link-hover,inherit)]">
                                     {{ page.title|default('') }}
-                                </h4>
+                                </span>
                                 {% if page.excerpt is defined and page.excerpt.description is defined %}
                                     <p class="mt-2 text-sm opacity-75 line-clamp-3">{{ page.excerpt.description }}</p>
                                 {% endif %}
@@ -37,10 +40,10 @@
                         {{ linkTarget == '_blank' ? 'rel="noopener noreferrer"' : '' }}
                         class="group block no-underline"
                     >
-                        <div class="p-6 rounded-[var(--border-radius,8px)] border border-[var(--color-border,#e5e7eb)] transition-shadow duration-300 hover:shadow-lg h-full">
-                            <h4 class="text-lg font-semibold group-hover:text-[var(--color-link)]">
+                        <div class="p-6 {{ paragraphImageRadius|default('') }} border border-[var(--card-border)] bg-[var(--card-bg)] text-[var(--variant-link-color,inherit)] transition-shadow duration-300 hover:shadow-lg h-full">
+                            <span class="block text-lg font-semibold group-hover:text-[var(--variant-link-hover,inherit)]">
                                 {{ link.label|default(link.url|default('')) }}
-                            </h4>
+                            </span>
                             {% if linkTarget == '_blank' %}
                                 <span class="text-xs opacity-50 mt-1 inline-block">&#8599;</span>
                             {% endif %}

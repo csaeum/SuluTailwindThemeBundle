@@ -14,7 +14,7 @@
             {% for link in links %}
                 {% if link.type == 'internal' and link.pages is defined %}
                     {% for page in link.pages %}
-                        <a href="{{ sulu_content_path(page.url|default('/')) }}" class="block text-[var(--color-link)] hover:text-[var(--color-link-hover)] transition-colors py-1">
+                        <a href="{{ sulu_content_path(page.url|default('/')) }}" class="block text-[var(--variant-link-color,inherit)] hover:text-[var(--variant-link-hover,inherit)] transition-colors py-1">
                             {{ page.title|default('') }}
                         </a>
                     {% endfor %}
@@ -28,7 +28,7 @@
                         href="{{ linkUrl }}"
                         target="{{ linkTarget }}"
                         {{ linkTarget == '_blank' ? 'rel="noopener noreferrer"' : '' }}
-                        class="block text-[var(--color-link)] hover:text-[var(--color-link-hover)] transition-colors py-1"
+                        class="block text-[var(--variant-link-color,inherit)] hover:text-[var(--variant-link-hover,inherit)] transition-colors py-1"
                     >
                         {{ link.label|default(link.url|default('')) }}
                         {% if linkTarget == '_blank' %}

@@ -85,10 +85,7 @@ class ThemeAdmin extends Admin
         'linked_pages' => [
             ['key' => 'cards', 'label' => 'iw_sulu_theme.style.cards'],
             ['key' => 'list', 'label' => 'iw_sulu_theme.style.list'],
-            ['key' => 'horizontal', 'label' => 'iw_sulu_theme.style.horizontal'],
-            ['key' => 'featured', 'label' => 'iw_sulu_theme.style.featured'],
             ['key' => 'minimal', 'label' => 'iw_sulu_theme.style.minimal'],
-            ['key' => 'image_cards', 'label' => 'iw_sulu_theme.style.image_cards'],
             ['key' => 'carousel', 'label' => 'iw_sulu_theme.style.carousel'],
         ],
         'location' => [

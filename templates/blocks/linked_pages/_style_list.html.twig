@@ -10,12 +10,14 @@
     } only %}
 
     {% if links is defined and links is iterable %}
-        <ul class="divide-y divide-[var(--color-border,#e5e7eb)] max-w-3xl">
+        <ul class="divide-y divide-[var(--list-border)] max-w-3xl"
+            style="--list-border: var(--variant-hr-color, var(--color-border, #e5e7eb));"
+        >
             {% for link in links %}
                 {% if link.type == 'internal' and link.pages is defined %}
                     {% for page in link.pages %}
                         <li>
-                            <a href="{{ sulu_content_path(page.url|default('/')) }}" class="flex items-center justify-between py-4 hover:text-[var(--color-link)] transition-colors no-underline group">
+                            <a href="{{ sulu_content_path(page.url|default('/')) }}" class="flex items-center justify-between py-4 hover:text-[var(--variant-link-hover,inherit)] transition-colors no-underline group">
                                 <span class="font-medium">{{ page.title|default('') }}</span>
                                 <svg class="w-5 h-5 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                             </a>
@@ -32,7 +34,7 @@
                             href="{{ linkUrl }}"
                             target="{{ linkTarget }}"
                             {{ linkTarget == '_blank' ? 'rel="noopener noreferrer"' : '' }}
-                            class="flex items-center justify-between py-4 hover:text-[var(--color-link)] transition-colors no-underline group"
+                            class="flex items-center justify-between py-4 hover:text-[var(--variant-link-hover,inherit)] transition-colors no-underline group"
                         >
                             <span class="font-medium">{{ link.label|default(link.url|default('')) }}</span>
                             {% if linkTarget == '_blank' %}

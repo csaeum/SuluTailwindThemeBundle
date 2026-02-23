@@ -6,9 +6,10 @@
         <div
             data-controller="key-figures"
             class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto"
+            style="--card-border: var(--variant-hr-color, var(--color-border, #e5e7eb));"
         >
             {% for figure in figures %}
-                <div class="p-6 md:p-8 rounded-[var(--border-radius,8px)] border border-[var(--color-border,#e5e7eb)] text-center">
+                <div class="p-6 md:p-8 {{ paragraphImageRadius|default('') }} border border-[var(--card-border)] text-center">
                     {# Icon / Image #}
                     {% if figure.image is defined and figure.image.id is defined %}
                         {% set media = sulu_resolve_media(figure.image.id, app.request.locale) %}
@@ -26,7 +27,7 @@
                         <span
                             data-key-figures-target="counter"
                             data-key-figures-end-value="{{ figure.number }}"
-                            class="block text-4xl md:text-5xl font-bold text-[var(--color-primary)]"
+                            class="block text-4xl md:text-5xl font-bold text-[var(--variant-paragraph-color,inherit)]"
                         >
                             0
                         </span>
