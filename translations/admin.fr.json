@@ -51,6 +51,7 @@
     "iw_sulu_theme.buttons": "Boutons",
     "iw_sulu_theme.buttons_primary": "Bouton primaire",
     "iw_sulu_theme.buttons_secondary": "Bouton secondaire",
+    "iw_sulu_theme.buttons_accent": "Bouton accent",
     "iw_sulu_theme.buttons_bg": "Fond",
     "iw_sulu_theme.buttons_text": "Texte",
     "iw_sulu_theme.buttons_border": "Bordure",
@@ -79,6 +80,7 @@
     "iw_sulu_theme.variant_hr_color": "Couleur des séparateurs",
     "iw_sulu_theme.variant_paragraphBg": "Fond des paragraphes",
     "iw_sulu_theme.variant_blockBg": "Fond du bloc",
+    "iw_sulu_theme.variant_button_style": "Style de bouton",
     "iw_sulu_theme.variant_separator_mode": "Mode du séparateur",
     "iw_sulu_theme.variant_separator_mode_style": "Style prédéfini",
     "iw_sulu_theme.variant_separator_mode_image": "Image personnalisée",
@@ -248,9 +250,9 @@
     "iw_sulu_theme.target_self": "Même fenêtre",
     "iw_sulu_theme.target_blank": "Nouvelle fenêtre",
 
-    "iw_sulu_theme.latitude": "Latitude",
-    "iw_sulu_theme.longitude": "Longitude",
+    "iw_sulu_theme.location": "Localisation",
     "iw_sulu_theme.address": "Adresse",
+    "iw_sulu_theme.open_map": "Ouvrir dans Maps",
 
     "iw_sulu_theme.form_id": "ID du formulaire",
     "iw_sulu_theme.documents": "Documents",

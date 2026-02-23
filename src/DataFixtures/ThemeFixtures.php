@@ -123,6 +123,15 @@ class ThemeFixtures
                         'hoverBorder' => '#1e40af',
                         'radius' => '8px',
                     ],
+                    'accent' => [
+                        'bg' => '#f59e0b',
+                        'text' => '#ffffff',
+                        'border' => 'none',
+                        'hoverBg' => '#d97706',
+                        'hoverText' => '#ffffff',
+                        'hoverBorder' => 'none',
+                        'radius' => '8px',
+                    ],
                 ],
                 'blockVariants' => [
                     'clair' => [
@@ -135,6 +144,7 @@ class ThemeFixtures
                         'hr' => '#e2e8f0',
                         'paragraphBg' => 'transparent',
                         'blockBg' => '#ffffff',
+                        'buttonStyle' => 'primary',
                     ],
                     'accent' => [
                         'label' => 'Accent primaire',
@@ -146,6 +156,7 @@ class ThemeFixtures
                         'hr' => 'rgba(255,255,255,0.2)',
                         'paragraphBg' => 'rgba(255,255,255,0.08)',
                         'blockBg' => '#1a56db',
+                        'buttonStyle' => 'secondary',
                     ],
                     'sombre' => [
                         'label' => 'Sombre',
@@ -157,6 +168,7 @@ class ThemeFixtures
                         'hr' => '#334155',
                         'paragraphBg' => '#1e293b',
                         'blockBg' => '#0f172a',
+                        'buttonStyle' => 'accent',
                     ],
                 ],
             ],
@@ -275,6 +287,15 @@ class ThemeFixtures
                         'hoverBorder' => 'none',
                         'radius' => '16px',
                     ],
+                    'accent' => [
+                        'bg' => '#8b5cf6',
+                        'text' => '#ffffff',
+                        'border' => 'none',
+                        'hoverBg' => '#7c3aed',
+                        'hoverText' => '#ffffff',
+                        'hoverBorder' => 'none',
+                        'radius' => '16px',
+                    ],
                 ],
                 'blockVariants' => [
                     'clair' => [
@@ -287,6 +308,7 @@ class ThemeFixtures
                         'hr' => '#fde68a',
                         'paragraphBg' => 'transparent',
                         'blockBg' => '#fffbeb',
+                        'buttonStyle' => 'primary',
                     ],
                     'accent' => [
                         'label' => 'Accent rose',
@@ -298,6 +320,7 @@ class ThemeFixtures
                         'hr' => 'rgba(255,255,255,0.2)',
                         'paragraphBg' => 'rgba(255,255,255,0.08)',
                         'blockBg' => '#ec4899',
+                        'buttonStyle' => 'secondary',
                     ],
                     'sombre' => [
                         'label' => 'Sombre',
@@ -309,6 +332,7 @@ class ThemeFixtures
                         'hr' => '#374151',
                         'paragraphBg' => '#1f2937',
                         'blockBg' => '#111827',
+                        'buttonStyle' => 'accent',
                     ],
                 ],
             ],
@@ -427,6 +451,15 @@ class ThemeFixtures
                         'hoverBorder' => '#000000',
                         'radius' => '0px',
                     ],
+                    'accent' => [
+                        'bg' => '#737373',
+                        'text' => '#ffffff',
+                        'border' => 'none',
+                        'hoverBg' => '#525252',
+                        'hoverText' => '#ffffff',
+                        'hoverBorder' => 'none',
+                        'radius' => '0px',
+                    ],
                 ],
                 'blockVariants' => [
                     'clair' => [
@@ -439,6 +472,7 @@ class ThemeFixtures
                         'hr' => '#e5e5e5',
                         'paragraphBg' => 'transparent',
                         'blockBg' => '#ffffff',
+                        'buttonStyle' => 'primary',
                     ],
                     'accent' => [
                         'label' => 'Gris neutre',
@@ -450,6 +484,7 @@ class ThemeFixtures
                         'hr' => '#d4d4d4',
                         'paragraphBg' => '#f5f5f5',
                         'blockBg' => '#fafafa',
+                        'buttonStyle' => 'secondary',
                     ],
                     'sombre' => [
                         'label' => 'Sombre',
@@ -461,6 +496,7 @@ class ThemeFixtures
                         'hr' => '#404040',
                         'paragraphBg' => '#171717',
                         'blockBg' => '#111111',
+                        'buttonStyle' => 'accent',
                     ],
                 ],
             ],
@@ -579,6 +615,15 @@ class ThemeFixtures
                         'hoverBorder' => 'none',
                         'radius' => '12px',
                     ],
+                    'accent' => [
+                        'bg' => '#059669',
+                        'text' => '#ffffff',
+                        'border' => '#047857',
+                        'hoverBg' => '#047857',
+                        'hoverText' => '#ffffff',
+                        'hoverBorder' => '#065f46',
+                        'radius' => '12px',
+                    ],
                 ],
                 'blockVariants' => [
                     'clair' => [
@@ -591,6 +636,7 @@ class ThemeFixtures
                         'hr' => '#d1e7dd',
                         'paragraphBg' => 'transparent',
                         'blockBg' => '#fefdf8',
+                        'buttonStyle' => 'primary',
                     ],
                     'accent' => [
                         'label' => 'Accent vert',
@@ -602,6 +648,7 @@ class ThemeFixtures
                         'hr' => 'rgba(255,255,255,0.2)',
                         'paragraphBg' => 'rgba(255,255,255,0.08)',
                         'blockBg' => '#065f46',
+                        'buttonStyle' => 'secondary',
                     ],
                     'sombre' => [
                         'label' => 'Sombre foret',
@@ -613,6 +660,7 @@ class ThemeFixtures
                         'hr' => '#064e3b',
                         'paragraphBg' => '#022c22',
                         'blockBg' => '#064e3b',
+                        'buttonStyle' => 'accent',
                     ],
                 ],
             ],

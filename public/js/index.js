@@ -7,6 +7,7 @@ import MarginSelector from './components/MarginSelector/MarginSelector';
 import ColorTokenEditor from './components/ColorTokenEditor/ColorTokenEditor';
 import FontSelector from './components/FontSelector/FontSelector';
 import RadiusSelector from './components/RadiusSelector/RadiusSelector';
+import ButtonStylePicker from './components/ButtonStylePicker/ButtonStylePicker';
 import collapsibleSections from './components/CollapsibleSections/CollapsibleSections';
 
 /**
@@ -22,6 +23,7 @@ initializer.addUpdateConfigHook('iw_sulu_theme', (config: Object, initialized: b
         // This data is refreshed on each admin config reload.
         VariantPicker.themeVariants = config.variants || [];
         StylePicker.blockStyles = config.blockStyles || {};
+        ButtonStylePicker.themeButtons = config.buttons || {};
         collapsibleSections.init(config.collapsibleSections || {});
     }
 
@@ -57,5 +59,10 @@ initializer.addUpdateConfigHook('iw_sulu_theme', (config: Object, initialized: b
     fieldRegistry.add(
         'iw_theme_radius_selector',
         RadiusSelector
+    );
+
+    fieldRegistry.add(
+        'iw_theme_button_style_picker',
+        ButtonStylePicker
     );
 });

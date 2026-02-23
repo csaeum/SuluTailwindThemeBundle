@@ -51,6 +51,7 @@
     "iw_sulu_theme.buttons": "Buttons",
     "iw_sulu_theme.buttons_primary": "Primary button",
     "iw_sulu_theme.buttons_secondary": "Secondary button",
+    "iw_sulu_theme.buttons_accent": "Accent button",
     "iw_sulu_theme.buttons_bg": "Background",
     "iw_sulu_theme.buttons_text": "Text",
     "iw_sulu_theme.buttons_border": "Border",
@@ -79,6 +80,7 @@
     "iw_sulu_theme.variant_hr_color": "Separator color",
     "iw_sulu_theme.variant_paragraphBg": "Paragraph background",
     "iw_sulu_theme.variant_blockBg": "Block background",
+    "iw_sulu_theme.variant_button_style": "Button style",
     "iw_sulu_theme.variant_separator_mode": "Separator mode",
     "iw_sulu_theme.variant_separator_mode_style": "Predefined style",
     "iw_sulu_theme.variant_separator_mode_image": "Custom image",
@@ -248,9 +250,9 @@
     "iw_sulu_theme.target_self": "Same window",
     "iw_sulu_theme.target_blank": "New window",
 
-    "iw_sulu_theme.latitude": "Latitude",
-    "iw_sulu_theme.longitude": "Longitude",
+    "iw_sulu_theme.location": "Location",
     "iw_sulu_theme.address": "Address",
+    "iw_sulu_theme.open_map": "Open in maps",
 
     "iw_sulu_theme.form_id": "Form ID",
     "iw_sulu_theme.documents": "Documents",

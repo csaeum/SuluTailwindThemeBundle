@@ -173,7 +173,7 @@ class ThemeCompiler
         $css .= $this->generateButtonClasses($tokens['buttons'] ?? []);
 
         // Block variant classes
-        $css .= $this->generateBlockVariantClasses($tokens['blockVariants'] ?? []);
+        $css .= $this->generateBlockVariantClasses($tokens['blockVariants'] ?? [], $tokens['buttons'] ?? []);
 
         return $css;
     }
@@ -276,6 +276,10 @@ class ThemeCompiler
                 continue;
             }
             foreach ($props as $prop => $value) {
+                // Resolve radius Tailwind classes to valid CSS values
+                if ('radius' === $prop) {
+                    $value = $this->resolveRadius((string) $value);
+                }
                 $css .= "  --btn-{$variant}-{$prop}: {$value};\n";
             }
         }
@@ -369,10 +373,11 @@ class ThemeCompiler
      * and blockBg colors. Templates use these properties for consistent styling.
      *
      * @param array<string, mixed> $blockVariants Block variant definitions
+     * @param array<string, mixed> $buttons       Button variant definitions (for .btn-variant mapping)
      *
      * @return string CSS class declarations
      */
-    private function generateBlockVariantClasses(array $blockVariants): string
+    private function generateBlockVariantClasses(array $blockVariants, array $buttons = []): string
     {
         $css = "/* Block variant classes */\n";
 
@@ -452,6 +457,7 @@ class ThemeCompiler
             $css .= "}\n";
 
             $css .= $this->generateSeparatorCss($variantName, $props);
+            $css .= $this->generateVariantButtonCss($variantName, $props, $buttons);
 
             // Apply paragraph background + padding only when paragraphBg is a real
             // visible color (not empty, not "transparent").
@@ -474,6 +480,69 @@ class ThemeCompiler
 
             $css .= "\n";
         }
+
+        return $css;
+    }
+
+    /**
+     * Generate CSS for variant-specific button styling.
+     *
+     * Reads the variant's buttonStyle choice (primary, secondary, accent) and
+     * generates a `.btn-variant` class with the chosen button's direct values.
+     * Uses the same resolution logic as generateButtonClasses() to ensure
+     * radius and border properties are correctly handled.
+     *
+     * @param string               $variantName The variant key
+     * @param array<string, mixed> $props       The variant properties
+     * @param array<string, mixed> $buttons     All button variant definitions
+     *
+     * @return string CSS declarations
+     */
+    private function generateVariantButtonCss(string $variantName, array $props, array $buttons): string
+    {
+        $buttonStyle = $props['buttonStyle'] ?? 'primary';
+        $allowed = ['primary', 'secondary', 'accent'];
+        if (!in_array($buttonStyle, $allowed, true)) {
+            $buttonStyle = 'primary';
+        }
+
+        $btnData = $buttons[$buttonStyle] ?? [];
+        if (empty($btnData) || !is_array($btnData)) {
+            return '';
+        }
+
+        $css = ".block-variant-{$variantName} .btn-variant {\n";
+        if (isset($btnData['bg'])) {
+            $css .= "  background-color: {$btnData['bg']};\n";
+        }
+        if (isset($btnData['text'])) {
+            $css .= "  color: {$btnData['text']};\n";
+        }
+        if (isset($btnData['radius'])) {
+            $css .= "  border-radius: {$this->resolveRadius((string) $btnData['radius'])};\n";
+        }
+        if (isset($btnData['border']) && 'none' !== $btnData['border']) {
+            $css .= "  border: 1px solid {$btnData['border']};\n";
+        } else {
+            $css .= "  border: none;\n";
+        }
+        $css .= "  cursor: pointer;\n";
+        $css .= "  display: inline-block;\n";
+        $css .= "  text-decoration: none;\n";
+        $css .= "  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;\n";
+        $css .= "}\n";
+
+        $css .= ".block-variant-{$variantName} .btn-variant:hover {\n";
+        if (isset($btnData['hoverBg'])) {
+            $css .= "  background-color: {$btnData['hoverBg']};\n";
+        }
+        if (isset($btnData['hoverText'])) {
+            $css .= "  color: {$btnData['hoverText']};\n";
+        }
+        if (isset($btnData['hoverBorder']) && 'none' !== $btnData['hoverBorder']) {
+            $css .= "  border-color: {$btnData['hoverBorder']};\n";
+        }
+        $css .= "}\n";
 
         return $css;
     }

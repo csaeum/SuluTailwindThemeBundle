@@ -70,7 +70,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
     /**
      * Button variant names expected in the form.
      */
-    private const BUTTON_VARIANTS = ['primary', 'secondary'];
+    private const BUTTON_VARIANTS = ['primary', 'secondary', 'accent'];
 
     /**
      * Typography assignment elements expected in the form.

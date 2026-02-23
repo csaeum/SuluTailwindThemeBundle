@@ -93,5 +93,48 @@
                 </property>
             </properties>
         </section>
+        <!-- Accent Button -->
+        <section name="accentButton">
+            <meta>
+                <title>iw_sulu_theme.buttons_accent</title>
+            </meta>
+            <properties>
+                <property name="buttons_accent_bg" type="iw_theme_color_token_editor" colspan="4">
+                    <meta>
+                        <title>iw_sulu_theme.buttons_bg</title>
+                    </meta>
+                </property>
+                <property name="buttons_accent_text" type="iw_theme_color_token_editor" colspan="4">
+                    <meta>
+                        <title>iw_sulu_theme.buttons_text</title>
+                    </meta>
+                </property>
+                <property name="buttons_accent_border" type="iw_theme_color_token_editor" colspan="4">
+                    <meta>
+                        <title>iw_sulu_theme.buttons_border</title>
+                    </meta>
+                </property>
+                <property name="buttons_accent_hoverBg" type="iw_theme_color_token_editor" colspan="4">
+                    <meta>
+                        <title>iw_sulu_theme.buttons_hoverBg</title>
+                    </meta>
+                </property>
+                <property name="buttons_accent_hoverText" type="iw_theme_color_token_editor" colspan="4">
+                    <meta>
+                        <title>iw_sulu_theme.buttons_hoverText</title>
+                    </meta>
+                </property>
+                <property name="buttons_accent_hoverBorder" type="iw_theme_color_token_editor" colspan="4">
+                    <meta>
+                        <title>iw_sulu_theme.buttons_hoverBorder</title>
+                    </meta>
+                </property>
+                <property name="buttons_accent_radius" type="iw_theme_radius_selector" colspan="12">
+                    <meta>
+                        <title>iw_sulu_theme.buttons_radius</title>
+                    </meta>
+                </property>
+            </properties>
+        </section>
     </properties>
 </form>

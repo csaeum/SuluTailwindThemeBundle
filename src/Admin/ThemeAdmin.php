@@ -357,8 +357,14 @@ class ThemeAdmin extends Admin
             }
         }
 
+        $buttons = [];
+        if (null !== $activeTheme) {
+            $buttons = $activeTheme->getTokens()['buttons'] ?? [];
+        }
+
         return [
             'variants' => $variants,
+            'buttons' => $buttons,
             'blockStyles' => self::BLOCK_STYLE_OPTIONS,
             'collapsibleSections' => self::COLLAPSIBLE_SECTIONS,
         ];

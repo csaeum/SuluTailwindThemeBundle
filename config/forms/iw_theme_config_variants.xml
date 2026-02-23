@@ -84,6 +84,12 @@
                             </meta>
                         </property>
 
+                        <property name="buttonStyle" type="iw_theme_button_style_picker" colspan="12">
+                            <meta>
+                                <title>iw_sulu_theme.variant_button_style</title>
+                            </meta>
+                        </property>
+
                         <property name="separatorMode" type="single_select" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_separator_mode</title>
