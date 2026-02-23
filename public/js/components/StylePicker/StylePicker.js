@@ -347,13 +347,55 @@ const WIREFRAME_RENDERERS = {
     // Note: 'centered' and 'split' wireframes are shared with text/form blocks above
 
     // ── document styles ──────────────────────────────────────────
-    default: (fill, accent) => (
+    document_default: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="10" y="10" width="100" height="60" rx="4" fill={fill} opacity="0.1" />
-            <rect x="20" y="20" width="60" height="5" rx="2" fill={accent} />
-            <rect x="20" y="30" width="80" height="3" rx="2" fill={fill} />
-            <rect x="20" y="38" width="70" height="3" rx="2" fill={fill} />
-            <rect x="20" y="50" width="35" height="8" rx="3" fill={accent} opacity="0.5" />
+            {/* Card row 1 */}
+            <rect x="5" y="5" width="110" height="20" rx="3" fill={fill} opacity="0.15" stroke={fill} strokeWidth="0.5" />
+            <rect x="11" y="10" width="8" height="10" rx="2" fill={accent} opacity="0.3" />
+            <rect x="24" y="11" width="45" height="4" rx="2" fill={accent} />
+            <rect x="24" y="17" width="25" height="3" rx="1" fill={fill} opacity="0.5" />
+            <polygon points="107,12 107,18 104,15" fill={fill} opacity="0.4" />
+            {/* Card row 2 */}
+            <rect x="5" y="30" width="110" height="20" rx="3" fill={fill} opacity="0.15" stroke={fill} strokeWidth="0.5" />
+            <rect x="11" y="35" width="8" height="10" rx="2" fill={accent} opacity="0.3" />
+            <rect x="24" y="36" width="50" height="4" rx="2" fill={accent} />
+            <rect x="24" y="42" width="30" height="3" rx="1" fill={fill} opacity="0.5" />
+            <polygon points="107,37 107,43 104,40" fill={fill} opacity="0.4" />
+            {/* Card row 3 */}
+            <rect x="5" y="55" width="110" height="20" rx="3" fill={fill} opacity="0.15" stroke={fill} strokeWidth="0.5" />
+            <rect x="11" y="60" width="8" height="10" rx="2" fill={accent} opacity="0.3" />
+            <rect x="24" y="61" width="40" height="4" rx="2" fill={accent} />
+            <rect x="24" y="67" width="20" height="3" rx="1" fill={fill} opacity="0.5" />
+            <polygon points="107,62 107,68 104,65" fill={fill} opacity="0.4" />
+        </svg>
+    ),
+    document_grid: (fill, accent) => (
+        <svg viewBox="0 0 120 80" width="120" height="80">
+            {/* Card 1 */}
+            <rect x="5" y="5" width="34" height="34" rx="3" fill={fill} opacity="0.15" stroke={fill} strokeWidth="0.5" />
+            <rect x="13" y="11" width="10" height="12" rx="2" fill={accent} opacity="0.3" />
+            <rect x="10" y="27" width="24" height="3" rx="1" fill={accent} />
+            <rect x="12" y="33" width="18" height="2" rx="1" fill={fill} opacity="0.5" />
+            {/* Card 2 */}
+            <rect x="43" y="5" width="34" height="34" rx="3" fill={fill} opacity="0.15" stroke={fill} strokeWidth="0.5" />
+            <rect x="51" y="11" width="10" height="12" rx="2" fill={accent} opacity="0.3" />
+            <rect x="48" y="27" width="24" height="3" rx="1" fill={accent} />
+            <rect x="50" y="33" width="18" height="2" rx="1" fill={fill} opacity="0.5" />
+            {/* Card 3 */}
+            <rect x="81" y="5" width="34" height="34" rx="3" fill={fill} opacity="0.15" stroke={fill} strokeWidth="0.5" />
+            <rect x="89" y="11" width="10" height="12" rx="2" fill={accent} opacity="0.3" />
+            <rect x="86" y="27" width="24" height="3" rx="1" fill={accent} />
+            <rect x="88" y="33" width="18" height="2" rx="1" fill={fill} opacity="0.5" />
+            {/* Card 4 */}
+            <rect x="5" y="43" width="34" height="34" rx="3" fill={fill} opacity="0.15" stroke={fill} strokeWidth="0.5" />
+            <rect x="13" y="49" width="10" height="12" rx="2" fill={accent} opacity="0.3" />
+            <rect x="10" y="65" width="24" height="3" rx="1" fill={accent} />
+            <rect x="12" y="71" width="18" height="2" rx="1" fill={fill} opacity="0.5" />
+            {/* Card 5 */}
+            <rect x="43" y="43" width="34" height="34" rx="3" fill={fill} opacity="0.15" stroke={fill} strokeWidth="0.5" />
+            <rect x="51" y="49" width="10" height="12" rx="2" fill={accent} opacity="0.3" />
+            <rect x="48" y="65" width="24" height="3" rx="1" fill={accent} />
+            <rect x="50" y="71" width="18" height="2" rx="1" fill={fill} opacity="0.5" />
         </svg>
     ),
 

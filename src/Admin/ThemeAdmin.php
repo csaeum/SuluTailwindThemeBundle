@@ -102,7 +102,6 @@ class ThemeAdmin extends Admin
         'document' => [
             ['key' => 'default', 'label' => 'iw_sulu_theme.style.default'],
             ['key' => 'grid', 'label' => 'iw_sulu_theme.style.grid'],
-            ['key' => 'accordion', 'label' => 'iw_sulu_theme.style.accordion'],
         ],
         'cta' => [
             ['key' => 'banner', 'label' => 'iw_sulu_theme.style.banner'],

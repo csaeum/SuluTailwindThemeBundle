@@ -86,6 +86,9 @@
                         <param name="prefix" type="string" value="px"/>
                     </params>
                 </property>
+                <property name="paragraphImageRadius" type="iw_theme_radius_selector" colspan="6">
+                    <meta><title>iw_sulu_theme.paragraph_radius</title></meta>
+                </property>
                 <property name="blockRadius" type="iw_theme_radius_selector" colspan="6">
                     <meta><title>iw_sulu_theme.block_radius</title></meta>
                 </property>
