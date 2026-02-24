@@ -1,18 +1,57 @@
 {# CTA buttons — renders primary and optional secondary action buttons.
    Expected variables:
-     - primaryButtonLabel: string
-     - primaryButtonUrl: string
-     - secondaryButtonLabel: string (optional)
-     - secondaryButtonUrl: string (optional)
+     - primaryButtonLink: string (URL from Sulu link type)
+     - primaryButtonView: object (view data with target, title, rel, href, provider)
+     - primaryButtonStyle: string (button style key: primary, secondary, accent)
+     - secondaryButtonLink: string (URL from Sulu link type, optional)
+     - secondaryButtonView: object (view data with target, title, rel, href, provider, optional)
+     - secondaryButtonStyle: string (button style key: primary, secondary, accent)
 #}
-{% if primaryButtonLabel|default('') is not empty and primaryButtonUrl|default('') is not empty %}
+{% if primaryButtonLink|default('') is not empty %}
+    {% set primaryTarget = primaryButtonView.target|default('_self') %}
+    {% set primaryRel = primaryButtonView.rel|default('') %}
+    {% set primaryBtnClass = 'btn-' ~ (primaryButtonStyle|default('primary')) %}
+
+    {# Resolve primary button label: attribute title > page title > URL #}
+    {% if primaryButtonView.title|default('') is not empty %}
+        {% set primaryLabel = primaryButtonView.title %}
+    {% elseif primaryButtonView.provider|default('') == 'page' and primaryButtonView.href|default('') is not empty %}
+        {% set linkedPage = sulu_page_load(primaryButtonView.href, {'title': 'title'}) %}
+        {% set primaryLabel = linkedPage.title|default(primaryButtonLink) %}
+    {% else %}
+        {% set primaryLabel = primaryButtonLink %}
+    {% endif %}
+
     <div class="flex flex-wrap items-center gap-4 mt-6">
-        <a href="{{ primaryButtonUrl }}" class="btn-primary inline-block px-6 py-3 text-center no-underline">
-            {{ primaryButtonLabel }}
+        <a href="{{ primaryButtonLink }}"
+           class="{{ primaryBtnClass }} inline-block px-6 py-3 text-center no-underline"
+           {{ primaryTarget != '_self' ? 'target="' ~ primaryTarget ~ '"' : '' }}
+           {{ primaryRel is not empty ? 'rel="' ~ primaryRel ~ '"' : (primaryTarget == '_blank' ? 'rel="noopener noreferrer"' : '') }}
+        >
+            {{ primaryLabel }}
         </a>
-        {% if secondaryButtonLabel|default('') is not empty and secondaryButtonUrl|default('') is not empty %}
-            <a href="{{ secondaryButtonUrl }}" class="btn-secondary inline-block px-6 py-3 text-center no-underline">
-                {{ secondaryButtonLabel }}
+
+        {% if secondaryButtonLink|default('') is not empty %}
+            {% set secondaryTarget = secondaryButtonView.target|default('_self') %}
+            {% set secondaryRel = secondaryButtonView.rel|default('') %}
+            {% set secondaryBtnClass = 'btn-' ~ (secondaryButtonStyle|default('secondary')) %}
+
+            {# Resolve secondary button label: attribute title > page title > URL #}
+            {% if secondaryButtonView.title|default('') is not empty %}
+                {% set secondaryLabel = secondaryButtonView.title %}
+            {% elseif secondaryButtonView.provider|default('') == 'page' and secondaryButtonView.href|default('') is not empty %}
+                {% set linkedPage = sulu_page_load(secondaryButtonView.href, {'title': 'title'}) %}
+                {% set secondaryLabel = linkedPage.title|default(secondaryButtonLink) %}
+            {% else %}
+                {% set secondaryLabel = secondaryButtonLink %}
+            {% endif %}
+
+            <a href="{{ secondaryButtonLink }}"
+               class="{{ secondaryBtnClass }} inline-block px-6 py-3 text-center no-underline"
+               {{ secondaryTarget != '_self' ? 'target="' ~ secondaryTarget ~ '"' : '' }}
+               {{ secondaryRel is not empty ? 'rel="' ~ secondaryRel ~ '"' : (secondaryTarget == '_blank' ? 'rel="noopener noreferrer"' : '') }}
+            >
+                {{ secondaryLabel }}
             </a>
         {% endif %}
     </div>

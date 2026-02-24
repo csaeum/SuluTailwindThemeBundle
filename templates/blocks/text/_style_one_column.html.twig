@@ -2,17 +2,15 @@
 {% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
-    <div class="max-w-4xl mx-auto">
-        {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
-            title: title|default(''),
-            subTitle: subTitle|default(''),
-            titleAlignment: titleAlignment|default('left'),
-            variant: variant|default('clair')
-        } only %}
+    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default(''),
+        titleAlignment: titleAlignment|default('left'),
+        variant: variant|default('clair')
+    } only %}
 
-        {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
-            text: text|default(''),
-            paragraphImageRadius: paragraphImageRadius|default('')
-        } only %}
-    </div>
+    {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
+        text: text|default(''),
+        paragraphImageRadius: resolvedParagraphRadius|default('')
+    } only %}
 {% endblock %}

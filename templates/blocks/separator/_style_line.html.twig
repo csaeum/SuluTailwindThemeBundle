@@ -13,5 +13,5 @@
         'dotted': 'border-dotted'
     } %}
 
-    <hr class="{{ widthMap[lineWidth|default('thin')]|default('border-t') }} {{ styleMap[lineStyle|default('solid')]|default('border-solid') }} border-current opacity-20">
+    <div class="{{ widthMap[lineWidth|default('thin')]|default('border-t') }} {{ styleMap[lineStyle|default('solid')]|default('border-solid') }} border-[var(--variant-hr-color,var(--color-border,currentColor))]"></div>
 {% endblock %}

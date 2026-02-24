@@ -443,11 +443,11 @@ class ThemeCompiler
             $css .= "  color: var(--variant-paragraph-color, inherit);\n";
             $css .= "}\n";
 
-            $css .= ".block-variant-{$variantName} a {\n";
+            $css .= ".block-variant-{$variantName} a:not([class*=\"btn-\"]) {\n";
             $css .= "  color: var(--variant-link-color, inherit);\n";
             $css .= "}\n";
 
-            $css .= ".block-variant-{$variantName} a:hover {\n";
+            $css .= ".block-variant-{$variantName} a:not([class*=\"btn-\"]):hover {\n";
             $css .= "  color: var(--variant-link-hover, var(--variant-link-color, inherit));\n";
             $css .= "}\n";
 
@@ -471,6 +471,7 @@ class ThemeCompiler
                 $css .= "  background-color: var(--variant-paragraph-bg);\n";
                 $css .= "  padding: 1rem 1.5rem;\n";
                 $css .= "  margin-block: 1rem;\n";
+                $css .= "  overflow: hidden;\n";
                 $css .= "}\n";
                 // Hide the dark overlay on background images when paragraph has its own bg
                 $css .= ".block-variant-{$variantName} .block-bg-overlay {\n";

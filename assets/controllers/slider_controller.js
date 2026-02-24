@@ -17,6 +17,9 @@ import { Controller } from '@hotwired/stimulus';
  *   - parallax (Boolean): When true, visible slide images translate
  *     vertically on scroll for a parallax scrolling effect. Requires
  *     images with the .parallax-slide-img class (taller than container).
+ *   - equalHeight (Boolean): When true, uses visibility instead of display
+ *     to hide inactive slides. Combined with a CSS grid stack, this keeps
+ *     the container height equal to the tallest slide (no layout jumps).
  *
  * Targets:
  *   - track: The scrollable container or slide wrapper
@@ -31,6 +34,7 @@ export default class extends Controller {
         mode: { type: String, default: 'scroll' },
         fullbleed: { type: Boolean, default: false },
         parallax: { type: Boolean, default: false },
+        equalHeight: { type: Boolean, default: false },
     };
 
     /** @type {number} Current slide index (carousel mode) */
@@ -115,12 +119,20 @@ export default class extends Controller {
 
     /**
      * Show the current slide and hide all others (carousel mode).
+     * When equalHeight is enabled, uses visibility instead of display
+     * so the container keeps the height of the tallest slide.
      *
      * @private
      */
     _showSlide() {
+        const useVisibility = this.equalHeightValue;
         this.slideTargets.forEach((slide, idx) => {
-            slide.classList.toggle('hidden', idx !== this.currentSlide);
+            if (useVisibility) {
+                slide.classList.toggle('invisible', idx !== this.currentSlide);
+                slide.classList.toggle('pointer-events-none', idx !== this.currentSlide);
+            } else {
+                slide.classList.toggle('hidden', idx !== this.currentSlide);
+            }
         });
 
         this._updateDots();
@@ -130,6 +142,8 @@ export default class extends Controller {
 
     /**
      * Update dot indicator states.
+     * Detects whether dots use white bg classes (gallery overlay) or
+     * custom colors (testimonials, etc.) and adapts accordingly.
      *
      * @private
      */
@@ -137,13 +151,15 @@ export default class extends Controller {
         if (!this.hasDotsTarget) return;
 
         const dots = this.dotsTarget.querySelectorAll('button');
+        const firstDot = dots[0];
+        const useLegacy = firstDot && (firstDot.classList.contains('bg-white') || firstDot.classList.contains('bg-white/50'));
+
         dots.forEach((dot, idx) => {
-            if (idx === this.currentSlide) {
-                dot.classList.remove('bg-white/50');
-                dot.classList.add('bg-white');
+            if (useLegacy) {
+                dot.classList.toggle('bg-white', idx === this.currentSlide);
+                dot.classList.toggle('bg-white/50', idx !== this.currentSlide);
             } else {
-                dot.classList.remove('bg-white');
-                dot.classList.add('bg-white/50');
+                dot.style.opacity = idx === this.currentSlide ? '1' : '0.3';
             }
         });
     }

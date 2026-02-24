@@ -22,6 +22,27 @@
 {% set radiusClass = (lateralMode == 'exterior' and blockRadius|default('') is not empty) ? 'sm:' ~ blockRadius : '' %}
 {% set bgAttr = (showBackground|default(true)) ? 'data-has-bg="true"' : '' %}
 
+{# Detect effective block padding per axis (same logic as text_images) #}
+{% set hasTopPad = paddingTop is defined and paddingTop is not empty and paddingTop != 'pt-0' %}
+{% set hasBotPad = paddingBottom is defined and paddingBottom is not empty and paddingBottom != 'pb-0' %}
+{% set hasLatPad = false %}
+{% if paddingLateral is defined and paddingLateral is not empty and paddingLateral != 'px-0' %}
+    {% set hasLatPad = true %}
+{% elseif (paddingLeft is defined and paddingLeft is not empty and paddingLeft != 'pl-0') or (paddingRight is defined and paddingRight is not empty and paddingRight != 'pr-0') %}
+    {% set hasLatPad = true %}
+{% endif %}
+
+{# Compute conditional paragraph radius: only when lateral space exists (edges don't touch viewport) #}
+{% set rawParagraphRadius = paragraphImageRadius|default('') %}
+{% set resolvedParagraphRadius = '' %}
+{% if rawParagraphRadius %}
+    {% if hasLatPad %}
+        {% set resolvedParagraphRadius = rawParagraphRadius %}
+    {% elseif lateralMode == 'interior' %}
+        {% set resolvedParagraphRadius = 'sm:' ~ rawParagraphRadius %}
+    {% endif %}
+{% endif %}
+
 <section
     class="block {{ variantClass }} {{ sectionContainerClass }} {{ mtClass }} {{ mbClass }} {{ ptClass }} {{ pbClass }} {{ plClass }} {{ prClass }} {{ radiusClass }} {% if radiusClass %}sm:overflow-hidden{% endif %}"
     {{ bgAttr|raw }}

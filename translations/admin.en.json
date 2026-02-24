@@ -175,8 +175,6 @@
     "iw_sulu_theme.style.split": "Split",
     "iw_sulu_theme.style.default": "Default",
     "iw_sulu_theme.style.banner": "Banner",
-    "iw_sulu_theme.style.floating": "Floating",
-    "iw_sulu_theme.style.single": "Single",
     "iw_sulu_theme.style.line": "Line",
     "iw_sulu_theme.style.spacer": "Spacer",
     "iw_sulu_theme.style.divider": "Divider",
@@ -256,10 +254,10 @@
     "iw_sulu_theme.form_id": "Form ID",
     "iw_sulu_theme.documents": "Documents",
 
-    "iw_sulu_theme.primary_button_label": "Primary button — Label",
-    "iw_sulu_theme.primary_button_url": "Primary button — URL",
-    "iw_sulu_theme.secondary_button_label": "Secondary button — Label",
-    "iw_sulu_theme.secondary_button_url": "Secondary button — URL",
+    "iw_sulu_theme.primary_button_link": "Primary button",
+    "iw_sulu_theme.primary_button_style": "Primary button style",
+    "iw_sulu_theme.secondary_button_link": "Secondary button",
+    "iw_sulu_theme.secondary_button_style": "Secondary button style",
 
     "iw_sulu_theme.testimonials": "Testimonials",
     "iw_sulu_theme.testimonial_item": "Testimonial",
@@ -279,11 +277,16 @@
     "iw_sulu_theme.line_solid": "Solid",
     "iw_sulu_theme.line_dashed": "Dashed",
     "iw_sulu_theme.line_dotted": "Dotted",
-    "iw_sulu_theme.line_none": "None",
     "iw_sulu_theme.line_width": "Line width",
     "iw_sulu_theme.line_thin": "Thin",
     "iw_sulu_theme.line_medium": "Medium",
     "iw_sulu_theme.line_thick": "Thick",
     "iw_sulu_theme.center_text": "Center text",
-    "iw_sulu_theme.center_icon": "Center icon"
+    "iw_sulu_theme.center_icon": "Center icon",
+    "iw_sulu_theme.center_icon_info": "Only used when center text is empty.",
+    "iw_sulu_theme.icon_size": "Icon size",
+    "iw_sulu_theme.icon_size_sm": "Small",
+    "iw_sulu_theme.icon_size_md": "Medium",
+    "iw_sulu_theme.icon_size_lg": "Large",
+    "iw_sulu_theme.icon_size_xl": "Extra large"
 }

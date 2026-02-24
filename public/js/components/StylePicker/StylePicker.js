@@ -400,7 +400,7 @@ const WIREFRAME_RENDERERS = {
     ),
 
     // ── cta styles ───────────────────────────────────────────────
-    banner: (fill, accent) => (
+    cta_banner: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
             <rect x="0" y="0" width="120" height="80" rx="0" fill={accent} opacity="0.2" />
             <rect x="25" y="15" width="70" height="8" rx="2" fill={accent} />
@@ -409,26 +409,34 @@ const WIREFRAME_RENDERERS = {
             <rect x="38" y="52" width="44" height="12" rx="5" fill={accent} />
         </svg>
     ),
-    floating: (fill, accent) => (
+    cta_centered: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
-            <rect x="15" y="8" width="90" height="64" rx="8" fill={accent} opacity="0.15" />
-            <rect x="20" y="12" width="80" height="56" rx="6" fill="#fff" stroke={accent} strokeWidth="1" opacity="0.5" />
-            <rect x="35" y="22" width="50" height="6" rx="2" fill={accent} />
-            <rect x="30" y="34" width="60" height="3" rx="2" fill={fill} />
-            <rect x="35" y="41" width="50" height="3" rx="2" fill={fill} />
-            <rect x="40" y="52" width="40" height="10" rx="4" fill={accent} />
+            {/* Title */}
+            <rect x="25" y="10" width="70" height="7" rx="2" fill={accent} />
+            {/* Subtitle */}
+            <rect x="32" y="22" width="56" height="4" rx="2" fill={fill} opacity="0.5" />
+            {/* Text lines */}
+            <rect x="15" y="33" width="90" height="3" rx="2" fill={fill} />
+            <rect x="20" y="40" width="80" height="3" rx="2" fill={fill} />
+            <rect x="25" y="47" width="70" height="3" rx="2" fill={fill} />
+            {/* CTA button */}
+            <rect x="38" y="58" width="44" height="12" rx="5" fill={accent} />
         </svg>
     ),
-
-    // ── testimonial styles ───────────────────────────────────────
-    single: (fill, accent) => (
+    cta_split: (fill, accent) => (
         <svg viewBox="0 0 120 80" width="120" height="80">
-            <text x="20" y="20" fontSize="24" fill={accent} opacity="0.3">"</text>
-            <rect x="25" y="25" width="70" height="5" rx="2" fill={fill} />
-            <rect x="30" y="34" width="60" height="5" rx="2" fill={fill} />
-            <rect x="35" y="43" width="50" height="5" rx="2" fill={fill} />
-            <circle cx="60" cy="62" r="7" fill={fill} opacity="0.3" />
-            <rect x="45" y="72" width="30" height="3" rx="2" fill={accent} />
+            {/* Image placeholder */}
+            <rect x="5" y="5" width="52" height="70" rx="3" fill={accent} opacity="0.15" />
+            <rect x="22" y="30" width="18" height="14" rx="2" fill={accent} opacity="0.3" />
+            <polygon points="31,28 24,38 38,38" fill={accent} opacity="0.2" />
+            {/* Title */}
+            <rect x="63" y="12" width="50" height="6" rx="2" fill={accent} />
+            {/* Text lines */}
+            <rect x="63" y="24" width="50" height="3" rx="2" fill={fill} />
+            <rect x="63" y="31" width="45" height="3" rx="2" fill={fill} />
+            <rect x="63" y="38" width="48" height="3" rx="2" fill={fill} />
+            {/* CTA button */}
+            <rect x="63" y="50" width="36" height="10" rx="4" fill={accent} />
         </svg>
     ),
 

@@ -11,13 +11,20 @@
         {% set bgImageUrl = resolvedImage.thumbnails['iw_theme_16_9']|default(resolvedImage.url) %}
     {% endif %}
 
-    <div class="relative py-16 md:py-20 lg:py-24 {{ bgImageUrl is empty ? 'bg-[var(--color-primary)]' : '' }}">
+    {# Convert padding class numbers to rem values for negative margins (fullbleed) #}
+    {% set spacingMap = {'0': '0px', '1': '0.25rem', '2': '0.5rem', '3': '0.75rem', '4': '1rem', '5': '1.25rem', '6': '1.5rem', '7': '1.75rem', '8': '2rem', '9': '2.25rem', '10': '2.5rem', '11': '2.75rem', '12': '3rem', '14': '3.5rem', '16': '4rem', '20': '5rem', '24': '6rem'} %}
+    {% set ptNum = ptClass|default('pt-0')|split('-')|last %}
+    {% set pbNum = pbClass|default('pb-0')|split('-')|last %}
+
+    {# Fullbleed wrapper: breaks out of section padding + container to fill the entire section #}
+    <div class="relative overflow-hidden {{ resolvedParagraphRadius|default('') }} {{ bgImageUrl is empty ? 'bg-[var(--color-primary)]' : '' }}"
+         style="margin-top: -{{ spacingMap[ptNum]|default('0px') }}; margin-bottom: -{{ spacingMap[pbNum]|default('0px') }}; margin-inline: calc(-50vw + 50%); width: 100vw;">
         {% if bgImageUrl is not empty %}
             <img src="{{ bgImageUrl }}" alt="" loading="lazy" class="absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-black/50"></div>
         {% endif %}
 
-        <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 text-center text-white">
+        <div class="relative z-10 container mx-auto {{ ptClass }} {{ pbClass }} {{ plClass }} {{ prClass }} text-white">
             {% if title is defined and title is not empty %}
                 <h2 class="block-title text-3xl md:text-4xl lg:text-5xl font-[var(--font-h2-weight)] text-white {{ titleAlignClass }}">{{ title }}</h2>
             {% endif %}
@@ -25,16 +32,18 @@
                 <h3 class="block-subtitle text-lg md:text-xl mt-3 text-white/80 {{ titleAlignClass }}">{{ subTitle }}</h3>
             {% endif %}
             {% if text is defined and text is not empty %}
-                <div class="block-text prose prose-invert max-w-2xl mx-auto mt-6">
+                <div class="block-text prose prose-invert max-w-none mt-6 {{ resolvedParagraphRadius|default('') }}">
                     {{ text|raw }}
                 </div>
             {% endif %}
 
             {% include '@ItechWorldSuluTheme/blocks/common/_cta_buttons.html.twig' with {
-                primaryButtonLabel: primaryButtonLabel|default(''),
-                primaryButtonUrl: primaryButtonUrl|default(''),
-                secondaryButtonLabel: secondaryButtonLabel|default(''),
-                secondaryButtonUrl: secondaryButtonUrl|default('')
+                primaryButtonLink: primaryButtonLink|default(''),
+                primaryButtonView: view.blocks[_key].primaryButtonLink|default({}),
+                primaryButtonStyle: primaryButtonStyle|default('primary'),
+                secondaryButtonLink: secondaryButtonLink|default(''),
+                secondaryButtonView: view.blocks[_key].secondaryButtonLink|default({}),
+                secondaryButtonStyle: secondaryButtonStyle|default('secondary')
             } only %}
         </div>
     </div>

@@ -107,12 +107,10 @@ class ThemeAdmin extends Admin
             ['key' => 'banner', 'label' => 'iw_sulu_theme.style.banner'],
             ['key' => 'centered', 'label' => 'iw_sulu_theme.style.centered'],
             ['key' => 'split', 'label' => 'iw_sulu_theme.style.split'],
-            ['key' => 'floating', 'label' => 'iw_sulu_theme.style.floating'],
         ],
         'testimonial' => [
             ['key' => 'cards', 'label' => 'iw_sulu_theme.style.cards'],
             ['key' => 'slider', 'label' => 'iw_sulu_theme.style.slider'],
-            ['key' => 'single', 'label' => 'iw_sulu_theme.style.single'],
             ['key' => 'minimal', 'label' => 'iw_sulu_theme.style.minimal'],
         ],
         'separator' => [

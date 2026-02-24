@@ -7,20 +7,32 @@
         'medium': 'border-t-2',
         'thick': 'border-t-4'
     } %}
-    {% set borderClass = widthMap[lineWidth|default('thin')]|default('border-t') %}
+    {% set styleMap = {
+        'solid': 'border-solid',
+        'dashed': 'border-dashed',
+        'dotted': 'border-dotted'
+    } %}
+    {% set iconSizeMap = {
+        'sm': 'w-6 h-6',
+        'md': 'w-10 h-10',
+        'lg': 'w-16 h-16',
+        'xl': 'w-24 h-24'
+    } %}
+    {% set borderClass = widthMap[lineWidth|default('thin')]|default('border-t') ~ ' ' ~ styleMap[lineStyle|default('solid')]|default('border-solid') %}
+    {% set iconClass = iconSizeMap[iconSize|default('md')]|default('w-10 h-10') %}
 
     <div class="flex items-center gap-4">
-        <div class="flex-1 {{ borderClass }} border-current opacity-20"></div>
+        <div class="flex-1 {{ borderClass }} border-[var(--variant-hr-color,var(--color-border,currentColor))]"></div>
 
         {% if text is defined and text is not empty %}
-            <span class="text-sm font-medium opacity-60 px-2">{{ text }}</span>
+            <span class="text-sm font-medium opacity-60 shrink-0">{{ text }}</span>
         {% elseif icon is defined and icon.id is defined %}
             {% set iconMedia = sulu_resolve_media(icon.id, app.request.locale) %}
-            <img src="{{ iconMedia.url }}" alt="" class="w-6 h-6 opacity-60" loading="lazy">
+            <img src="{{ iconMedia.thumbnails['iw_theme_avatar']|default(iconMedia.url) }}" alt="" class="{{ iconClass }} object-contain opacity-60 shrink-0" loading="lazy">
         {% else %}
             <span class="text-[var(--color-primary)] opacity-40">&#9670;</span>
         {% endif %}
 
-        <div class="flex-1 {{ borderClass }} border-current opacity-20"></div>
+        <div class="flex-1 {{ borderClass }} border-[var(--variant-hr-color,var(--color-border,currentColor))]"></div>
     </div>
 {% endblock %}

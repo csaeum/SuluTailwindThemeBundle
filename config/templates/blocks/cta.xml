@@ -34,28 +34,36 @@
                 <property name="text" type="text_editor">
                     <meta><title>iw_sulu_theme.text</title></meta>
                 </property>
-                <property name="primaryButtonLabel" type="text_line">
-                    <meta><title>iw_sulu_theme.primary_button_label</title></meta>
+                <property name="primaryButtonLink" type="link">
+                    <meta><title>iw_sulu_theme.primary_button_link</title></meta>
+                    <params>
+                        <param name="enable_attributes" value="true"/>
+                    </params>
                 </property>
-                <property name="primaryButtonUrl" type="text_line">
-                    <meta><title>iw_sulu_theme.primary_button_url</title></meta>
+                <property name="primaryButtonStyle" type="iw_theme_button_style_picker">
+                    <meta><title>iw_sulu_theme.primary_button_style</title></meta>
                 </property>
-                <property name="secondaryButtonLabel" type="text_line">
-                    <meta><title>iw_sulu_theme.secondary_button_label</title></meta>
+                <property name="secondaryButtonLink" type="link">
+                    <meta><title>iw_sulu_theme.secondary_button_link</title></meta>
+                    <params>
+                        <param name="enable_attributes" value="true"/>
+                    </params>
                 </property>
-                <property name="secondaryButtonUrl" type="text_line">
-                    <meta><title>iw_sulu_theme.secondary_button_url</title></meta>
+                <property name="secondaryButtonStyle" type="iw_theme_button_style_picker">
+                    <meta><title>iw_sulu_theme.secondary_button_style</title></meta>
                 </property>
-                <property name="image" type="single_media_selection">
+                <property name="image" type="single_media_selection"
+                          visibleCondition="__parent.style == 'split'">
                     <meta><title>iw_sulu_theme.image</title></meta>
                 </property>
-                <property name="imagePosition" type="single_select">
-                    <meta><title>iw_sulu_theme.image_position</title></meta>
+                <property name="contentRight" type="checkbox"
+                          visibleCondition="__parent.style == 'split'">
                     <params>
-                        <param name="default_value" type="string" value="right"/>
-                        <param name="values" type="collection">
-                            <param name="left"><meta><title>iw_sulu_theme.position_left</title></meta></param>
-                            <param name="right"><meta><title>iw_sulu_theme.position_right</title></meta></param>
+                        <param name="type" value="toggler"/>
+                        <param name="label">
+                            <meta>
+                                <title>iw_sulu_theme.content_position_right</title>
+                            </meta>
                         </param>
                     </params>
                 </property>

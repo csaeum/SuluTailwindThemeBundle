@@ -10,10 +10,10 @@
     } only %}
 
     {% if testimonials is defined and testimonials is iterable %}
-        <div class="max-w-3xl mx-auto divide-y divide-[var(--color-border,#e5e7eb)]">
+        <div class="divide-y divide-[var(--variant-hr-color,var(--color-border,#e5e7eb))]">
             {% for item in testimonials %}
                 {% if item.type|default('testimonial') == 'testimonial' %}
-                    <div class="py-6 {{ loop.first ? 'pt-0' : '' }}">
+                    <div class="py-6 {{ paragraphImageRadius|default('') }} {{ loop.first ? 'pt-0' : '' }}">
                         {% if item.quote is defined and item.quote is not empty %}
                             <p class="italic text-lg leading-relaxed">"{{ item.quote }}"</p>
                         {% endif %}
