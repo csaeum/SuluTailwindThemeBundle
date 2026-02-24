@@ -34,54 +34,81 @@
                             <meta>
                                 <title>iw_sulu_theme.variant_title_color</title>
                             </meta>
+                            <params>
+                                <param name="show_palette" type="string" value="true"/>
+                            </params>
                         </property>
 
                         <property name="subtitle" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_subtitle_color</title>
                             </meta>
+                            <params>
+                                <param name="show_palette" type="string" value="true"/>
+                            </params>
                         </property>
 
                         <property name="paragraph" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_paragraph_color</title>
                             </meta>
+                            <params>
+                                <param name="show_palette" type="string" value="true"/>
+                            </params>
                         </property>
 
                         <property name="link" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_link_color</title>
                             </meta>
+                            <params>
+                                <param name="show_palette" type="string" value="true"/>
+                            </params>
                         </property>
 
                         <property name="linkHover" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_link_hover_color</title>
                             </meta>
+                            <params>
+                                <param name="show_palette" type="string" value="true"/>
+                            </params>
                         </property>
 
                         <property name="list" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_list_color</title>
                             </meta>
+                            <params>
+                                <param name="show_palette" type="string" value="true"/>
+                            </params>
                         </property>
 
                         <property name="hr" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_hr_color</title>
                             </meta>
+                            <params>
+                                <param name="show_palette" type="string" value="true"/>
+                            </params>
                         </property>
 
                         <property name="paragraphBg" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_paragraphBg</title>
                             </meta>
+                            <params>
+                                <param name="show_palette" type="string" value="true"/>
+                            </params>
                         </property>
 
                         <property name="blockBg" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
                                 <title>iw_sulu_theme.variant_blockBg</title>
                             </meta>
+                            <params>
+                                <param name="show_palette" type="string" value="true"/>
+                            </params>
                         </property>
 
                         <property name="buttonStyle" type="iw_theme_button_style_picker" colspan="12">

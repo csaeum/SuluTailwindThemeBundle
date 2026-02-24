@@ -51,6 +51,7 @@ class ThemeFixtures
                 'colors' => [
                     'primary' => '#1a56db',
                     'secondary' => '#475569',
+                    'accent' => '#F59E0B',
                     'background' => '#ffffff',
                     'text' => '#1e293b',
                     'link' => '#1a56db',
@@ -215,6 +216,7 @@ class ThemeFixtures
                 'colors' => [
                     'primary' => '#ec4899',
                     'secondary' => '#f59e0b',
+                    'accent' => '#EC4899',
                     'background' => '#fffbeb',
                     'text' => '#1f2937',
                     'link' => '#ec4899',
@@ -379,6 +381,7 @@ class ThemeFixtures
                 'colors' => [
                     'primary' => '#000000',
                     'secondary' => '#6b7280',
+                    'accent' => '#6366F1',
                     'background' => '#ffffff',
                     'text' => '#111111',
                     'link' => '#000000',
@@ -543,6 +546,7 @@ class ThemeFixtures
                 'colors' => [
                     'primary' => '#065f46',
                     'secondary' => '#d97706',
+                    'accent' => '#F97316',
                     'background' => '#fefdf8',
                     'text' => '#1a2e1a',
                     'link' => '#065f46',

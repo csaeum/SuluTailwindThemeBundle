@@ -6,6 +6,7 @@ namespace ItechWorld\SuluThemeBundle\Admin;
 
 use ItechWorld\SuluThemeBundle\Entity\ThemeConfig;
 use ItechWorld\SuluThemeBundle\Repository\ThemeConfigRepository;
+use ItechWorld\SuluThemeBundle\Service\OklchPaletteGenerator;
 use Sulu\Bundle\AdminBundle\Admin\Admin;
 use Sulu\Bundle\AdminBundle\Admin\Navigation\NavigationItem;
 use Sulu\Bundle\AdminBundle\Admin\Navigation\NavigationItemCollection;
@@ -124,11 +125,13 @@ class ThemeAdmin extends Admin
      * @param ViewBuilderFactoryInterface $viewBuilderFactory The Sulu view builder factory
      * @param SecurityCheckerInterface    $securityChecker    The Sulu security checker
      * @param ThemeConfigRepository       $repository         The theme config repository
+     * @param OklchPaletteGenerator       $paletteGenerator   The OKLCH palette generator
      */
     public function __construct(
         private ViewBuilderFactoryInterface $viewBuilderFactory,
         private SecurityCheckerInterface $securityChecker,
         private ThemeConfigRepository $repository,
+        private OklchPaletteGenerator $paletteGenerator,
     ) {
     }
 
@@ -355,8 +358,20 @@ class ThemeAdmin extends Admin
         }
 
         $buttons = [];
+        $palette = [];
         if (null !== $activeTheme) {
-            $buttons = $activeTheme->getTokens()['buttons'] ?? [];
+            $tokens = $activeTheme->getTokens();
+            $buttons = $tokens['buttons'] ?? [];
+
+            // Generate OKLCH palettes for the 4 main colors
+            $paletteColors = ['primary', 'secondary', 'accent', 'background'];
+            $colors = $tokens['colors'] ?? [];
+            foreach ($paletteColors as $colorName) {
+                $hex = $colors[$colorName] ?? null;
+                if (is_string($hex) && $hex !== '') {
+                    $palette[$colorName] = $this->paletteGenerator->generatePalette($hex);
+                }
+            }
         }
 
         return [
@@ -364,6 +379,7 @@ class ThemeAdmin extends Admin
             'buttons' => $buttons,
             'blockStyles' => self::BLOCK_STYLE_OPTIONS,
             'collapsibleSections' => self::COLLAPSIBLE_SECTIONS,
+            'palette' => $palette,
         ];
     }
 }

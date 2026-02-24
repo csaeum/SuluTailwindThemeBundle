@@ -37,6 +37,7 @@ class ThemeCompiler
     public function __construct(
         private readonly string $cssOutputDir,
         private readonly GoogleFontsResolver $googleFontsResolver,
+        private readonly OklchPaletteGenerator $paletteGenerator,
     ) {
     }
 
@@ -163,6 +164,7 @@ class ThemeCompiler
         // :root CSS custom properties
         $css .= ":root {\n";
         $css .= $this->generateColorVariables($tokens['colors'] ?? []);
+        $css .= $this->generatePaletteVariables($tokens['colors'] ?? []);
         $css .= $this->generateTypographyVariables($typography);
         $css .= $this->generateBorderVariables($tokens['borders'] ?? []);
         $css .= $this->generateButtonVariables($tokens['buttons'] ?? []);
@@ -197,6 +199,44 @@ class ThemeCompiler
             } else {
                 $css .= "  --color-{$key}: {$value};\n";
             }
+        }
+
+        return $css . "\n";
+    }
+
+    /**
+     * Generate CSS custom properties for OKLCH color palettes.
+     *
+     * For each of the 4 main colors (primary, secondary, accent, background),
+     * generates 11 shades (50→950) as CSS custom properties using the OKLCH
+     * color space for perceptually uniform results.
+     *
+     * @param array<string, mixed> $colors Color token values
+     *
+     * @return string CSS variable declarations (e.g. --color-primary-50: #eff6ff;)
+     */
+    private function generatePaletteVariables(array $colors): string
+    {
+        $paletteColors = ['primary', 'secondary', 'accent', 'background'];
+        $css = "  /* Color palettes (OKLCH) */\n";
+        $hasAny = false;
+
+        foreach ($paletteColors as $colorName) {
+            $hex = $colors[$colorName] ?? null;
+            if (!is_string($hex) || $hex === '') {
+                continue;
+            }
+
+            $hasAny = true;
+            $palette = $this->paletteGenerator->generatePalette($hex);
+
+            foreach ($palette as $shade => $shadeHex) {
+                $css .= "  --color-{$colorName}-{$shade}: {$shadeHex};\n";
+            }
+        }
+
+        if (!$hasAny) {
+            return '';
         }
 
         return $css . "\n";

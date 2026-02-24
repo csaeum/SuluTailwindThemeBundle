@@ -17,6 +17,7 @@
     "iw_sulu_theme.colors_background": "Couleur de fond",
     "iw_sulu_theme.colors_text": "Couleur du texte",
     "iw_sulu_theme.colors_link": "Couleur des liens",
+    "iw_sulu_theme.colors_accent": "Accent",
     "iw_sulu_theme.colors_linkHover": "Couleur des liens au survol",
 
     "iw_sulu_theme.typography": "Typographie",
@@ -288,5 +289,8 @@
     "iw_sulu_theme.icon_size_sm": "Petite",
     "iw_sulu_theme.icon_size_md": "Moyenne",
     "iw_sulu_theme.icon_size_lg": "Grande",
-    "iw_sulu_theme.icon_size_xl": "Très grande"
+    "iw_sulu_theme.icon_size_xl": "Très grande",
+
+    "iw_sulu_theme.palette_tab": "Palette",
+    "iw_sulu_theme.custom_tab": "Personnalisé"
 }

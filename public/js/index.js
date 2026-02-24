@@ -24,6 +24,7 @@ initializer.addUpdateConfigHook('iw_sulu_theme', (config: Object, initialized: b
         VariantPicker.themeVariants = config.variants || [];
         StylePicker.blockStyles = config.blockStyles || {};
         ButtonStylePicker.themeButtons = config.buttons || {};
+        ColorTokenEditor.themePalette = config.palette || {};
         collapsibleSections.init(config.collapsibleSections || {});
     }
 
