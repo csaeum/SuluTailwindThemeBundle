@@ -609,6 +609,12 @@ class ThemeCompiler
                 $css .= "  margin-block: 1rem;\n";
                 $css .= "  overflow: hidden;\n";
                 $css .= "}\n";
+                // Remove bottom margin when block-text is the last child
+                // to prevent it from stacking with the section's padding-bottom
+                // or overflowing when pb is 0.
+                $css .= ".block-variant-{$index} .block-text:last-child {\n";
+                $css .= "  margin-bottom: 0;\n";
+                $css .= "}\n";
                 // Hide the dark overlay on background images when paragraph has its own bg
                 $css .= ".block-variant-{$index} .block-bg-overlay {\n";
                 $css .= "  display: none;\n";
