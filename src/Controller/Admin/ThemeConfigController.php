@@ -198,21 +198,20 @@ class ThemeConfigController extends AbstractController implements SecuredControl
 
         $this->mapDataToEntity($data, $theme);
 
-        // Handle activation: deactivate all others first.
+        // Handle activation: check AFTER mapDataToEntity so we detect
+        // when a theme is being activated (not just already active).
         // deactivateAll() uses DQL which bypasses the UnitOfWork, so Doctrine
         // still thinks the entity has isActive=true (original loaded value).
         // We must refresh() the entity so Doctrine sees the DB state (is_active=0),
         // then re-apply our changes so the UPDATE includes is_active=1.
-        $wasActive = $theme->isActive();
-        $this->entityManager->flush();
-
-        if ($wasActive) {
+        if ($theme->isActive()) {
             $this->repository->deactivateAll();
             $this->entityManager->refresh($theme);
             $this->mapDataToEntity($data, $theme);
             $theme->setIsActive(true);
-            $this->entityManager->flush();
         }
+
+        $this->entityManager->flush();
 
         if ($theme->isActive()) {
             $this->compiler->compile($theme);
@@ -367,7 +366,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         // Typography assignments (depth 2): tokens.typography.assignments.h1.family → typography_assignments_h1_family
         $this->flattenDepth2($data, self::PREFIX_TYPO_ASSIGNMENTS, $tokens['typography']['assignments'] ?? []);
 
-        // BlockVariants as Sulu block array (associative → indexed with 'key' field)
+        // BlockVariants as Sulu block array (indexed array with 'type' field)
         $data['blockVariants'] = $this->serializeBlockVariants($tokens['blockVariants'] ?? []);
 
         // Flatten menuConfig scalars and nested colors
@@ -464,26 +463,23 @@ class ThemeConfigController extends AbstractController implements SecuredControl
     }
 
     /**
-     * Convert block variants from DB format (associative) to Sulu block format (indexed).
+     * Convert block variants from DB format (indexed array) to Sulu block format.
      *
-     * DB: {clair: {label, title, ...}, accent: {...}}
-     * Form: [{type: "variant", key: "clair", label: ..., title: ...}, ...]
+     * DB: [{label, title, ...}, {label, title, ...}]
+     * Form: [{type: "variant", label: ..., title: ...}, ...]
      *
-     * @param array<string, array<string, mixed>> $variants DB block variants
+     * @param array<int, array<string, mixed>> $variants DB block variants
      *
      * @return array<int, array<string, mixed>> Sulu block formatted variants
      */
     private function serializeBlockVariants(array $variants): array
     {
         $result = [];
-        foreach ($variants as $key => $props) {
+        foreach ($variants as $props) {
             if (!is_array($props)) {
                 continue;
             }
-            $result[] = array_merge(
-                ['type' => 'variant', 'key' => $key],
-                $props,
-            );
+            $result[] = array_merge(['type' => 'variant'], $props);
         }
 
         return $result;
@@ -633,17 +629,17 @@ class ThemeConfigController extends AbstractController implements SecuredControl
     }
 
     /**
-     * Unflatten block variant form data back into associative structure.
+     * Unflatten block variant form data back into an indexed array.
      *
-     * Form: [{type: "variant", key: "clair", label: ..., title: ...}, ...]
-     * DB: {clair: {label: ..., title: ...}, ...}
+     * Form: [{type: "variant", label: ..., title: ...}, ...]
+     * DB: [{label: ..., title: ...}, ...]
      *
-     * When the key is empty, it is auto-generated from the label (slugified).
+     * The position in the array IS the variant identifier (index 0, 1, 2...).
      *
-     * @param array<string, mixed>                     $data     Source flat data
-     * @param array<string, array<string, mixed>> $existing Existing variants
+     * @param array<string, mixed>                $data     Source flat data
+     * @param array<int, array<string, mixed>> $existing Existing variants
      *
-     * @return array<string, array<string, mixed>> Reconstructed variants
+     * @return array<int, array<string, mixed>> Reconstructed variants
      */
     private function unflattenBlockVariants(array $data, array $existing): array
     {
@@ -652,70 +648,20 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         }
 
         $result = [];
-        $usedKeys = [];
 
         foreach ($data['blockVariants'] as $blockItem) {
             if (!is_array($blockItem)) {
                 continue;
             }
 
-            $key = trim($blockItem['key'] ?? '');
-
-            // Auto-generate key from label when empty
-            if ('' === $key) {
-                $label = trim($blockItem['label'] ?? '');
-                $key = $this->generateVariantKey($label, $usedKeys);
-            }
-
             $props = $blockItem;
-            // Remove Sulu block metadata keys
-            unset($props['type'], $props['key']);
-            $result[$key] = $props;
-            $usedKeys[] = $key;
+            // Remove Sulu block metadata
+            unset($props['type']);
+            $result[] = $props;
         }
 
-        return !empty($result) ? $result : $existing;
-    }
-
-    /**
-     * Generate a CSS-safe variant key from a label.
-     *
-     * Transliterates to ASCII, lowercases, replaces non-alphanumeric with underscores,
-     * and appends a counter suffix if the key already exists.
-     *
-     * @param string        $label       The human-readable label
-     * @param array<string> $existingKeys Keys already in use
-     *
-     * @return string A unique, CSS-safe variant key
-     */
-    private function generateVariantKey(string $label, array $existingKeys): string
-    {
-        if ('' === $label) {
-            $label = 'variant';
-        }
-
-        // Transliterate accented characters to ASCII
-        $slug = transliterator_transliterate('Any-Latin; Latin-ASCII; Lower()', $label);
-        if (false === $slug || '' === $slug) {
-            $slug = $label;
-        }
-
-        $slug = (string) preg_replace('/[^a-z0-9]+/', '_', strtolower($slug));
-        $slug = trim($slug, '_');
-
-        if ('' === $slug) {
-            $slug = 'variant';
-        }
-
-        // Ensure uniqueness among current batch
-        $baseSlug = $slug;
-        $counter = 1;
-        while (\in_array($slug, $existingKeys, true)) {
-            $slug = $baseSlug . '_' . $counter;
-            ++$counter;
-        }
-
-        return $slug;
+        // Allow saving empty variants (don't fallback to existing)
+        return $result;
     }
 
     /**

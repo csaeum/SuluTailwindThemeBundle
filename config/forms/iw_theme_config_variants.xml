@@ -17,13 +17,6 @@
                         <title>iw_sulu_theme.variant</title>
                     </meta>
                     <properties>
-                        <property name="key" type="text_line" visibleCondition="false">
-                            <meta>
-                                <title>iw_sulu_theme.variant_key</title>
-                                <info_text>iw_sulu_theme.variant_key_auto_info</info_text>
-                            </meta>
-                        </property>
-
                         <property name="label" type="text_line" colspan="12" mandatory="true">
                             <meta>
                                 <title>iw_sulu_theme.variant_label</title>

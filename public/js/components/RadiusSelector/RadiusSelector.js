@@ -33,6 +33,23 @@ const RADIUS_OPTIONS = [
  * @param {Function} props.onChange - Callback when a value is selected
  */
 export default class RadiusSelector extends React.Component {
+    /**
+     * Apply default value from schemaOptions when field is empty on mount.
+     * Uses setTimeout to ensure the Sulu form is fully initialized before
+     * calling onChange, which avoids race conditions with form state setup.
+     */
+    componentDidMount() {
+        const {value, onChange, schemaOptions} = this.props;
+        if ((value === null || value === undefined || value === '') && onChange) {
+            const defaultValue = schemaOptions
+                && schemaOptions.default_value
+                && schemaOptions.default_value.value;
+            if (defaultValue) {
+                setTimeout(() => onChange(defaultValue), 0);
+            }
+        }
+    }
+
     handleSelect = (key) => {
         const {onChange} = this.props;
         if (!onChange) {

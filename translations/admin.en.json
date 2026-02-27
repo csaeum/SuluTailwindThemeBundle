@@ -69,8 +69,6 @@
     "iw_sulu_theme.variants": "Variants",
     "iw_sulu_theme.variants_info": "Define color variants for content blocks",
     "iw_sulu_theme.variant": "Variant",
-    "iw_sulu_theme.variant_key": "Key",
-    "iw_sulu_theme.variant_key_auto_info": "Auto-generated from label if left empty",
     "iw_sulu_theme.variant_label": "Label",
     "iw_sulu_theme.variant_title_color": "Title color",
     "iw_sulu_theme.variant_subtitle_color": "Subtitle color",

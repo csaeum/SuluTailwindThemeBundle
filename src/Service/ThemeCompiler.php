@@ -408,12 +408,15 @@ class ThemeCompiler
     /**
      * Generate CSS classes for block variants.
      *
-     * Each variant generates a `.block-variant-{name}` class with CSS custom
+     * Each variant generates a `.block-variant-{index}` class with CSS custom
      * properties for title, subtitle, paragraph, link, list, hr, paragraphBg
      * and blockBg colors. Templates use these properties for consistent styling.
      *
-     * @param array<string, mixed> $blockVariants Block variant definitions
-     * @param array<string, mixed> $buttons       Button variant definitions (for .btn-variant mapping)
+     * Variants are stored as an indexed array; the array position (0, 1, 2...)
+     * is the identifier, making variants interchangeable between themes.
+     *
+     * @param array<int, array<string, mixed>> $blockVariants Block variant definitions (indexed)
+     * @param array<string, mixed>             $buttons       Button variant definitions (for .btn-variant mapping)
      *
      * @return string CSS class declarations
      */
@@ -434,11 +437,11 @@ class ThemeCompiler
             'paragraphBg' => '--variant-paragraph-bg',
         ];
 
-        foreach ($blockVariants as $variantName => $props) {
+        foreach ($blockVariants as $index => $props) {
             if (!is_array($props)) {
                 continue;
             }
-            $css .= ".block-variant-{$variantName} {\n";
+            $css .= ".block-variant-{$index} {\n";
 
             foreach ($propertyMap as $tokenKey => $cssProperty) {
                 // blockBg is handled separately with the [data-has-bg] selector
@@ -456,48 +459,141 @@ class ThemeCompiler
                 $css .= "  color: {$props['title']};\n";
             }
 
+            // Subtle background for code, table headers, blockquotes
+            $blockBgHex = trim((string) ($props['blockBg'] ?? '#ffffff'));
+            $subtleBg = $this->isLightBackground($blockBgHex)
+                ? 'rgba(0,0,0,0.04)'
+                : 'rgba(255,255,255,0.07)';
+            $css .= "  --variant-subtle-bg: {$subtleBg};\n";
+
             $css .= "}\n";
 
             // Block background only visible when showBackground is checked (data-has-bg)
             if (!empty($props['blockBg'])) {
-                $css .= ".block-variant-{$variantName}[data-has-bg=\"true\"] {\n";
+                $css .= ".block-variant-{$index}[data-has-bg=\"true\"] {\n";
                 $css .= "  background-color: {$props['blockBg']};\n";
                 $css .= "}\n";
             }
 
             // Child element selectors using custom properties
-            $css .= ".block-variant-{$variantName} h1,\n";
-            $css .= ".block-variant-{$variantName} h2,\n";
-            $css .= ".block-variant-{$variantName} h3,\n";
-            $css .= ".block-variant-{$variantName} h4,\n";
-            $css .= ".block-variant-{$variantName} h5,\n";
-            $css .= ".block-variant-{$variantName} h6 {\n";
+            $css .= ".block-variant-{$index} h1,\n";
+            $css .= ".block-variant-{$index} h2,\n";
+            $css .= ".block-variant-{$index} h3,\n";
+            $css .= ".block-variant-{$index} h4,\n";
+            $css .= ".block-variant-{$index} h5,\n";
+            $css .= ".block-variant-{$index} h6 {\n";
             $css .= "  color: var(--variant-title-color, inherit);\n";
             $css .= "}\n";
 
-            $css .= ".block-variant-{$variantName} .block-subtitle {\n";
+            $css .= ".block-variant-{$index} .block-subtitle {\n";
             $css .= "  color: var(--variant-subtitle-color, inherit);\n";
             $css .= "}\n";
 
-            $css .= ".block-variant-{$variantName} p {\n";
+            $css .= ".block-variant-{$index} p {\n";
             $css .= "  color: var(--variant-paragraph-color, inherit);\n";
             $css .= "}\n";
 
-            $css .= ".block-variant-{$variantName} a:not([class*=\"btn-\"]) {\n";
+            $css .= ".block-variant-{$index} a:not([class*=\"btn-\"]) {\n";
             $css .= "  color: var(--variant-link-color, inherit);\n";
             $css .= "}\n";
 
-            $css .= ".block-variant-{$variantName} a:not([class*=\"btn-\"]):hover {\n";
+            $css .= ".block-variant-{$index} a:not([class*=\"btn-\"]):hover {\n";
             $css .= "  color: var(--variant-link-hover, var(--variant-link-color, inherit));\n";
             $css .= "}\n";
 
-            $css .= ".block-variant-{$variantName} ul,\n";
-            $css .= ".block-variant-{$variantName} ol {\n";
+            $css .= ".block-variant-{$index} ul,\n";
+            $css .= ".block-variant-{$index} ol {\n";
             $css .= "  color: var(--variant-list-color, inherit);\n";
             $css .= "}\n";
 
-            $css .= $this->generateSeparatorCss($variantName, $props);
-            $css .= $this->generateVariantButtonCss($variantName, $props, $buttons);
+            // List bottom margin inside block-text
+            $css .= ".block-variant-{$index} .block-text ul,\n";
+            $css .= ".block-variant-{$index} .block-text ol {\n";
+            $css .= "  margin-bottom: 1em;\n";
+            $css .= "}\n";
+
+            // Table styling (CKEditor wraps in <figure class="table">)
+            $css .= ".block-variant-{$index} figure.table {\n";
+            $css .= "  margin: 1rem 0;\n";
+            $css .= "  overflow-x: auto;\n";
+            $css .= "}\n";
+
+            $css .= ".block-variant-{$index} table {\n";
+            $css .= "  width: 100%;\n";
+            $css .= "  border-collapse: collapse;\n";
+            $css .= "  color: var(--variant-paragraph-color, inherit);\n";
+            $css .= "}\n";
+
+            $css .= ".block-variant-{$index} table th,\n";
+            $css .= ".block-variant-{$index} table td {\n";
+            $css .= "  padding: 0.75rem 1rem;\n";
+            $css .= "  border: 1px solid var(--variant-hr-color, #e5e7eb);\n";
+            $css .= "  text-align: left;\n";
+            $css .= "}\n";
+
+            $css .= ".block-variant-{$index} table th {\n";
+            $css .= "  font-weight: 600;\n";
+            $css .= "  color: var(--variant-title-color, inherit);\n";
+            $css .= "  background-color: var(--variant-subtle-bg);\n";
+            $css .= "}\n";
+
+            // Inline code (<code> not inside <pre>)
+            $css .= ".block-variant-{$index} :not(pre) > code {\n";
+            $css .= "  background-color: var(--variant-subtle-bg);\n";
+            $css .= "  padding: 0.15em 0.4em;\n";
+            $css .= "  border-radius: 4px;\n";
+            $css .= "  font-size: 0.875em;\n";
+            $css .= "  border: 1px solid var(--variant-hr-color, #e5e7eb);\n";
+            $css .= "}\n";
+
+            // Code blocks (<pre><code>)
+            $css .= ".block-variant-{$index} pre {\n";
+            $css .= "  background-color: var(--variant-subtle-bg);\n";
+            $css .= "  padding: 1rem 1.25rem;\n";
+            $css .= "  border-radius: var(--border-radius, 8px);\n";
+            $css .= "  overflow-x: auto;\n";
+            $css .= "  margin: 1rem 0;\n";
+            $css .= "  border: 1px solid var(--variant-hr-color, #e5e7eb);\n";
+            $css .= "}\n";
+
+            $css .= ".block-variant-{$index} pre code {\n";
+            $css .= "  background: none;\n";
+            $css .= "  padding: 0;\n";
+            $css .= "  border-radius: 0;\n";
+            $css .= "  border: none;\n";
+            $css .= "  font-size: 0.875em;\n";
+            $css .= "  color: var(--variant-paragraph-color, inherit);\n";
+            $css .= "}\n";
+
+            // Blockquote
+            $css .= ".block-variant-{$index} blockquote {\n";
+            $css .= "  border-left: 4px solid var(--variant-hr-color, #e5e7eb);\n";
+            $css .= "  padding: 0.5rem 0 0.5rem 1rem;\n";
+            $css .= "  margin: 1rem 0;\n";
+            $css .= "  color: var(--variant-subtitle-color, inherit);\n";
+            $css .= "  font-style: italic;\n";
+            $css .= "}\n";
+
+            // To-do list (CKEditor <ul class="todo-list">)
+            $css .= ".block-variant-{$index} .todo-list {\n";
+            $css .= "  list-style: none;\n";
+            $css .= "  padding-left: 0;\n";
+            $css .= "  color: var(--variant-list-color, inherit);\n";
+            $css .= "}\n";
+
+            $css .= ".block-variant-{$index} .todo-list .todo-list__label {\n";
+            $css .= "  display: flex;\n";
+            $css .= "  align-items: flex-start;\n";
+            $css .= "  gap: 0.5rem;\n";
+            $css .= "}\n";
+
+            $css .= ".block-variant-{$index} .todo-list input[type=\"checkbox\"] {\n";
+            $css .= "  margin-top: 0.25em;\n";
+            $css .= "  accent-color: var(--variant-link-color, var(--color-primary, currentColor));\n";
+            $css .= "}\n";
+
+            $css .= $this->generateSeparatorCss((string) $index, $props);
+            $css .= $this->generateVariantButtonCss((string) $index, $props, $buttons);
 
             // Apply paragraph background + padding only when paragraphBg is a real
             // visible color (not empty, not "transparent").
@@ -507,14 +603,14 @@ class ThemeCompiler
             // No visible paragraphBg → no background, no padding, no margin.
             $pgBg = trim($props['paragraphBg'] ?? '');
             if ($pgBg !== '' && strtolower($pgBg) !== 'transparent') {
-                $css .= ".block-variant-{$variantName} .block-text {\n";
+                $css .= ".block-variant-{$index} .block-text {\n";
                 $css .= "  background-color: var(--variant-paragraph-bg);\n";
                 $css .= "  padding: 1rem 1.5rem;\n";
                 $css .= "  margin-block: 1rem;\n";
                 $css .= "  overflow: hidden;\n";
                 $css .= "}\n";
                 // Hide the dark overlay on background images when paragraph has its own bg
-                $css .= ".block-variant-{$variantName} .block-bg-overlay {\n";
+                $css .= ".block-variant-{$index} .block-bg-overlay {\n";
                 $css .= "  display: none;\n";
                 $css .= "}\n";
             }
@@ -749,6 +845,41 @@ class ThemeCompiler
         $hash = md5($theme->getUpdatedAt()->format('U.u'));
 
         return sprintf('theme-%d-%s.css', $theme->getId() ?? 0, substr($hash, 0, 8));
+    }
+
+    /**
+     * Determine if a background color is perceptually "light".
+     *
+     * Uses the ITU-R BT.601 luma formula (0.299R + 0.587G + 0.114B).
+     * Non-hex values (rgba, named colors) default to light.
+     *
+     * @param string $color A CSS color value (ideally hex)
+     *
+     * @return bool True if the color is light (luminance > 0.5)
+     */
+    private function isLightBackground(string $color): bool
+    {
+        if (!str_starts_with($color, '#')) {
+            return true;
+        }
+
+        $hex = ltrim($color, '#');
+
+        if (3 === \strlen($hex)) {
+            $hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+        }
+
+        if (6 !== \strlen($hex)) {
+            return true;
+        }
+
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+
+        $luminance = (0.299 * $r + 0.587 * $g + 0.114 * $b) / 255;
+
+        return $luminance > 0.5;
     }
 
     /**

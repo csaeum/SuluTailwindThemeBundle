@@ -3,7 +3,12 @@
    not the section, so the image always fills its half edge-to-edge. #}
 
 {# ── Wrapper logic (replicated from _block_wrapper) ───────────────────────── #}
-{% set variantClass = 'block-variant-' ~ (variant|default('clair')) %}
+{% set variantIndex = variant|default(0) %}
+{% set allVariants = iw_sulu_theme.blockVariants|default([]) %}
+{% if variantIndex >= allVariants|length %}
+    {% set variantIndex = 0 %}
+{% endif %}
+{% set variantClass = 'block-variant-' ~ variantIndex %}
 {% set mtClass = marginTop|default('mt-0') %}
 {% set mbClass = marginBottom|default('mb-0') %}
 
@@ -154,7 +159,7 @@
                     title: title|default(''),
                     subTitle: subTitle|default(''),
                     titleAlignment: titleAlignment|default('left'),
-                    variant: variant|default('clair')
+                    variant: variant|default(0)
                 } only %}
 
                 {% if text is defined and text is not empty %}

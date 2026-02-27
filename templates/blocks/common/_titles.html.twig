@@ -2,9 +2,13 @@
 {% set alignMap = {'left': 'text-left', 'center': 'text-center', 'right': 'text-right'} %}
 {% set alignClass = alignMap[titleAlignment|default('left')]|default('text-left') %}
 
-{# Resolve separator config from the variant global #}
-{% set variantKey = variant|default('clair') %}
-{% set variantConfig = iw_sulu_theme.blockVariants[variantKey]|default({}) %}
+{# Resolve separator config from the variant index #}
+{% set variantIndex = variant|default(0) %}
+{% set allVariants = iw_sulu_theme.blockVariants|default([]) %}
+{% if variantIndex >= allVariants|length %}
+    {% set variantIndex = 0 %}
+{% endif %}
+{% set variantConfig = allVariants[variantIndex]|default({}) %}
 {% set separatorMode = variantConfig.separatorMode|default('style') %}
 
 {% if (title is defined and title is not empty) or (subTitle is defined and subTitle is not empty) %}

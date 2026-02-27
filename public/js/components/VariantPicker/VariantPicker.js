@@ -24,21 +24,36 @@ const DEFAULT_COLOR = '#cccccc';
 export default class VariantPicker extends React.Component {
     /**
      * Block variants from the active theme, set by the config hook.
-     * Array of objects with key, label, blockBg, title, subtitle, paragraph, link, hr, list.
+     * Array of objects with index, label, blockBg, title, subtitle, paragraph, link, hr, list.
      *
      * @type {Array<Object>}
      */
     static themeVariants = [];
 
     /**
+     * Apply default value (first variant) when field is empty on mount.
+     * Uses setTimeout to ensure the Sulu form is fully initialized before
+     * calling onChange, which avoids race conditions with form state setup.
+     */
+    componentDidMount() {
+        const {value, onChange} = this.props;
+        if ((value === null || value === undefined || value === '') && onChange) {
+            const variants = VariantPicker.themeVariants || [];
+            if (variants.length > 0) {
+                setTimeout(() => onChange(0), 0);
+            }
+        }
+    }
+
+    /**
      * Handle variant selection.
      *
-     * @param {string} variantKey - The key of the selected variant
+     * @param {number} variantIndex - The index of the selected variant
      */
-    handleSelect = (variantKey) => {
+    handleSelect = (variantIndex) => {
         const {onChange} = this.props;
         if (onChange) {
-            onChange(variantKey);
+            onChange(variantIndex);
         }
     };
 
@@ -114,14 +129,14 @@ export default class VariantPicker extends React.Component {
 
         return (
             <div
-                key={variant.key}
+                key={variant.index}
                 style={containerStyle}
-                onClick={() => this.handleSelect(variant.key)}
+                onClick={() => this.handleSelect(variant.index)}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
-                        this.handleSelect(variant.key);
+                        this.handleSelect(variant.index);
                     }
                 }}
             >
@@ -149,7 +164,7 @@ export default class VariantPicker extends React.Component {
                     <div style={barStyle(linkColor, '5px', '30%', '0')} />
                 </div>
                 <div style={labelStyle}>
-                    {variant.label || variant.key}
+                    {variant.label || `Variant ${variant.index}`}
                 </div>
                 <div style={swatchContainerStyle}>
                     <div style={swatchStyle(titleColor)} title="Title" />
@@ -184,7 +199,7 @@ export default class VariantPicker extends React.Component {
                 padding: '8px',
             }}>
                 {variants.map((variant) =>
-                    this.renderWireframe(variant, value === variant.key)
+                    this.renderWireframe(variant, String(value) === String(variant.index))
                 )}
             </div>
         );

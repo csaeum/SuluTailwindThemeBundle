@@ -4,7 +4,12 @@
 {# so the image always fills the full block width (top/left/right or bottom/left/right). #}
 
 {# ── Wrapper logic (replicated from _block_wrapper) ───────────────────────── #}
-{% set variantClass = 'block-variant-' ~ (variant|default('clair')) %}
+{% set variantIndex = variant|default(0) %}
+{% set allVariants = iw_sulu_theme.blockVariants|default([]) %}
+{% if variantIndex >= allVariants|length %}
+    {% set variantIndex = 0 %}
+{% endif %}
+{% set variantClass = 'block-variant-' ~ variantIndex %}
 {% set mtClass = marginTop|default('mt-0') %}
 {% set mbClass = marginBottom|default('mb-0') %}
 
@@ -96,7 +101,7 @@
                 title: title|default(''),
                 subTitle: subTitle|default(''),
                 titleAlignment: titleAlignment|default('left'),
-                variant: variant|default('clair')
+                variant: variant|default(0)
             } only %}
 
             {# Paragraph: lateral margin when no paddingLateral (reset at sm in interior mode) #}

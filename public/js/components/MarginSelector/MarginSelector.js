@@ -22,6 +22,23 @@ const MARGIN_VALUES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 16, 20, 24, 32];
  */
 export default class MarginSelector extends React.Component {
     /**
+     * Apply default value from schemaOptions when field is empty on mount.
+     * Uses setTimeout to ensure the Sulu form is fully initialized before
+     * calling onChange, which avoids race conditions with form state setup.
+     */
+    componentDidMount() {
+        const {value, onChange, schemaOptions} = this.props;
+        if ((value === null || value === undefined || value === '') && onChange) {
+            const defaultValue = schemaOptions
+                && schemaOptions.default_value
+                && schemaOptions.default_value.value;
+            if (defaultValue) {
+                setTimeout(() => onChange(defaultValue), 0);
+            }
+        }
+    }
+
+    /**
      * Resolve the Tailwind margin prefix from schema options or field name.
      *
      * Priority: explicit schemaOptions.prefix > inferred from dataPath prop > 'mt' fallback.

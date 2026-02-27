@@ -348,12 +348,12 @@ class ThemeAdmin extends Admin
             $tokens = $activeTheme->getTokens();
             $blockVariants = $tokens['blockVariants'] ?? [];
 
-            foreach ($blockVariants as $key => $props) {
+            foreach ($blockVariants as $index => $props) {
                 if (!is_array($props)) {
                     continue;
                 }
 
-                $variants[] = array_merge(['key' => $key], $props);
+                $variants[] = array_merge(['index' => $index], $props);
             }
         }
 

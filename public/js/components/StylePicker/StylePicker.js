@@ -489,6 +489,22 @@ export default class StylePicker extends React.Component {
     static blockStyles = {};
 
     /**
+     * Apply default value (first available style) when field is empty on mount.
+     * Uses setTimeout to ensure the Sulu form is fully initialized before
+     * calling onChange, which avoids race conditions with form state setup.
+     */
+    componentDidMount() {
+        const {value, onChange} = this.props;
+        if ((value === null || value === undefined || value === '') && onChange) {
+            const blockType = this.getBlockType();
+            const styles = StylePicker.blockStyles[blockType] || [];
+            if (styles.length > 0) {
+                setTimeout(() => onChange(styles[0].key), 0);
+            }
+        }
+    }
+
+    /**
      * Detect the block type from the form data or schema options.
      *
      * Primary: reads the "type" field of the parent block via formInspector.

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace ItechWorld\SuluThemeBundle\DataFixtures;
 
 /**
- * Provides preset theme data for the 4 built-in themes.
+ * Provides preset theme data for the 6 built-in themes.
  *
  * Each preset contains complete design tokens (colors, typography, borders,
  * buttons, block variants), menu configuration, and block styles for all
@@ -17,7 +17,7 @@ namespace ItechWorld\SuluThemeBundle\DataFixtures;
  * Typography families use internal names:
  *   name, role, source, weights (array), fallback
  *
- * Block variants use associative keys (clair, accent, sombre) with properties:
+ * Block variants use indexed arrays (position 0, 1, 2) with properties:
  *   label, title, subtitle, paragraph, link, list, hr, paragraphBg, blockBg
  */
 class ThemeFixtures
@@ -34,6 +34,8 @@ class ThemeFixtures
             'creative' => self::getCreativePreset(),
             'minimal' => self::getMinimalPreset(),
             'nature' => self::getNaturePreset(),
+            'halloween' => self::getHalloweenPreset(),
+            'christmas' => self::getChristmasPreset(),
         ];
     }
 
@@ -135,7 +137,7 @@ class ThemeFixtures
                     ],
                 ],
                 'blockVariants' => [
-                    'clair' => [
+                    [
                         'label' => 'Clair',
                         'title' => '#1e293b',
                         'subtitle' => '#475569',
@@ -147,7 +149,7 @@ class ThemeFixtures
                         'blockBg' => '#ffffff',
                         'buttonStyle' => 'primary',
                     ],
-                    'accent' => [
+                    [
                         'label' => 'Accent primaire',
                         'title' => '#ffffff',
                         'subtitle' => '#dbeafe',
@@ -159,7 +161,7 @@ class ThemeFixtures
                         'blockBg' => '#1a56db',
                         'buttonStyle' => 'secondary',
                     ],
-                    'sombre' => [
+                    [
                         'label' => 'Sombre',
                         'title' => '#f8fafc',
                         'subtitle' => '#cbd5e1',
@@ -300,7 +302,7 @@ class ThemeFixtures
                     ],
                 ],
                 'blockVariants' => [
-                    'clair' => [
+                    [
                         'label' => 'Clair',
                         'title' => '#1f2937',
                         'subtitle' => '#6b7280',
@@ -312,7 +314,7 @@ class ThemeFixtures
                         'blockBg' => '#fffbeb',
                         'buttonStyle' => 'primary',
                     ],
-                    'accent' => [
+                    [
                         'label' => 'Accent rose',
                         'title' => '#ffffff',
                         'subtitle' => '#fce7f3',
@@ -324,7 +326,7 @@ class ThemeFixtures
                         'blockBg' => '#ec4899',
                         'buttonStyle' => 'secondary',
                     ],
-                    'sombre' => [
+                    [
                         'label' => 'Sombre',
                         'title' => '#fdf2f8',
                         'subtitle' => '#d1d5db',
@@ -465,7 +467,7 @@ class ThemeFixtures
                     ],
                 ],
                 'blockVariants' => [
-                    'clair' => [
+                    [
                         'label' => 'Clair',
                         'title' => '#111111',
                         'subtitle' => '#737373',
@@ -477,7 +479,7 @@ class ThemeFixtures
                         'blockBg' => '#ffffff',
                         'buttonStyle' => 'primary',
                     ],
-                    'accent' => [
+                    [
                         'label' => 'Gris neutre',
                         'title' => '#111111',
                         'subtitle' => '#525252',
@@ -489,7 +491,7 @@ class ThemeFixtures
                         'blockBg' => '#fafafa',
                         'buttonStyle' => 'secondary',
                     ],
-                    'sombre' => [
+                    [
                         'label' => 'Sombre',
                         'title' => '#fafafa',
                         'subtitle' => '#a3a3a3',
@@ -630,7 +632,7 @@ class ThemeFixtures
                     ],
                 ],
                 'blockVariants' => [
-                    'clair' => [
+                    [
                         'label' => 'Clair nature',
                         'title' => '#1a2e1a',
                         'subtitle' => '#4d7c4d',
@@ -642,7 +644,7 @@ class ThemeFixtures
                         'blockBg' => '#fefdf8',
                         'buttonStyle' => 'primary',
                     ],
-                    'accent' => [
+                    [
                         'label' => 'Accent vert',
                         'title' => '#ffffff',
                         'subtitle' => '#a7f3d0',
@@ -654,7 +656,7 @@ class ThemeFixtures
                         'blockBg' => '#065f46',
                         'buttonStyle' => 'secondary',
                     ],
-                    'sombre' => [
+                    [
                         'label' => 'Sombre foret',
                         'title' => '#ecfdf5',
                         'subtitle' => '#86efac',
@@ -691,6 +693,336 @@ class ThemeFixtures
                     'burgerClose' => '#ffffff',
                     'socialMedia' => '#4d7c4d',
                     'socialMediaHover' => '#065f46',
+                ],
+            ],
+            'blockStyles' => self::getDefaultBlockStyles(),
+        ];
+    }
+
+    /**
+     * Halloween theme: orange/purple/black, Creepster/Nunito Sans, 12px radius, spooky.
+     *
+     * @return array<string, mixed>
+     */
+    private static function getHalloweenPreset(): array
+    {
+        return [
+            'name' => 'halloween',
+            'label' => 'Halloween Spooky',
+            'tokens' => [
+                'colors' => [
+                    'primary' => '#f97316',
+                    'secondary' => '#7c3aed',
+                    'accent' => '#eab308',
+                    'background' => '#1c1917',
+                    'text' => '#fafaf9',
+                    'link' => '#f97316',
+                    'linkHover' => '#fb923c',
+                ],
+                'typography' => [
+                    'baseFontSize' => '16px',
+                    'baseLineHeight' => '1.6',
+                    'families' => [
+                        [
+                            'name' => 'Creepster',
+                            'role' => 'heading',
+                            'source' => 'google',
+                            'weights' => [400],
+                            'fallback' => 'cursive, system-ui',
+                        ],
+                        [
+                            'name' => 'Nunito Sans',
+                            'role' => 'body',
+                            'source' => 'google',
+                            'weights' => [400, 600],
+                            'fallback' => 'system-ui, sans-serif',
+                        ],
+                    ],
+                    'scale' => [
+                        'xs' => '0.75rem',
+                        'sm' => '0.875rem',
+                        'base' => '1rem',
+                        'lg' => '1.125rem',
+                        'xl' => '1.25rem',
+                        '2xl' => '1.5rem',
+                        '3xl' => '2rem',
+                        '4xl' => '2.75rem',
+                        '5xl' => '3.5rem',
+                    ],
+                    'assignments' => [
+                        'h1' => ['family' => 'heading', 'weight' => '400'],
+                        'h2' => ['family' => 'heading', 'weight' => '400'],
+                        'h3' => ['family' => 'heading', 'weight' => '400'],
+                        'h4' => ['family' => 'heading', 'weight' => '400'],
+                        'h5' => ['family' => 'body', 'weight' => '600'],
+                        'h6' => ['family' => 'body', 'weight' => '600'],
+                        'body' => ['family' => 'body', 'weight' => '400'],
+                        'link' => ['family' => 'body', 'weight' => '600'],
+                    ],
+                ],
+                'borders' => [
+                    'radius' => '12px',
+                    'radiusSm' => '6px',
+                    'radiusLg' => '16px',
+                    'radiusFull' => '9999px',
+                    'imageRadius' => '12px',
+                ],
+                'buttons' => [
+                    'primary' => [
+                        'bg' => '#f97316',
+                        'text' => '#1c1917',
+                        'border' => 'none',
+                        'hoverBg' => '#ea580c',
+                        'hoverText' => '#1c1917',
+                        'hoverBorder' => 'none',
+                        'radius' => '12px',
+                    ],
+                    'secondary' => [
+                        'bg' => '#7c3aed',
+                        'text' => '#ffffff',
+                        'border' => 'none',
+                        'hoverBg' => '#6d28d9',
+                        'hoverText' => '#ffffff',
+                        'hoverBorder' => 'none',
+                        'radius' => '12px',
+                    ],
+                    'accent' => [
+                        'bg' => '#eab308',
+                        'text' => '#1c1917',
+                        'border' => 'none',
+                        'hoverBg' => '#ca8a04',
+                        'hoverText' => '#1c1917',
+                        'hoverBorder' => 'none',
+                        'radius' => '12px',
+                    ],
+                ],
+                'blockVariants' => [
+                    [
+                        'label' => 'Nuit noire',
+                        'title' => '#f97316',
+                        'subtitle' => '#a8a29e',
+                        'paragraph' => '#d6d3d1',
+                        'link' => '#f97316',
+                        'list' => '#d6d3d1',
+                        'hr' => '#44403c',
+                        'paragraphBg' => 'transparent',
+                        'blockBg' => '#1c1917',
+                        'buttonStyle' => 'primary',
+                    ],
+                    [
+                        'label' => 'Citrouille',
+                        'title' => '#1c1917',
+                        'subtitle' => '#431407',
+                        'paragraph' => '#431407',
+                        'link' => '#7c3aed',
+                        'list' => '#431407',
+                        'hr' => 'rgba(0,0,0,0.15)',
+                        'paragraphBg' => 'rgba(0,0,0,0.05)',
+                        'blockBg' => '#f97316',
+                        'buttonStyle' => 'secondary',
+                    ],
+                    [
+                        'label' => 'Violet sorcier',
+                        'title' => '#ffffff',
+                        'subtitle' => '#c4b5fd',
+                        'paragraph' => '#ddd6fe',
+                        'link' => '#f97316',
+                        'list' => '#ddd6fe',
+                        'hr' => 'rgba(255,255,255,0.15)',
+                        'paragraphBg' => 'rgba(255,255,255,0.06)',
+                        'blockBg' => '#5b21b6',
+                        'buttonStyle' => 'accent',
+                    ],
+                ],
+            ],
+            'menuConfig' => [
+                'type' => 'navbar',
+                'animation' => 'fade',
+                'clickParentPage' => true,
+                'childLevels' => 2,
+                'displayLogoDesktop' => true,
+                'displayLogoMobile' => true,
+                'displaySiteName' => true,
+                'displaySocialMedia' => false,
+                'colors' => [
+                    'bg' => '#1c1917',
+                    'text' => '#fafaf9',
+                    'textHover' => '#f97316',
+                    'secondBg' => '#292524',
+                    'secondText' => '#a8a29e',
+                    'secondTextHover' => '#f97316',
+                    'thirdBg' => '#44403c',
+                    'thirdText' => '#d6d3d1',
+                    'divider' => '#44403c',
+                    'burgerOpen' => '#f97316',
+                    'burgerClose' => '#f97316',
+                    'socialMedia' => '#a8a29e',
+                    'socialMediaHover' => '#f97316',
+                ],
+            ],
+            'blockStyles' => self::getDefaultBlockStyles(),
+        ];
+    }
+
+    /**
+     * Christmas theme: red/green/gold, Mountains of Christmas/Source Sans 3, 10px radius, festive.
+     *
+     * @return array<string, mixed>
+     */
+    private static function getChristmasPreset(): array
+    {
+        return [
+            'name' => 'christmas',
+            'label' => 'Christmas Festive',
+            'tokens' => [
+                'colors' => [
+                    'primary' => '#dc2626',
+                    'secondary' => '#15803d',
+                    'accent' => '#d97706',
+                    'background' => '#fef2f2',
+                    'text' => '#1c1917',
+                    'link' => '#dc2626',
+                    'linkHover' => '#b91c1c',
+                ],
+                'typography' => [
+                    'baseFontSize' => '16px',
+                    'baseLineHeight' => '1.7',
+                    'families' => [
+                        [
+                            'name' => 'Mountains of Christmas',
+                            'role' => 'heading',
+                            'source' => 'google',
+                            'weights' => [400, 700],
+                            'fallback' => 'cursive, Georgia, serif',
+                        ],
+                        [
+                            'name' => 'Source Sans 3',
+                            'role' => 'body',
+                            'source' => 'google',
+                            'weights' => [400, 600],
+                            'fallback' => 'system-ui, sans-serif',
+                        ],
+                    ],
+                    'scale' => [
+                        'xs' => '0.75rem',
+                        'sm' => '0.875rem',
+                        'base' => '1rem',
+                        'lg' => '1.125rem',
+                        'xl' => '1.25rem',
+                        '2xl' => '1.5rem',
+                        '3xl' => '2rem',
+                        '4xl' => '2.5rem',
+                        '5xl' => '3.25rem',
+                    ],
+                    'assignments' => [
+                        'h1' => ['family' => 'heading', 'weight' => '700'],
+                        'h2' => ['family' => 'heading', 'weight' => '700'],
+                        'h3' => ['family' => 'heading', 'weight' => '400'],
+                        'h4' => ['family' => 'heading', 'weight' => '400'],
+                        'h5' => ['family' => 'body', 'weight' => '600'],
+                        'h6' => ['family' => 'body', 'weight' => '600'],
+                        'body' => ['family' => 'body', 'weight' => '400'],
+                        'link' => ['family' => 'body', 'weight' => '600'],
+                    ],
+                ],
+                'borders' => [
+                    'radius' => '10px',
+                    'radiusSm' => '6px',
+                    'radiusLg' => '14px',
+                    'radiusFull' => '9999px',
+                    'imageRadius' => '10px',
+                ],
+                'buttons' => [
+                    'primary' => [
+                        'bg' => '#dc2626',
+                        'text' => '#ffffff',
+                        'border' => 'none',
+                        'hoverBg' => '#b91c1c',
+                        'hoverText' => '#ffffff',
+                        'hoverBorder' => 'none',
+                        'radius' => '10px',
+                    ],
+                    'secondary' => [
+                        'bg' => '#15803d',
+                        'text' => '#ffffff',
+                        'border' => 'none',
+                        'hoverBg' => '#166534',
+                        'hoverText' => '#ffffff',
+                        'hoverBorder' => 'none',
+                        'radius' => '10px',
+                    ],
+                    'accent' => [
+                        'bg' => '#d97706',
+                        'text' => '#ffffff',
+                        'border' => 'none',
+                        'hoverBg' => '#b45309',
+                        'hoverText' => '#ffffff',
+                        'hoverBorder' => 'none',
+                        'radius' => '10px',
+                    ],
+                ],
+                'blockVariants' => [
+                    [
+                        'label' => 'Neige',
+                        'title' => '#991b1b',
+                        'subtitle' => '#57534e',
+                        'paragraph' => '#44403c',
+                        'link' => '#dc2626',
+                        'list' => '#44403c',
+                        'hr' => '#fecaca',
+                        'paragraphBg' => 'transparent',
+                        'blockBg' => '#fef2f2',
+                        'buttonStyle' => 'primary',
+                    ],
+                    [
+                        'label' => 'Sapin',
+                        'title' => '#ffffff',
+                        'subtitle' => '#bbf7d0',
+                        'paragraph' => '#dcfce7',
+                        'link' => '#fbbf24',
+                        'list' => '#dcfce7',
+                        'hr' => 'rgba(255,255,255,0.2)',
+                        'paragraphBg' => 'rgba(255,255,255,0.08)',
+                        'blockBg' => '#15803d',
+                        'buttonStyle' => 'accent',
+                    ],
+                    [
+                        'label' => 'Rouge festif',
+                        'title' => '#ffffff',
+                        'subtitle' => '#fecaca',
+                        'paragraph' => '#fee2e2',
+                        'link' => '#fbbf24',
+                        'list' => '#fee2e2',
+                        'hr' => 'rgba(255,255,255,0.2)',
+                        'paragraphBg' => 'rgba(255,255,255,0.06)',
+                        'blockBg' => '#dc2626',
+                        'buttonStyle' => 'secondary',
+                    ],
+                ],
+            ],
+            'menuConfig' => [
+                'type' => 'navbar',
+                'animation' => 'slide',
+                'clickParentPage' => true,
+                'childLevels' => 3,
+                'displayLogoDesktop' => true,
+                'displayLogoMobile' => true,
+                'displaySiteName' => true,
+                'displaySocialMedia' => true,
+                'colors' => [
+                    'bg' => '#fef2f2',
+                    'text' => '#1c1917',
+                    'textHover' => '#dc2626',
+                    'secondBg' => '#fee2e2',
+                    'secondText' => '#57534e',
+                    'secondTextHover' => '#dc2626',
+                    'thirdBg' => '#fecaca',
+                    'thirdText' => '#78716c',
+                    'divider' => '#fecaca',
+                    'burgerOpen' => '#dc2626',
+                    'burgerClose' => '#ffffff',
+                    'socialMedia' => '#dc2626',
+                    'socialMediaHover' => '#15803d',
                 ],
             ],
             'blockStyles' => self::getDefaultBlockStyles(),

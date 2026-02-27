@@ -29,7 +29,7 @@
         title: title|default(''),
         subTitle: subTitle|default(''),
         titleAlignment: titleAlignment|default('left'),
-        variant: variant|default('clair')
+        variant: variant|default(0)
     } only %}
 
     {% if images is defined and images is iterable and images|length > 0 %}
