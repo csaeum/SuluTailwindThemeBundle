@@ -546,6 +546,40 @@ php bin/adminconsole iw-sulu:theme:compile --theme=corporate
 
 The bundle registers the security context `sulu.iw_sulu_theme.themes` with VIEW, ADD, EDIT, and DELETE permissions. Configure role access in **Settings > Roles**.
 
+## Using the theme in custom components
+
+The theme compiles design tokens into **CSS custom properties** and exposes data through **Twig functions** and a **global variable**. This means your custom Twig templates and CSS automatically adapt when the active theme changes.
+
+Quick example:
+
+```css
+/* Your custom CSS — adapts to the active theme */
+.my-card {
+    background: var(--color-primary-50);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+    font-family: var(--font-family-body);
+}
+```
+
+```twig
+{# Your custom Twig — variant colors applied automatically #}
+<section class="block-variant-0" data-has-bg="true">
+    <h2>Title is colored by the variant</h2>
+    <p>Paragraph too.</p>
+    <a href="/cta" class="btn-primary px-6 py-3">Themed button</a>
+</section>
+```
+
+For the full reference, see the **[doc/](doc/)** directory:
+
+| Document | Description |
+|----------|-------------|
+| [CSS Variables Reference](doc/css-variables.md) | All CSS custom properties: colors, palettes, typography, borders, buttons, menu |
+| [Block Variants](doc/block-variants.md) | Variant classes, auto-styled elements, separator styles, `.btn-variant` |
+| [Twig Reference](doc/twig-reference.md) | All Twig functions, global variable `iw_sulu_theme`, token structure |
+| [Custom Integration Guide](doc/custom-integration.md) | Step-by-step examples: custom CSS, Twig components, block templates, PHP services |
+
 ## Architecture
 
 ```
@@ -579,10 +613,22 @@ SuluThemeBundle/
 * English
 * French
 
-## Support
+## 🐛 Bug and Idea
 
-You can support this project by buying me a coffee: [Buy me a coffee](https://www.buymeacoffee.com/steeven.th)
+See the [open issues](https://github.com/steeven-th/SuluThemeBundle/issues) for a list of proposed features (and known issues).
 
-## License
+## 💰 Support me
+
+You can buy me a coffee to support me **this plugin is 100% free**.
+
+[Buy me a coffee](https://www.buymeacoffee.com/steeven.th)
+
+## 👨‍💻 Contact
+
+<a href="https://steeven-th.dev"><img src="https://avatars.githubusercontent.com/u/82022828?s=96&v=4" width="50"></a>
+<a href="https://x.com/ThomasSteeven2"><img src="./doc/images/x.webp" width="50" alt="x.com"></a>
+<a href="https://www.linkedin.com/in/steeven-thomas-221b02b8/"><img src="./doc/images/linkedin.png" width="50" alt="Linkedin"></a>
+
+## 📘&nbsp; License
 
 This bundle is under the [MIT License](LICENSE).
