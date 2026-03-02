@@ -290,5 +290,7 @@
     "iw_sulu_theme.icon_size_xl": "Extra large",
 
     "iw_sulu_theme.palette_tab": "Palette",
-    "iw_sulu_theme.custom_tab": "Custom"
+    "iw_sulu_theme.custom_tab": "Custom",
+
+    "iw_sulu_theme.activate": "Activate"
 }

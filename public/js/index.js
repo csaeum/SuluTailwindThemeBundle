@@ -1,5 +1,6 @@
 // @flow
 import {fieldRegistry} from 'sulu-admin-bundle/containers';
+import {listToolbarActionRegistry} from 'sulu-admin-bundle/views/List';
 import initializer from 'sulu-admin-bundle/services/initializer';
 import VariantPicker from './components/VariantPicker/VariantPicker';
 import StylePicker from './components/StylePicker/StylePicker';
@@ -9,6 +10,7 @@ import FontSelector from './components/FontSelector/FontSelector';
 import RadiusSelector from './components/RadiusSelector/RadiusSelector';
 import ButtonStylePicker from './components/ButtonStylePicker/ButtonStylePicker';
 import collapsibleSections from './components/CollapsibleSections/CollapsibleSections';
+import ActivateToolbarAction from './components/ActivateToolbarAction/ActivateToolbarAction';
 
 /**
  * Register all custom field types for the SuluThemeBundle admin interface.
@@ -31,6 +33,8 @@ initializer.addUpdateConfigHook('iw_sulu_theme', (config: Object, initialized: b
     if (initialized) {
         return;
     }
+
+    listToolbarActionRegistry.add('iw_sulu_theme.activate', ActivateToolbarAction);
 
     fieldRegistry.add(
         'iw_theme_variant_picker',

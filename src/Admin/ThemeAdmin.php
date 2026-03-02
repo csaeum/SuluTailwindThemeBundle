@@ -177,6 +177,7 @@ class ThemeAdmin extends Admin
 
         if ($this->securityChecker->hasPermission(static::SECURITY_CONTEXT, PermissionTypes::EDIT)) {
             $formToolbarActions[] = new ToolbarAction('sulu_admin.save');
+            $listToolbarActions[] = new ToolbarAction('iw_sulu_theme.activate');
         }
 
         if ($this->securityChecker->hasPermission(static::SECURITY_CONTEXT, PermissionTypes::DELETE)) {

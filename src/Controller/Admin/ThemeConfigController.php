@@ -164,6 +164,11 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         $theme = new ThemeConfig();
         $this->mapDataToEntity($data, $theme);
 
+        // Deactivate all others if this theme will be active
+        if ($theme->isActive()) {
+            $this->repository->deactivateAll();
+        }
+
         $this->entityManager->persist($theme);
         $this->entityManager->flush();
 
@@ -245,6 +250,36 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         $this->entityManager->flush();
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * Activate a specific theme, deactivating all others.
+     *
+     * @param int $id The theme configuration ID
+     *
+     * @return Response JSON response with activated theme data
+     *
+     * @throws NotFoundHttpException If the theme is not found
+     */
+    #[Route('/admin/api/iw-theme-configs/{id}/activate', name: 'iw_sulu_theme.activate_theme_config', methods: ['POST'], requirements: ['id' => '\d+'])]
+    public function activateAction(int $id): Response
+    {
+        $theme = $this->repository->find($id);
+
+        if (null === $theme) {
+            throw new NotFoundHttpException(sprintf('Theme config with ID "%d" not found.', $id));
+        }
+
+        // Deactivate all themes, then activate this one
+        $this->repository->deactivateAll();
+        $this->entityManager->refresh($theme);
+        $theme->setIsActive(true);
+        $this->entityManager->flush();
+
+        // Compile CSS for the newly activated theme
+        $this->compiler->compile($theme);
+
+        return new JsonResponse($this->serializeTheme($theme));
     }
 
     /**
