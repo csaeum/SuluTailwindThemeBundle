@@ -292,5 +292,15 @@
     "iw_sulu_theme.palette_tab": "Palette",
     "iw_sulu_theme.custom_tab": "Custom",
 
-    "iw_sulu_theme.activate": "Activate"
+    "iw_sulu_theme.activate": "Activate",
+
+    "iw_sulu_theme.snippet.social_media": "Social Media",
+    "iw_sulu_theme.snippet.social_media_menu_area": "Social media in the menu",
+    "iw_sulu_theme.snippet.social_media_footer_area": "Social media in the footer",
+    "iw_sulu_theme.social_medias": "Social Media",
+    "iw_sulu_theme.social_media_item": "Social Media",
+    "iw_sulu_theme.social_media_name": "Name",
+    "iw_sulu_theme.icon": "Icon",
+    "iw_sulu_theme.fa_icon": "Font Awesome Icon",
+    "iw_sulu_theme.fa_icon_info": "Add the classes w-8 and h-8"
 }

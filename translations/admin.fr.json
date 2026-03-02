@@ -292,5 +292,15 @@
     "iw_sulu_theme.palette_tab": "Palette",
     "iw_sulu_theme.custom_tab": "Personnalisé",
 
-    "iw_sulu_theme.activate": "Activer"
+    "iw_sulu_theme.activate": "Activer",
+
+    "iw_sulu_theme.snippet.social_media": "Réseaux sociaux",
+    "iw_sulu_theme.snippet.social_media_menu_area": "Réseaux sociaux dans le menu",
+    "iw_sulu_theme.snippet.social_media_footer_area": "Réseaux sociaux dans le pied de page",
+    "iw_sulu_theme.social_medias": "Réseaux sociaux",
+    "iw_sulu_theme.social_media_item": "Réseau social",
+    "iw_sulu_theme.social_media_name": "Nom",
+    "iw_sulu_theme.icon": "Icône",
+    "iw_sulu_theme.fa_icon": "Icône Font Awesome",
+    "iw_sulu_theme.fa_icon_info": "Ajouter les classes w-8 et h-8"
 }
