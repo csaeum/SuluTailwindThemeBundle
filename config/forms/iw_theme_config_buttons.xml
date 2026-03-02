@@ -17,7 +17,7 @@
                         <title>iw_sulu_theme.buttons_bg</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_primary_text" type="iw_theme_color_token_editor" colspan="4">
@@ -25,7 +25,7 @@
                         <title>iw_sulu_theme.buttons_text</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_primary_border" type="iw_theme_color_token_editor" colspan="4">
@@ -33,7 +33,7 @@
                         <title>iw_sulu_theme.buttons_border</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_primary_hoverBg" type="iw_theme_color_token_editor" colspan="4">
@@ -41,7 +41,7 @@
                         <title>iw_sulu_theme.buttons_hoverBg</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_primary_hoverText" type="iw_theme_color_token_editor" colspan="4">
@@ -49,7 +49,7 @@
                         <title>iw_sulu_theme.buttons_hoverText</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_primary_hoverBorder" type="iw_theme_color_token_editor" colspan="4">
@@ -57,10 +57,10 @@
                         <title>iw_sulu_theme.buttons_hoverBorder</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
-                <property name="buttons_primary_radius" type="iw_theme_radius_selector" colspan="12">
+                <property name="buttons_primary_radius" type="iw_theme_radius_selector">
                     <meta>
                         <title>iw_sulu_theme.buttons_radius</title>
                     </meta>
@@ -79,7 +79,7 @@
                         <title>iw_sulu_theme.buttons_bg</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_secondary_text" type="iw_theme_color_token_editor" colspan="4">
@@ -87,7 +87,7 @@
                         <title>iw_sulu_theme.buttons_text</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_secondary_border" type="iw_theme_color_token_editor" colspan="4">
@@ -95,7 +95,7 @@
                         <title>iw_sulu_theme.buttons_border</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_secondary_hoverBg" type="iw_theme_color_token_editor" colspan="4">
@@ -103,7 +103,7 @@
                         <title>iw_sulu_theme.buttons_hoverBg</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_secondary_hoverText" type="iw_theme_color_token_editor" colspan="4">
@@ -111,7 +111,7 @@
                         <title>iw_sulu_theme.buttons_hoverText</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_secondary_hoverBorder" type="iw_theme_color_token_editor" colspan="4">
@@ -119,10 +119,10 @@
                         <title>iw_sulu_theme.buttons_hoverBorder</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
-                <property name="buttons_secondary_radius" type="iw_theme_radius_selector" colspan="12">
+                <property name="buttons_secondary_radius" type="iw_theme_radius_selector">
                     <meta>
                         <title>iw_sulu_theme.buttons_radius</title>
                     </meta>
@@ -140,7 +140,7 @@
                         <title>iw_sulu_theme.buttons_bg</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_accent_text" type="iw_theme_color_token_editor" colspan="4">
@@ -148,7 +148,7 @@
                         <title>iw_sulu_theme.buttons_text</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_accent_border" type="iw_theme_color_token_editor" colspan="4">
@@ -156,7 +156,7 @@
                         <title>iw_sulu_theme.buttons_border</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_accent_hoverBg" type="iw_theme_color_token_editor" colspan="4">
@@ -164,7 +164,7 @@
                         <title>iw_sulu_theme.buttons_hoverBg</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_accent_hoverText" type="iw_theme_color_token_editor" colspan="4">
@@ -172,7 +172,7 @@
                         <title>iw_sulu_theme.buttons_hoverText</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
                 <property name="buttons_accent_hoverBorder" type="iw_theme_color_token_editor" colspan="4">
@@ -180,10 +180,10 @@
                         <title>iw_sulu_theme.buttons_hoverBorder</title>
                     </meta>
                     <params>
-                        <param name="show_palette" type="string" value="true"/>
+                        <param name="show_palette" value="true"/>
                     </params>
                 </property>
-                <property name="buttons_accent_radius" type="iw_theme_radius_selector" colspan="12">
+                <property name="buttons_accent_radius" type="iw_theme_radius_selector">
                     <meta>
                         <title>iw_sulu_theme.buttons_radius</title>
                     </meta>

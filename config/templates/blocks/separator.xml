@@ -18,7 +18,7 @@
                           visibleCondition="__parent.style == 'spacer'">
                     <meta><title>iw_sulu_theme.height</title></meta>
                     <params>
-                        <param name="default_value" type="string" value="md"/>
+                        <param name="default_value" value="md"/>
                         <param name="values" type="collection">
                             <param name="xs"><meta><title>iw_sulu_theme.height_xs</title></meta></param>
                             <param name="sm"><meta><title>iw_sulu_theme.height_sm</title></meta></param>
@@ -32,7 +32,7 @@
                           visibleCondition="__parent.style == 'line' OR __parent.style == 'divider'">
                     <meta><title>iw_sulu_theme.line_style</title></meta>
                     <params>
-                        <param name="default_value" type="string" value="solid"/>
+                        <param name="default_value" value="solid"/>
                         <param name="values" type="collection">
                             <param name="solid"><meta><title>iw_sulu_theme.line_solid</title></meta></param>
                             <param name="dashed"><meta><title>iw_sulu_theme.line_dashed</title></meta></param>
@@ -44,7 +44,7 @@
                           visibleCondition="__parent.style == 'line' OR __parent.style == 'divider'">
                     <meta><title>iw_sulu_theme.line_width</title></meta>
                     <params>
-                        <param name="default_value" type="string" value="thin"/>
+                        <param name="default_value" value="thin"/>
                         <param name="values" type="collection">
                             <param name="thin"><meta><title>iw_sulu_theme.line_thin</title></meta></param>
                             <param name="medium"><meta><title>iw_sulu_theme.line_medium</title></meta></param>
@@ -67,7 +67,7 @@
                           visibleCondition="__parent.style == 'divider'">
                     <meta><title>iw_sulu_theme.icon_size</title></meta>
                     <params>
-                        <param name="default_value" type="string" value="md"/>
+                        <param name="default_value" value="md"/>
                         <param name="values" type="collection">
                             <param name="sm"><meta><title>iw_sulu_theme.icon_size_sm</title></meta></param>
                             <param name="md"><meta><title>iw_sulu_theme.icon_size_md</title></meta></param>
@@ -89,7 +89,7 @@
                 <property name="style" type="iw_theme_style_picker" colspan="6">
                     <meta><title>iw_sulu_theme.layout_style</title></meta>
                     <params>
-                        <param name="block_type" type="string" value="separator"/>
+                        <param name="block_type" value="separator"/>
                     </params>
                 </property>
             </properties>
@@ -102,19 +102,19 @@
                 <property name="marginTop" type="iw_theme_margin_selector" colspan="6">
                     <meta><title>iw_sulu_theme.margin_top</title></meta>
                     <params>
-                        <param name="default_value" type="string" value="mt-5"/>
+                        <param name="default_value" value="mt-5"/>
                     </params>
                 </property>
                 <property name="marginBottom" type="iw_theme_margin_selector" colspan="6">
                     <meta><title>iw_sulu_theme.margin_bottom</title></meta>
                     <params>
-                        <param name="default_value" type="string" value="mb-5"/>
+                        <param name="default_value" value="mb-5"/>
                     </params>
                 </property>
                 <property name="lateralMargins" type="single_select">
                     <meta><title>iw_sulu_theme.lateral_margins</title></meta>
                     <params>
-                        <param name="default_value" type="string" value="exterior"/>
+                        <param name="default_value" value="exterior"/>
                         <param name="values" type="collection">
                             <param name="exterior"><meta><title>iw_sulu_theme.lateral_margins_exterior</title></meta></param>
                             <param name="interior"><meta><title>iw_sulu_theme.lateral_margins_interior</title></meta></param>
@@ -125,20 +125,20 @@
                 <property name="paddingTop" type="iw_theme_margin_selector" colspan="6">
                     <meta><title>iw_sulu_theme.padding_top</title></meta>
                     <params>
-                        <param name="default_value" type="string" value="pt-5"/>
+                        <param name="default_value" value="pt-5"/>
                     </params>
                 </property>
                 <property name="paddingBottom" type="iw_theme_margin_selector" colspan="6">
                     <meta><title>iw_sulu_theme.padding_bottom</title></meta>
                     <params>
-                        <param name="default_value" type="string" value="pb-5"/>
+                        <param name="default_value" value="pb-5"/>
                     </params>
                 </property>
                 <property name="paddingLateral" type="iw_theme_margin_selector">
                     <meta><title>iw_sulu_theme.padding_lateral</title></meta>
                     <params>
-                        <param name="prefix" type="string" value="px"/>
-                        <param name="default_value" type="string" value="px-5"/>
+                        <param name="prefix" value="px"/>
+                        <param name="default_value" value="px-5"/>
                     </params>
                 </property>
             </properties>

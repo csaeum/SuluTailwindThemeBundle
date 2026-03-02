@@ -17,7 +17,7 @@
                         <title>iw_sulu_theme.variant</title>
                     </meta>
                     <properties>
-                        <property name="label" type="text_line" colspan="12" mandatory="true">
+                        <property name="label" type="text_line" mandatory="true">
                             <meta>
                                 <title>iw_sulu_theme.variant_label</title>
                             </meta>
@@ -28,7 +28,7 @@
                                 <title>iw_sulu_theme.variant_title_color</title>
                             </meta>
                             <params>
-                                <param name="show_palette" type="string" value="true"/>
+                                <param name="show_palette" value="true"/>
                             </params>
                         </property>
 
@@ -37,7 +37,7 @@
                                 <title>iw_sulu_theme.variant_subtitle_color</title>
                             </meta>
                             <params>
-                                <param name="show_palette" type="string" value="true"/>
+                                <param name="show_palette" value="true"/>
                             </params>
                         </property>
 
@@ -46,7 +46,7 @@
                                 <title>iw_sulu_theme.variant_paragraph_color</title>
                             </meta>
                             <params>
-                                <param name="show_palette" type="string" value="true"/>
+                                <param name="show_palette" value="true"/>
                             </params>
                         </property>
 
@@ -55,7 +55,7 @@
                                 <title>iw_sulu_theme.variant_link_color</title>
                             </meta>
                             <params>
-                                <param name="show_palette" type="string" value="true"/>
+                                <param name="show_palette" value="true"/>
                             </params>
                         </property>
 
@@ -64,7 +64,7 @@
                                 <title>iw_sulu_theme.variant_link_hover_color</title>
                             </meta>
                             <params>
-                                <param name="show_palette" type="string" value="true"/>
+                                <param name="show_palette" value="true"/>
                             </params>
                         </property>
 
@@ -73,7 +73,7 @@
                                 <title>iw_sulu_theme.variant_list_color</title>
                             </meta>
                             <params>
-                                <param name="show_palette" type="string" value="true"/>
+                                <param name="show_palette" value="true"/>
                             </params>
                         </property>
 
@@ -82,7 +82,7 @@
                                 <title>iw_sulu_theme.variant_hr_color</title>
                             </meta>
                             <params>
-                                <param name="show_palette" type="string" value="true"/>
+                                <param name="show_palette" value="true"/>
                             </params>
                         </property>
 
@@ -91,7 +91,7 @@
                                 <title>iw_sulu_theme.variant_paragraphBg</title>
                             </meta>
                             <params>
-                                <param name="show_palette" type="string" value="true"/>
+                                <param name="show_palette" value="true"/>
                             </params>
                         </property>
 
@@ -100,11 +100,11 @@
                                 <title>iw_sulu_theme.variant_blockBg</title>
                             </meta>
                             <params>
-                                <param name="show_palette" type="string" value="true"/>
+                                <param name="show_palette" value="true"/>
                             </params>
                         </property>
 
-                        <property name="buttonStyle" type="iw_theme_button_style_picker" colspan="12">
+                        <property name="buttonStyle" type="iw_theme_button_style_picker">
                             <meta>
                                 <title>iw_sulu_theme.variant_button_style</title>
                             </meta>
@@ -115,7 +115,7 @@
                                 <title>iw_sulu_theme.variant_separator_mode</title>
                             </meta>
                             <params>
-                                <param name="default_value" type="string" value="style"/>
+                                <param name="default_value" value="style"/>
                                 <param name="values" type="collection">
                                     <param name="style">
                                         <meta><title>iw_sulu_theme.variant_separator_mode_style</title></meta>
@@ -136,7 +136,7 @@
                                 <title>iw_sulu_theme.variant_separator_style</title>
                             </meta>
                             <params>
-                                <param name="default_value" type="string" value="solid"/>
+                                <param name="default_value" value="solid"/>
                                 <param name="values" type="collection">
                                     <param name="solid"><meta><title>iw_sulu_theme.separator_solid</title></meta></param>
                                     <param name="dashed"><meta><title>iw_sulu_theme.separator_dashed</title></meta></param>

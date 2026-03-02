@@ -15,7 +15,7 @@
     <property name="titleAlignment" type="single_select">
         <meta><title>iw_sulu_theme.title_alignment</title></meta>
         <params>
-            <param name="default_value" type="string" value="left"/>
+            <param name="default_value" value="left"/>
             <param name="values" type="collection">
                 <param name="left"><meta><title>iw_sulu_theme.align_left</title></meta></param>
                 <param name="center"><meta><title>iw_sulu_theme.align_center</title></meta></param>
