@@ -301,6 +301,5 @@
     "iw_sulu_theme.social_media_item": "Réseau social",
     "iw_sulu_theme.social_media_name": "Nom",
     "iw_sulu_theme.icon": "Icône",
-    "iw_sulu_theme.fa_icon": "Icône Font Awesome",
-    "iw_sulu_theme.fa_icon_info": "Ajouter les classes w-8 et h-8"
+    "iw_sulu_theme.snippet_title": "Titre du fragment"
 }

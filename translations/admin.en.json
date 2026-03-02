@@ -301,6 +301,5 @@
     "iw_sulu_theme.social_media_item": "Social Media",
     "iw_sulu_theme.social_media_name": "Name",
     "iw_sulu_theme.icon": "Icon",
-    "iw_sulu_theme.fa_icon": "Font Awesome Icon",
-    "iw_sulu_theme.fa_icon_info": "Add the classes w-8 and h-8"
+    "iw_sulu_theme.snippet_title": "Snippet title"
 }

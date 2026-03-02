@@ -237,7 +237,7 @@ Navigate to **Settings > Themes** in the Sulu admin panel. From there you can:
 
 ### Page templates
 
-The bundle ships with a ready-to-use page template (`iw_default`) that includes **11 block types**: `text`, `text_images`, `gallery`, `key_figures`, `linked_pages`, `location`, `form`, `document`, `cta`, `testimonial`, and `separator`.
+The bundle ships with a ready-to-use page template (`iw_theme_default`) that includes **11 block types**: `text`, `text_images`, `gallery`, `key_figures`, `linked_pages`, `location`, `form`, `document`, `cta`, `testimonial`, and `separator`.
 
 To use it, simply select **"Page par défaut"** (or **"Default page"**) as the template when creating a page in the Sulu admin.
 
@@ -248,7 +248,7 @@ The template system is built on a **modular architecture** that separates concer
 ```
 config/templates/
 ├── pages/
-│   └── iw_default.xml              ← Page template (~50 lines, uses <type ref="..."/>)
+│   └── iw_theme_default.xml              ← Page template (~50 lines, uses <type ref="..."/>)
 ├── fragments/                       ← Shared property fragments (reference/documentation)
 │   ├── header.xml                   ← title + url properties
 │   ├── blocks.xml                   ← Block container with all 11 type references
@@ -404,7 +404,7 @@ You can also **include individual settings properties** using XPointer with a `@
 
 #### Excluding the bundle's page template
 
-If you don't want the bundle's default page template (`iw_default`) to appear in a specific webspace, you can **exclude it** in your webspace XML configuration (`config/webspaces/*.xml`):
+If you don't want the bundle's default page template (`iw_theme_default`) to appear in a specific webspace, you can **exclude it** in your webspace XML configuration (`config/webspaces/*.xml`):
 
 ```xml
 <webspace>
@@ -413,7 +413,7 @@ If you don't want the bundle's default page template (`iw_default`) to appear in
         <!-- ... -->
     </templates>
     <excluded-templates>
-        <excluded-template>iw_default</excluded-template>
+        <excluded-template>iw_theme_default</excluded-template>
     </excluded-templates>
     <!-- ... -->
 </webspace>

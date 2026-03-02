@@ -3,20 +3,20 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
 
-    <key>social_media</key>
+    <key>iw_theme_social_media</key>
 
     <meta>
         <title>iw_sulu_theme.snippet.social_media</title>
     </meta>
 
     <areas>
-        <area key="menu_social_media_links" cache-invalidation="true">
+        <area key="iw_theme_menu_social_media_links">
             <meta>
                 <title>iw_sulu_theme.snippet.social_media_menu_area</title>
             </meta>
         </area>
 
-        <area key="footer_social_media_links" cache-invalidation="false">
+        <area key="iw_theme_footer_social_media_links" cache-invalidation="false">
             <meta>
                 <title>iw_sulu_theme.snippet.social_media_footer_area</title>
             </meta>
@@ -26,7 +26,7 @@
     <properties>
         <property name="title" type="text_line" mandatory="true">
             <meta>
-                <title>sudcms.title_snippet</title>
+                <title>iw_sulu_theme.snippet_title</title>
             </meta>
             <tag name="sulu.node.name"/>
         </property>
@@ -48,16 +48,9 @@
                             </meta>
                         </property>
 
-                        <property name="icon" colspan="6" type="single_media_selection">
+                        <property name="icon" type="single_media_selection">
                             <meta>
                                 <title>iw_sulu_theme.icon</title>
-                            </meta>
-                        </property>
-
-                        <property name="fa_icon" colspan="6" type="text_line">
-                            <meta>
-                                <title>iw_sulu_theme.fa_icon</title>
-                                <info_text>iw_sulu_theme.fa_icon_info</info_text>
                             </meta>
                         </property>
 

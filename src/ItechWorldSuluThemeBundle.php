@@ -103,6 +103,17 @@ class ItechWorldSuluThemeBundle extends AbstractBundle
                     ],
                 ],
             ]);
+
+            // Register snippet template directories
+            $builder->prependExtensionConfig('sulu_admin', [
+                'templates' => [
+                    'snippet' => [
+                        'directories' => [
+                            'iw_sulu_theme' => __DIR__ . '/../config/templates/snippets',
+                        ],
+                    ],
+                ],
+            ]);
         }
     }
 
