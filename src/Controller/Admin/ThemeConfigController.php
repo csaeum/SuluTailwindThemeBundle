@@ -81,8 +81,11 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      * Scalar menuConfig keys (non-color).
      */
     private const MENU_SCALAR_KEYS = [
-        'type', 'animation', 'clickParentPage', 'childLevels',
+        'type', 'animation', 'slideDirection', 'navPosition', 'clickParentPage', 'childLevels',
         'displayLogoDesktop', 'displayLogoMobile', 'displaySiteName', 'displaySocialMedia',
+        'logoDesktop', 'logoMobile',
+        'fullscreenImage', 'twoColumns',
+        'sidebarPosition', 'transparentNavbar',
     ];
 
     public function __construct(
@@ -464,7 +467,8 @@ class ThemeConfigController extends AbstractController implements SecuredControl
                         $data[self::PREFIX_MENU_COLORS . $colorKey] = $colorValue;
                     }
                 }
-            } elseif (!is_array($value)) {
+            } elseif (in_array($key, self::MENU_SCALAR_KEYS, true)) {
+                // Pass through known keys (scalars + media objects like {id: X})
                 $data[self::PREFIX_MENU . $key] = $value;
             }
         }

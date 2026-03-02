@@ -1,90 +1,290 @@
-{# Menu — fixed sidebar navigation #}
-{% set menuBg = config.bg|default('var(--menu-bg)') %}
-{% set menuText = config.text|default('var(--menu-text)') %}
-{% set sidebarWidth = config.sidebarWidth|default('280px') %}
+{# Menu — sidebar navigation #}
+{% set position = config.sidebarPosition|default('left') %}
+{% set isLeft = position == 'left' %}
 
-{# Sidebar — fixed on desktop, toggle on mobile #}
-<aside
-    data-controller="menu"
-    class="fixed top-0 left-0 h-full z-40"
-    style="width: {{ sidebarWidth }};"
->
-    {# Mobile toggle button (shown when sidebar is collapsed) #}
-    <button
-        type="button"
-        data-action="menu#toggle"
-        data-menu-target="burger"
-        class="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 flex items-center justify-center rounded-full shadow-lg"
-        aria-label="Menu"
-        style="background-color: {{ menuBg }}; color: {{ menuText }};"
-    >
-        <svg data-menu-target="iconOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-        <svg data-menu-target="iconClose" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-    </button>
+{# Resolve logo media URLs #}
+{% set logoDesktopUrl = null %}
+{% set logoMobileUrl = null %}
+{% if config.logoDesktop is defined and config.logoDesktop.id|default(null) is not null %}
+    {% set logoDesktopMedia = sulu_resolve_media(config.logoDesktop.id, app.request.locale) %}
+    {% if logoDesktopMedia is not null %}
+        {% set logoDesktopUrl = logoDesktopMedia.thumbnails['iw_theme_logo_desktop']|default(logoDesktopMedia.url)|default(null) %}
+    {% endif %}
+{% endif %}
+{% if config.logoMobile is defined and config.logoMobile.id|default(null) is not null %}
+    {% set logoMobileMedia = sulu_resolve_media(config.logoMobile.id, app.request.locale) %}
+    {% if logoMobileMedia is not null %}
+        {% set logoMobileUrl = logoMobileMedia.thumbnails['iw_theme_logo_mobile']|default(logoMobileMedia.url)|default(null) %}
+    {% endif %}
+{% endif %}
 
-    {# Sidebar panel #}
-    <div
-        data-menu-target="panel"
-        class="hidden lg:flex flex-col h-full overflow-y-auto p-6 shadow-xl"
-        style="background-color: {{ menuBg }}; width: {{ sidebarWidth }};"
-    >
-        {# Logo / Brand #}
-        <div class="mb-8">
-            <a href="{{ sulu_content_path('/') }}" class="flex items-center no-underline" style="color: {{ menuText }};">
-                {% if config.logo is defined and config.logo is not empty %}
-                    <img src="{{ config.logo }}" alt="{{ config.siteName|default('') }}" class="h-10 w-auto">
+{# Load social media links from snippet area #}
+{% set socialLinks = [] %}
+{% if config.displaySocialMedia|default(false) %}
+    {% set socialSnippet = sulu_snippet_load_by_area('iw_theme_menu_social_media_links') %}
+    {% if socialSnippet is not null and socialSnippet.content is defined and socialSnippet.content.blocks_social_medias is defined %}
+        {% set socialLinks = socialSnippet.content.blocks_social_medias %}
+    {% endif %}
+{% endif %}
+
+{% set navItems = sulu_page_navigation_root_tree('main', config.childLevels|default(2), {title: 'title', url: 'url'}) %}
+
+{# Macro: navigation items L1/L2/L3 accordion #}
+{% macro render_nav_items(navItems, config) %}
+    {% for item in navItems %}
+        {% if item.children is defined and item.children|length > 0 %}
+            <div>
+                {# L1 with children — accordion button or link depending on config #}
+                {% if config.clickParentPage|default(false) %}
+                    <a
+                        href="{{ sulu_content_path(item.url) }}"
+                        class="iw-menu-text flex items-center justify-between w-full py-2.5 px-3 text-sm font-semibold rounded-md hover:opacity-80 transition-opacity no-underline"
+                    >
+                        {{ item.title }}
+                    </a>
                 {% else %}
-                    <span class="text-xl font-bold">{{ config.siteName|default('Site') }}</span>
+                    <button
+                        type="button"
+                        data-action="menu#toggleMobileSubmenu"
+                        class="iw-menu-text flex items-center justify-between w-full py-2.5 px-3 text-sm font-semibold rounded-md hover:opacity-80 transition-opacity text-left"
+                    >
+                        {{ item.title }}
+                        <svg class="w-4 h-4 flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
                 {% endif %}
-            </a>
-        </div>
-
-        {# Navigation links #}
-        {% set navItems = sulu_page_navigation_root_tree('main', 2, {title: 'title', url: 'url'}) %}
-        {% if navItems is not empty %}
-            <nav class="flex-1 space-y-1">
-                {% for item in navItems %}
-                    {% if item.children is defined and item.children|length > 0 %}
-                        <div>
-                            <button
-                                type="button"
-                                data-action="menu#toggleMobileSubmenu"
-                                class="flex items-center justify-between w-full py-2.5 px-3 text-left text-sm font-medium rounded-md hover:opacity-80 transition-opacity"
-                                style="color: {{ menuText }};"
-                            >
-                                {{ item.title }}
-                                <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                            </button>
-                            <div data-menu-target="submenu" class="hidden pl-4 space-y-0.5">
-                                {% for child in item.children %}
+                <div data-menu-target="submenu" class="{{ config.clickParentPage|default(false) ? '' : 'hidden' }} pl-3 space-y-0.5">
+                    {% for child in item.children %}
+                        {% if child.children is defined and child.children|length > 0 %}
+                            {# L2 with L3 children — nested accordion #}
+                            <div>
+                                <button
+                                    type="button"
+                                    data-action="menu#toggleMobileSubmenu"
+                                    class="iw-menu-text-l2 flex items-center justify-between w-full py-2 px-3 text-sm rounded-md opacity-70 hover:opacity-100 transition-opacity text-left"
+                                >
+                                    <span>{{ child.title }}</span>
+                                    <svg class="w-3.5 h-3.5 flex-shrink-0 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                                <div data-menu-target="submenu" class="hidden pl-3 space-y-0.5">
+                                    {# Link to L2 page itself #}
                                     <a
                                         href="{{ sulu_content_path(child.url) }}"
-                                        class="block py-2 px-3 text-sm rounded-md opacity-75 hover:opacity-100 transition-opacity no-underline"
-                                        style="color: {{ menuText }};"
+                                        class="iw-menu-text-l3 block py-1.5 px-3 text-xs opacity-50 hover:opacity-100 transition-opacity no-underline italic"
                                     >
                                         {{ child.title }}
                                     </a>
-                                {% endfor %}
+                                    {# L3 grandchildren #}
+                                    {% for grandchild in child.children %}
+                                        <a
+                                            href="{{ sulu_content_path(grandchild.url) }}"
+                                            class="iw-menu-text-l3 block py-1.5 px-3 text-xs opacity-60 hover:opacity-100 transition-opacity no-underline"
+                                        >
+                                            {{ grandchild.title }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
+                        {% else %}
+                            {# L2 without children — simple link #}
+                            <a
+                                href="{{ sulu_content_path(child.url) }}"
+                                class="iw-menu-text-l2 block py-2 px-3 text-sm rounded-md opacity-70 hover:opacity-100 transition-opacity no-underline"
+                            >
+                                {{ child.title }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            {# L1 without children — simple link #}
+            <a
+                href="{{ sulu_content_path(item.url) }}"
+                class="iw-menu-text block py-2.5 px-3 text-sm font-semibold rounded-md hover:opacity-80 transition-opacity no-underline"
+            >
+                {{ item.title }}
+            </a>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+{# Macro: social media icons #}
+{% macro render_social_links(socialLinks) %}
+    {% if socialLinks|length > 0 %}
+        <div class="flex items-center gap-3 py-4">
+            {% for link in socialLinks %}
+                <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center">
+                    {% if link.icon is defined and link.icon.id is defined %}
+                        {% set iconMedia = sulu_resolve_media(link.icon.id, app.request.locale) %}
+                        {% if iconMedia is not null and iconMedia.url is defined %}
+                            {% set iconUrl = iconMedia.thumbnails['50x50']|default(iconMedia.url) %}
+                            <span class="iw-social-icon w-5 h-5"
+                                  style="-webkit-mask-image: url('{{ iconUrl }}'); mask-image: url('{{ iconUrl }}');"
+                                  aria-label="{{ link.name|default('') }}"></span>
+                        {% else %}
+                            <span class="iw-social-text text-sm">{{ link.name|default('') }}</span>
+                        {% endif %}
                     {% else %}
-                        <a
-                            href="{{ sulu_content_path(item.url) }}"
-                            class="block py-2.5 px-3 text-sm font-medium rounded-md hover:opacity-80 transition-opacity no-underline"
-                            style="color: {{ menuText }};"
-                        >
-                            {{ item.title }}
-                        </a>
+                        <span class="iw-social-text text-sm">{{ link.name|default('') }}</span>
                     {% endif %}
-                {% endfor %}
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endmacro %}
+
+{# Macro: logo display #}
+{% macro render_logo(displayDesktop, logoDesktopUrl, displayMobile, logoMobileUrl, displaySiteName, siteName) %}
+    <a href="{{ sulu_content_path('/') }}" class="iw-menu-text flex items-center gap-2 no-underline">
+        {% if displayDesktop and logoDesktopUrl %}
+            <img src="{{ logoDesktopUrl }}" alt="" class="iw-menu-logo-desktop hidden md:block w-auto">
+        {% endif %}
+        {% if displayMobile and logoMobileUrl %}
+            <img src="{{ logoMobileUrl }}" alt="" class="iw-menu-logo-mobile block md:hidden w-auto">
+        {% endif %}
+        {% if displaySiteName %}
+            <span class="text-lg font-bold">{{ siteName }}</span>
+        {% endif %}
+        {# Fallback: show site name if nothing else is configured #}
+        {% if not displayDesktop and not displayMobile and not displaySiteName %}
+            <span class="text-lg font-bold">{{ siteName|default('Site') }}</span>
+        {% endif %}
+    </a>
+{% endmacro %}
+
+<header data-controller="menu"
+        data-menu-animation-value="slide"
+        data-menu-slide-direction-value="{{ position }}"
+        class="iw-menu {{ config.transparentNavbar|default(false) ? 'iw-menu-transparent' : '' }}">
+
+    {# ═══ NAVBAR: always visible (mobile + desktop) ═══ #}
+    <nav class="sticky top-0 z-40 w-full transition-shadow">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16 md:h-20">
+            {# LEFT — Logo + Site Name #}
+            <div class="flex-shrink-0 flex items-center">
+                {{ _self.render_logo(
+                    config.displayLogoDesktop|default(false), logoDesktopUrl,
+                    config.displayLogoMobile|default(false), logoMobileUrl,
+                    config.displaySiteName|default(false), config.siteName|default('')
+                ) }}
+            </div>
+
+            {# RIGHT — Social media + Burger #}
+            <div class="flex items-center gap-3">
+                {# Social media icons (desktop only) #}
+                {% if socialLinks|length > 0 %}
+                    <div class="hidden md:flex items-center gap-2">
+                        {% for link in socialLinks %}
+                            <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
+                               class="inline-flex items-center">
+                                {% if link.icon is defined and link.icon.id is defined %}
+                                    {% set iconMedia = sulu_resolve_media(link.icon.id, app.request.locale) %}
+                                    {% if iconMedia is not null and iconMedia.url is defined %}
+                                        {% set iconUrl = iconMedia.thumbnails['50x50']|default(iconMedia.url) %}
+                                        <span class="iw-social-icon w-5 h-5"
+                                              style="-webkit-mask-image: url('{{ iconUrl }}'); mask-image: url('{{ iconUrl }}');"
+                                              aria-label="{{ link.name|default('') }}"></span>
+                                    {% else %}
+                                        <span class="iw-social-text text-sm">{{ link.name|default('') }}</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="iw-social-text text-sm">{{ link.name|default('') }}</span>
+                                {% endif %}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {# Burger — mobile: opens overlay, desktop: toggles sidebar #}
+                <button type="button"
+                        data-action="menu#toggle"
+                        data-menu-target="burger"
+                        class="lg:hidden iw-menu-burger w-10 h-10 flex flex-col items-center justify-center gap-1.5"
+                        aria-label="Menu">
+                    <span class="iw-menu-burger-line"></span>
+                    <span class="iw-menu-burger-line"></span>
+                    <span class="iw-menu-burger-line"></span>
+                </button>
+                <button type="button"
+                        data-action="menu#toggleSidebar"
+                        data-menu-target="sidebarBurger"
+                        class="hidden lg:flex iw-menu-burger w-10 h-10 flex-col items-center justify-center gap-1.5"
+                        aria-label="Menu">
+                    <span class="iw-menu-burger-line"></span>
+                    <span class="iw-menu-burger-line"></span>
+                    <span class="iw-menu-burger-line"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    {# ═══ MOBILE: overlay panel (slide from left/right) ═══ #}
+    <div data-menu-target="panel"
+         class="lg:hidden fixed inset-0 z-50 invisible opacity-0">
+        {# Backdrop #}
+        <div data-menu-target="backdrop"
+             data-action="click->menu#toggle"
+             class="iw-menu-backdrop absolute inset-0"></div>
+        {# Side panel #}
+        <div class="iw-menu-sidebar relative z-10 h-full w-72 max-w-[80vw] flex flex-col overflow-y-auto
+                    {{ isLeft ? '' : 'ml-auto' }}">
+            {# Close button #}
+            <div class="flex items-center {{ isLeft ? 'justify-end' : 'justify-start' }} h-16 px-4">
+                <button type="button"
+                        data-action="menu#toggle"
+                        class="iw-menu-burger is-open w-10 h-10 flex flex-col items-center justify-center gap-1.5"
+                        aria-label="Close">
+                    <span class="iw-menu-burger-line"></span>
+                    <span class="iw-menu-burger-line"></span>
+                    <span class="iw-menu-burger-line"></span>
+                </button>
+            </div>
+            {# Navigation L1/L2/L3 #}
+            {% if navItems is not empty %}
+                <nav class="flex-1 px-4 py-2 space-y-1">
+                    {{ _self.render_nav_items(navItems, config) }}
+                </nav>
+            {% endif %}
+            {# Logo + Social links at the bottom #}
+            <div class="mt-auto px-4 py-4">
+                {% if (config.displayLogoDesktop|default(false) and logoDesktopUrl) or (config.displayLogoMobile|default(false) and logoMobileUrl) %}
+                    <div class="pb-3">
+                        {{ _self.render_logo(
+                            config.displayLogoDesktop|default(false), logoDesktopUrl,
+                            config.displayLogoMobile|default(false), logoMobileUrl,
+                            false, ''
+                        ) }}
+                    </div>
+                {% endif %}
+                {{ _self.render_social_links(socialLinks) }}
+            </div>
+        </div>
+    </div>
+
+    {# ═══ DESKTOP: Sidebar fixe (starts closed, toggled via navbar burger) ═══ #}
+    <aside data-menu-target="sidebar"
+           class="hidden lg:flex fixed top-0 {{ isLeft ? 'left-0' : 'right-0' }} h-screen z-30
+                  iw-menu-sidebar w-72 flex-col transition-transform duration-300
+                  {{ isLeft ? '-translate-x-full' : 'translate-x-full' }}">
+
+        {# Top spacer matching navbar height #}
+        <div class="h-20 flex-shrink-0"></div>
+
+        {# Navigation L1/L2/L3 #}
+        {% if navItems is not empty %}
+            <nav class="flex-1 overflow-y-auto px-4 py-2 space-y-1">
+                {{ _self.render_nav_items(navItems, config) }}
             </nav>
         {% endif %}
-    </div>
-</aside>
 
-{# Offset the page content on desktop to account for the sidebar width #}
-<style>
-    @media (min-width: 1024px) {
-        body > main { margin-left: {{ sidebarWidth }}; }
-    }
-</style>
+        {# Social links at the bottom #}
+        <div class="mt-auto px-4 py-4">
+            {{ _self.render_social_links(socialLinks) }}
+        </div>
+    </aside>
+</header>

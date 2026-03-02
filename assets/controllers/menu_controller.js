@@ -1,27 +1,54 @@
 import { Controller } from '@hotwired/stimulus';
 
 /**
- * Menu controller — handles mobile menu toggle, dropdowns, and scroll behavior.
+ * Menu controller — handles mobile fullscreen overlay, desktop dropdowns (click + hover),
+ * level-3 sub-dropdowns with smart repositioning, and scroll behavior.
+ *
+ * Values:
+ *   - animation: The animation type ("none", "slide", "fade")
+ *   - slideDirection: The slide direction ("top", "right", "bottom", "left")
  *
  * Targets:
- *   - panel: The mobile menu panel (or fullscreen overlay)
+ *   - panel: The mobile fullscreen overlay panel
  *   - burger: The burger button element
- *   - iconOpen: The "open" hamburger icon
- *   - iconClose: The "close" (X) icon
- *   - dropdown: Desktop dropdown menu containers
+ *   - dropdown: Desktop L2 dropdown menu containers
+ *   - dropdownParent: Desktop L2 dropdown parent wrappers (for hover events)
+ *   - subdropdown: Desktop L3 sub-dropdown menu containers
+ *   - subdropdownParent: Desktop L3 sub-dropdown parent wrappers (for hover events)
  *   - submenu: Mobile submenu containers (toggled independently)
  *
  * Actions:
- *   - toggle(): Toggle mobile menu open/close
- *   - close(): Close the mobile menu
+ *   - toggle(): Toggle mobile overlay open/close
  *   - toggleDropdown(event): Toggle a desktop dropdown
  *   - toggleMobileSubmenu(event): Toggle a mobile submenu accordion
  */
 export default class extends Controller {
-    static targets = ['panel', 'burger', 'iconOpen', 'iconClose', 'dropdown', 'submenu'];
+    static targets = [
+        'panel', 'burger',
+        'dropdown', 'dropdownParent',
+        'subdropdown', 'subdropdownParent',
+        'submenu',
+        'curtainLeft', 'curtainRight',
+        'backdrop',
+        'sidebar', 'sidebarBurger',
+    ];
+
+    static values = {
+        animation: { type: String, default: 'none' },
+        slideDirection: { type: String, default: 'top' },
+    };
 
     /** @type {boolean} Whether the mobile menu is currently open */
     isOpen = false;
+
+    /** @type {Map<Element, number>} Timeout IDs for hover close delay per dropdown parent */
+    _hoverTimeouts = new Map();
+
+    /** @type {Array<Function>} Cleanup callbacks for hover listeners */
+    _hoverCleanups = [];
+
+    /** @type {boolean} Whether the desktop sidebar is currently open */
+    isSidebarOpen = false;
 
     connect() {
         // Close dropdowns when clicking outside
@@ -31,23 +58,30 @@ export default class extends Controller {
         // Scroll behavior: add shadow on scroll
         this._onScroll = this._handleScroll.bind(this);
         window.addEventListener('scroll', this._onScroll, { passive: true });
+
+        // Setup hover behavior for desktop dropdowns (L2 + L3)
+        this._setupHoverDropdowns();
+
+        // Set initial hidden transform on the panel based on animation config
+        this._setInitialPanelState();
     }
 
     disconnect() {
         document.removeEventListener('click', this._onDocumentClick);
         window.removeEventListener('scroll', this._onScroll);
+        this._cleanupHoverDropdowns();
     }
 
-    /** Toggle the mobile menu panel visibility. */
+    /** Toggle the mobile overlay visibility with animation. */
     toggle() {
         this.isOpen = !this.isOpen;
-        this._updateState();
-    }
 
-    /** Close the mobile menu. */
-    close() {
-        this.isOpen = false;
-        this._updateState();
+        // Toggle animated burger (3 lines → X)
+        if (this.hasBurgerTarget) {
+            this.burgerTarget.classList.toggle('is-open', this.isOpen);
+        }
+
+        this._updateOverlayState();
     }
 
     /**
@@ -61,14 +95,23 @@ export default class extends Controller {
 
         if (!dropdown) return;
 
-        // Close all other dropdowns first
+        // Close all other dropdowns and their sub-dropdowns first
         this.dropdownTargets.forEach((dd) => {
             if (dd !== dropdown) {
                 dd.classList.add('hidden');
+                this._closeSubDropdownsInside(dd);
             }
         });
 
+        const willOpen = dropdown.classList.contains('hidden');
         dropdown.classList.toggle('hidden');
+
+        if (willOpen) {
+            this._repositionDropdown(dropdown);
+        } else {
+            // Closing: also reset sub-dropdowns inside
+            this._closeSubDropdownsInside(dropdown);
+        }
     }
 
     /**
@@ -92,26 +135,179 @@ export default class extends Controller {
         }
     }
 
+    /** Toggle desktop sidebar open/close. */
+    toggleSidebar() {
+        if (!this.hasSidebarTarget) return;
+
+        this.isSidebarOpen = !this.isSidebarOpen;
+        const sidebar = this.sidebarTarget;
+        const position = this.slideDirectionValue; // 'left' or 'right'
+        const hiddenClass = position === 'left' ? '-translate-x-full' : 'translate-x-full';
+
+        if (this.isSidebarOpen) {
+            sidebar.classList.remove(hiddenClass);
+            sidebar.classList.add('translate-x-0');
+        } else {
+            sidebar.classList.remove('translate-x-0');
+            sidebar.classList.add(hiddenClass);
+        }
+
+        // Toggle burger → X on desktop
+        if (this.hasSidebarBurgerTarget) {
+            this.sidebarBurgerTarget.classList.toggle('is-open', this.isSidebarOpen);
+        }
+    }
+
     /**
-     * Update the visual state of the mobile menu.
+     * Set the initial hidden state of the panel based on animation type.
      *
      * @private
      */
-    _updateState() {
-        if (this.hasPanelTarget) {
-            this.panelTarget.classList.toggle('hidden', !this.isOpen);
-        }
+    _setInitialPanelState() {
+        // Panel starts hidden via Tailwind classes (invisible + opacity-0).
+        // No inline styles needed — _updateOverlayState() handles everything
+        // dynamically on open/close.
+    }
 
-        if (this.hasIconOpenTarget) {
-            this.iconOpenTarget.classList.toggle('hidden', this.isOpen);
-        }
+    /**
+     * Get the CSS transform for slide animation.
+     *
+     * @param {boolean} open - Whether the panel should be in the open state
+     * @returns {string} CSS transform value
+     * @private
+     */
+    _getSlideTransform(open) {
+        if (open) return 'translate(0, 0)';
 
-        if (this.hasIconCloseTarget) {
-            this.iconCloseTarget.classList.toggle('hidden', !this.isOpen);
+        const direction = this.slideDirectionValue;
+        switch (direction) {
+            case 'top': return 'translateY(-100%)';
+            case 'bottom': return 'translateY(100%)';
+            case 'left': return 'translateX(-100%)';
+            case 'right': return 'translateX(100%)';
+            default: return 'translateY(-100%)';
         }
+    }
 
-        // Prevent body scroll when menu is open
-        document.body.style.overflow = this.isOpen ? 'hidden' : '';
+    /**
+     * Update the fullscreen overlay state with animation.
+     *
+     * @private
+     */
+    _updateOverlayState() {
+        if (!this.hasPanelTarget) return;
+
+        const panel = this.panelTarget;
+        const animation = this.animationValue;
+
+        if (this.isOpen) {
+            // Clean all inline styles and remove Tailwind hiding classes
+            panel.style.cssText = '';
+            panel.classList.remove('invisible', 'opacity-0');
+
+            if (animation === 'slide') {
+                // Fully visible but positioned off-screen
+                panel.style.opacity = '1';
+                panel.style.transform = this._getSlideTransform(false);
+                panel.offsetHeight; // eslint-disable-line no-unused-expressions
+                // Animate only the transform
+                panel.style.transition = 'transform 0.3s ease';
+                panel.style.transform = this._getSlideTransform(true);
+            } else if (animation === 'fade') {
+                // Start transparent
+                panel.style.opacity = '0';
+                panel.offsetHeight; // eslint-disable-line no-unused-expressions
+                // Animate only the opacity
+                panel.style.transition = 'opacity 0.3s ease';
+                panel.style.opacity = '1';
+            } else if (animation === 'curtain') {
+                // Curtain effect: left panel slides from left, right panel slides from right
+                panel.style.opacity = '1';
+                const left = this.hasCurtainLeftTarget ? this.curtainLeftTarget : null;
+                const right = this.hasCurtainRightTarget ? this.curtainRightTarget : null;
+                if (left) {
+                    left.style.transform = 'translateX(-100%)';
+                    left.offsetHeight; // eslint-disable-line no-unused-expressions
+                    left.style.transition = 'transform 0.5s ease';
+                    left.style.transform = 'translateX(0)';
+                }
+                if (right) {
+                    right.style.transform = 'translateX(100%)';
+                    right.offsetHeight; // eslint-disable-line no-unused-expressions
+                    right.style.transition = 'transform 0.5s ease';
+                    right.style.transform = 'translateX(0)';
+                }
+            }
+            // "none": panel is already visible, nothing to animate
+
+            // Show backdrop (sidebar mobile overlay)
+            if (this.hasBackdropTarget) {
+                this.backdropTarget.style.opacity = '0';
+                this.backdropTarget.offsetHeight; // eslint-disable-line no-unused-expressions
+                this.backdropTarget.style.transition = 'opacity 0.3s ease';
+                this.backdropTarget.style.opacity = '1';
+            }
+
+            document.body.style.overflow = 'hidden';
+        } else {
+            // Closing: animate out then clean up
+            if (animation === 'slide') {
+                panel.style.transition = 'transform 0.3s ease';
+                panel.style.transform = this._getSlideTransform(false);
+            } else if (animation === 'fade') {
+                panel.style.transition = 'opacity 0.3s ease';
+                panel.style.opacity = '0';
+            } else if (animation === 'curtain') {
+                const left = this.hasCurtainLeftTarget ? this.curtainLeftTarget : null;
+                const right = this.hasCurtainRightTarget ? this.curtainRightTarget : null;
+                if (left) {
+                    left.style.transition = 'transform 0.5s ease';
+                    left.style.transform = 'translateX(-100%)';
+                }
+                if (right) {
+                    right.style.transition = 'transform 0.5s ease';
+                    right.style.transform = 'translateX(100%)';
+                }
+            }
+
+            // Hide backdrop (sidebar mobile overlay)
+            if (this.hasBackdropTarget) {
+                this.backdropTarget.style.transition = 'opacity 0.3s ease';
+                this.backdropTarget.style.opacity = '0';
+            }
+
+            if (animation !== 'none') {
+                // Determine which element to listen for transitionend on
+                let transitionTarget = panel;
+                if (animation === 'curtain') {
+                    transitionTarget = this.hasCurtainRightTarget ? this.curtainRightTarget
+                                     : this.hasCurtainLeftTarget ? this.curtainLeftTarget
+                                     : panel;
+                }
+
+                // After transition completes, wipe inline styles and restore hiding classes.
+                // Must filter by e.target to ignore bubbled events from children
+                // (e.g. buttons with transition-opacity finishing before the slide).
+                const onEnd = (e) => {
+                    if (e.target !== transitionTarget || e.propertyName !== 'transform') return;
+                    transitionTarget.removeEventListener('transitionend', onEnd);
+                    panel.style.cssText = '';
+                    panel.classList.add('invisible', 'opacity-0');
+                    // Clean curtain inline styles
+                    if (animation === 'curtain') {
+                        if (this.hasCurtainLeftTarget) this.curtainLeftTarget.style.cssText = '';
+                        if (this.hasCurtainRightTarget) this.curtainRightTarget.style.cssText = '';
+                    }
+                };
+                transitionTarget.addEventListener('transitionend', onEnd);
+            } else {
+                // No animation: hide instantly
+                panel.style.cssText = '';
+                panel.classList.add('invisible', 'opacity-0');
+            }
+
+            document.body.style.overflow = '';
+        }
     }
 
     /**
@@ -123,6 +319,7 @@ export default class extends Controller {
     _handleDocumentClick(event) {
         if (!this.element.contains(event.target)) {
             this.dropdownTargets.forEach((dd) => dd.classList.add('hidden'));
+            this._resetAllSubDropdowns();
         }
     }
 
@@ -134,5 +331,213 @@ export default class extends Controller {
     _handleScroll() {
         const scrolled = window.scrollY > 10;
         this.element.classList.toggle('shadow-md', scrolled);
+    }
+
+    /**
+     * Setup mouseenter/mouseleave listeners on dropdown parents (L2 + L3)
+     * for desktop hover behavior. Uses a small delay on mouseleave to
+     * prevent accidental closures.
+     *
+     * @private
+     */
+    _setupHoverDropdowns() {
+        // Only enable hover on non-touch devices (desktop)
+        const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+        if (!mediaQuery.matches) return;
+
+        // L2 dropdown parents
+        if (this.hasDropdownParentTarget) {
+            this.dropdownParentTargets.forEach((parent) => {
+                const dropdown = parent.querySelector('[data-menu-target="dropdown"]');
+                if (!dropdown) return;
+
+                const onEnter = () => {
+                    this._clearHoverTimeout(parent);
+
+                    // Close other L2 dropdowns
+                    this.dropdownTargets.forEach((dd) => {
+                        if (dd !== dropdown) {
+                            dd.classList.add('hidden');
+                            this._closeSubDropdownsInside(dd);
+                        }
+                    });
+
+                    dropdown.classList.remove('hidden');
+                    this._repositionDropdown(dropdown);
+                };
+
+                const onLeave = () => {
+                    const timeout = setTimeout(() => {
+                        dropdown.classList.add('hidden');
+                        this._closeSubDropdownsInside(dropdown);
+                        this._hoverTimeouts.delete(parent);
+                    }, 150);
+                    this._hoverTimeouts.set(parent, timeout);
+                };
+
+                parent.addEventListener('mouseenter', onEnter);
+                parent.addEventListener('mouseleave', onLeave);
+
+                this._hoverCleanups.push(() => {
+                    parent.removeEventListener('mouseenter', onEnter);
+                    parent.removeEventListener('mouseleave', onLeave);
+                });
+            });
+        }
+
+        // L3 sub-dropdown parents
+        if (this.hasSubdropdownParentTarget) {
+            this.subdropdownParentTargets.forEach((parent) => {
+                const subdropdown = parent.querySelector('[data-menu-target="subdropdown"]');
+                if (!subdropdown) return;
+
+                const onEnter = () => {
+                    this._clearHoverTimeout(parent);
+                    subdropdown.classList.remove('hidden');
+                    this._repositionSubDropdown(subdropdown);
+                };
+
+                const onLeave = () => {
+                    const timeout = setTimeout(() => {
+                        subdropdown.classList.add('hidden');
+                        this._resetSubDropdownPosition(subdropdown);
+                        this._hoverTimeouts.delete(parent);
+                    }, 150);
+                    this._hoverTimeouts.set(parent, timeout);
+                };
+
+                parent.addEventListener('mouseenter', onEnter);
+                parent.addEventListener('mouseleave', onLeave);
+
+                this._hoverCleanups.push(() => {
+                    parent.removeEventListener('mouseenter', onEnter);
+                    parent.removeEventListener('mouseleave', onLeave);
+                });
+            });
+        }
+    }
+
+    /**
+     * Remove all hover event listeners and clear pending timeouts.
+     *
+     * @private
+     */
+    _cleanupHoverDropdowns() {
+        this._hoverCleanups.forEach((cleanup) => cleanup());
+        this._hoverCleanups = [];
+
+        this._hoverTimeouts.forEach((timeout) => clearTimeout(timeout));
+        this._hoverTimeouts.clear();
+    }
+
+    /**
+     * Clear a pending hover timeout for a specific element.
+     *
+     * @param {Element} element
+     * @private
+     */
+    _clearHoverTimeout(element) {
+        const timeout = this._hoverTimeouts.get(element);
+        if (timeout) {
+            clearTimeout(timeout);
+            this._hoverTimeouts.delete(element);
+        }
+    }
+
+    /**
+     * Reposition an L2 dropdown to prevent it from overflowing the viewport.
+     * Adjusts left/right positioning based on available space.
+     *
+     * @param {HTMLElement} dropdown
+     * @private
+     */
+    _repositionDropdown(dropdown) {
+        // Reset positioning first
+        dropdown.style.left = '';
+        dropdown.style.right = '';
+
+        requestAnimationFrame(() => {
+            const rect = dropdown.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+
+            if (rect.right > viewportWidth) {
+                dropdown.style.left = 'auto';
+                dropdown.style.right = '0';
+            } else if (rect.left < 0) {
+                dropdown.style.left = '0';
+                dropdown.style.right = 'auto';
+            }
+        });
+    }
+
+    /**
+     * Reposition an L3 sub-dropdown to prevent it from overflowing the viewport.
+     *
+     * Default: opens to the right (left-full via Tailwind).
+     * If it overflows right, flips to open to the left instead.
+     *
+     * @param {HTMLElement} subdropdown
+     * @private
+     */
+    _repositionSubDropdown(subdropdown) {
+        // Reset inline overrides — Tailwind's left-full ml-0.5 applies
+        this._resetSubDropdownPosition(subdropdown);
+
+        requestAnimationFrame(() => {
+            const rect = subdropdown.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+
+            if (rect.right > viewportWidth) {
+                // Overflow right: flip to open left
+                subdropdown.style.left = 'auto';
+                subdropdown.style.right = '100%';
+                subdropdown.style.marginLeft = '0';
+                subdropdown.style.marginRight = '0.125rem';
+            } else if (rect.left < 0) {
+                // Overflow left: ensure opens right
+                subdropdown.style.left = '100%';
+                subdropdown.style.right = 'auto';
+            }
+        });
+    }
+
+    /**
+     * Reset a sub-dropdown's inline position overrides so Tailwind classes apply.
+     *
+     * @param {HTMLElement} subdropdown
+     * @private
+     */
+    _resetSubDropdownPosition(subdropdown) {
+        subdropdown.style.left = '';
+        subdropdown.style.right = '';
+        subdropdown.style.marginLeft = '';
+        subdropdown.style.marginRight = '';
+    }
+
+    /**
+     * Close and reset all L3 sub-dropdowns inside a given L2 dropdown.
+     *
+     * @param {HTMLElement} dropdown
+     * @private
+     */
+    _closeSubDropdownsInside(dropdown) {
+        dropdown.querySelectorAll('[data-menu-target="subdropdown"]').forEach((sd) => {
+            sd.classList.add('hidden');
+            this._resetSubDropdownPosition(sd);
+        });
+    }
+
+    /**
+     * Reset all L3 sub-dropdowns to hidden state with default positioning.
+     *
+     * @private
+     */
+    _resetAllSubDropdowns() {
+        if (!this.hasSubdropdownTarget) return;
+
+        this.subdropdownTargets.forEach((sd) => {
+            sd.classList.add('hidden');
+            this._resetSubDropdownPosition(sd);
+        });
     }
 }

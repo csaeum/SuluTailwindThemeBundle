@@ -174,6 +174,9 @@ class ThemeCompiler
         // Button classes
         $css .= $this->generateButtonClasses($tokens['buttons'] ?? []);
 
+        // Menu utility classes (navbar, dropdowns, overlay, social icons)
+        $css .= $this->generateMenuClasses();
+
         // Block variant classes
         $css .= $this->generateBlockVariantClasses($tokens['blockVariants'] ?? [], $tokens['buttons'] ?? []);
 
@@ -350,6 +353,91 @@ class ThemeCompiler
         }
 
         return $css . "\n";
+    }
+
+    /**
+     * Generate CSS utility classes for the menu component.
+     *
+     * Covers: navbar base, text colors per level, dropdown backgrounds,
+     * dividers, burger icons, logo sizing, fullscreen overlay, and
+     * social media icons (mask-image technique for SVG coloring).
+     *
+     * @return string CSS class declarations
+     */
+    private function generateMenuClasses(): string
+    {
+        $css = "/* Menu component */\n";
+
+        // Base: navbar header + overlay background/text
+        $css .= ".iw-menu { background-color: var(--menu-bg); color: var(--menu-text); }\n";
+        $css .= ".iw-menu > nav { background-color: inherit; }\n";
+
+        // Transparent navbar variant
+        $css .= ".iw-menu.iw-menu-transparent { background-color: transparent; }\n";
+
+        // Text colors per navigation level
+        $css .= ".iw-menu-text { color: var(--menu-text); }\n";
+        $css .= ".iw-menu-text-l2 { color: var(--menu-secondText, var(--menu-text)); }\n";
+        $css .= ".iw-menu-text-l3 { color: var(--menu-thirdText, var(--menu-secondText, var(--menu-text))); }\n";
+
+        // Dropdown backgrounds per level
+        $css .= ".iw-menu-dropdown-l2 { background-color: var(--menu-secondBg, var(--menu-bg)); border-radius: var(--border-radius); }\n";
+        $css .= ".iw-menu-dropdown-l3 { background-color: var(--menu-thirdBg, var(--menu-secondBg, var(--menu-bg))); border-radius: var(--border-radius); }\n";
+
+        // Dividers
+        $css .= ".iw-menu-divider { border-color: var(--menu-divider, rgba(255,255,255,0.1)); }\n";
+
+        // Animated burger button (3 lines → X)
+        $css .= ".iw-menu-burger { color: var(--menu-burgerOpen, var(--menu-text)); }\n";
+        $css .= ".iw-menu-burger-line {\n";
+        $css .= "  display: block;\n";
+        $css .= "  width: 22px;\n";
+        $css .= "  height: 2px;\n";
+        $css .= "  background-color: currentColor;\n";
+        $css .= "  transition: transform 0.3s ease, opacity 0.3s ease;\n";
+        $css .= "}\n";
+        $css .= ".iw-menu-burger.is-open { color: var(--menu-burgerClose, var(--menu-text)); }\n";
+        $css .= ".iw-menu-burger.is-open .iw-menu-burger-line:nth-child(1) { transform: translateY(8px) rotate(45deg); }\n";
+        $css .= ".iw-menu-burger.is-open .iw-menu-burger-line:nth-child(2) { opacity: 0; }\n";
+        $css .= ".iw-menu-burger.is-open .iw-menu-burger-line:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }\n";
+
+        // Logo sizing
+        $css .= ".iw-menu-logo-desktop { max-height: 40px; }\n";
+        $css .= ".iw-menu-logo-mobile { max-height: 32px; }\n";
+
+        // Fullscreen overlay (transition is handled by JS, not CSS, to avoid conflicts)
+        $css .= ".iw-menu-overlay {\n";
+        $css .= "  background-color: var(--menu-bg);\n";
+        $css .= "  color: var(--menu-text);\n";
+        $css .= "}\n";
+        $css .= ".iw-menu-overlay-nav { height: 100%; }\n";
+
+        // Fullscreen split layout (curtain effect)
+        $css .= ".iw-menu-fullscreen-nav { background-color: var(--menu-bg); }\n";
+
+        // Sidebar panel
+        $css .= ".iw-menu-sidebar { background-color: var(--menu-bg); }\n";
+
+        // Backdrop overlay
+        $css .= ".iw-menu-backdrop { background-color: rgba(0, 0, 0, 0.5); }\n";
+
+        // Social media icons — mask-image technique for SVG coloring
+        $css .= ".iw-social-icon {\n";
+        $css .= "  display: inline-block;\n";
+        $css .= "  background-color: var(--menu-socialMedia);\n";
+        $css .= "  -webkit-mask-size: contain;\n";
+        $css .= "  mask-size: contain;\n";
+        $css .= "  -webkit-mask-repeat: no-repeat;\n";
+        $css .= "  mask-repeat: no-repeat;\n";
+        $css .= "  -webkit-mask-position: center;\n";
+        $css .= "  mask-position: center;\n";
+        $css .= "  transition: background-color 0.2s ease;\n";
+        $css .= "}\n";
+        $css .= "a:hover > .iw-social-icon { background-color: var(--menu-socialMediaHover, var(--menu-socialMedia)); }\n";
+        $css .= ".iw-social-text { color: var(--menu-socialMedia); transition: color 0.2s ease; }\n";
+        $css .= "a:hover > .iw-social-text { color: var(--menu-socialMediaHover, var(--menu-socialMedia)); }\n\n";
+
+        return $css;
     }
 
     /**

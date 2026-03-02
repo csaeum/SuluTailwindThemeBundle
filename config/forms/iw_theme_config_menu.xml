@@ -34,7 +34,29 @@
                     </params>
                 </property>
 
-                <property name="menuConfig_animation" type="single_select" colspan="6">
+                <property name="menuConfig_navPosition" type="single_select" colspan="6"
+                          visibleCondition="menuConfig_type == 'navbar'">
+                    <meta>
+                        <title>iw_sulu_theme.menu_navPosition</title>
+                    </meta>
+                    <params>
+                        <param name="default_value" value="center"/>
+                        <param name="values" type="collection">
+                            <param name="left">
+                                <meta><title>iw_sulu_theme.menu_navPosition_left</title></meta>
+                            </param>
+                            <param name="center">
+                                <meta><title>iw_sulu_theme.menu_navPosition_center</title></meta>
+                            </param>
+                            <param name="right">
+                                <meta><title>iw_sulu_theme.menu_navPosition_right</title></meta>
+                            </param>
+                        </param>
+                    </params>
+                </property>
+
+                <property name="menuConfig_animation" type="single_select" colspan="6"
+                          visibleCondition="menuConfig_type != 'fullscreen' AND menuConfig_type != 'sidebar'">
                     <meta>
                         <title>iw_sulu_theme.menu_animation</title>
                     </meta>
@@ -48,6 +70,31 @@
                             </param>
                             <param name="fade">
                                 <meta><title>iw_sulu_theme.menu_animation_fade</title></meta>
+                            </param>
+                        </param>
+                    </params>
+                </property>
+
+                <property name="menuConfig_slideDirection" type="single_select" colspan="6"
+                          visibleCondition="menuConfig_type != 'fullscreen' AND menuConfig_type != 'sidebar'"
+                          disabledCondition="menuConfig_animation != 'slide'">
+                    <meta>
+                        <title>iw_sulu_theme.menu_slideDirection</title>
+                    </meta>
+                    <params>
+                        <param name="default_value" value="top"/>
+                        <param name="values" type="collection">
+                            <param name="top">
+                                <meta><title>iw_sulu_theme.menu_slideDirection_top</title></meta>
+                            </param>
+                            <param name="right">
+                                <meta><title>iw_sulu_theme.menu_slideDirection_right</title></meta>
+                            </param>
+                            <param name="bottom">
+                                <meta><title>iw_sulu_theme.menu_slideDirection_bottom</title></meta>
+                            </param>
+                            <param name="left">
+                                <meta><title>iw_sulu_theme.menu_slideDirection_left</title></meta>
                             </param>
                         </param>
                     </params>
@@ -78,6 +125,41 @@
                         </param>
                     </params>
                 </property>
+
+                <property name="menuConfig_fullscreenImage" type="single_media_selection" colspan="6"
+                          visibleCondition="menuConfig_type == 'fullscreen'">
+                    <meta>
+                        <title>iw_sulu_theme.menu_fullscreenImage</title>
+                        <info_text>iw_sulu_theme.menu_fullscreenImage_info</info_text>
+                    </meta>
+                </property>
+
+                <property name="menuConfig_twoColumns" type="checkbox" colspan="6"
+                          visibleCondition="menuConfig_type == 'fullscreen'">
+                    <meta>
+                        <title>iw_sulu_theme.menu_twoColumns</title>
+                        <info_text>iw_sulu_theme.menu_twoColumns_info</info_text>
+                    </meta>
+                </property>
+
+                <property name="menuConfig_sidebarPosition" type="single_select" colspan="6"
+                          visibleCondition="menuConfig_type == 'sidebar'">
+                    <meta>
+                        <title>iw_sulu_theme.menu_sidebarPosition</title>
+                        <info_text>iw_sulu_theme.menu_sidebarPosition_info</info_text>
+                    </meta>
+                    <params>
+                        <param name="default_value" type="string" value="left"/>
+                        <param name="values" type="collection">
+                            <param name="left">
+                                <meta><title>iw_sulu_theme.menu_position_left</title></meta>
+                            </param>
+                            <param name="right">
+                                <meta><title>iw_sulu_theme.menu_position_right</title></meta>
+                            </param>
+                        </param>
+                    </params>
+                </property>
             </properties>
         </section>
 
@@ -87,6 +169,18 @@
                 <title>iw_sulu_theme.menu_display</title>
             </meta>
             <properties>
+                <property name="menuConfig_logoDesktop" type="single_media_selection" colspan="6">
+                    <meta>
+                        <title>iw_sulu_theme.menu_logoDesktop</title>
+                    </meta>
+                </property>
+
+                <property name="menuConfig_logoMobile" type="single_media_selection" colspan="6">
+                    <meta>
+                        <title>iw_sulu_theme.menu_logoMobile</title>
+                    </meta>
+                </property>
+
                 <property name="menuConfig_displayLogoDesktop" type="checkbox" colspan="6">
                     <meta>
                         <title>iw_sulu_theme.menu_displayLogoDesktop</title>
@@ -108,6 +202,13 @@
                 <property name="menuConfig_displaySocialMedia" type="checkbox" colspan="6">
                     <meta>
                         <title>iw_sulu_theme.menu_displaySocialMedia</title>
+                    </meta>
+                </property>
+
+                <property name="menuConfig_transparentNavbar" type="checkbox" colspan="6">
+                    <meta>
+                        <title>iw_sulu_theme.menu_transparentNavbar</title>
+                        <info_text>iw_sulu_theme.menu_transparentNavbar_info</info_text>
                     </meta>
                 </property>
             </properties>
