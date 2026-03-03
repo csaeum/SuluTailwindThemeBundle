@@ -59,6 +59,7 @@ services:
             - '@itech_world.sulu_theme.provider'
             - '@itech_world.sulu_theme.compiler'
             - '@itech_world.sulu_theme.google_fonts_resolver'
+            - '@?sulu_core.webspace.request_analyzer'
         tags:
             - { name: 'twig.extension' }
 

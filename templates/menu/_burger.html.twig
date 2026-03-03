@@ -4,6 +4,11 @@
 {% set animation = config.animation|default('none') %}
 {% set slideDirection = config.slideDirection|default('top') %}
 
+{# Parent page click mode: none, split, or selflink (backward compat: boolean → string) #}
+{% set clickMode = config.clickParentPage|default('none') %}
+{% if clickMode is same as(true) %}{% set clickMode = 'selflink' %}{% endif %}
+{% if clickMode is same as(false) %}{% set clickMode = 'none' %}{% endif %}
+
 {# Resolve logo media URLs #}
 {% set logoDesktopUrl = null %}
 {% set logoMobileUrl = null %}
@@ -109,36 +114,93 @@
             {% if navItems is not empty %}
                 {% for item in navItems %}
                     {% if item.children is defined and item.children|length > 0 %}
-                        <div class="iw-menu-divider border-b">
-                            <button
-                                type="button"
-                                data-action="menu#toggleMobileSubmenu"
-                                class="iw-menu-text flex items-center justify-between w-full py-4 text-left"
-                            >
-                                <span class="text-lg font-medium">{{ item.title }}</span>
-                                <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
+                        <div class="iw-menu-divider border-b iw-menu-parent-item">
+                            {% if clickMode == 'split' %}
+                                {# Split button: link + separate chevron toggle #}
+                                <div class="flex items-center justify-between w-full">
+                                    <a
+                                        href="{{ sulu_content_path(item.url) }}"
+                                        class="iw-menu-text flex-1 py-4 text-lg font-medium no-underline"
+                                    >
+                                        {{ item.title }}
+                                    </a>
+                                    <button
+                                        type="button"
+                                        data-action="menu#toggleMobileSubmenu"
+                                        class="iw-menu-text p-2 cursor-pointer"
+                                    >
+                                        <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                </div>
+                            {% else %}
+                                {# Default button (none + selflink) #}
+                                <button
+                                    type="button"
+                                    data-action="menu#toggleMobileSubmenu"
+                                    class="iw-menu-text flex items-center justify-between w-full py-4 text-left cursor-pointer"
+                                >
+                                    <span class="text-lg font-medium">{{ item.title }}</span>
+                                    <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                            {% endif %}
                             <div data-menu-target="submenu" class="iw-menu-dropdown-l2 hidden pb-3 mt-1 px-4">
+                                {# Self-link: add parent page as first item in submenu #}
+                                {% if clickMode == 'selflink' %}
+                                    <a
+                                        href="{{ sulu_content_path(item.url) }}"
+                                        class="iw-menu-text-l2 block py-2.5 opacity-80 hover:opacity-100 no-underline italic"
+                                    >
+                                        {{ item.title }}
+                                    </a>
+                                {% endif %}
                                 {% for child in item.children %}
                                     {% if child.children is defined and child.children|length > 0 %}
                                         {# Level 2 with level 3 sub-accordion #}
-                                        <button
-                                            type="button"
-                                            data-action="menu#toggleMobileSubmenu"
-                                            class="iw-menu-text-l2 flex items-center justify-between w-full py-2.5 text-left"
-                                        >
-                                            <span>{{ child.title }}</span>
-                                            <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                                        </button>
-                                        <div data-menu-target="submenu" class="iw-menu-dropdown-l3 hidden pb-2 mt-1 px-4">
-                                            {% for grandchild in child.children %}
-                                                <a
-                                                    href="{{ sulu_content_path(grandchild.url) }}"
-                                                    class="iw-menu-text-l3 block py-2 text-sm opacity-70 hover:opacity-100 no-underline"
+                                        <div class="iw-menu-parent-item">
+                                            {% if clickMode == 'split' %}
+                                                <div class="flex items-center justify-between w-full">
+                                                    <a
+                                                        href="{{ sulu_content_path(child.url) }}"
+                                                        class="iw-menu-text-l2 flex-1 py-2.5 no-underline"
+                                                    >
+                                                        {{ child.title }}
+                                                    </a>
+                                                    <button
+                                                        type="button"
+                                                        data-action="menu#toggleMobileSubmenu"
+                                                        class="iw-menu-text-l2 p-1 cursor-pointer"
+                                                    >
+                                                        <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                                    </button>
+                                                </div>
+                                            {% else %}
+                                                <button
+                                                    type="button"
+                                                    data-action="menu#toggleMobileSubmenu"
+                                                    class="iw-menu-text-l2 flex items-center justify-between w-full py-2.5 text-left cursor-pointer"
                                                 >
-                                                    {{ grandchild.title }}
-                                                </a>
-                                            {% endfor %}
+                                                    <span>{{ child.title }}</span>
+                                                    <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                                </button>
+                                            {% endif %}
+                                            <div data-menu-target="submenu" class="iw-menu-dropdown-l3 hidden pb-2 mt-1 px-4">
+                                                {% if clickMode == 'selflink' %}
+                                                    <a
+                                                        href="{{ sulu_content_path(child.url) }}"
+                                                        class="iw-menu-text-l3 block py-2 text-sm opacity-70 hover:opacity-100 no-underline italic"
+                                                    >
+                                                        {{ child.title }}
+                                                    </a>
+                                                {% endif %}
+                                                {% for grandchild in child.children %}
+                                                    <a
+                                                        href="{{ sulu_content_path(grandchild.url) }}"
+                                                        class="iw-menu-text-l3 block py-2 text-sm opacity-70 hover:opacity-100 no-underline"
+                                                    >
+                                                        {{ grandchild.title }}
+                                                    </a>
+                                                {% endfor %}
+                                            </div>
                                         </div>
                                     {% else %}
                                         <a

@@ -121,7 +121,11 @@ export default class extends Controller {
      */
     toggleMobileSubmenu(event) {
         const button = event.currentTarget;
-        const submenu = button.nextElementSibling;
+        // Find the submenu: either next sibling of button, or next sibling of button's parent wrapper (split button case)
+        let submenu = button.nextElementSibling;
+        if (!submenu || !submenu.hasAttribute('data-menu-target')) {
+            submenu = button.closest('.iw-menu-parent-item')?.querySelector('[data-menu-target="submenu"]');
+        }
         const arrow = button.querySelector('svg');
 
         if (!submenu) return;

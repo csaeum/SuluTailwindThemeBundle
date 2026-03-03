@@ -375,10 +375,13 @@ class ThemeCompiler
         // Transparent navbar variant
         $css .= ".iw-menu.iw-menu-transparent { background-color: transparent; }\n";
 
-        // Text colors per navigation level
-        $css .= ".iw-menu-text { color: var(--menu-text); }\n";
-        $css .= ".iw-menu-text-l2 { color: var(--menu-secondText, var(--menu-text)); }\n";
-        $css .= ".iw-menu-text-l3 { color: var(--menu-thirdText, var(--menu-secondText, var(--menu-text))); }\n";
+        // Text colors per navigation level (with hover transition)
+        $css .= ".iw-menu-text { color: var(--menu-text); transition: color 0.2s ease; }\n";
+        $css .= ".iw-menu-text:hover { color: var(--menu-textHover, var(--menu-text)); }\n";
+        $css .= ".iw-menu-text-l2 { color: var(--menu-secondText, var(--menu-text)); transition: color 0.2s ease; }\n";
+        $css .= ".iw-menu-text-l2:hover { color: var(--menu-secondTextHover, var(--menu-secondText, var(--menu-text))); }\n";
+        $css .= ".iw-menu-text-l3 { color: var(--menu-thirdText, var(--menu-secondText, var(--menu-text))); transition: color 0.2s ease; }\n";
+        $css .= ".iw-menu-text-l3:hover { color: var(--menu-thirdTextHover, var(--menu-thirdText, var(--menu-secondText, var(--menu-text)))); }\n";
 
         // Dropdown backgrounds per level
         $css .= ".iw-menu-dropdown-l2 { background-color: var(--menu-secondBg, var(--menu-bg)); border-radius: var(--border-radius); }\n";

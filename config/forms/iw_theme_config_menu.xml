@@ -100,10 +100,33 @@
                     </params>
                 </property>
 
-                <property name="menuConfig_clickParentPage" type="checkbox" colspan="6">
+                <property name="menuConfig_clickParentPage" type="single_select" colspan="6"
+                          visibleCondition="menuConfig_type != 'navbar'">
                     <meta>
                         <title>iw_sulu_theme.menu_clickParentPage</title>
                         <info_text>iw_sulu_theme.menu_clickParentPage_info</info_text>
+                    </meta>
+                    <params>
+                        <param name="default_value" type="string" value="none"/>
+                        <param name="values" type="collection">
+                            <param name="none">
+                                <meta><title>iw_sulu_theme.menu_clickParentPage_none</title></meta>
+                            </param>
+                            <param name="split">
+                                <meta><title>iw_sulu_theme.menu_clickParentPage_split</title></meta>
+                            </param>
+                            <param name="selflink">
+                                <meta><title>iw_sulu_theme.menu_clickParentPage_selflink</title></meta>
+                            </param>
+                        </param>
+                    </params>
+                </property>
+
+                <property name="menuConfig_clickParentPageNavbar" type="checkbox" colspan="6"
+                          visibleCondition="menuConfig_type == 'navbar'">
+                    <meta>
+                        <title>iw_sulu_theme.menu_clickParentPageNavbar</title>
+                        <info_text>iw_sulu_theme.menu_clickParentPageNavbar_info</info_text>
                     </meta>
                 </property>
 

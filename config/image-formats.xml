@@ -57,6 +57,24 @@
         <scale x="400" y="300" mode="outbound"/>
     </format>
 
+    <!-- Logo desktop (max 400x80, keeps aspect ratio) -->
+    <format key="iw_theme_logo_desktop">
+        <meta>
+            <title lang="en">Theme Logo Desktop</title>
+            <title lang="fr">Thème Logo Desktop</title>
+        </meta>
+        <scale x="400" y="80" mode="inset"/>
+    </format>
+
+    <!-- Logo mobile (max 200x64, keeps aspect ratio) -->
+    <format key="iw_theme_logo_mobile">
+        <meta>
+            <title lang="en">Theme Logo Mobile</title>
+            <title lang="fr">Thème Logo Mobile</title>
+        </meta>
+        <scale x="200" y="64" mode="inset"/>
+    </format>
+
     <!-- Hero banner format (ultra-wide) -->
     <format key="iw_theme_hero">
         <meta>

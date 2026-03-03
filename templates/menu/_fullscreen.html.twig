@@ -10,6 +10,11 @@
 {% endif %}
 {% set twoColumns = config.twoColumns|default(false) %}
 
+{# Parent page click mode: none, split, or selflink (backward compat: boolean → string) #}
+{% set clickMode = config.clickParentPage|default('none') %}
+{% if clickMode is same as(true) %}{% set clickMode = 'selflink' %}{% endif %}
+{% if clickMode is same as(false) %}{% set clickMode = 'none' %}{% endif %}
+
 {# Animation: curtain (split) when image present, slide from right otherwise #}
 {% set animation = fullscreenImageUrl ? 'curtain' : 'slide' %}
 
@@ -129,7 +134,7 @@
     {% endmacro %}
 
     {# Macro: navigation items (L1 / L2 / L3) #}
-    {% macro render_nav_items(navItems, twoColumns) %}
+    {% macro render_nav_items(navItems, twoColumns, clickMode) %}
         {% set navClasses = twoColumns
             ? 'grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-2 text-left'
             : 'space-y-4 md:space-y-6 text-center'
@@ -137,7 +142,7 @@
         <nav class="{{ navClasses }} overflow-y-auto max-h-full px-6 sm:px-8 py-8">
             {% for item in navItems %}
                 <div>
-                    {# L1 link #}
+                    {# L1 link — always a direct link in fullscreen #}
                     <a
                         href="{{ sulu_content_path(item.url) }}"
                         class="iw-menu-text text-2xl md:text-4xl lg:text-5xl font-bold hover:opacity-80 transition-opacity no-underline"
@@ -150,26 +155,50 @@
                         <div class="mt-2 space-y-1">
                             {% for child in item.children %}
                                 {% if child.children is defined and child.children|length > 0 %}
-                                    {# L2 with L3 children — accordion button #}
-                                    <div>
-                                        <button
-                                            type="button"
-                                            data-action="menu#toggleMobileSubmenu"
-                                            class="iw-menu-text-l2 flex items-center gap-2 text-base md:text-lg opacity-60 hover:opacity-100 transition-opacity w-full {{ twoColumns ? 'justify-start' : 'justify-center' }}"
-                                        >
-                                            <span>{{ child.title }}</span>
-                                            <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                            </svg>
-                                        </button>
-                                        <div data-menu-target="submenu" class="hidden mt-1 space-y-1 {{ twoColumns ? '' : 'text-center' }}">
-                                            {# Link to the L2 page itself #}
-                                            <a
-                                                href="{{ sulu_content_path(child.url) }}"
-                                                class="iw-menu-text-l3 block text-sm opacity-50 hover:opacity-100 transition-opacity no-underline italic"
+                                    {# L2 with L3 children #}
+                                    <div class="iw-menu-parent-item">
+                                        {% if clickMode == 'split' %}
+                                            {# Split button: L2 is a link + separate chevron #}
+                                            <div class="flex items-center gap-2 w-full {{ twoColumns ? 'justify-start' : 'justify-center' }}">
+                                                <a
+                                                    href="{{ sulu_content_path(child.url) }}"
+                                                    class="iw-menu-text-l2 text-base md:text-lg opacity-60 hover:opacity-100 transition-opacity no-underline"
+                                                >
+                                                    {{ child.title }}
+                                                </a>
+                                                <button
+                                                    type="button"
+                                                    data-action="menu#toggleMobileSubmenu"
+                                                    class="iw-menu-text-l2 opacity-60 hover:opacity-100 cursor-pointer"
+                                                >
+                                                    <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        {% else %}
+                                            {# Default button (none + selflink) #}
+                                            <button
+                                                type="button"
+                                                data-action="menu#toggleMobileSubmenu"
+                                                class="iw-menu-text-l2 flex items-center gap-2 text-base md:text-lg opacity-60 hover:opacity-100 transition-opacity w-full cursor-pointer {{ twoColumns ? 'justify-start' : 'justify-center' }}"
                                             >
-                                                {{ child.title }}
-                                            </a>
+                                                <span>{{ child.title }}</span>
+                                                <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                                </svg>
+                                            </button>
+                                        {% endif %}
+                                        <div data-menu-target="submenu" class="hidden mt-1 space-y-1 {{ twoColumns ? '' : 'text-center' }}">
+                                            {% if clickMode == 'selflink' %}
+                                                {# Self-link to the L2 page itself #}
+                                                <a
+                                                    href="{{ sulu_content_path(child.url) }}"
+                                                    class="iw-menu-text-l3 block text-sm opacity-50 hover:opacity-100 transition-opacity no-underline italic"
+                                                >
+                                                    {{ child.title }}
+                                                </a>
+                                            {% endif %}
                                             {# L3 grandchildren #}
                                             {% for grandchild in child.children %}
                                                 <a
@@ -254,7 +283,7 @@
                 <div data-menu-target="curtainRight" class="iw-menu-fullscreen-nav relative w-full md:w-1/2 h-full overflow-y-auto flex flex-col items-center justify-center">
                     {{ _self.render_close_button() }}
                     {% if navItems is not empty %}
-                        {{ _self.render_nav_items(navItems, twoColumns) }}
+                        {{ _self.render_nav_items(navItems, twoColumns, clickMode) }}
                     {% endif %}
                     {{ _self.render_overlay_logo(config.displayLogoDesktop|default(false), logoDesktopUrl, config.displayLogoMobile|default(false), logoMobileUrl) }}
                     {{ _self.render_social_links(socialLinks) }}
@@ -270,7 +299,7 @@
         >
             {{ _self.render_close_button() }}
             {% if navItems is not empty %}
-                {{ _self.render_nav_items(navItems, twoColumns) }}
+                {{ _self.render_nav_items(navItems, twoColumns, clickMode) }}
             {% endif %}
             {{ _self.render_overlay_logo(config.displayLogoDesktop|default(false), logoDesktopUrl, config.displayLogoMobile|default(false), logoMobileUrl) }}
             {{ _self.render_social_links(socialLinks) }}

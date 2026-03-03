@@ -86,6 +86,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         'logoDesktop', 'logoMobile',
         'fullscreenImage', 'twoColumns',
         'sidebarPosition', 'transparentNavbar',
+        'clickParentPageNavbar',
     ];
 
     public function __construct(

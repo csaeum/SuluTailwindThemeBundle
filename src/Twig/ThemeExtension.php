@@ -7,6 +7,7 @@ namespace ItechWorld\SuluThemeBundle\Twig;
 use ItechWorld\SuluThemeBundle\Service\GoogleFontsResolver;
 use ItechWorld\SuluThemeBundle\Service\ThemeCompiler;
 use ItechWorld\SuluThemeBundle\Service\ThemeProvider;
+use Sulu\Component\Webspace\Analyzer\RequestAnalyzerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
@@ -23,6 +24,7 @@ class ThemeExtension extends AbstractExtension implements GlobalsInterface
         private readonly ThemeProvider $themeProvider,
         private readonly ThemeCompiler $compiler,
         private readonly GoogleFontsResolver $fontsResolver,
+        private readonly ?RequestAnalyzerInterface $requestAnalyzer = null,
     ) {
     }
 
@@ -157,11 +159,22 @@ class ThemeExtension extends AbstractExtension implements GlobalsInterface
     /**
      * Get the menu configuration for the active theme.
      *
+     * Injects the webspace name as `siteName` when available (website context).
+     *
      * @return array<string, mixed> The menu configuration
      */
     public function getMenuConfig(): array
     {
-        return $this->themeProvider->getMenuConfig();
+        $config = $this->themeProvider->getMenuConfig();
+
+        if (!empty($config) && null !== $this->requestAnalyzer) {
+            $webspace = $this->requestAnalyzer->getWebspace();
+            if (null !== $webspace) {
+                $config['siteName'] = $webspace->getName();
+            }
+        }
+
+        return $config;
     }
 
     /**

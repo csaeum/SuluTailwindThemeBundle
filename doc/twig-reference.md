@@ -70,7 +70,8 @@ Returns the menu configuration for the active theme.
 |-----|------|-------------|
 | `type` | `string` | `navbar`, `burger`, `fullscreen`, or `sidebar` |
 | `animation` | `string` | `none`, `slide`, or `fade` |
-| `clickParentPage` | `bool` | Whether clicking a parent item navigates to its page |
+| `clickParentPage` | `string` | Parent page access mode: `'none'`, `'split'`, or `'selflink'` (default: `'none'`) |
+| `clickParentPageNavbar` | `bool` | Adds a self-link to parent page in navbar submenus (default: `false`) |
 | `childLevels` | `int` | Number of sub-menu levels to display (1, 2, or 3) |
 | `displayLogoDesktop` | `bool` | Show logo on desktop |
 | `displayLogoMobile` | `bool` | Show logo on mobile |

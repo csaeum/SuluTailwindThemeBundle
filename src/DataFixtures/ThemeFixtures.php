@@ -14,6 +14,9 @@ namespace ItechWorld\SuluThemeBundle\DataFixtures;
  * Button property names match the admin form fields:
  *   bg, text, border, hoverBg, hoverText, hoverBorder, radius
  *
+ * Border/button radius values use Tailwind class names (e.g. "rounded-lg")
+ * which are resolved to CSS values by the ThemeCompiler.
+ *
  * Typography families use internal names:
  *   name, role, source, weights (array), fallback
  *
@@ -40,7 +43,7 @@ class ThemeFixtures
     }
 
     /**
-     * Corporate theme: professional blues, Inter font, 8px radius.
+     * Corporate theme: professional blues, Inter font, rounded-lg radius.
      *
      * @return array<string, mixed>
      */
@@ -101,11 +104,11 @@ class ThemeFixtures
                     ],
                 ],
                 'borders' => [
-                    'radius' => '8px',
-                    'radiusSm' => '4px',
-                    'radiusLg' => '12px',
-                    'radiusFull' => '9999px',
-                    'imageRadius' => '8px',
+                    'radius' => 'rounded-lg',
+                    'radiusSm' => 'rounded-sm',
+                    'radiusLg' => 'rounded-xl',
+                    'radiusFull' => 'rounded-full',
+                    'imageRadius' => 'rounded-lg',
                 ],
                 'buttons' => [
                     'primary' => [
@@ -115,7 +118,7 @@ class ThemeFixtures
                         'hoverBg' => '#1e40af',
                         'hoverText' => '#ffffff',
                         'hoverBorder' => 'none',
-                        'radius' => '8px',
+                        'radius' => 'rounded-lg',
                     ],
                     'secondary' => [
                         'bg' => '#ffffff',
@@ -124,7 +127,7 @@ class ThemeFixtures
                         'hoverBg' => '#f8fafc',
                         'hoverText' => '#1e40af',
                         'hoverBorder' => '#1e40af',
-                        'radius' => '8px',
+                        'radius' => 'rounded-lg',
                     ],
                     'accent' => [
                         'bg' => '#f59e0b',
@@ -133,7 +136,7 @@ class ThemeFixtures
                         'hoverBg' => '#d97706',
                         'hoverText' => '#ffffff',
                         'hoverBorder' => 'none',
-                        'radius' => '8px',
+                        'radius' => 'rounded-lg',
                     ],
                 ],
                 'blockVariants' => [
@@ -178,7 +181,8 @@ class ThemeFixtures
             'menuConfig' => [
                 'type' => 'navbar',
                 'animation' => 'none',
-                'clickParentPage' => true,
+                'clickParentPage' => 'none',
+                'clickParentPageNavbar' => true,
                 'childLevels' => 3,
                 'displayLogoDesktop' => true,
                 'displayLogoMobile' => true,
@@ -205,7 +209,7 @@ class ThemeFixtures
     }
 
     /**
-     * Creative theme: pink + amber, Poppins/DM Sans, 16px radius, bold.
+     * Creative theme: pink + amber, Poppins/DM Sans, rounded-2xl radius, bold.
      *
      * @return array<string, mixed>
      */
@@ -266,11 +270,11 @@ class ThemeFixtures
                     ],
                 ],
                 'borders' => [
-                    'radius' => '16px',
-                    'radiusSm' => '8px',
-                    'radiusLg' => '24px',
-                    'radiusFull' => '9999px',
-                    'imageRadius' => '16px',
+                    'radius' => 'rounded-2xl',
+                    'radiusSm' => 'rounded-lg',
+                    'radiusLg' => 'rounded-3xl',
+                    'radiusFull' => 'rounded-full',
+                    'imageRadius' => 'rounded-2xl',
                 ],
                 'buttons' => [
                     'primary' => [
@@ -280,7 +284,7 @@ class ThemeFixtures
                         'hoverBg' => '#db2777',
                         'hoverText' => '#ffffff',
                         'hoverBorder' => 'none',
-                        'radius' => '16px',
+                        'radius' => 'rounded-2xl',
                     ],
                     'secondary' => [
                         'bg' => '#f59e0b',
@@ -289,7 +293,7 @@ class ThemeFixtures
                         'hoverBg' => '#d97706',
                         'hoverText' => '#1f2937',
                         'hoverBorder' => 'none',
-                        'radius' => '16px',
+                        'radius' => 'rounded-2xl',
                     ],
                     'accent' => [
                         'bg' => '#8b5cf6',
@@ -298,7 +302,7 @@ class ThemeFixtures
                         'hoverBg' => '#7c3aed',
                         'hoverText' => '#ffffff',
                         'hoverBorder' => 'none',
-                        'radius' => '16px',
+                        'radius' => 'rounded-2xl',
                     ],
                 ],
                 'blockVariants' => [
@@ -343,7 +347,8 @@ class ThemeFixtures
             'menuConfig' => [
                 'type' => 'navbar',
                 'animation' => 'fade',
-                'clickParentPage' => false,
+                'clickParentPage' => 'none',
+                'clickParentPageNavbar' => false,
                 'childLevels' => 2,
                 'displayLogoDesktop' => true,
                 'displayLogoMobile' => true,
@@ -370,7 +375,7 @@ class ThemeFixtures
     }
 
     /**
-     * Minimal theme: black/white, Playfair Display/Inter, 0px radius, clean.
+     * Minimal theme: black/white, Playfair Display/Inter, no radius, clean.
      *
      * @return array<string, mixed>
      */
@@ -431,11 +436,11 @@ class ThemeFixtures
                     ],
                 ],
                 'borders' => [
-                    'radius' => '0px',
-                    'radiusSm' => '0px',
-                    'radiusLg' => '0px',
-                    'radiusFull' => '9999px',
-                    'imageRadius' => '0px',
+                    'radius' => 'rounded-none',
+                    'radiusSm' => 'rounded-none',
+                    'radiusLg' => 'rounded-none',
+                    'radiusFull' => 'rounded-full',
+                    'imageRadius' => 'rounded-none',
                 ],
                 'buttons' => [
                     'primary' => [
@@ -445,7 +450,7 @@ class ThemeFixtures
                         'hoverBg' => '#374151',
                         'hoverText' => '#ffffff',
                         'hoverBorder' => 'none',
-                        'radius' => '0px',
+                        'radius' => 'rounded-none',
                     ],
                     'secondary' => [
                         'bg' => '#ffffff',
@@ -454,7 +459,7 @@ class ThemeFixtures
                         'hoverBg' => '#f5f5f5',
                         'hoverText' => '#000000',
                         'hoverBorder' => '#000000',
-                        'radius' => '0px',
+                        'radius' => 'rounded-none',
                     ],
                     'accent' => [
                         'bg' => '#737373',
@@ -463,7 +468,7 @@ class ThemeFixtures
                         'hoverBg' => '#525252',
                         'hoverText' => '#ffffff',
                         'hoverBorder' => 'none',
-                        'radius' => '0px',
+                        'radius' => 'rounded-none',
                     ],
                 ],
                 'blockVariants' => [
@@ -508,7 +513,8 @@ class ThemeFixtures
             'menuConfig' => [
                 'type' => 'navbar',
                 'animation' => 'none',
-                'clickParentPage' => true,
+                'clickParentPage' => 'none',
+                'clickParentPageNavbar' => true,
                 'childLevels' => 2,
                 'displayLogoDesktop' => true,
                 'displayLogoMobile' => true,
@@ -535,7 +541,7 @@ class ThemeFixtures
     }
 
     /**
-     * Nature theme: forest green + gold, DM Sans/Open Sans, 12px radius.
+     * Nature theme: forest green + gold, DM Sans/Open Sans, rounded-xl radius.
      *
      * @return array<string, mixed>
      */
@@ -596,11 +602,11 @@ class ThemeFixtures
                     ],
                 ],
                 'borders' => [
-                    'radius' => '12px',
-                    'radiusSm' => '6px',
-                    'radiusLg' => '16px',
-                    'radiusFull' => '9999px',
-                    'imageRadius' => '12px',
+                    'radius' => 'rounded-xl',
+                    'radiusSm' => 'rounded-md',
+                    'radiusLg' => 'rounded-2xl',
+                    'radiusFull' => 'rounded-full',
+                    'imageRadius' => 'rounded-xl',
                 ],
                 'buttons' => [
                     'primary' => [
@@ -610,7 +616,7 @@ class ThemeFixtures
                         'hoverBg' => '#064e3b',
                         'hoverText' => '#ffffff',
                         'hoverBorder' => 'none',
-                        'radius' => '12px',
+                        'radius' => 'rounded-xl',
                     ],
                     'secondary' => [
                         'bg' => '#d97706',
@@ -619,7 +625,7 @@ class ThemeFixtures
                         'hoverBg' => '#b45309',
                         'hoverText' => '#ffffff',
                         'hoverBorder' => 'none',
-                        'radius' => '12px',
+                        'radius' => 'rounded-xl',
                     ],
                     'accent' => [
                         'bg' => '#059669',
@@ -628,7 +634,7 @@ class ThemeFixtures
                         'hoverBg' => '#047857',
                         'hoverText' => '#ffffff',
                         'hoverBorder' => '#065f46',
-                        'radius' => '12px',
+                        'radius' => 'rounded-xl',
                     ],
                 ],
                 'blockVariants' => [
@@ -673,7 +679,8 @@ class ThemeFixtures
             'menuConfig' => [
                 'type' => 'navbar',
                 'animation' => 'slide',
-                'clickParentPage' => true,
+                'clickParentPage' => 'none',
+                'clickParentPageNavbar' => true,
                 'childLevels' => 3,
                 'displayLogoDesktop' => true,
                 'displayLogoMobile' => true,
@@ -700,7 +707,7 @@ class ThemeFixtures
     }
 
     /**
-     * Halloween theme: orange/purple/black, Creepster/Nunito Sans, 12px radius, spooky.
+     * Halloween theme: orange/purple/black, Creepster/Nunito Sans, rounded-xl radius, spooky.
      *
      * @return array<string, mixed>
      */
@@ -761,11 +768,11 @@ class ThemeFixtures
                     ],
                 ],
                 'borders' => [
-                    'radius' => '12px',
-                    'radiusSm' => '6px',
-                    'radiusLg' => '16px',
-                    'radiusFull' => '9999px',
-                    'imageRadius' => '12px',
+                    'radius' => 'rounded-xl',
+                    'radiusSm' => 'rounded-md',
+                    'radiusLg' => 'rounded-2xl',
+                    'radiusFull' => 'rounded-full',
+                    'imageRadius' => 'rounded-xl',
                 ],
                 'buttons' => [
                     'primary' => [
@@ -775,7 +782,7 @@ class ThemeFixtures
                         'hoverBg' => '#ea580c',
                         'hoverText' => '#1c1917',
                         'hoverBorder' => 'none',
-                        'radius' => '12px',
+                        'radius' => 'rounded-xl',
                     ],
                     'secondary' => [
                         'bg' => '#7c3aed',
@@ -784,7 +791,7 @@ class ThemeFixtures
                         'hoverBg' => '#6d28d9',
                         'hoverText' => '#ffffff',
                         'hoverBorder' => 'none',
-                        'radius' => '12px',
+                        'radius' => 'rounded-xl',
                     ],
                     'accent' => [
                         'bg' => '#eab308',
@@ -793,7 +800,7 @@ class ThemeFixtures
                         'hoverBg' => '#ca8a04',
                         'hoverText' => '#1c1917',
                         'hoverBorder' => 'none',
-                        'radius' => '12px',
+                        'radius' => 'rounded-xl',
                     ],
                 ],
                 'blockVariants' => [
@@ -838,7 +845,8 @@ class ThemeFixtures
             'menuConfig' => [
                 'type' => 'navbar',
                 'animation' => 'fade',
-                'clickParentPage' => true,
+                'clickParentPage' => 'none',
+                'clickParentPageNavbar' => true,
                 'childLevels' => 2,
                 'displayLogoDesktop' => true,
                 'displayLogoMobile' => true,
@@ -865,7 +873,7 @@ class ThemeFixtures
     }
 
     /**
-     * Christmas theme: red/green/gold, Mountains of Christmas/Source Sans 3, 10px radius, festive.
+     * Christmas theme: red/green/gold, Mountains of Christmas/Source Sans 3, rounded-xl radius, festive.
      *
      * @return array<string, mixed>
      */
@@ -926,11 +934,11 @@ class ThemeFixtures
                     ],
                 ],
                 'borders' => [
-                    'radius' => '10px',
-                    'radiusSm' => '6px',
-                    'radiusLg' => '14px',
-                    'radiusFull' => '9999px',
-                    'imageRadius' => '10px',
+                    'radius' => 'rounded-xl',
+                    'radiusSm' => 'rounded-md',
+                    'radiusLg' => 'rounded-xl',
+                    'radiusFull' => 'rounded-full',
+                    'imageRadius' => 'rounded-xl',
                 ],
                 'buttons' => [
                     'primary' => [
@@ -940,7 +948,7 @@ class ThemeFixtures
                         'hoverBg' => '#b91c1c',
                         'hoverText' => '#ffffff',
                         'hoverBorder' => 'none',
-                        'radius' => '10px',
+                        'radius' => 'rounded-xl',
                     ],
                     'secondary' => [
                         'bg' => '#15803d',
@@ -949,7 +957,7 @@ class ThemeFixtures
                         'hoverBg' => '#166534',
                         'hoverText' => '#ffffff',
                         'hoverBorder' => 'none',
-                        'radius' => '10px',
+                        'radius' => 'rounded-xl',
                     ],
                     'accent' => [
                         'bg' => '#d97706',
@@ -958,7 +966,7 @@ class ThemeFixtures
                         'hoverBg' => '#b45309',
                         'hoverText' => '#ffffff',
                         'hoverBorder' => 'none',
-                        'radius' => '10px',
+                        'radius' => 'rounded-xl',
                     ],
                 ],
                 'blockVariants' => [
@@ -1003,7 +1011,8 @@ class ThemeFixtures
             'menuConfig' => [
                 'type' => 'navbar',
                 'animation' => 'slide',
-                'clickParentPage' => true,
+                'clickParentPage' => 'none',
+                'clickParentPageNavbar' => true,
                 'childLevels' => 3,
                 'displayLogoDesktop' => true,
                 'displayLogoMobile' => true,
