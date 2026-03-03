@@ -75,6 +75,15 @@
         <scale x="200" y="64" mode="inset"/>
     </format>
 
+    <!-- Mega menu image card (16:10 ratio, 400x250) -->
+    <format key="iw_theme_mega_card">
+        <meta>
+            <title lang="en">Theme Mega Menu Card</title>
+            <title lang="fr">Thème Mega Menu Carte</title>
+        </meta>
+        <scale x="400" y="250" mode="outbound"/>
+    </format>
+
     <!-- Hero banner format (ultra-wide) -->
     <format key="iw_theme_hero">
         <meta>

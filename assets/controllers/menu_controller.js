@@ -31,6 +31,7 @@ export default class extends Controller {
         'curtainLeft', 'curtainRight',
         'backdrop',
         'sidebar', 'sidebarBurger',
+        'megaParent', 'megaDropdown',
     ];
 
     static values = {
@@ -160,6 +161,34 @@ export default class extends Controller {
         if (this.hasSidebarBurgerTarget) {
             this.sidebarBurgerTarget.classList.toggle('is-open', this.isSidebarOpen);
         }
+    }
+
+    /**
+     * Toggle a mega dropdown panel.
+     * Closes all other mega dropdowns before toggling the target one.
+     *
+     * @param {Event} event
+     */
+    toggleMegaDropdown(event) {
+        const button = event.currentTarget;
+        const index = this.megaParentTargets.indexOf(button);
+        const dropdown = this.megaDropdownTargets[index];
+        if (!dropdown) return;
+
+        // Close all other mega dropdowns
+        this.megaDropdownTargets.forEach((dd, i) => {
+            if (i !== index) {
+                dd.classList.add('hidden');
+                const arrow = this.megaParentTargets[i]?.querySelector('svg');
+                if (arrow) arrow.style.transform = '';
+            }
+        });
+
+        // Toggle this one
+        const isHidden = dropdown.classList.contains('hidden');
+        dropdown.classList.toggle('hidden');
+        const arrow = button.querySelector('svg');
+        if (arrow) arrow.style.transform = isHidden ? 'rotate(180deg)' : '';
     }
 
     /**
@@ -324,6 +353,7 @@ export default class extends Controller {
         if (!this.element.contains(event.target)) {
             this.dropdownTargets.forEach((dd) => dd.classList.add('hidden'));
             this._resetAllSubDropdowns();
+            this._closeAllMegaDropdowns();
         }
     }
 
@@ -385,6 +415,67 @@ export default class extends Controller {
                 this._hoverCleanups.push(() => {
                     parent.removeEventListener('mouseenter', onEnter);
                     parent.removeEventListener('mouseleave', onLeave);
+                });
+            });
+        }
+
+        // Mega dropdown parents (L1 buttons for mega menus)
+        if (this.hasMegaParentTarget) {
+            this.megaParentTargets.forEach((button, index) => {
+                const dropdown = this.megaDropdownTargets[index];
+                if (!dropdown) return;
+
+                // Wrap button + dropdown in a virtual hover zone
+                // mouseenter on button opens, mouseleave with delay closes
+                const onEnterButton = () => {
+                    this._clearHoverTimeout(button);
+                    // Close other mega dropdowns
+                    this.megaDropdownTargets.forEach((dd, i) => {
+                        if (i !== index) {
+                            dd.classList.add('hidden');
+                            const arrow = this.megaParentTargets[i]?.querySelector('svg');
+                            if (arrow) arrow.style.transform = '';
+                        }
+                    });
+                    dropdown.classList.remove('hidden');
+                    const arrow = button.querySelector('svg');
+                    if (arrow) arrow.style.transform = 'rotate(180deg)';
+                };
+
+                const onLeaveButton = () => {
+                    const timeout = setTimeout(() => {
+                        dropdown.classList.add('hidden');
+                        const arrow = button.querySelector('svg');
+                        if (arrow) arrow.style.transform = '';
+                        this._hoverTimeouts.delete(button);
+                    }, 150);
+                    this._hoverTimeouts.set(button, timeout);
+                };
+
+                const onEnterDropdown = () => {
+                    this._clearHoverTimeout(button);
+                };
+
+                const onLeaveDropdown = () => {
+                    const timeout = setTimeout(() => {
+                        dropdown.classList.add('hidden');
+                        const arrow = button.querySelector('svg');
+                        if (arrow) arrow.style.transform = '';
+                        this._hoverTimeouts.delete(button);
+                    }, 150);
+                    this._hoverTimeouts.set(button, timeout);
+                };
+
+                button.addEventListener('mouseenter', onEnterButton);
+                button.addEventListener('mouseleave', onLeaveButton);
+                dropdown.addEventListener('mouseenter', onEnterDropdown);
+                dropdown.addEventListener('mouseleave', onLeaveDropdown);
+
+                this._hoverCleanups.push(() => {
+                    button.removeEventListener('mouseenter', onEnterButton);
+                    button.removeEventListener('mouseleave', onLeaveButton);
+                    dropdown.removeEventListener('mouseenter', onEnterDropdown);
+                    dropdown.removeEventListener('mouseleave', onLeaveDropdown);
                 });
             });
         }
@@ -542,6 +633,21 @@ export default class extends Controller {
         this.subdropdownTargets.forEach((sd) => {
             sd.classList.add('hidden');
             this._resetSubDropdownPosition(sd);
+        });
+    }
+
+    /**
+     * Close all mega dropdowns and reset their arrow indicators.
+     *
+     * @private
+     */
+    _closeAllMegaDropdowns() {
+        if (!this.hasMegaDropdownTarget) return;
+
+        this.megaDropdownTargets.forEach((dd, i) => {
+            dd.classList.add('hidden');
+            const arrow = this.megaParentTargets[i]?.querySelector('svg');
+            if (arrow) arrow.style.transform = '';
         });
     }
 }

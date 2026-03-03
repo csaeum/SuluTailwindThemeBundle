@@ -440,6 +440,59 @@ class ThemeCompiler
         $css .= ".iw-social-text { color: var(--menu-socialMedia); transition: color 0.2s ease; }\n";
         $css .= "a:hover > .iw-social-text { color: var(--menu-socialMediaHover, var(--menu-socialMedia)); }\n\n";
 
+        // Mega menu dropdown panel
+        $css .= ".iw-mega-dropdown { background-color: var(--menu-secondBg, var(--menu-bg)); ";
+        $css .= "border-top: 1px solid var(--menu-divider, rgba(0,0,0,0.1)); }\n";
+        // Mega menu featured column
+        $css .= ".iw-mega-featured { background-color: var(--menu-thirdBg, var(--menu-secondBg, var(--menu-bg))); ";
+        $css .= "border-radius: var(--border-radius); padding: 1.5rem; }\n";
+        // Mega menu image card (radius by default for consistent hover shadow)
+        $css .= ".iw-mega-card { border-radius: var(--border-radius); overflow: hidden; ";
+        $css .= "transition: transform 0.2s ease, box-shadow 0.2s ease; }\n";
+        $css .= ".iw-mega-card:hover { transform: translateY(-2px); ";
+        $css .= "box-shadow: 0 4px 12px rgba(0,0,0,0.1); }\n";
+        // Mega menu card image (uses theme image radius by default)
+        $css .= ".iw-mega-card img { width: 100%; height: auto; object-fit: cover; ";
+        $css .= "border-radius: var(--border-imageRadius, var(--border-radius)); }\n";
+        // Mega menu card with background: radius on card, overflow clips image corners, no image radius
+        $css .= ".iw-mega-card-bg { background-color: var(--menu-thirdBg, var(--menu-secondBg, var(--menu-bg))); ";
+        $css .= "border-radius: var(--border-radius); overflow: hidden; }\n";
+        $css .= ".iw-mega-card-bg img { border-radius: 0; }\n";
+        // Mega menu featured image (uses theme image radius)
+        $css .= ".iw-mega-featured img { width: 100%; height: auto; object-fit: cover; ";
+        $css .= "border-radius: var(--border-imageRadius, var(--border-radius)); }\n";
+        // Mega menu column grid (1 to 5 columns) with responsive breakpoints
+        for ($i = 1; $i <= 5; $i++) {
+            $css .= ".iw-mega-grid-{$i} { display: grid; gap: 2rem; ";
+            $css .= "grid-template-columns: repeat({$i}, 1fr); }\n";
+        }
+        // Responsive: 3 columns → 2 under 900px
+        $css .= "@media (max-width: 900px) {\n";
+        $css .= "  .iw-mega-grid-3 { grid-template-columns: repeat(2, 1fr); }\n";
+        $css .= "}\n";
+        // Responsive: 4-5 columns → 2 under 1024px, then 1 under 768px
+        $css .= "@media (max-width: 1024px) {\n";
+        $css .= "  .iw-mega-grid-4 { grid-template-columns: repeat(2, 1fr); }\n";
+        $css .= "  .iw-mega-grid-5 { grid-template-columns: repeat(2, 1fr); }\n";
+        $css .= "}\n";
+        $css .= "@media (max-width: 768px) {\n";
+        $css .= "  .iw-mega-grid-3,\n";
+        $css .= "  .iw-mega-grid-4,\n";
+        $css .= "  .iw-mega-grid-5 { grid-template-columns: 1fr; }\n";
+        $css .= "}\n";
+
+        // Mega menu horizontal card layout (image + text side by side)
+        $css .= ".iw-mega-card-horizontal { display: flex; align-items: center; }\n";
+        $css .= ".iw-mega-card-horizontal img { width: 40%; flex-shrink: 0; }\n";
+        $css .= ".iw-mega-card-horizontal .iw-mega-card-body { flex: 1; }\n";
+        $css .= ".iw-mega-card-img-right { flex-direction: row-reverse; }\n";
+        // Mega menu horizontal featured layout (image + content side by side)
+        $css .= ".iw-mega-featured-horizontal { display: flex; align-items: flex-start; gap: 1.5rem; }\n";
+        $css .= ".iw-mega-featured-horizontal img { width: 45%; flex-shrink: 0; }\n";
+        $css .= ".iw-mega-featured-horizontal .iw-mega-featured-body { flex: 1; }\n";
+        $css .= ".iw-mega-featured-img-right { flex-direction: row-reverse; }\n";
+        $css .= "\n";
+
         return $css;
     }
 

@@ -39,6 +39,7 @@ class ThemeFixtures
             'nature' => self::getNaturePreset(),
             'halloween' => self::getHalloweenPreset(),
             'christmas' => self::getChristmasPreset(),
+            'megamenu' => self::getMegamenuPreset(),
         ];
     }
 
@@ -1113,6 +1114,177 @@ class ThemeFixtures
                     ['key' => 'default', 'label' => 'Par defaut', 'twig' => '_style_default.html.twig', 'default' => true],
                 ],
             ],
+        ];
+    }
+
+    /**
+     * Mega menu theme: professional dark navbar with mega dropdown navigation.
+     *
+     * Uses the megamenu type in native mode (page tree) by default.
+     *
+     * @return array<string, mixed>
+     */
+    private static function getMegamenuPreset(): array
+    {
+        return [
+            'name' => 'megamenu',
+            'label' => 'Mega Menu Professional',
+            'tokens' => [
+                'colors' => [
+                    'primary' => '#6366f1',
+                    'secondary' => '#475569',
+                    'accent' => '#f59e0b',
+                    'background' => '#ffffff',
+                    'text' => '#1e293b',
+                    'link' => '#6366f1',
+                    'linkHover' => '#4f46e5',
+                ],
+                'typography' => [
+                    'baseFontSize' => '16px',
+                    'baseLineHeight' => '1.6',
+                    'families' => [
+                        [
+                            'name' => 'Inter',
+                            'role' => 'heading',
+                            'source' => 'google',
+                            'weights' => [500, 600, 700],
+                            'fallback' => 'system-ui, sans-serif',
+                        ],
+                        [
+                            'name' => 'Inter',
+                            'role' => 'body',
+                            'source' => 'google',
+                            'weights' => [400, 500],
+                            'fallback' => 'system-ui, sans-serif',
+                        ],
+                    ],
+                    'scale' => [
+                        'xs' => '0.75rem',
+                        'sm' => '0.875rem',
+                        'base' => '1rem',
+                        'lg' => '1.125rem',
+                        'xl' => '1.25rem',
+                        '2xl' => '1.5rem',
+                        '3xl' => '1.875rem',
+                        '4xl' => '2.25rem',
+                        '5xl' => '3rem',
+                    ],
+                    'assignments' => [
+                        'h1' => ['family' => 'heading', 'weight' => '700'],
+                        'h2' => ['family' => 'heading', 'weight' => '600'],
+                        'h3' => ['family' => 'heading', 'weight' => '600'],
+                        'h4' => ['family' => 'heading', 'weight' => '500'],
+                        'h5' => ['family' => 'heading', 'weight' => '500'],
+                        'h6' => ['family' => 'heading', 'weight' => '500'],
+                        'body' => ['family' => 'body', 'weight' => '400'],
+                        'link' => ['family' => 'body', 'weight' => '500'],
+                    ],
+                ],
+                'borders' => [
+                    'radius' => 'rounded-lg',
+                    'imageRadius' => 'rounded-lg',
+                ],
+                'buttons' => [
+                    'primary' => [
+                        'bg' => '#6366f1',
+                        'text' => '#ffffff',
+                        'border' => 'none',
+                        'hoverBg' => '#4f46e5',
+                        'hoverText' => '#ffffff',
+                        'hoverBorder' => 'none',
+                        'radius' => 'rounded-lg',
+                    ],
+                    'secondary' => [
+                        'bg' => 'transparent',
+                        'text' => '#6366f1',
+                        'border' => '#6366f1',
+                        'hoverBg' => '#6366f1',
+                        'hoverText' => '#ffffff',
+                        'hoverBorder' => '#6366f1',
+                        'radius' => 'rounded-lg',
+                    ],
+                    'accent' => [
+                        'bg' => '#f59e0b',
+                        'text' => '#1e293b',
+                        'border' => 'none',
+                        'hoverBg' => '#d97706',
+                        'hoverText' => '#1e293b',
+                        'hoverBorder' => 'none',
+                        'radius' => 'rounded-lg',
+                    ],
+                ],
+                'blockVariants' => [
+                    [
+                        'label' => 'Light',
+                        'title' => '#1e293b',
+                        'subtitle' => '#475569',
+                        'paragraph' => '#334155',
+                        'link' => '#6366f1',
+                        'linkHover' => '#4f46e5',
+                        'list' => '#334155',
+                        'hr' => '#e2e8f0',
+                        'paragraphBg' => 'transparent',
+                        'blockBg' => '#ffffff',
+                        'buttonStyle' => 'primary',
+                    ],
+                    [
+                        'label' => 'Accent',
+                        'title' => '#ffffff',
+                        'subtitle' => '#e0e7ff',
+                        'paragraph' => '#c7d2fe',
+                        'link' => '#fbbf24',
+                        'linkHover' => '#f59e0b',
+                        'list' => '#c7d2fe',
+                        'hr' => 'rgba(255,255,255,0.2)',
+                        'paragraphBg' => 'transparent',
+                        'blockBg' => '#6366f1',
+                        'buttonStyle' => 'accent',
+                    ],
+                    [
+                        'label' => 'Dark',
+                        'title' => '#f8fafc',
+                        'subtitle' => '#94a3b8',
+                        'paragraph' => '#cbd5e1',
+                        'link' => '#818cf8',
+                        'linkHover' => '#a5b4fc',
+                        'list' => '#cbd5e1',
+                        'hr' => 'rgba(255,255,255,0.1)',
+                        'paragraphBg' => 'transparent',
+                        'blockBg' => '#0f172a',
+                        'buttonStyle' => 'accent',
+                    ],
+                ],
+            ],
+            'menuConfig' => [
+                'type' => 'megamenu',
+                'megamenuSource' => 'native',
+                'navPosition' => 'center',
+                'animation' => 'none',
+                'clickParentPage' => 'none',
+                'clickParentPageNavbar' => false,
+                'childLevels' => 3,
+                'displayLogoDesktop' => true,
+                'displayLogoMobile' => true,
+                'displaySiteName' => false,
+                'displaySocialMedia' => false,
+                'transparentNavbar' => false,
+                'colors' => [
+                    'bg' => '#0f172a',
+                    'text' => '#e2e8f0',
+                    'textHover' => '#ffffff',
+                    'secondBg' => '#1e293b',
+                    'secondText' => '#cbd5e1',
+                    'secondTextHover' => '#ffffff',
+                    'thirdBg' => '#334155',
+                    'thirdText' => '#94a3b8',
+                    'divider' => 'rgba(255,255,255,0.1)',
+                    'burgerOpen' => '#e2e8f0',
+                    'burgerClose' => '#e2e8f0',
+                    'socialMedia' => '#94a3b8',
+                    'socialMediaHover' => '#ffffff',
+                ],
+            ],
+            'blockStyles' => self::getDefaultBlockStyles(),
         ];
     }
 }

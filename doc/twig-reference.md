@@ -68,8 +68,9 @@ Returns the menu configuration for the active theme.
 
 | Key | Type | Description |
 |-----|------|-------------|
-| `type` | `string` | `navbar`, `burger`, `fullscreen`, or `sidebar` |
+| `type` | `string` | `navbar`, `burger`, `fullscreen`, `sidebar`, or `megamenu` |
 | `animation` | `string` | `none`, `slide`, or `fade` |
+| `megamenuSource` | `string` | Data source for mega menu: `'native'` (page tree) or `'snippet'` (manual structure). Only used when `type` is `megamenu`. Default: `'native'` |
 | `clickParentPage` | `string` | Parent page access mode: `'none'`, `'split'`, or `'selflink'` (default: `'none'`) |
 | `clickParentPageNavbar` | `bool` | Adds a self-link to parent page in navbar submenus (default: `false`) |
 | `childLevels` | `int` | Number of sub-menu levels to display (1, 2, or 3) |
