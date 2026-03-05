@@ -19,6 +19,10 @@
     Manage colors, typography, buttons, borders, block variants, and menu styles from the Sulu admin interface.
 </p>
 
+<p align="center">
+    <a href="doc/screenshots.md"><strong>See screenshots of the admin interface</strong></a>
+</p>
+
 ---
 
 ## Requirements
@@ -351,6 +355,7 @@ The theme compiles design tokens into **CSS custom properties** and exposes data
 
 | Document | Description |
 |----------|-------------|
+| [Screenshots](doc/screenshots.md) | Visual overview of the admin interface (colors, typography, buttons, blocks, menu) |
 | [Page Templates](doc/page-templates.md) | Modular architecture, creating custom templates, block types, XInclude fragments |
 | [CSS Variables Reference](doc/css-variables.md) | All CSS custom properties: colors, palettes, typography, borders, buttons, menu |
 | [Block Variants](doc/block-variants.md) | Variant classes, auto-styled elements, separator styles, `.btn-variant` |
