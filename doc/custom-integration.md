@@ -109,7 +109,7 @@ The `iw_sulu_tailwind_theme` global variable is available in every Twig template
 {% set bodyFont = iw_sulu_tailwind_theme.typography.families|default([])|filter(f => f.role == 'body')|first %}
 {% set fontName = bodyFont.name|default('sans-serif') %}
 
-<footer style="font-family: '{{ fontName }}', sans-serif;">
+<footer class="font-[var(--font-family-body)]">
     <p>Copyright {{ 'now'|date('Y') }}</p>
 </footer>
 ```

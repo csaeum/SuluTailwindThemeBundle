@@ -219,10 +219,21 @@ Generated from **Settings > Themes > Menu** tab (colors section only).
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `--menu-bg` | Menu background | `#ffffff` |
-| `--menu-text` | Menu text color | `#202124` |
-| `--menu-hover` | Menu item hover bg | `#f3f3f3` |
-| `--menu-active` | Active menu item color | `#1a73e8` |
+| `--menu-bg` | Main menu background | `#ffffff` |
+| `--menu-text` | Primary text color | `#202124` |
+| `--menu-textHover` | Text color on hover | `#1a73e8` |
+| `--menu-secondBg` | Dropdown background (level 2) | `#f8f9fa` |
+| `--menu-secondText` | Dropdown text color | `#202124` |
+| `--menu-secondTextHover` | Dropdown text hover color | `#1a73e8` |
+| `--menu-thirdBg` | Sub-dropdown / featured column background | `#f0f0f0` |
+| `--menu-thirdText` | Sub-dropdown text color | `#202124` |
+| `--menu-divider` | Border/separator color | `rgba(0,0,0,0.1)` |
+| `--menu-burgerOpen` | Burger icon color (closed state) | `#202124` |
+| `--menu-burgerClose` | Burger icon color (open state) | `#ffffff` |
+| `--menu-socialMedia` | Social media icon color | `#555555` |
+| `--menu-socialMediaHover` | Social media icon hover color | `#1a73e8` |
+
+> See [Menu System](menus.md#menu-colors) for the full reference on menu CSS classes.
 
 ---
 

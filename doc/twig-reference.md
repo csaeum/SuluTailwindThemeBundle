@@ -79,7 +79,7 @@ Returns the menu configuration for the active theme.
 | `displayLogoMobile` | `bool` | Show logo on mobile |
 | `displayMenuDesktop` | `bool` | Show menu on desktop |
 | `displayMenuMobile` | `bool` | Show menu on mobile |
-| `colors` | `array` | `{bg, text, hover, active}` — menu color tokens |
+| `colors` | `array` | Menu color tokens (`bg`, `text`, `textHover`, `secondBg`, `secondText`, `secondTextHover`, `thirdBg`, `thirdText`, `divider`, `burgerOpen`, `burgerClose`, `socialMedia`, `socialMediaHover`) |
 | `logo` | `string\|null` | Path to logo image |
 | `siteName` | `string\|null` | Site name for display |
 

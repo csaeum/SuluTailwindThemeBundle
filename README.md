@@ -31,7 +31,7 @@
 
 * **Design tokens**: Store all theme settings as structured JSON, compiled to CSS custom properties
 * **Admin interface**: Full CRUD with 7 tabs (details, colors, typography, buttons, borders, block variants, menu)
-* **Multiple themes**: Create and switch between theme presets (corporate, creative, minimal, nature)
+* **Multiple themes**: Create and switch between 7 preset themes (corporate, creative, minimal, nature, halloween, christmas, megamenu)
 * **CSS compilation**: Automatic generation of `:root` variables, `.block-variant-*` classes, `.btn-*` styles
 * **Google Fonts**: Automatic resolution and inclusion of Google Fonts from typography settings
 * **Block variants**: Per-block color schemes (light, accent, dark) applied via CSS custom properties
@@ -273,295 +273,57 @@ The bundle ships with a ready-to-use page template (`iw_theme_default`) that inc
 
 To use it, simply select **"Page par défaut"** (or **"Default page"**) as the template when creating a page in the Sulu admin.
 
-#### Modular architecture
+The template system uses a **modular architecture** with global block types registered via `sulu_admin.templates.block.directories`. You can create your own page templates referencing any subset of blocks, use XInclude fragments to reuse shared properties, and exclude the default template from specific webspaces.
 
-The template system is built on a **modular architecture** that separates concerns:
-
-```
-config/templates/
-├── pages/
-│   └── iw_theme_default.xml              ← Page template (~50 lines, uses <type ref="..."/>)
-├── fragments/                       ← Shared property fragments (reference/documentation)
-│   ├── header.xml                   ← title + url properties
-│   ├── blocks.xml                   ← Block container with all 11 type references
-│   └── components/
-│       ├── title_group.xml          ← title + subtitle + alignment (used by 9/11 blocks)
-│       ├── variant.xml              ← Color variant picker (used by 11/11 blocks)
-│       └── settings.xml             ← All settings properties (single source of truth)
-└── blocks/                          ← Global block types (registered via Sulu DI)
-    ├── text.xml
-    ├── text_images.xml
-    ├── gallery.xml
-    ├── key_figures.xml
-    ├── linked_pages.xml
-    ├── location.xml
-    ├── form.xml
-    ├── document.xml
-    ├── cta.xml
-    ├── testimonial.xml
-    └── separator.xml
-```
-
-Each block is a **global Sulu block type** registered via `sulu_admin.templates.block.directories`. The page template references them with `<type ref="text"/>` instead of inlining the full block definition.
-
-#### Creating your own page template
-
-Since blocks are registered globally, creating a custom page template with a subset of blocks is straightforward:
-
-```xml
-<?xml version="1.0" ?>
-<template xmlns="http://schemas.sulu.io/template/template"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
-
-    <key>my_page</key>
-    <view>pages/my_page</view>
-    <controller>Sulu\Content\UserInterface\Controller\Website\ContentController::indexAction</controller>
-    <cacheLifetime>604800</cacheLifetime>
-
-    <meta>
-        <title lang="en">My custom page</title>
-        <title lang="fr">Ma page personnalisée</title>
-    </meta>
-
-    <properties>
-        <property name="title" type="text_line" mandatory="true">
-            <meta>
-                <title lang="en">Title</title>
-                <title lang="fr">Titre</title>
-            </meta>
-            <params>
-                <param name="headline" value="true"/>
-            </params>
-            <tag name="sulu.rlp.part"/>
-        </property>
-
-        <property name="url" type="route" mandatory="true">
-            <meta>
-                <title lang="en">URL</title>
-                <title lang="fr">URL</title>
-            </meta>
-            <tag name="sulu.rlp"/>
-        </property>
-
-        <!-- Only include the block types you need -->
-        <block name="blocks" default-type="text" minOccurs="0">
-            <meta>
-                <title lang="en">Content blocks</title>
-                <title lang="fr">Blocs de contenu</title>
-            </meta>
-            <types>
-                <type ref="text"/>
-                <type ref="text_images"/>
-                <type ref="gallery"/>
-                <!-- Add or remove block types as needed -->
-            </types>
-        </block>
-    </properties>
-</template>
-```
-
-#### Available block types
-
-| Block type | Description | Sections |
-|------------|-------------|----------|
-| `text` | Rich text content | Content (title group + editor), Appearance, Settings |
-| `text_images` | Text with image gallery | Content (title group + images + editor), Appearance, Settings |
-| `gallery` | Image gallery | Content (title group + images), Appearance, Settings |
-| `key_figures` | Key figures/stats | Content (nested figures block), Appearance, Settings |
-| `linked_pages` | Internal/external links | Content (title group + links block), Appearance, Settings |
-| `location` | Map with address | Content (title group + coordinates + address), Appearance, Settings |
-| `form` | Form integration | Content (title group + form ID), Appearance, Settings |
-| `document` | Document downloads | Content (title group + media), Appearance, Settings |
-| `cta` | Call to action | Content (title group + buttons + image), Appearance, Settings |
-| `testimonial` | Testimonials | Content (title group + testimonials block), Appearance, Settings |
-| `separator` | Visual separator | Content (height + line style), Appearance, Settings |
-
-Each block has 3 sections: **Content** (block-specific), **Appearance** (variant + style), and **Settings** (margins, paddings, radius, background).
-
-> All labels use translation keys (`iw_sulu_tailwind_theme.*`). See `translations/admin.fr.json` and `translations/admin.en.json` for the full list.
-
-#### Using fragments via XInclude
-
-Instead of manually writing header properties and block lists, you can **include the bundle's fragments** directly in your page template using XML XInclude. The `href` must point to the fragment file inside the `vendor/` directory:
-
-```xml
-<?xml version="1.0" ?>
-<template xmlns="http://schemas.sulu.io/template/template"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xmlns:xi="http://www.w3.org/2001/XInclude"
-          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
-
-    <key>my_page</key>
-    <view>pages/my_page</view>
-    <controller>Sulu\Content\UserInterface\Controller\Website\ContentController::indexAction</controller>
-    <cacheLifetime>604800</cacheLifetime>
-
-    <meta>
-        <title lang="en">My custom page</title>
-        <title lang="fr">Ma page personnalisée</title>
-    </meta>
-
-    <properties>
-        <!-- Include header properties (title + url) from the bundle -->
-        <xi:include href="../../../vendor/itech-world/sulu-tailwind-theme-bundle/config/templates/fragments/header.xml"
-                    xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:property)"/>
-
-        <!-- Include the full blocks container (all 11 types) -->
-        <xi:include href="../../../vendor/itech-world/sulu-tailwind-theme-bundle/config/templates/fragments/blocks.xml"
-                    xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:block)"/>
-    </properties>
-</template>
-```
-
-**Available fragments:**
-
-| Fragment | Path | Description |
-|----------|------|-------------|
-| Header | `fragments/header.xml` | `title` (text_line, mandatory, rlp.part) + `url` (route, mandatory, rlp) |
-| Blocks | `fragments/blocks.xml` | `<block>` container with all 11 `<type ref="..."/>` |
-| Title group | `fragments/components/title_group.xml` | `title` + `subTitle` + `titleAlignment` (single_select) |
-| Variant | `fragments/components/variant.xml` | `variant` (iw_theme_variant_picker) |
-| Settings | `fragments/components/settings.xml` | All 9 settings properties (margins, paddings, radius, background) |
-
-> **Note:** The `href` path is relative to your template file location. Adjust `../../../vendor/` according to where your template sits relative to the project root. Typically, for templates in `config/templates/pages/`, the path is `../../../vendor/itech-world/sulu-tailwind-theme-bundle/config/templates/fragments/...`.
-
-You can also **include individual settings properties** using XPointer with a `@name` selector:
-
-```xml
-<!-- Include only marginTop from settings.xml -->
-<xi:include href="../../../vendor/itech-world/sulu-tailwind-theme-bundle/config/templates/fragments/components/settings.xml"
-            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:property[@name='marginTop'])"/>
-```
-
-#### Excluding the bundle's page template
-
-If you don't want the bundle's default page template (`iw_theme_default`) to appear in a specific webspace, you can **exclude it** in your webspace XML configuration (`config/webspaces/*.xml`):
-
-```xml
-<webspace>
-    <!-- ... -->
-    <templates>
-        <!-- ... -->
-    </templates>
-    <excluded-templates>
-        <excluded-template>iw_theme_default</excluded-template>
-    </excluded-templates>
-    <!-- ... -->
-</webspace>
-```
-
-This prevents the "Page par défaut" template from showing up in the page creation dialog for that webspace, while still keeping the **global block types** available for your own page templates via `<type ref="..."/>`.
+> See **[Page Templates](doc/page-templates.md)** for the full reference: modular architecture, creating custom templates, available block types, XInclude fragments, and excluding templates.
 
 #### Integrating the theme in your base template
 
-The recommended approach is to integrate the theme Twig functions directly into your project's `templates/base.html.twig`. This gives you full control over the layout while benefiting from the theme system.
-
-Here is a complete example:
+Add the theme functions to your `templates/base.html.twig`:
 
 ```twig
-{# templates/base.html.twig #}
-<!DOCTYPE html>
-<html lang="{{ app.request.locale|split('_')[0] }}">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    {% block meta %}
-        {{ include('@SuluWebsite/Extension/seo.html.twig', {
-            seo: extension.seo|default([]),
-            content: content|default([]),
-            localizations: localizations|default([]),
-            shadowBaseLocale: shadowBaseLocale|default(),
-        }) }}
-    {% endblock %}
-
-    {# Theme: Google Fonts #}
+    {# Google Fonts #}
     {{ iw_sulu_tailwind_theme_fonts_link()|raw }}
 
-    {# Theme: compiled CSS custom properties #}
+    {# Compiled CSS custom properties #}
     {% set themeCssPath = iw_sulu_tailwind_theme_css_path() %}
     {% if themeCssPath is not empty %}
         <link rel="stylesheet" href="{{ themeCssPath }}">
     {% endif %}
 
-    {% block style %}{% endblock %}
     {{ encore_entry_link_tags('app') }}
 </head>
 <body class="bg-[var(--color-background)] text-[var(--color-text)]">
-    {# Theme: dynamic menu #}
+    {# Dynamic menu #}
     {% set menuConfig = iw_sulu_tailwind_theme_menu_config() %}
-    {% block header %}
-        {% if menuConfig is not empty and menuConfig.type is defined %}
-            {% include '@ItechWorldSuluTailwindTheme/menu/_' ~ menuConfig.type ~ '.html.twig' with {config: menuConfig} %}
-        {% else %}
-            <header>
-                <nav class="container mx-auto px-4 py-4">
-                    <ul class="flex gap-4">
-                        <li><a href="{{ sulu_content_root_path() }}">Home</a></li>
-                        {% for item in sulu_page_navigation_root_tree('main', 1, {title: 'title', url: 'url'}) %}
-                            <li>
-                                <a href="{{ sulu_content_path(item.url) }}" title="{{ item.title }}">{{ item.title }}</a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </nav>
-            </header>
-        {% endif %}
-    {% endblock %}
+    {% if menuConfig is not empty and menuConfig.type is defined %}
+        {% include '@ItechWorldSuluTailwindTheme/menu/_' ~ menuConfig.type ~ '.html.twig'
+            with {config: menuConfig} %}
+    {% endif %}
 
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+    {% block content %}{% endblock %}
 
-    <footer>
-        {% block footer %}
-            <p>Copyright {{ 'now'|date('Y') }} SULU</p>
-        {% endblock %}
-    </footer>
-
-    {% block javascripts %}{% endblock %}
     {{ encore_entry_script_tags('app') }}
 </body>
-</html>
 ```
 
-**Key integration points:**
-
-| Element | Code | Purpose |
-|---------|------|---------|
-| Google Fonts | `{{ iw_sulu_tailwind_theme_fonts_link()\|raw }}` | Loads font families defined in the theme |
-| Theme CSS | `{{ iw_sulu_tailwind_theme_css_path() }}` | Includes compiled CSS custom properties |
-| Body classes | `bg-[var(--color-background)] text-[var(--color-text)]` | Applies theme background and text colors |
-| Dynamic menu | `iw_sulu_tailwind_theme_menu_config()` | Renders the menu type configured in the admin |
-| Menu templates | `@ItechWorldSuluTailwindTheme/menu/_<type>.html.twig` | Available types: `navbar`, `burger`, `fullscreen`, `sidebar` |
-
-> The bundle also provides a `@ItechWorldSuluTailwindTheme/base.html.twig` template that you can extend if you prefer, but integrating the functions directly gives you more flexibility.
+> The bundle also provides `@ItechWorldSuluTailwindTheme/base.html.twig` as a ready-to-extend base template. See **[Custom Integration Guide](doc/custom-integration.md)** for a complete example with SEO, fallback navigation, and more.
 
 ### Twig functions
 
-Use these functions in your templates:
+| Function | Returns |
+|----------|---------|
+| `iw_sulu_tailwind_theme_css_path()` | Web path to the compiled theme CSS |
+| `iw_sulu_tailwind_theme_fonts_link()` | `<link>` tags for Google Fonts |
+| `iw_sulu_tailwind_theme_menu_config()` | Menu configuration array |
+| `iw_sulu_tailwind_theme_tokens()` | Full design tokens array |
+| `iw_sulu_tailwind_theme_block_styles()` | Block style configuration |
+| `iw_sulu_block_style_template(type, style)` | Resolved template path for a block style |
 
-```twig
-{# Include the compiled theme CSS #}
-<link rel="stylesheet" href="{{ iw_sulu_tailwind_theme_css_path() }}">
+The global variable `iw_sulu_tailwind_theme` is available in all templates and contains the active theme tokens.
 
-{# Include Google Fonts #}
-{{ iw_sulu_tailwind_theme_fonts_link()|raw }}
-
-{# Get the menu configuration #}
-{% set menuConfig = iw_sulu_tailwind_theme_menu_config() %}
-
-{# Get all theme tokens #}
-{% set tokens = iw_sulu_tailwind_theme_tokens() %}
-
-{# Get block styles configuration #}
-{% set blockStyles = iw_sulu_tailwind_theme_block_styles() %}
-
-{# Get block style template path #}
-{% set template = iw_sulu_block_style_template('gallery', 'grid') %}
-```
+> See **[Twig Reference](doc/twig-reference.md)** for the full API, return types, and token structure.
 
 ### CLI commands
 
@@ -581,39 +343,17 @@ php bin/adminconsole iw-sulu:theme:sync-fonts
 
 The bundle registers the security context `sulu.iw_sulu_tailwind_theme.themes` with VIEW, ADD, EDIT, and DELETE permissions. Configure role access in **Settings > Roles**.
 
-## Using the theme in custom components
+## Documentation
 
-The theme compiles design tokens into **CSS custom properties** and exposes data through **Twig functions** and a **global variable**. This means your custom Twig templates and CSS automatically adapt when the active theme changes.
-
-Quick example:
-
-```css
-/* Your custom CSS — adapts to the active theme */
-.my-card {
-    background: var(--color-primary-50);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    font-family: var(--font-family-body);
-}
-```
-
-```twig
-{# Your custom Twig — variant colors applied automatically #}
-<section class="block-variant-0" data-has-bg="true">
-    <h2>Title is colored by the variant</h2>
-    <p>Paragraph too.</p>
-    <a href="/cta" class="btn-primary px-6 py-3">Themed button</a>
-</section>
-```
-
-For the full reference, see the **[doc/](doc/)** directory:
+The theme compiles design tokens into **CSS custom properties** and exposes data through **Twig functions** and a **global variable**. Your custom templates and CSS automatically adapt when the active theme changes.
 
 | Document | Description |
 |----------|-------------|
+| [Page Templates](doc/page-templates.md) | Modular architecture, creating custom templates, block types, XInclude fragments |
 | [CSS Variables Reference](doc/css-variables.md) | All CSS custom properties: colors, palettes, typography, borders, buttons, menu |
 | [Block Variants](doc/block-variants.md) | Variant classes, auto-styled elements, separator styles, `.btn-variant` |
 | [Twig Reference](doc/twig-reference.md) | All Twig functions, global variable `iw_sulu_tailwind_theme`, token structure |
-| [Custom Integration Guide](doc/custom-integration.md) | Step-by-step examples: custom CSS, Twig components, block templates, PHP services |
+| [Custom Integration Guide](doc/custom-integration.md) | Custom CSS, Twig components, block templates, PHP services, Tailwind integration |
 | [Menus](doc/menus.md) | Menu types, configuration, and customization |
 
 ## Architecture
@@ -639,7 +379,7 @@ SuluTailwindThemeBundle/
 │   ├── Service/            # ThemeCompiler, ThemeProvider, GoogleFontsResolver, GoogleFontsCatalog
 │   └── Twig/               # ThemeExtension
 ├── templates/              # Twig templates (blocks, menus, base)
-├── translations/           # Admin translations (fr, en)
+├── translations/           # Admin translations (fr, en, de)
 ├── assets/                 # Frontend assets (Stimulus controllers, CSS)
 └── public/js/              # Admin React components
 ```

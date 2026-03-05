@@ -24,7 +24,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 #[AsCommand(
     name: 'iw-sulu:theme:install',
-    description: 'Install a preset theme (corporate, creative, minimal, nature)',
+    description: 'Install a preset theme (corporate, creative, minimal, nature, halloween, christmas, megamenu)',
 )]
 class ThemeInstallCommand extends Command
 {
@@ -44,7 +44,7 @@ class ThemeInstallCommand extends Command
         $this->addArgument(
             'name',
             InputArgument::REQUIRED,
-            'The preset theme name (corporate, creative, minimal, nature)',
+            'The preset theme name (corporate, creative, minimal, nature, halloween, christmas, megamenu)',
         );
     }
 
