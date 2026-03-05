@@ -26,6 +26,8 @@
 * PHP >= 8.2
 * Sulu CMS >= 3.0
 * Doctrine ORM >= 3.0
+* Tailwind CSS >= 4.0
+* Webpack Encore
 
 ## Features
 
@@ -259,9 +261,9 @@ The typography tab includes a **Font Picker** with autocomplete for Google Fonts
 Navigate to **Settings > Themes** in the Sulu admin panel. From there you can:
 
 1. **Create a theme**: Click "Add", fill in the name and label
-2. **Configure colors**: Set primary, secondary, background, text, and link colors
+2. **Configure colors**: Set primary, secondary, accent, and background colors + text, link, and link hover colors
 3. **Configure typography**: Select fonts for headings/body/accent via the Font Picker (Google Fonts autocomplete, system fonts, or free text)
-4. **Configure buttons**: Set primary/secondary button styles (background, text, border, hover states, radius)
+4. **Configure buttons**: Set primary/secondary/accent button styles (background, text, border, hover states, radius)
 5. **Configure borders**: Set border radius values (default, small, large, full, image)
 6. **Configure block variants**: Define color schemes (e.g., light, accent, dark) for content blocks
 7. **Configure menu**: Choose menu type, colors, animation, and display options
