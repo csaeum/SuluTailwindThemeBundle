@@ -6,13 +6,13 @@
     <key>iw_theme_mega_menu</key>
 
     <meta>
-        <title>iw_sulu_theme.snippet.mega_menu</title>
+        <title>iw_sulu_tailwind_theme.snippet.mega_menu</title>
     </meta>
 
     <areas>
         <area key="iw_theme_mega_menu">
             <meta>
-                <title>iw_sulu_theme.snippet.mega_menu_area</title>
+                <title>iw_sulu_tailwind_theme.snippet.mega_menu_area</title>
             </meta>
         </area>
     </areas>
@@ -20,7 +20,7 @@
     <properties>
         <property name="title" type="text_line" mandatory="true">
             <meta>
-                <title>iw_sulu_theme.snippet_title</title>
+                <title>iw_sulu_tailwind_theme.snippet_title</title>
             </meta>
             <tag name="sulu.node.name"/>
         </property>
@@ -28,31 +28,31 @@
         <!-- Menu items: simple links or mega dropdowns -->
         <block name="menu_items" minOccurs="1">
             <meta>
-                <title>iw_sulu_theme.mega_menu_items</title>
+                <title>iw_sulu_tailwind_theme.mega_menu_items</title>
             </meta>
 
             <types>
                 <!-- Simple link: direct navigation item without dropdown -->
                 <type name="simple_link">
                     <meta>
-                        <title>iw_sulu_theme.mega_simple_link</title>
+                        <title>iw_sulu_tailwind_theme.mega_simple_link</title>
                     </meta>
                     <properties>
                         <property name="title" type="text_line" mandatory="true">
                             <meta>
-                                <title>iw_sulu_theme.title</title>
+                                <title>iw_sulu_tailwind_theme.title</title>
                             </meta>
                         </property>
 
                         <property name="link" type="link" mandatory="true">
                             <meta>
-                                <title>iw_sulu_theme.mega_menu_link</title>
+                                <title>iw_sulu_tailwind_theme.mega_menu_link</title>
                             </meta>
                         </property>
 
                         <property name="open_in_new_tab" type="checkbox">
                             <meta>
-                                <title>iw_sulu_theme.mega_open_new_tab</title>
+                                <title>iw_sulu_tailwind_theme.mega_open_new_tab</title>
                             </meta>
                         </property>
                     </properties>
@@ -61,65 +61,65 @@
                 <!-- Mega dropdown: full-width dropdown with typed columns -->
                 <type name="mega_dropdown">
                     <meta>
-                        <title>iw_sulu_theme.mega_dropdown</title>
+                        <title>iw_sulu_tailwind_theme.mega_dropdown</title>
                     </meta>
                     <properties>
                         <property name="title" type="text_line" mandatory="true">
                             <meta>
-                                <title>iw_sulu_theme.title</title>
+                                <title>iw_sulu_tailwind_theme.title</title>
                             </meta>
                         </property>
 
                         <property name="link" type="link">
                             <meta>
-                                <title>iw_sulu_theme.mega_self_link</title>
+                                <title>iw_sulu_tailwind_theme.mega_self_link</title>
                             </meta>
                         </property>
 
                         <!-- Columns inside the mega dropdown -->
                         <block name="columns" minOccurs="1">
                             <meta>
-                                <title>iw_sulu_theme.mega_columns</title>
+                                <title>iw_sulu_tailwind_theme.mega_columns</title>
                             </meta>
 
                             <types>
                                 <!-- Link column: category title + list of links -->
                                 <type name="link_column">
                                     <meta>
-                                        <title>iw_sulu_theme.mega_link_column</title>
+                                        <title>iw_sulu_tailwind_theme.mega_link_column</title>
                                     </meta>
                                     <properties>
                                         <property name="column_title" type="text_line">
                                             <meta>
-                                                <title>iw_sulu_theme.mega_column_title</title>
+                                                <title>iw_sulu_tailwind_theme.mega_column_title</title>
                                             </meta>
                                         </property>
 
                                         <block name="links" minOccurs="1">
                                             <meta>
-                                                <title>iw_sulu_theme.links</title>
+                                                <title>iw_sulu_tailwind_theme.links</title>
                                             </meta>
                                             <types>
                                                 <type name="link_item">
                                                     <meta>
-                                                        <title>iw_sulu_theme.mega_link</title>
+                                                        <title>iw_sulu_tailwind_theme.mega_link</title>
                                                     </meta>
                                                     <properties>
                                                         <property name="title" type="text_line" mandatory="true">
                                                             <meta>
-                                                                <title>iw_sulu_theme.title</title>
+                                                                <title>iw_sulu_tailwind_theme.title</title>
                                                             </meta>
                                                         </property>
 
                                                         <property name="link" type="link" mandatory="true">
                                                             <meta>
-                                                                <title>iw_sulu_theme.mega_link</title>
+                                                                <title>iw_sulu_tailwind_theme.mega_link</title>
                                                             </meta>
                                                         </property>
 
                                                         <property name="description" type="text_line">
                                                             <meta>
-                                                                <title>iw_sulu_theme.mega_link_description</title>
+                                                                <title>iw_sulu_tailwind_theme.mega_link_description</title>
                                                             </meta>
                                                         </property>
                                                     </properties>
@@ -132,27 +132,27 @@
                                 <!-- Image column: category title + image cards -->
                                 <type name="image_column">
                                     <meta>
-                                        <title>iw_sulu_theme.mega_image_column</title>
+                                        <title>iw_sulu_tailwind_theme.mega_image_column</title>
                                     </meta>
                                     <properties>
                                         <property name="column_title" type="text_line">
                                             <meta>
-                                                <title>iw_sulu_theme.mega_column_title</title>
+                                                <title>iw_sulu_tailwind_theme.mega_column_title</title>
                                             </meta>
                                         </property>
 
                                         <property name="layout" type="single_select" colspan="6">
                                             <meta>
-                                                <title>iw_sulu_theme.mega_layout</title>
+                                                <title>iw_sulu_tailwind_theme.mega_layout</title>
                                             </meta>
                                             <params>
                                                 <param name="default_value" type="string" value="vertical"/>
                                                 <param name="values" type="collection">
                                                     <param name="vertical">
-                                                        <meta><title>iw_sulu_theme.mega_layout_vertical</title></meta>
+                                                        <meta><title>iw_sulu_tailwind_theme.mega_layout_vertical</title></meta>
                                                     </param>
                                                     <param name="horizontal">
-                                                        <meta><title>iw_sulu_theme.mega_layout_horizontal</title></meta>
+                                                        <meta><title>iw_sulu_tailwind_theme.mega_layout_horizontal</title></meta>
                                                     </param>
                                                 </param>
                                             </params>
@@ -161,16 +161,16 @@
                                         <property name="image_position" type="single_select" colspan="6"
                                                   visibleCondition="__parent.layout == 'horizontal'">
                                             <meta>
-                                                <title>iw_sulu_theme.mega_image_position</title>
+                                                <title>iw_sulu_tailwind_theme.mega_image_position</title>
                                             </meta>
                                             <params>
                                                 <param name="default_value" type="string" value="left"/>
                                                 <param name="values" type="collection">
                                                     <param name="left">
-                                                        <meta><title>iw_sulu_theme.position_left</title></meta>
+                                                        <meta><title>iw_sulu_tailwind_theme.position_left</title></meta>
                                                     </param>
                                                     <param name="right">
-                                                        <meta><title>iw_sulu_theme.position_right</title></meta>
+                                                        <meta><title>iw_sulu_tailwind_theme.position_right</title></meta>
                                                     </param>
                                                 </param>
                                             </params>
@@ -178,50 +178,50 @@
 
                                         <block name="cards" minOccurs="1">
                                             <meta>
-                                                <title>iw_sulu_theme.mega_image_cards</title>
+                                                <title>iw_sulu_tailwind_theme.mega_image_cards</title>
                                             </meta>
                                             <types>
                                                 <type name="image_card">
                                                     <meta>
-                                                        <title>iw_sulu_theme.mega_image_card</title>
+                                                        <title>iw_sulu_tailwind_theme.mega_image_card</title>
                                                     </meta>
                                                     <properties>
                                                         <property name="title" type="text_line" mandatory="true">
                                                             <meta>
-                                                                <title>iw_sulu_theme.title</title>
+                                                                <title>iw_sulu_tailwind_theme.title</title>
                                                             </meta>
                                                         </property>
 
                                                         <property name="link" type="link">
                                                             <meta>
-                                                                <title>iw_sulu_theme.mega_link</title>
+                                                                <title>iw_sulu_tailwind_theme.mega_link</title>
                                                             </meta>
                                                         </property>
 
                                                         <property name="image" type="single_media_selection">
                                                             <meta>
-                                                                <title>iw_sulu_theme.image</title>
+                                                                <title>iw_sulu_tailwind_theme.image</title>
                                                             </meta>
                                                         </property>
 
                                                         <property name="image_ratio" type="single_select" colspan="6">
                                                             <meta>
-                                                                <title>iw_sulu_theme.mega_image_ratio</title>
+                                                                <title>iw_sulu_tailwind_theme.mega_image_ratio</title>
                                                             </meta>
                                                             <params>
                                                                 <param name="default_value" type="string" value="auto"/>
                                                                 <param name="values" type="collection">
                                                                     <param name="auto">
-                                                                        <meta><title>iw_sulu_theme.mega_ratio_auto</title></meta>
+                                                                        <meta><title>iw_sulu_tailwind_theme.mega_ratio_auto</title></meta>
                                                                     </param>
                                                                     <param name="1-1">
-                                                                        <meta><title>iw_sulu_theme.mega_ratio_square</title></meta>
+                                                                        <meta><title>iw_sulu_tailwind_theme.mega_ratio_square</title></meta>
                                                                     </param>
                                                                     <param name="9-16">
-                                                                        <meta><title>iw_sulu_theme.mega_ratio_portrait</title></meta>
+                                                                        <meta><title>iw_sulu_tailwind_theme.mega_ratio_portrait</title></meta>
                                                                     </param>
                                                                     <param name="16-9">
-                                                                        <meta><title>iw_sulu_theme.mega_ratio_landscape</title></meta>
+                                                                        <meta><title>iw_sulu_tailwind_theme.mega_ratio_landscape</title></meta>
                                                                     </param>
                                                                 </param>
                                                             </params>
@@ -229,13 +229,13 @@
 
                                                         <property name="description" type="text_line">
                                                             <meta>
-                                                                <title>iw_sulu_theme.mega_link_description</title>
+                                                                <title>iw_sulu_tailwind_theme.mega_link_description</title>
                                                             </meta>
                                                         </property>
 
                                                         <property name="show_background" type="checkbox">
                                                             <meta>
-                                                                <title>iw_sulu_theme.mega_card_show_background</title>
+                                                                <title>iw_sulu_tailwind_theme.mega_card_show_background</title>
                                                             </meta>
                                                         </property>
                                                     </properties>
@@ -248,27 +248,27 @@
                                 <!-- Featured column: highlight with image, description and CTA -->
                                 <type name="featured_column">
                                     <meta>
-                                        <title>iw_sulu_theme.mega_featured_column</title>
+                                        <title>iw_sulu_tailwind_theme.mega_featured_column</title>
                                     </meta>
                                     <properties>
                                         <property name="title" type="text_line" mandatory="true">
                                             <meta>
-                                                <title>iw_sulu_theme.title</title>
+                                                <title>iw_sulu_tailwind_theme.title</title>
                                             </meta>
                                         </property>
 
                                         <property name="layout" type="single_select" colspan="6">
                                             <meta>
-                                                <title>iw_sulu_theme.mega_layout</title>
+                                                <title>iw_sulu_tailwind_theme.mega_layout</title>
                                             </meta>
                                             <params>
                                                 <param name="default_value" type="string" value="vertical"/>
                                                 <param name="values" type="collection">
                                                     <param name="vertical">
-                                                        <meta><title>iw_sulu_theme.mega_layout_vertical</title></meta>
+                                                        <meta><title>iw_sulu_tailwind_theme.mega_layout_vertical</title></meta>
                                                     </param>
                                                     <param name="horizontal">
-                                                        <meta><title>iw_sulu_theme.mega_layout_horizontal</title></meta>
+                                                        <meta><title>iw_sulu_tailwind_theme.mega_layout_horizontal</title></meta>
                                                     </param>
                                                 </param>
                                             </params>
@@ -277,16 +277,16 @@
                                         <property name="image_position" type="single_select" colspan="6"
                                                   visibleCondition="__parent.layout == 'horizontal'">
                                             <meta>
-                                                <title>iw_sulu_theme.mega_image_position</title>
+                                                <title>iw_sulu_tailwind_theme.mega_image_position</title>
                                             </meta>
                                             <params>
                                                 <param name="default_value" type="string" value="left"/>
                                                 <param name="values" type="collection">
                                                     <param name="left">
-                                                        <meta><title>iw_sulu_theme.position_left</title></meta>
+                                                        <meta><title>iw_sulu_tailwind_theme.position_left</title></meta>
                                                     </param>
                                                     <param name="right">
-                                                        <meta><title>iw_sulu_theme.position_right</title></meta>
+                                                        <meta><title>iw_sulu_tailwind_theme.position_right</title></meta>
                                                     </param>
                                                 </param>
                                             </params>
@@ -294,34 +294,34 @@
 
                                         <property name="description" type="text_area">
                                             <meta>
-                                                <title>iw_sulu_theme.mega_link_description</title>
+                                                <title>iw_sulu_tailwind_theme.mega_link_description</title>
                                             </meta>
                                         </property>
 
                                         <property name="image" type="single_media_selection">
                                             <meta>
-                                                <title>iw_sulu_theme.image</title>
+                                                <title>iw_sulu_tailwind_theme.image</title>
                                             </meta>
                                         </property>
 
                                         <property name="image_ratio" type="single_select" colspan="6">
                                             <meta>
-                                                <title>iw_sulu_theme.mega_image_ratio</title>
+                                                <title>iw_sulu_tailwind_theme.mega_image_ratio</title>
                                             </meta>
                                             <params>
                                                 <param name="default_value" type="string" value="auto"/>
                                                 <param name="values" type="collection">
                                                     <param name="auto">
-                                                        <meta><title>iw_sulu_theme.mega_ratio_auto</title></meta>
+                                                        <meta><title>iw_sulu_tailwind_theme.mega_ratio_auto</title></meta>
                                                     </param>
                                                     <param name="1-1">
-                                                        <meta><title>iw_sulu_theme.mega_ratio_square</title></meta>
+                                                        <meta><title>iw_sulu_tailwind_theme.mega_ratio_square</title></meta>
                                                     </param>
                                                     <param name="9-16">
-                                                        <meta><title>iw_sulu_theme.mega_ratio_portrait</title></meta>
+                                                        <meta><title>iw_sulu_tailwind_theme.mega_ratio_portrait</title></meta>
                                                     </param>
                                                     <param name="16-9">
-                                                        <meta><title>iw_sulu_theme.mega_ratio_landscape</title></meta>
+                                                        <meta><title>iw_sulu_tailwind_theme.mega_ratio_landscape</title></meta>
                                                     </param>
                                                 </param>
                                             </params>
@@ -329,19 +329,19 @@
 
                                         <property name="cta_title" type="text_line">
                                             <meta>
-                                                <title>iw_sulu_theme.mega_cta_title</title>
+                                                <title>iw_sulu_tailwind_theme.mega_cta_title</title>
                                             </meta>
                                         </property>
 
                                         <property name="cta_link" type="link">
                                             <meta>
-                                                <title>iw_sulu_theme.mega_cta_link</title>
+                                                <title>iw_sulu_tailwind_theme.mega_cta_link</title>
                                             </meta>
                                         </property>
 
                                         <property name="cta_style" type="iw_theme_button_style_picker">
                                             <meta>
-                                                <title>iw_sulu_theme.mega_cta_style</title>
+                                                <title>iw_sulu_tailwind_theme.mega_cta_style</title>
                                             </meta>
                                         </property>
                                     </properties>
@@ -356,36 +356,36 @@
         <!-- Global CTA button section -->
         <section name="ctaSection">
             <meta>
-                <title>iw_sulu_theme.mega_cta_section</title>
+                <title>iw_sulu_tailwind_theme.mega_cta_section</title>
             </meta>
             <properties>
                 <property name="cta_title" type="text_line" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.mega_cta_title</title>
+                        <title>iw_sulu_tailwind_theme.mega_cta_title</title>
                     </meta>
                 </property>
 
                 <property name="cta_link" type="link" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.mega_cta_link</title>
+                        <title>iw_sulu_tailwind_theme.mega_cta_link</title>
                     </meta>
                 </property>
 
                 <property name="cta_style" type="single_select" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.mega_cta_style</title>
+                        <title>iw_sulu_tailwind_theme.mega_cta_style</title>
                     </meta>
                     <params>
                         <param name="default_value" type="string" value="primary"/>
                         <param name="values" type="collection">
                             <param name="primary">
-                                <meta><title>iw_sulu_theme.buttons_primary</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.buttons_primary</title></meta>
                             </param>
                             <param name="secondary">
-                                <meta><title>iw_sulu_theme.buttons_secondary</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.buttons_secondary</title></meta>
                             </param>
                             <param name="accent">
-                                <meta><title>iw_sulu_theme.buttons_accent</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.buttons_accent</title></meta>
                             </param>
                         </param>
                     </params>

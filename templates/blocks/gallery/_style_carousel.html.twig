@@ -1,5 +1,5 @@
 {# Gallery block — 3D carousel with parallax tilt, blurred background and lightbox #}
-{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+{% extends '@ItechWorldSuluTailwindTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
     {# Resolve lateral mode and image radius #}
@@ -50,7 +50,7 @@
 
             {# Titles — sit on top of the blurred background #}
             <div class="relative z-10">
-                {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+                {% include '@ItechWorldSuluTailwindTheme/blocks/common/_titles.html.twig' with {
                     title: title|default(''),
                     subTitle: subTitle|default(''),
                     titleAlignment: titleAlignment|default('left'),
@@ -131,7 +131,7 @@
             </div>
         </div>
     {% else %}
-        {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        {% include '@ItechWorldSuluTailwindTheme/blocks/common/_titles.html.twig' with {
             title: title|default(''),
             subTitle: subTitle|default(''),
             titleAlignment: titleAlignment|default('left'),

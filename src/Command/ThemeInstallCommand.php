@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace ItechWorld\SuluThemeBundle\Command;
+namespace ItechWorld\SuluTailwindThemeBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use ItechWorld\SuluThemeBundle\DataFixtures\ThemeFixtures;
-use ItechWorld\SuluThemeBundle\Entity\ThemeConfig;
-use ItechWorld\SuluThemeBundle\Repository\ThemeConfigRepository;
-use ItechWorld\SuluThemeBundle\Service\ThemeCompiler;
+use ItechWorld\SuluTailwindThemeBundle\DataFixtures\ThemeFixtures;
+use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
+use ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository;
+use ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

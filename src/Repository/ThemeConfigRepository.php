@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ItechWorld\SuluThemeBundle\Repository;
+namespace ItechWorld\SuluTailwindThemeBundle\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use ItechWorld\SuluThemeBundle\Entity\ThemeConfig;
+use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
 
 /**
  * Repository for ThemeConfig entities.

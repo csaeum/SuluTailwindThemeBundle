@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItechWorld\SuluThemeBundle\Service;
+namespace ItechWorld\SuluTailwindThemeBundle\Service;
 
 /**
  * Generates Tailwind-style color palettes (50→950) using the OKLCH color space.

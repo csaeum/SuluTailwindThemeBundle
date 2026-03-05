@@ -6,7 +6,7 @@
 <properties xmlns="http://schemas.sulu.io/template/template">
     <block name="blocks" default-type="text" minOccurs="0">
         <meta>
-            <title>iw_sulu_theme.content_blocks</title>
+            <title>iw_sulu_tailwind_theme.content_blocks</title>
         </meta>
         <types>
             <type ref="text"/>

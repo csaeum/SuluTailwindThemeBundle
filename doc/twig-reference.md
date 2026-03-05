@@ -1,15 +1,15 @@
 # Twig Reference
 
-The SuluThemeBundle provides Twig functions and a global variable to access theme data in your templates.
+The SuluTailwindThemeBundle provides Twig functions and a global variable to access theme data in your templates.
 
 ## Twig functions
 
-### `iw_sulu_theme_css_path()`
+### `iw_sulu_tailwind_theme_css_path()`
 
 Returns the web-accessible path to the compiled CSS file for the active theme.
 
 ```twig
-{% set themeCssPath = iw_sulu_theme_css_path() %}
+{% set themeCssPath = iw_sulu_tailwind_theme_css_path() %}
 {% if themeCssPath is not empty %}
     <link rel="stylesheet" href="{{ themeCssPath }}">
 {% endif %}
@@ -19,12 +19,12 @@ Returns the web-accessible path to the compiled CSS file for the active theme.
 
 ---
 
-### `iw_sulu_theme_fonts_link()`
+### `iw_sulu_tailwind_theme_fonts_link()`
 
 Returns HTML `<link>` tags for Google Fonts preconnect and stylesheet.
 
 ```twig
-{{ iw_sulu_theme_fonts_link()|raw }}
+{{ iw_sulu_tailwind_theme_fonts_link()|raw }}
 ```
 
 **Returns:** `string` (HTML safe) — e.g.:
@@ -38,26 +38,27 @@ Returns HTML `<link>` tags for Google Fonts preconnect and stylesheet.
 
 ---
 
-### `iw_sulu_theme_tokens()`
+### `iw_sulu_tailwind_theme_tokens()`
 
 Returns the complete design tokens array for the active theme.
 
 ```twig
-{% set tokens = iw_sulu_theme_tokens() %}
-{{ tokens.colors.primary }}         {# → #1a73e8 #}
-{{ tokens.typography.baseFontSize }} {# → 16px #}
+{% set tokens = iw_sulu_tailwind_theme_tokens() %}
+{{ tokens.colors.primary }}                            {# → #1a73e8 #}
+{{ tokens.typography.assignments.body.size }}           {# → 1rem #}
+{{ tokens.typography.assignments.h1.weight }}           {# → 700 #}
 ```
 
 **Returns:** `array` — Full token structure (see [Token structure](#token-structure) below).
 
 ---
 
-### `iw_sulu_theme_menu_config()`
+### `iw_sulu_tailwind_theme_menu_config()`
 
 Returns the menu configuration for the active theme.
 
 ```twig
-{% set menu = iw_sulu_theme_menu_config() %}
+{% set menu = iw_sulu_tailwind_theme_menu_config() %}
 {% if menu is not empty and menu.type is defined %}
     Menu type: {{ menu.type }}
     Animation: {{ menu.animation }}
@@ -84,12 +85,12 @@ Returns the menu configuration for the active theme.
 
 ---
 
-### `iw_sulu_theme_block_styles()`
+### `iw_sulu_tailwind_theme_block_styles()`
 
 Returns the block style configuration (layout variations per block type).
 
 ```twig
-{% set blockStyles = iw_sulu_theme_block_styles() %}
+{% set blockStyles = iw_sulu_tailwind_theme_block_styles() %}
 {% set textStyles = blockStyles.text.styles|default([]) %}
 {# → [{key: 'one_column', label: '...', twig: '...', default: true}, ...] #}
 ```
@@ -122,31 +123,32 @@ Returns the Twig template path for a specific block style.
 
 ---
 
-## Global variable: `iw_sulu_theme`
+## Global variable: `iw_sulu_tailwind_theme`
 
-Available everywhere in Twig without any import. Contains the same data as `iw_sulu_theme_tokens()`.
+Available everywhere in Twig without any import. Contains the same data as `iw_sulu_tailwind_theme_tokens()`.
 
 ```twig
 {# Access colors directly #}
-{{ iw_sulu_theme.colors.primary }}
+{{ iw_sulu_tailwind_theme.colors.primary }}
 
 {# Access block variants #}
-{% set variants = iw_sulu_theme.blockVariants|default([]) %}
+{% set variants = iw_sulu_tailwind_theme.blockVariants|default([]) %}
 {% set firstVariant = variants[0]|default({}) %}
 {{ firstVariant.label }}
 
 {# Access typography #}
-{{ iw_sulu_theme.typography.baseFontSize }}
+{{ iw_sulu_tailwind_theme.typography.assignments.body.size }}
+{{ iw_sulu_tailwind_theme.typography.assignments.h1.lineHeight }}
 ```
 
 ---
 
 ## Token structure
 
-The `iw_sulu_theme` global (and `iw_sulu_theme_tokens()` return value) has this structure:
+The `iw_sulu_tailwind_theme` global (and `iw_sulu_tailwind_theme_tokens()` return value) has this structure:
 
 ```
-iw_sulu_theme
+iw_sulu_tailwind_theme
 ├── colors
 │   ├── primary         → "#1a73e8"
 │   ├── secondary       → "#34a853"
@@ -158,12 +160,19 @@ iw_sulu_theme
 │   └── border          → "#e5e7eb"
 │
 ├── typography
-│   ├── baseFontSize    → "16px"
-│   ├── baseLineHeight  → "1.5"
 │   ├── families[]
-│   │   ├── {role: "body", name: "Inter", fallback: "sans-serif"}
-│   │   ├── {role: "heading", name: "Poppins", fallback: "sans-serif"}
-│   │   └── {role: "mono", name: "Roboto Mono", fallback: "monospace"}
+│   │   ├── {role: "heading", name: "Poppins", source: "google", fallback: "sans-serif"}
+│   │   ├── {role: "body", name: "Inter", source: "google", fallback: "sans-serif"}
+│   │   └── {role: "accent", name: "...", source: "google", fallback: "serif"}  (optional)
+│   ├── assignments
+│   │   ├── h1 → {family: "heading", weight: "700", size: "2.5rem", style: "normal", lineHeight: "1.2"}
+│   │   ├── h2 → {family: "heading", weight: "600", size: "2rem", style: "normal", lineHeight: "1.25"}
+│   │   ├── h3 → { ... }
+│   │   ├── h4 → { ... }
+│   │   ├── h5 → { ... }
+│   │   ├── h6 → { ... }
+│   │   ├── body → {family: "body", weight: "400", size: "1rem", style: "normal", lineHeight: "1.5"}
+│   │   └── link → {family: "body", weight: "500", size: "1rem", style: "normal", lineHeight: "1.5"}
 │   └── scale
 │       ├── xs → "0.75rem"
 │       ├── sm → "0.875rem"

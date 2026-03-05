@@ -4,19 +4,20 @@ services:
         autoconfigure: true
 
     # ─── Admin ───────────────────────────────────────────────────────────
-    itech_world.sulu_theme.admin:
-        class: ItechWorld\SuluThemeBundle\Admin\ThemeAdmin
+    itech_world.sulu_tailwind_theme.admin:
+        class: ItechWorld\SuluTailwindThemeBundle\Admin\ThemeAdmin
         arguments:
             - '@sulu_admin.view_builder_factory'
             - '@sulu_security.security_checker'
-            - '@itech_world.sulu_theme.repository'
-            - '@itech_world.sulu_theme.palette_generator'
+            - '@itech_world.sulu_tailwind_theme.repository'
+            - '@itech_world.sulu_tailwind_theme.palette_generator'
+            - '@itech_world.sulu_tailwind_theme.google_fonts_catalog'
         tags:
             - { name: 'sulu.admin' }
             - { name: 'sulu.context', context: 'admin' }
 
     # ─── Controllers ─────────────────────────────────────────────────────
-    ItechWorld\SuluThemeBundle\Controller\Admin\ThemeConfigController:
+    ItechWorld\SuluTailwindThemeBundle\Controller\Admin\ThemeConfigController:
         autowire: true
         autoconfigure: true
         public: true
@@ -24,71 +25,85 @@ services:
             $fieldDescriptorFactory: '@sulu_core.list_builder.field_descriptor_factory'
             $listBuilderFactory: '@sulu_core.doctrine_list_builder_factory'
             $restHelper: '@sulu_core.doctrine_rest_helper'
+            $googleFontsCatalog: '@itech_world.sulu_tailwind_theme.google_fonts_catalog'
         tags:
             - { name: 'controller.service_arguments' }
 
     # ─── Services ────────────────────────────────────────────────────────
-    itech_world.sulu_theme.palette_generator:
-        class: ItechWorld\SuluThemeBundle\Service\OklchPaletteGenerator
+    itech_world.sulu_tailwind_theme.palette_generator:
+        class: ItechWorld\SuluTailwindThemeBundle\Service\OklchPaletteGenerator
 
-    itech_world.sulu_theme.compiler:
-        class: ItechWorld\SuluThemeBundle\Service\ThemeCompiler
+    itech_world.sulu_tailwind_theme.compiler:
+        class: ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler
         arguments:
-            $cssOutputDir: '%itech_world_sulu_theme.css_output_dir%'
-            $paletteGenerator: '@itech_world.sulu_theme.palette_generator'
+            $cssOutputDir: '%itech_world_sulu_tailwind_theme.css_output_dir%'
+            $paletteGenerator: '@itech_world.sulu_tailwind_theme.palette_generator'
 
-    itech_world.sulu_theme.provider:
-        class: ItechWorld\SuluThemeBundle\Service\ThemeProvider
+    itech_world.sulu_tailwind_theme.provider:
+        class: ItechWorld\SuluTailwindThemeBundle\Service\ThemeProvider
         arguments:
-            - '@itech_world.sulu_theme.repository'
-            - '@itech_world.sulu_theme.compiler'
+            - '@itech_world.sulu_tailwind_theme.repository'
+            - '@itech_world.sulu_tailwind_theme.compiler'
 
-    itech_world.sulu_theme.google_fonts_resolver:
-        class: ItechWorld\SuluThemeBundle\Service\GoogleFontsResolver
+    itech_world.sulu_tailwind_theme.google_fonts_resolver:
+        class: ItechWorld\SuluTailwindThemeBundle\Service\GoogleFontsResolver
+
+    itech_world.sulu_tailwind_theme.google_fonts_catalog:
+        class: ItechWorld\SuluTailwindThemeBundle\Service\GoogleFontsCatalog
+        arguments:
+            $apiKey: '%itech_world_sulu_tailwind_theme.google_fonts_api_key%'
+            $cacheDir: '%itech_world_sulu_tailwind_theme.css_output_dir%'
 
     # ─── Repository ──────────────────────────────────────────────────────
-    itech_world.sulu_theme.repository:
-        class: ItechWorld\SuluThemeBundle\Repository\ThemeConfigRepository
+    itech_world.sulu_tailwind_theme.repository:
+        class: ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository
         arguments:
             - '@doctrine'
 
     # ─── Twig Extension ──────────────────────────────────────────────────
-    itech_world.sulu_theme.twig_extension:
-        class: ItechWorld\SuluThemeBundle\Twig\ThemeExtension
+    itech_world.sulu_tailwind_theme.twig_extension:
+        class: ItechWorld\SuluTailwindThemeBundle\Twig\ThemeExtension
         arguments:
-            - '@itech_world.sulu_theme.provider'
-            - '@itech_world.sulu_theme.compiler'
-            - '@itech_world.sulu_theme.google_fonts_resolver'
+            - '@itech_world.sulu_tailwind_theme.provider'
+            - '@itech_world.sulu_tailwind_theme.compiler'
+            - '@itech_world.sulu_tailwind_theme.google_fonts_resolver'
             - '@?sulu_core.webspace.request_analyzer'
         tags:
             - { name: 'twig.extension' }
 
     # ─── Doctrine Listener (auto-registered via #[AsDoctrineListener]) ───
-    itech_world.sulu_theme.compile_subscriber:
-        class: ItechWorld\SuluThemeBundle\EventSubscriber\ThemeCompileSubscriber
+    itech_world.sulu_tailwind_theme.compile_subscriber:
+        class: ItechWorld\SuluTailwindThemeBundle\EventSubscriber\ThemeCompileSubscriber
         arguments:
-            - '@itech_world.sulu_theme.compiler'
+            - '@itech_world.sulu_tailwind_theme.compiler'
 
     # ─── Commands ────────────────────────────────────────────────────────
-    ItechWorld\SuluThemeBundle\Command\ThemeInstallCommand:
+    ItechWorld\SuluTailwindThemeBundle\Command\ThemeInstallCommand:
         arguments:
-            - '@itech_world.sulu_theme.repository'
-            - '@itech_world.sulu_theme.compiler'
+            - '@itech_world.sulu_tailwind_theme.repository'
+            - '@itech_world.sulu_tailwind_theme.compiler'
             - '@doctrine.orm.entity_manager'
         tags:
             - { name: 'console.command' }
 
-    ItechWorld\SuluThemeBundle\Command\ThemeCompileCommand:
+    ItechWorld\SuluTailwindThemeBundle\Command\ThemeCompileCommand:
         arguments:
-            - '@itech_world.sulu_theme.repository'
-            - '@itech_world.sulu_theme.compiler'
+            - '@itech_world.sulu_tailwind_theme.repository'
+            - '@itech_world.sulu_tailwind_theme.compiler'
+        tags:
+            - { name: 'console.command' }
+
+    ItechWorld\SuluTailwindThemeBundle\Command\FontsSyncCommand:
+        arguments:
+            - '@itech_world.sulu_tailwind_theme.google_fonts_catalog'
         tags:
             - { name: 'console.command' }
 
     # ─── FQCN Aliases ────────────────────────────────────────────────────
-    ItechWorld\SuluThemeBundle\Service\OklchPaletteGenerator: '@itech_world.sulu_theme.palette_generator'
-    ItechWorld\SuluThemeBundle\Service\ThemeCompiler: '@itech_world.sulu_theme.compiler'
-    ItechWorld\SuluThemeBundle\Service\ThemeProvider: '@itech_world.sulu_theme.provider'
-    ItechWorld\SuluThemeBundle\Service\GoogleFontsResolver: '@itech_world.sulu_theme.google_fonts_resolver'
-    ItechWorld\SuluThemeBundle\Repository\ThemeConfigRepository: '@itech_world.sulu_theme.repository'
-    ItechWorld\SuluThemeBundle\Twig\ThemeExtension: '@itech_world.sulu_theme.twig_extension'
+    ItechWorld\SuluTailwindThemeBundle\Service\OklchPaletteGenerator: '@itech_world.sulu_tailwind_theme.palette_generator'
+    ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler: '@itech_world.sulu_tailwind_theme.compiler'
+    ItechWorld\SuluTailwindThemeBundle\Service\ThemeProvider: '@itech_world.sulu_tailwind_theme.provider'
+    ItechWorld\SuluTailwindThemeBundle\Service\GoogleFontsResolver: '@itech_world.sulu_tailwind_theme.google_fonts_resolver'
+    ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository: '@itech_world.sulu_tailwind_theme.repository'
+    ItechWorld\SuluTailwindThemeBundle\Twig\ThemeExtension: '@itech_world.sulu_tailwind_theme.twig_extension'
+    ItechWorld\SuluTailwindThemeBundle\Service\GoogleFontsCatalog: '@itech_world.sulu_tailwind_theme.google_fonts_catalog'

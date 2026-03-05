@@ -1,5 +1,5 @@
 {# Location block — full-width map with info below #}
-{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+{% extends '@ItechWorldSuluTailwindTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
     {% if location is defined and location.lat is defined and location.long is defined %}
@@ -40,7 +40,7 @@
             <div class="mt-6 space-y-4"
                  style="--card-border: var(--variant-hr-color, var(--color-border, #e5e7eb)); --card-bg: color-mix(in srgb, var(--card-border) 60%, transparent);"
             >
-                {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+                {% include '@ItechWorldSuluTailwindTheme/blocks/common/_titles.html.twig' with {
                     title: title|default(''),
                     subTitle: subTitle|default(''),
                     titleAlignment: titleAlignment|default('left'),
@@ -51,7 +51,7 @@
                     <div class="{{ paragraphImageRadius|default('') }} border border-[var(--card-border)] bg-[var(--card-bg)] p-5">
                         <span class="block font-semibold mb-2 flex items-center gap-2 text-[var(--variant-title-color,inherit)]">
                             <svg class="w-5 h-5 text-[var(--variant-link-color,var(--color-primary))]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            {{ 'iw_sulu_theme.address'|trans|default('Address') }}
+                            {{ 'iw_sulu_tailwind_theme.address'|trans|default('Address') }}
                         </span>
                         <p class="whitespace-pre-line text-[var(--variant-paragraph-color,inherit)] opacity-75">{{ formattedAddress }}</p>
                     </div>
@@ -70,7 +70,7 @@
                     rel="noopener noreferrer"
                     class="btn-variant inline-block px-6 py-3 text-center no-underline"
                 >
-                    {{ 'iw_sulu_theme.open_map'|trans|default('Open in maps') }} &#8599;
+                    {{ 'iw_sulu_tailwind_theme.open_map'|trans|default('Open in maps') }} &#8599;
                 </a>
             </div>
         {% endif %}

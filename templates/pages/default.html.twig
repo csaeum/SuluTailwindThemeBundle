@@ -1,5 +1,5 @@
 {# Default page template — renders content blocks using the block dispatcher pattern #}
-{% extends '@ItechWorldSuluTheme/base.html.twig' %}
+{% extends '@ItechWorldSuluTailwindTheme/base.html.twig' %}
 
 {% block content %}
     {% if content.blocks is defined and content.blocks is iterable %}
@@ -28,8 +28,8 @@
                 {% set blockStyle = defaultStyles[blockType]|default('default') %}
             {% endif %}
 
-            {% set templatePath = '@ItechWorldSuluTheme/blocks/' ~ blockType ~ '/_style_' ~ blockStyle ~ '.html.twig' %}
-            {% set fallbackPath = '@ItechWorldSuluTheme/blocks/' ~ blockType ~ '/_style_' ~ defaultStyles[blockType]|default('default') ~ '.html.twig' %}
+            {% set templatePath = '@ItechWorldSuluTailwindTheme/blocks/' ~ blockType ~ '/_style_' ~ blockStyle ~ '.html.twig' %}
+            {% set fallbackPath = '@ItechWorldSuluTailwindTheme/blocks/' ~ blockType ~ '/_style_' ~ defaultStyles[blockType]|default('default') ~ '.html.twig' %}
 
             {% include [templatePath, fallbackPath] with block %}
         {% endfor %}

@@ -1,11 +1,11 @@
 # CSS Custom Properties Reference
 
-The SuluThemeBundle compiles your theme configuration into a single CSS file containing `:root` custom properties and utility classes. This file is served at `/iw-theme/css/theme-{id}-{hash}.css`.
+The SuluTailwindThemeBundle compiles your theme configuration into a single CSS file containing `:root` custom properties and utility classes. This file is served at `/iw-theme/css/theme-{id}-{hash}.css`.
 
 ## Including the theme CSS
 
 ```twig
-{% set themeCssPath = iw_sulu_theme_css_path() %}
+{% set themeCssPath = iw_sulu_tailwind_theme_css_path() %}
 {% if themeCssPath is not empty %}
     <link rel="stylesheet" href="{{ themeCssPath }}">
 {% endif %}
@@ -65,13 +65,69 @@ Same pattern for `--color-secondary-*`, `--color-accent-*`, `--color-background-
 
 Generated from **Settings > Themes > Typography** tab.
 
+Font families are selected via the **Font Picker**, which supports three sources:
+- **Google Fonts**: autocomplete from the synced catalog (requires [API key configuration](../README.md#google-fonts-api-key-optional))
+- **System fonts**: 15 cross-platform fonts (Arial, Georgia, Courier New, etc.)
+- **Free text**: manual entry (fallback when no API key is configured)
+
+Only Google Fonts generate a `@import` rule in the compiled CSS. System fonts rely on the user's operating system.
+
+### Font families
+
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `--font-size-base` | Base font size | `16px` |
-| `--line-height-base` | Base line height | `1.5` |
-| `--font-family-body` | Body font family | `'Inter', sans-serif` |
 | `--font-family-heading` | Heading font family | `'Poppins', sans-serif` |
-| `--font-family-mono` | Monospace font family | `'Roboto Mono', monospace` |
+| `--font-family-body` | Body font family | `'Inter', sans-serif` |
+| `--font-family-accent` | Accent font family (optional) | `'Playfair Display', serif` |
+
+### Per-element variables
+
+For each element (`h1`-`h6`, `body`, `link`), the following variables are generated from the typography assignments:
+
+| Variable pattern | Description | Example |
+|-----------------|-------------|---------|
+| `--font-{el}-family` | Element font family reference | `var(--font-family-heading)` |
+| `--font-{el}-weight` | Element font weight | `700` |
+| `--font-size-{el}` | Element font size | `2.5rem` |
+| `--font-{el}-style` | Element font style | `normal` |
+| `--line-height-{el}` | Element line height | `1.2` |
+
+Where `{el}` is `h1`, `h2`, `h3`, `h4`, `h5`, `h6`, `body`, or `link`.
+
+**Full list of generated variables:**
+
+| Variable | Default |
+|----------|---------|
+| `--font-h1-family` | `var(--font-family-heading)` |
+| `--font-h1-weight` | `700` |
+| `--font-size-h1` | `2.5rem` |
+| `--font-h1-style` | `normal` |
+| `--line-height-h1` | `1.2` |
+| `--font-h2-weight` | `600` |
+| `--font-size-h2` | `2rem` |
+| `--font-h3-weight` | `600` |
+| `--font-size-h3` | `1.5rem` |
+| `--font-h4-weight` | `600` |
+| `--font-size-h4` | `1.25rem` |
+| `--font-h5-weight` | `500` |
+| `--font-size-h5` | `1.125rem` |
+| `--font-h6-weight` | `500` |
+| `--font-size-h6` | `1rem` |
+| `--font-body-family` | `var(--font-family-body)` |
+| `--font-body-weight` | `400` |
+| `--font-size-body` | `1rem` |
+| `--font-body-style` | `normal` |
+| `--line-height-body` | `1.5` |
+| `--font-link-weight` | `500` |
+
+### Base values
+
+Derived from the `body` assignment:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `--font-size-base` | Base font size (from body assignment) | `1rem` |
+| `--line-height-base` | Base line height (from body assignment) | `1.5` |
 
 ### Font scale
 
@@ -91,11 +147,14 @@ Generated from **Settings > Themes > Typography** tab.
 **Usage example:**
 ```css
 .my-heading {
-    font-family: var(--font-family-heading);
-    font-size: var(--font-size-3xl);
+    font-family: var(--font-h1-family, var(--font-family-heading));
+    font-weight: var(--font-h1-weight, 700);
+    font-size: var(--font-size-h1, 2.5rem);
+    font-style: var(--font-h1-style, normal);
+    line-height: var(--line-height-h1, 1.2);
 }
 .my-text {
-    font-family: var(--font-family-body);
+    font-family: var(--font-body-family, var(--font-family-body));
     font-size: var(--font-size-base);
     line-height: var(--line-height-base);
 }

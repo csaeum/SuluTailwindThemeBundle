@@ -8,24 +8,24 @@
     <properties>
         <block name="blockVariants" default-type="variant" minOccurs="0">
             <meta>
-                <title>iw_sulu_theme.variants</title>
-                <info_text>iw_sulu_theme.variants_info</info_text>
+                <title>iw_sulu_tailwind_theme.variants</title>
+                <info_text>iw_sulu_tailwind_theme.variants_info</info_text>
             </meta>
             <types>
                 <type name="variant">
                     <meta>
-                        <title>iw_sulu_theme.variant</title>
+                        <title>iw_sulu_tailwind_theme.variant</title>
                     </meta>
                     <properties>
                         <property name="label" type="text_line" mandatory="true">
                             <meta>
-                                <title>iw_sulu_theme.variant_label</title>
+                                <title>iw_sulu_tailwind_theme.variant_label</title>
                             </meta>
                         </property>
 
                         <property name="title" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
-                                <title>iw_sulu_theme.variant_title_color</title>
+                                <title>iw_sulu_tailwind_theme.variant_title_color</title>
                             </meta>
                             <params>
                                 <param name="show_palette" value="true"/>
@@ -34,7 +34,7 @@
 
                         <property name="subtitle" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
-                                <title>iw_sulu_theme.variant_subtitle_color</title>
+                                <title>iw_sulu_tailwind_theme.variant_subtitle_color</title>
                             </meta>
                             <params>
                                 <param name="show_palette" value="true"/>
@@ -43,7 +43,7 @@
 
                         <property name="paragraph" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
-                                <title>iw_sulu_theme.variant_paragraph_color</title>
+                                <title>iw_sulu_tailwind_theme.variant_paragraph_color</title>
                             </meta>
                             <params>
                                 <param name="show_palette" value="true"/>
@@ -52,7 +52,7 @@
 
                         <property name="link" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
-                                <title>iw_sulu_theme.variant_link_color</title>
+                                <title>iw_sulu_tailwind_theme.variant_link_color</title>
                             </meta>
                             <params>
                                 <param name="show_palette" value="true"/>
@@ -61,7 +61,7 @@
 
                         <property name="linkHover" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
-                                <title>iw_sulu_theme.variant_link_hover_color</title>
+                                <title>iw_sulu_tailwind_theme.variant_link_hover_color</title>
                             </meta>
                             <params>
                                 <param name="show_palette" value="true"/>
@@ -70,7 +70,7 @@
 
                         <property name="list" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
-                                <title>iw_sulu_theme.variant_list_color</title>
+                                <title>iw_sulu_tailwind_theme.variant_list_color</title>
                             </meta>
                             <params>
                                 <param name="show_palette" value="true"/>
@@ -79,7 +79,7 @@
 
                         <property name="hr" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
-                                <title>iw_sulu_theme.variant_hr_color</title>
+                                <title>iw_sulu_tailwind_theme.variant_hr_color</title>
                             </meta>
                             <params>
                                 <param name="show_palette" value="true"/>
@@ -88,7 +88,7 @@
 
                         <property name="paragraphBg" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
-                                <title>iw_sulu_theme.variant_paragraphBg</title>
+                                <title>iw_sulu_tailwind_theme.variant_paragraphBg</title>
                             </meta>
                             <params>
                                 <param name="show_palette" value="true"/>
@@ -97,7 +97,7 @@
 
                         <property name="blockBg" type="iw_theme_color_token_editor" colspan="4">
                             <meta>
-                                <title>iw_sulu_theme.variant_blockBg</title>
+                                <title>iw_sulu_tailwind_theme.variant_blockBg</title>
                             </meta>
                             <params>
                                 <param name="show_palette" value="true"/>
@@ -106,25 +106,25 @@
 
                         <property name="buttonStyle" type="iw_theme_button_style_picker">
                             <meta>
-                                <title>iw_sulu_theme.variant_button_style</title>
+                                <title>iw_sulu_tailwind_theme.variant_button_style</title>
                             </meta>
                         </property>
 
                         <property name="separatorMode" type="single_select" colspan="4">
                             <meta>
-                                <title>iw_sulu_theme.variant_separator_mode</title>
+                                <title>iw_sulu_tailwind_theme.variant_separator_mode</title>
                             </meta>
                             <params>
                                 <param name="default_value" value="style"/>
                                 <param name="values" type="collection">
                                     <param name="style">
-                                        <meta><title>iw_sulu_theme.variant_separator_mode_style</title></meta>
+                                        <meta><title>iw_sulu_tailwind_theme.variant_separator_mode_style</title></meta>
                                     </param>
                                     <param name="image">
-                                        <meta><title>iw_sulu_theme.variant_separator_mode_image</title></meta>
+                                        <meta><title>iw_sulu_tailwind_theme.variant_separator_mode_image</title></meta>
                                     </param>
                                     <param name="none">
-                                        <meta><title>iw_sulu_theme.variant_separator_mode_none</title></meta>
+                                        <meta><title>iw_sulu_tailwind_theme.variant_separator_mode_none</title></meta>
                                     </param>
                                 </param>
                             </params>
@@ -133,20 +133,20 @@
                         <property name="separatorStyle" type="single_select" colspan="4"
                                   visibleCondition="__parent.separatorMode == 'style' OR __parent.separatorMode == null">
                             <meta>
-                                <title>iw_sulu_theme.variant_separator_style</title>
+                                <title>iw_sulu_tailwind_theme.variant_separator_style</title>
                             </meta>
                             <params>
                                 <param name="default_value" value="solid"/>
                                 <param name="values" type="collection">
-                                    <param name="solid"><meta><title>iw_sulu_theme.separator_solid</title></meta></param>
-                                    <param name="dashed"><meta><title>iw_sulu_theme.separator_dashed</title></meta></param>
-                                    <param name="dotted"><meta><title>iw_sulu_theme.separator_dotted</title></meta></param>
-                                    <param name="double"><meta><title>iw_sulu_theme.separator_double</title></meta></param>
-                                    <param name="gradient"><meta><title>iw_sulu_theme.separator_gradient</title></meta></param>
-                                    <param name="wave"><meta><title>iw_sulu_theme.separator_wave</title></meta></param>
-                                    <param name="zigzag"><meta><title>iw_sulu_theme.separator_zigzag</title></meta></param>
-                                    <param name="dots"><meta><title>iw_sulu_theme.separator_dots</title></meta></param>
-                                    <param name="diamond"><meta><title>iw_sulu_theme.separator_diamond</title></meta></param>
+                                    <param name="solid"><meta><title>iw_sulu_tailwind_theme.separator_solid</title></meta></param>
+                                    <param name="dashed"><meta><title>iw_sulu_tailwind_theme.separator_dashed</title></meta></param>
+                                    <param name="dotted"><meta><title>iw_sulu_tailwind_theme.separator_dotted</title></meta></param>
+                                    <param name="double"><meta><title>iw_sulu_tailwind_theme.separator_double</title></meta></param>
+                                    <param name="gradient"><meta><title>iw_sulu_tailwind_theme.separator_gradient</title></meta></param>
+                                    <param name="wave"><meta><title>iw_sulu_tailwind_theme.separator_wave</title></meta></param>
+                                    <param name="zigzag"><meta><title>iw_sulu_tailwind_theme.separator_zigzag</title></meta></param>
+                                    <param name="dots"><meta><title>iw_sulu_tailwind_theme.separator_dots</title></meta></param>
+                                    <param name="diamond"><meta><title>iw_sulu_tailwind_theme.separator_diamond</title></meta></param>
                                 </param>
                             </params>
                         </property>
@@ -154,7 +154,7 @@
                         <property name="separatorImage" type="single_media_selection" colspan="4"
                                   visibleCondition="__parent.separatorMode == 'image'">
                             <meta>
-                                <title>iw_sulu_theme.variant_separator_image</title>
+                                <title>iw_sulu_tailwind_theme.variant_separator_image</title>
                             </meta>
                         </property>
                     </properties>

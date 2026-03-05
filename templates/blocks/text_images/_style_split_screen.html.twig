@@ -4,7 +4,7 @@
 
 {# ── Wrapper logic (replicated from _block_wrapper) ───────────────────────── #}
 {% set variantIndex = variant|default(0) %}
-{% set allVariants = iw_sulu_theme.blockVariants|default([]) %}
+{% set allVariants = iw_sulu_tailwind_theme.blockVariants|default([]) %}
 {% if variantIndex >= allVariants|length %}
     {% set variantIndex = 0 %}
 {% endif %}
@@ -155,7 +155,7 @@
         {# Text side — vertically centered with padding, max-w to keep lines readable on wide screens #}
         <div class="{{ isRight ? 'lg:order-1' : 'lg:order-2' }} flex items-center {{ ptClass }} {{ pbClass }} {{ plClass }} {{ prClass }}">
             <div class="w-full max-w-2xl{{ isRight ? ' ml-auto' : '' }}">
-                {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+                {% include '@ItechWorldSuluTailwindTheme/blocks/common/_titles.html.twig' with {
                     title: title|default(''),
                     subTitle: subTitle|default(''),
                     titleAlignment: titleAlignment|default('left'),

@@ -5,7 +5,7 @@
 
 {# ── Wrapper logic (replicated from _block_wrapper) ───────────────────────── #}
 {% set variantIndex = variant|default(0) %}
-{% set allVariants = iw_sulu_theme.blockVariants|default([]) %}
+{% set allVariants = iw_sulu_tailwind_theme.blockVariants|default([]) %}
 {% if variantIndex >= allVariants|length %}
     {% set variantIndex = 0 %}
 {% endif %}
@@ -99,7 +99,7 @@
         {% endif %}
             <div class="min-h-[300px] md:min-h-[400px] flex items-center{{ isRight ? ' lg:justify-end' : '' }}">
                 <div class="lg:max-w-2xl text-white">
-                    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+                    {% include '@ItechWorldSuluTailwindTheme/blocks/common/_titles.html.twig' with {
                         title: title|default(''),
                         subTitle: subTitle|default(''),
                         titleAlignment: titleAlignment|default('left'),

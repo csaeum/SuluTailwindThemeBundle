@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace ItechWorld\SuluThemeBundle\Service;
+namespace ItechWorld\SuluTailwindThemeBundle\Service;
 
-use ItechWorld\SuluThemeBundle\Entity\ThemeConfig;
+use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
 
 /**
  * Compiles ThemeConfig design tokens into CSS custom properties.
@@ -246,7 +246,29 @@ class ThemeCompiler
     }
 
     /**
+     * Default values for each typography assignment element.
+     *
+     * Used as fallback when assignment data is missing for an element.
+     */
+    private const TYPO_DEFAULTS = [
+        'h1' => ['family' => 'heading', 'weight' => '700', 'size' => 2.5, 'style' => 'normal', 'lineHeight' => '1.2'],
+        'h2' => ['family' => 'heading', 'weight' => '600', 'size' => 2, 'style' => 'normal', 'lineHeight' => '1.25'],
+        'h3' => ['family' => 'heading', 'weight' => '600', 'size' => 1.5, 'style' => 'normal', 'lineHeight' => '1.3'],
+        'h4' => ['family' => 'heading', 'weight' => '600', 'size' => 1.25, 'style' => 'normal', 'lineHeight' => '1.35'],
+        'h5' => ['family' => 'heading', 'weight' => '500', 'size' => 1.125, 'style' => 'normal', 'lineHeight' => '1.4'],
+        'h6' => ['family' => 'heading', 'weight' => '500', 'size' => 1, 'style' => 'normal', 'lineHeight' => '1.4'],
+        'body' => ['family' => 'body', 'weight' => '400', 'size' => 1, 'style' => 'normal', 'lineHeight' => '1.5'],
+        'link' => ['family' => 'body', 'weight' => '500', 'size' => 1, 'style' => 'normal', 'lineHeight' => '1.5'],
+    ];
+
+    /**
      * Generate CSS custom properties for typography tokens.
+     *
+     * Generates:
+     * - Font family variables (--font-family-heading, --font-family-body, --font-family-accent)
+     * - Per-element assignment variables (--font-h1-family, --font-h1-weight, --font-size-h1, etc.)
+     * - Base values derived from body assignment (--font-size-base, --line-height-base)
+     * - Scale variables (--font-size-xs, --font-size-sm, etc.)
      *
      * @param array<string, mixed> $typography Typography token values
      *
@@ -254,13 +276,9 @@ class ThemeCompiler
      */
     private function generateTypographyVariables(array $typography): string
     {
-        $css = "  /* Typography */\n";
+        $css = "  /* Typography — Font families */\n";
 
-        $baseFontSize = $typography['baseFontSize'] ?? '16px';
-        $baseLineHeight = $typography['baseLineHeight'] ?? '1.5';
-        $css .= "  --font-size-base: {$baseFontSize};\n";
-        $css .= "  --line-height-base: {$baseLineHeight};\n";
-
+        // Font family variables
         $families = $typography['families'] ?? [];
         foreach ($families as $family) {
             $role = $family['role'] ?? 'body';
@@ -269,12 +287,66 @@ class ThemeCompiler
             $css .= "  --font-family-{$role}: '{$name}', {$fallback};\n";
         }
 
+        // Assignment variables per element
+        $assignments = $typography['assignments'] ?? [];
+        $css .= "\n  /* Typography — Assignments */\n";
+
+        foreach (self::TYPO_DEFAULTS as $element => $defaults) {
+            $props = array_merge($defaults, $assignments[$element] ?? []);
+            $familyRole = $props['family'];
+            $weight = $props['weight'];
+            $size = $this->normalizeFontSize($props['size']);
+            $style = $props['style'];
+            $lineHeight = $props['lineHeight'];
+
+            $css .= "  --font-{$element}-family: var(--font-family-{$familyRole});\n";
+            $css .= "  --font-{$element}-weight: {$weight};\n";
+            $css .= "  --font-size-{$element}: {$size};\n";
+            $css .= "  --font-{$element}-style: {$style};\n";
+            $css .= "  --line-height-{$element}: {$lineHeight};\n";
+        }
+
+        // Base values derived from body assignment (backwards compatible)
+        $bodyProps = array_merge(self::TYPO_DEFAULTS['body'], $assignments['body'] ?? []);
+        $baseFontSize = $this->normalizeFontSize($bodyProps['size'] ?? $typography['baseFontSize'] ?? '16px');
+        $baseLineHeight = $bodyProps['lineHeight'] ?? $typography['baseLineHeight'] ?? '1.5';
+        $css .= "\n  /* Typography — Base values */\n";
+        $css .= "  --font-size-base: {$baseFontSize};\n";
+        $css .= "  --line-height-base: {$baseLineHeight};\n";
+
+        // Scale
         $scale = $typography['scale'] ?? [];
-        foreach ($scale as $key => $value) {
-            $css .= "  --font-size-{$key}: {$value};\n";
+        if (!empty($scale)) {
+            $css .= "\n  /* Typography — Scale */\n";
+            foreach ($scale as $key => $value) {
+                $css .= "  --font-size-{$key}: {$value};\n";
+            }
         }
 
         return $css . "\n";
+    }
+
+    /**
+     * Normalize a font size value to include the "rem" unit.
+     *
+     * Handles both legacy string values (e.g. "2.5rem") and numeric values
+     * from the number form field (e.g. 2.5 or "2.5").
+     *
+     * @param string|int|float $value Raw font size value
+     *
+     * @return string Normalized value with CSS unit (e.g. "2.5rem")
+     */
+    private function normalizeFontSize(string|int|float $value): string
+    {
+        $stringValue = (string) $value;
+
+        // Already has a CSS unit (rem, px, em, etc.) — return as-is
+        if (preg_match('/[a-z%]+$/i', $stringValue)) {
+            return $stringValue;
+        }
+
+        // Pure numeric value — append "rem"
+        return $stringValue . 'rem';
     }
 
     /**

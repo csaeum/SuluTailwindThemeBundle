@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ItechWorld\SuluThemeBundle\Entity;
+namespace ItechWorld\SuluTailwindThemeBundle\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use ItechWorld\SuluThemeBundle\Repository\ThemeConfigRepository;
+use ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository;
 
 /**
  * Represents a theme configuration with design tokens, menu config, and block styles.
@@ -15,7 +15,7 @@ use ItechWorld\SuluThemeBundle\Repository\ThemeConfigRepository;
  * by the ThemeCompiler service.
  */
 #[ORM\Entity(repositoryClass: ThemeConfigRepository::class)]
-#[ORM\Table(name: 'iw_sulu_theme_config')]
+#[ORM\Table(name: 'iw_sulu_tailwind_theme_config')]
 #[ORM\HasLifecycleCallbacks]
 class ThemeConfig
 {

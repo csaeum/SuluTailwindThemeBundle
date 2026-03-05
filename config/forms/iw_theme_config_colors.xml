@@ -8,30 +8,30 @@
     <properties>
         <section name="mainColors">
             <meta>
-                <title>iw_sulu_theme.colors_section_main</title>
+                <title>iw_sulu_tailwind_theme.colors_section_main</title>
             </meta>
             <properties>
                 <property name="colors_primary" type="iw_theme_color_token_editor" colspan="3">
                     <meta>
-                        <title>iw_sulu_theme.colors_primary</title>
+                        <title>iw_sulu_tailwind_theme.colors_primary</title>
                     </meta>
                 </property>
 
                 <property name="colors_secondary" type="iw_theme_color_token_editor" colspan="3">
                     <meta>
-                        <title>iw_sulu_theme.colors_secondary</title>
+                        <title>iw_sulu_tailwind_theme.colors_secondary</title>
                     </meta>
                 </property>
 
                 <property name="colors_accent" type="iw_theme_color_token_editor" colspan="3">
                     <meta>
-                        <title>iw_sulu_theme.colors_accent</title>
+                        <title>iw_sulu_tailwind_theme.colors_accent</title>
                     </meta>
                 </property>
 
                 <property name="colors_background" type="iw_theme_color_token_editor" colspan="3">
                     <meta>
-                        <title>iw_sulu_theme.colors_background</title>
+                        <title>iw_sulu_tailwind_theme.colors_background</title>
                     </meta>
                 </property>
             </properties>
@@ -39,24 +39,24 @@
 
         <section name="textColors">
             <meta>
-                <title>iw_sulu_theme.colors_section_text</title>
+                <title>iw_sulu_tailwind_theme.colors_section_text</title>
             </meta>
             <properties>
                 <property name="colors_text" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.colors_text</title>
+                        <title>iw_sulu_tailwind_theme.colors_text</title>
                     </meta>
                 </property>
 
                 <property name="colors_link" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.colors_link</title>
+                        <title>iw_sulu_tailwind_theme.colors_link</title>
                     </meta>
                 </property>
 
                 <property name="colors_linkHover" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.colors_linkHover</title>
+                        <title>iw_sulu_tailwind_theme.colors_linkHover</title>
                     </meta>
                 </property>
             </properties>

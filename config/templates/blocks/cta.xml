@@ -6,55 +6,55 @@
 
     <key>cta</key>
     <meta>
-        <title>iw_sulu_theme.block.cta</title>
+        <title>iw_sulu_tailwind_theme.block.cta</title>
     </meta>
 
     <properties>
         <!-- ── Content ── -->
         <section name="content">
-            <meta><title>iw_sulu_theme.content</title></meta>
+            <meta><title>iw_sulu_tailwind_theme.content</title></meta>
             <properties>
                 <property name="title" type="text_line">
-                    <meta><title>iw_sulu_theme.title</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.title</title></meta>
                 </property>
                 <property name="subTitle" type="text_line">
-                    <meta><title>iw_sulu_theme.subtitle</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.subtitle</title></meta>
                 </property>
                 <property name="titleAlignment" type="single_select">
-                    <meta><title>iw_sulu_theme.title_alignment</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.title_alignment</title></meta>
                     <params>
                         <param name="default_value" value="left"/>
                         <param name="values" type="collection">
-                            <param name="left"><meta><title>iw_sulu_theme.align_left</title></meta></param>
-                            <param name="center"><meta><title>iw_sulu_theme.align_center</title></meta></param>
-                            <param name="right"><meta><title>iw_sulu_theme.align_right</title></meta></param>
+                            <param name="left"><meta><title>iw_sulu_tailwind_theme.align_left</title></meta></param>
+                            <param name="center"><meta><title>iw_sulu_tailwind_theme.align_center</title></meta></param>
+                            <param name="right"><meta><title>iw_sulu_tailwind_theme.align_right</title></meta></param>
                         </param>
                     </params>
                 </property>
                 <property name="text" type="text_editor">
-                    <meta><title>iw_sulu_theme.text</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.text</title></meta>
                 </property>
                 <property name="primaryButtonLink" type="link">
-                    <meta><title>iw_sulu_theme.primary_button_link</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.primary_button_link</title></meta>
                     <params>
                         <param name="enable_attributes" value="true"/>
                     </params>
                 </property>
                 <property name="primaryButtonStyle" type="iw_theme_button_style_picker">
-                    <meta><title>iw_sulu_theme.primary_button_style</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.primary_button_style</title></meta>
                 </property>
                 <property name="secondaryButtonLink" type="link">
-                    <meta><title>iw_sulu_theme.secondary_button_link</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.secondary_button_link</title></meta>
                     <params>
                         <param name="enable_attributes" value="true"/>
                     </params>
                 </property>
                 <property name="secondaryButtonStyle" type="iw_theme_button_style_picker">
-                    <meta><title>iw_sulu_theme.secondary_button_style</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.secondary_button_style</title></meta>
                 </property>
                 <property name="image" type="single_media_selection"
                           visibleCondition="__parent.style == 'split'">
-                    <meta><title>iw_sulu_theme.image</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.image</title></meta>
                 </property>
                 <property name="contentRight" type="checkbox"
                           visibleCondition="__parent.style == 'split'">
@@ -62,7 +62,7 @@
                         <param name="type" value="toggler"/>
                         <param name="label">
                             <meta>
-                                <title>iw_sulu_theme.content_position_right</title>
+                                <title>iw_sulu_tailwind_theme.content_position_right</title>
                             </meta>
                         </param>
                     </params>
@@ -72,13 +72,13 @@
 
         <!-- ── Appearance ── -->
         <section name="appearance">
-            <meta><title>iw_sulu_theme.appearance</title></meta>
+            <meta><title>iw_sulu_tailwind_theme.appearance</title></meta>
             <properties>
                 <property name="variant" type="iw_theme_variant_picker" colspan="6">
-                    <meta><title>iw_sulu_theme.color_variant</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.color_variant</title></meta>
                 </property>
                 <property name="style" type="iw_theme_style_picker" colspan="6">
-                    <meta><title>iw_sulu_theme.layout_style</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.layout_style</title></meta>
                     <params>
                         <param name="block_type" value="cta"/>
                     </params>
@@ -88,64 +88,64 @@
 
         <!-- ── Settings ── -->
         <section name="settings">
-            <meta><title>iw_sulu_theme.settings</title></meta>
+            <meta><title>iw_sulu_tailwind_theme.settings</title></meta>
             <properties>
                 <property name="marginTop" type="iw_theme_margin_selector" colspan="6">
-                    <meta><title>iw_sulu_theme.margin_top</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.margin_top</title></meta>
                     <params>
                         <param name="default_value" value="mt-5"/>
                     </params>
                 </property>
                 <property name="marginBottom" type="iw_theme_margin_selector" colspan="6">
-                    <meta><title>iw_sulu_theme.margin_bottom</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.margin_bottom</title></meta>
                     <params>
                         <param name="default_value" value="mb-5"/>
                     </params>
                 </property>
                 <property name="lateralMargins" type="single_select">
-                    <meta><title>iw_sulu_theme.lateral_margins</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.lateral_margins</title></meta>
                     <params>
                         <param name="default_value" value="exterior"/>
                         <param name="values" type="collection">
-                            <param name="exterior"><meta><title>iw_sulu_theme.lateral_margins_exterior</title></meta></param>
-                            <param name="interior"><meta><title>iw_sulu_theme.lateral_margins_interior</title></meta></param>
-                            <param name="none"><meta><title>iw_sulu_theme.lateral_margins_none</title></meta></param>
+                            <param name="exterior"><meta><title>iw_sulu_tailwind_theme.lateral_margins_exterior</title></meta></param>
+                            <param name="interior"><meta><title>iw_sulu_tailwind_theme.lateral_margins_interior</title></meta></param>
+                            <param name="none"><meta><title>iw_sulu_tailwind_theme.lateral_margins_none</title></meta></param>
                         </param>
                     </params>
                 </property>
                 <property name="paddingTop" type="iw_theme_margin_selector" colspan="6">
-                    <meta><title>iw_sulu_theme.padding_top</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.padding_top</title></meta>
                     <params>
                         <param name="default_value" value="pt-5"/>
                     </params>
                 </property>
                 <property name="paddingBottom" type="iw_theme_margin_selector" colspan="6">
-                    <meta><title>iw_sulu_theme.padding_bottom</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.padding_bottom</title></meta>
                     <params>
                         <param name="default_value" value="pb-5"/>
                     </params>
                 </property>
                 <property name="paddingLateral" type="iw_theme_margin_selector">
-                    <meta><title>iw_sulu_theme.padding_lateral</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.padding_lateral</title></meta>
                     <params>
                         <param name="prefix" value="px"/>
                         <param name="default_value" value="px-5"/>
                     </params>
                 </property>
                 <property name="blockRadius" type="iw_theme_radius_selector" colspan="6">
-                    <meta><title>iw_sulu_theme.block_radius</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.block_radius</title></meta>
                     <params>
                         <param name="default_value" value="rounded-none"/>
                     </params>
                 </property>
                 <property name="paragraphImageRadius" type="iw_theme_radius_selector" colspan="6">
-                    <meta><title>iw_sulu_theme.paragraph_image_radius</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.paragraph_image_radius</title></meta>
                     <params>
                         <param name="default_value" value="rounded-none"/>
                     </params>
                 </property>
                 <property name="showBackground" type="checkbox">
-                    <meta><title>iw_sulu_theme.show_background</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.show_background</title></meta>
                 </property>
             </properties>
         </section>

@@ -25,7 +25,7 @@ export default class ActivateToolbarAction extends AbstractListToolbarAction {
         return {
             disabled: !singleSelected || alreadyActive,
             icon: 'su-check-circle',
-            label: translate('iw_sulu_theme.activate'),
+            label: translate('iw_sulu_tailwind_theme.activate'),
             loading: this.activating,
             onClick: this.handleClick,
             type: 'button',

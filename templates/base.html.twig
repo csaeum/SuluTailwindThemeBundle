@@ -16,10 +16,10 @@
     {% endblock %}
 
     {# Theme: Google Fonts #}
-    {{ iw_sulu_theme_fonts_link()|raw }}
+    {{ iw_sulu_tailwind_theme_fonts_link()|raw }}
 
     {# Theme: compiled CSS custom properties #}
-    {% set themeCssPath = iw_sulu_theme_css_path() %}
+    {% set themeCssPath = iw_sulu_tailwind_theme_css_path() %}
     {% if themeCssPath is not empty %}
         <link rel="stylesheet" href="{{ themeCssPath }}">
     {% endif %}
@@ -29,10 +29,10 @@
 </head>
 <body class="bg-[var(--color-background)] text-[var(--color-text)]">
     {# Theme: dynamic menu #}
-    {% set menuConfig = iw_sulu_theme_menu_config() %}
+    {% set menuConfig = iw_sulu_tailwind_theme_menu_config() %}
     {% block header %}
         {% if menuConfig is not empty and menuConfig.type is defined %}
-            {% include '@ItechWorldSuluTheme/menu/_' ~ menuConfig.type ~ '.html.twig' with {config: menuConfig} %}
+            {% include '@ItechWorldSuluTailwindTheme/menu/_' ~ menuConfig.type ~ '.html.twig' with {config: menuConfig} %}
         {% else %}
             <header>
                 <nav class="container mx-auto px-4 py-4">

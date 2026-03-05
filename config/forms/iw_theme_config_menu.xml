@@ -9,29 +9,29 @@
         <!-- Menu Configuration -->
         <section name="menuSettings">
             <meta>
-                <title>iw_sulu_theme.menu_settings</title>
+                <title>iw_sulu_tailwind_theme.menu_settings</title>
             </meta>
             <properties>
                 <property name="menuConfig_type" type="single_select" colspan="6">
                     <meta>
-                        <title>iw_sulu_theme.menu_type</title>
+                        <title>iw_sulu_tailwind_theme.menu_type</title>
                     </meta>
                     <params>
                         <param name="values" type="collection">
                             <param name="navbar">
-                                <meta><title>iw_sulu_theme.menu_type_navbar</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_type_navbar</title></meta>
                             </param>
                             <param name="burger">
-                                <meta><title>iw_sulu_theme.menu_type_burger</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_type_burger</title></meta>
                             </param>
                             <param name="fullscreen">
-                                <meta><title>iw_sulu_theme.menu_type_fullscreen</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_type_fullscreen</title></meta>
                             </param>
                             <param name="sidebar">
-                                <meta><title>iw_sulu_theme.menu_type_sidebar</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_type_sidebar</title></meta>
                             </param>
                             <param name="megamenu">
-                                <meta><title>iw_sulu_theme.menu_type_megamenu</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_type_megamenu</title></meta>
                             </param>
                         </param>
                     </params>
@@ -40,17 +40,17 @@
                 <property name="menuConfig_megamenuSource" type="single_select" colspan="6"
                           visibleCondition="menuConfig_type == 'megamenu'">
                     <meta>
-                        <title>iw_sulu_theme.mega_source</title>
-                        <info_text>iw_sulu_theme.mega_source_info</info_text>
+                        <title>iw_sulu_tailwind_theme.mega_source</title>
+                        <info_text>iw_sulu_tailwind_theme.mega_source_info</info_text>
                     </meta>
                     <params>
                         <param name="default_value" type="string" value="native"/>
                         <param name="values" type="collection">
                             <param name="native">
-                                <meta><title>iw_sulu_theme.mega_source_native</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.mega_source_native</title></meta>
                             </param>
                             <param name="snippet">
-                                <meta><title>iw_sulu_theme.mega_source_snippet</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.mega_source_snippet</title></meta>
                             </param>
                         </param>
                     </params>
@@ -59,19 +59,19 @@
                 <property name="menuConfig_navPosition" type="single_select" colspan="6"
                           visibleCondition="menuConfig_type == 'navbar' OR menuConfig_type == 'megamenu'">
                     <meta>
-                        <title>iw_sulu_theme.menu_navPosition</title>
+                        <title>iw_sulu_tailwind_theme.menu_navPosition</title>
                     </meta>
                     <params>
                         <param name="default_value" value="center"/>
                         <param name="values" type="collection">
                             <param name="left">
-                                <meta><title>iw_sulu_theme.menu_navPosition_left</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_navPosition_left</title></meta>
                             </param>
                             <param name="center">
-                                <meta><title>iw_sulu_theme.menu_navPosition_center</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_navPosition_center</title></meta>
                             </param>
                             <param name="right">
-                                <meta><title>iw_sulu_theme.menu_navPosition_right</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_navPosition_right</title></meta>
                             </param>
                         </param>
                     </params>
@@ -80,18 +80,18 @@
                 <property name="menuConfig_animation" type="single_select" colspan="6"
                           visibleCondition="menuConfig_type != 'fullscreen' AND menuConfig_type != 'sidebar' AND menuConfig_type != 'megamenu'">
                     <meta>
-                        <title>iw_sulu_theme.menu_animation</title>
+                        <title>iw_sulu_tailwind_theme.menu_animation</title>
                     </meta>
                     <params>
                         <param name="values" type="collection">
                             <param name="none">
-                                <meta><title>iw_sulu_theme.menu_animation_none</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_animation_none</title></meta>
                             </param>
                             <param name="slide">
-                                <meta><title>iw_sulu_theme.menu_animation_slide</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_animation_slide</title></meta>
                             </param>
                             <param name="fade">
-                                <meta><title>iw_sulu_theme.menu_animation_fade</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_animation_fade</title></meta>
                             </param>
                         </param>
                     </params>
@@ -101,22 +101,22 @@
                           visibleCondition="menuConfig_type != 'fullscreen' AND menuConfig_type != 'sidebar' AND menuConfig_type != 'megamenu'"
                           disabledCondition="menuConfig_animation != 'slide'">
                     <meta>
-                        <title>iw_sulu_theme.menu_slideDirection</title>
+                        <title>iw_sulu_tailwind_theme.menu_slideDirection</title>
                     </meta>
                     <params>
                         <param name="default_value" value="top"/>
                         <param name="values" type="collection">
                             <param name="top">
-                                <meta><title>iw_sulu_theme.menu_slideDirection_top</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_slideDirection_top</title></meta>
                             </param>
                             <param name="right">
-                                <meta><title>iw_sulu_theme.menu_slideDirection_right</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_slideDirection_right</title></meta>
                             </param>
                             <param name="bottom">
-                                <meta><title>iw_sulu_theme.menu_slideDirection_bottom</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_slideDirection_bottom</title></meta>
                             </param>
                             <param name="left">
-                                <meta><title>iw_sulu_theme.menu_slideDirection_left</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_slideDirection_left</title></meta>
                             </param>
                         </param>
                     </params>
@@ -125,20 +125,20 @@
                 <property name="menuConfig_clickParentPage" type="single_select" colspan="6"
                           visibleCondition="menuConfig_type != 'navbar' AND menuConfig_type != 'megamenu'">
                     <meta>
-                        <title>iw_sulu_theme.menu_clickParentPage</title>
-                        <info_text>iw_sulu_theme.menu_clickParentPage_info</info_text>
+                        <title>iw_sulu_tailwind_theme.menu_clickParentPage</title>
+                        <info_text>iw_sulu_tailwind_theme.menu_clickParentPage_info</info_text>
                     </meta>
                     <params>
                         <param name="default_value" type="string" value="none"/>
                         <param name="values" type="collection">
                             <param name="none">
-                                <meta><title>iw_sulu_theme.menu_clickParentPage_none</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_clickParentPage_none</title></meta>
                             </param>
                             <param name="split">
-                                <meta><title>iw_sulu_theme.menu_clickParentPage_split</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_clickParentPage_split</title></meta>
                             </param>
                             <param name="selflink">
-                                <meta><title>iw_sulu_theme.menu_clickParentPage_selflink</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_clickParentPage_selflink</title></meta>
                             </param>
                         </param>
                     </params>
@@ -147,14 +147,14 @@
                 <property name="menuConfig_clickParentPageNavbar" type="checkbox" colspan="6"
                           visibleCondition="menuConfig_type == 'navbar'">
                     <meta>
-                        <title>iw_sulu_theme.menu_clickParentPageNavbar</title>
-                        <info_text>iw_sulu_theme.menu_clickParentPageNavbar_info</info_text>
+                        <title>iw_sulu_tailwind_theme.menu_clickParentPageNavbar</title>
+                        <info_text>iw_sulu_tailwind_theme.menu_clickParentPageNavbar_info</info_text>
                     </meta>
                 </property>
 
                 <property name="menuConfig_childLevels" type="single_select" colspan="6">
                     <meta>
-                        <title>iw_sulu_theme.menu_childLevels</title>
+                        <title>iw_sulu_tailwind_theme.menu_childLevels</title>
                     </meta>
                     <params>
                         <param name="values" type="collection">
@@ -174,33 +174,33 @@
                 <property name="menuConfig_fullscreenImage" type="single_media_selection" colspan="6"
                           visibleCondition="menuConfig_type == 'fullscreen'">
                     <meta>
-                        <title>iw_sulu_theme.menu_fullscreenImage</title>
-                        <info_text>iw_sulu_theme.menu_fullscreenImage_info</info_text>
+                        <title>iw_sulu_tailwind_theme.menu_fullscreenImage</title>
+                        <info_text>iw_sulu_tailwind_theme.menu_fullscreenImage_info</info_text>
                     </meta>
                 </property>
 
                 <property name="menuConfig_twoColumns" type="checkbox" colspan="6"
                           visibleCondition="menuConfig_type == 'fullscreen'">
                     <meta>
-                        <title>iw_sulu_theme.menu_twoColumns</title>
-                        <info_text>iw_sulu_theme.menu_twoColumns_info</info_text>
+                        <title>iw_sulu_tailwind_theme.menu_twoColumns</title>
+                        <info_text>iw_sulu_tailwind_theme.menu_twoColumns_info</info_text>
                     </meta>
                 </property>
 
                 <property name="menuConfig_sidebarPosition" type="single_select" colspan="6"
                           visibleCondition="menuConfig_type == 'sidebar'">
                     <meta>
-                        <title>iw_sulu_theme.menu_sidebarPosition</title>
-                        <info_text>iw_sulu_theme.menu_sidebarPosition_info</info_text>
+                        <title>iw_sulu_tailwind_theme.menu_sidebarPosition</title>
+                        <info_text>iw_sulu_tailwind_theme.menu_sidebarPosition_info</info_text>
                     </meta>
                     <params>
                         <param name="default_value" type="string" value="left"/>
                         <param name="values" type="collection">
                             <param name="left">
-                                <meta><title>iw_sulu_theme.menu_position_left</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_position_left</title></meta>
                             </param>
                             <param name="right">
-                                <meta><title>iw_sulu_theme.menu_position_right</title></meta>
+                                <meta><title>iw_sulu_tailwind_theme.menu_position_right</title></meta>
                             </param>
                         </param>
                     </params>
@@ -211,49 +211,49 @@
         <!-- Display Options -->
         <section name="menuDisplay">
             <meta>
-                <title>iw_sulu_theme.menu_display</title>
+                <title>iw_sulu_tailwind_theme.menu_display</title>
             </meta>
             <properties>
                 <property name="menuConfig_logoDesktop" type="single_media_selection" colspan="6">
                     <meta>
-                        <title>iw_sulu_theme.menu_logoDesktop</title>
+                        <title>iw_sulu_tailwind_theme.menu_logoDesktop</title>
                     </meta>
                 </property>
 
                 <property name="menuConfig_logoMobile" type="single_media_selection" colspan="6">
                     <meta>
-                        <title>iw_sulu_theme.menu_logoMobile</title>
+                        <title>iw_sulu_tailwind_theme.menu_logoMobile</title>
                     </meta>
                 </property>
 
                 <property name="menuConfig_displayLogoDesktop" type="checkbox" colspan="6">
                     <meta>
-                        <title>iw_sulu_theme.menu_displayLogoDesktop</title>
+                        <title>iw_sulu_tailwind_theme.menu_displayLogoDesktop</title>
                     </meta>
                 </property>
 
                 <property name="menuConfig_displayLogoMobile" type="checkbox" colspan="6">
                     <meta>
-                        <title>iw_sulu_theme.menu_displayLogoMobile</title>
+                        <title>iw_sulu_tailwind_theme.menu_displayLogoMobile</title>
                     </meta>
                 </property>
 
                 <property name="menuConfig_displaySiteName" type="checkbox" colspan="6">
                     <meta>
-                        <title>iw_sulu_theme.menu_displaySiteName</title>
+                        <title>iw_sulu_tailwind_theme.menu_displaySiteName</title>
                     </meta>
                 </property>
 
                 <property name="menuConfig_displaySocialMedia" type="checkbox" colspan="6">
                     <meta>
-                        <title>iw_sulu_theme.menu_displaySocialMedia</title>
+                        <title>iw_sulu_tailwind_theme.menu_displaySocialMedia</title>
                     </meta>
                 </property>
 
                 <property name="menuConfig_transparentNavbar" type="checkbox" colspan="6">
                     <meta>
-                        <title>iw_sulu_theme.menu_transparentNavbar</title>
-                        <info_text>iw_sulu_theme.menu_transparentNavbar_info</info_text>
+                        <title>iw_sulu_tailwind_theme.menu_transparentNavbar</title>
+                        <info_text>iw_sulu_tailwind_theme.menu_transparentNavbar_info</info_text>
                     </meta>
                 </property>
             </properties>
@@ -262,12 +262,12 @@
         <!-- Menu Colors -->
         <section name="menuColors">
             <meta>
-                <title>iw_sulu_theme.menu_colors</title>
+                <title>iw_sulu_tailwind_theme.menu_colors</title>
             </meta>
             <properties>
                 <property name="menuConfig_colors_bg" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.menu_colors_bg</title>
+                        <title>iw_sulu_tailwind_theme.menu_colors_bg</title>
                     </meta>
                     <params>
                         <param name="show_palette" value="true"/>
@@ -276,7 +276,7 @@
 
                 <property name="menuConfig_colors_text" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.menu_colors_text</title>
+                        <title>iw_sulu_tailwind_theme.menu_colors_text</title>
                     </meta>
                     <params>
                         <param name="show_palette" value="true"/>
@@ -285,7 +285,7 @@
 
                 <property name="menuConfig_colors_textHover" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.menu_colors_textHover</title>
+                        <title>iw_sulu_tailwind_theme.menu_colors_textHover</title>
                     </meta>
                     <params>
                         <param name="show_palette" value="true"/>
@@ -294,7 +294,7 @@
 
                 <property name="menuConfig_colors_secondBg" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.menu_colors_secondBg</title>
+                        <title>iw_sulu_tailwind_theme.menu_colors_secondBg</title>
                     </meta>
                     <params>
                         <param name="show_palette" value="true"/>
@@ -303,7 +303,7 @@
 
                 <property name="menuConfig_colors_secondText" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.menu_colors_secondText</title>
+                        <title>iw_sulu_tailwind_theme.menu_colors_secondText</title>
                     </meta>
                     <params>
                         <param name="show_palette" value="true"/>
@@ -312,7 +312,7 @@
 
                 <property name="menuConfig_colors_secondTextHover" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.menu_colors_secondTextHover</title>
+                        <title>iw_sulu_tailwind_theme.menu_colors_secondTextHover</title>
                     </meta>
                     <params>
                         <param name="show_palette" value="true"/>
@@ -321,7 +321,7 @@
 
                 <property name="menuConfig_colors_thirdBg" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.menu_colors_thirdBg</title>
+                        <title>iw_sulu_tailwind_theme.menu_colors_thirdBg</title>
                     </meta>
                     <params>
                         <param name="show_palette" value="true"/>
@@ -330,7 +330,7 @@
 
                 <property name="menuConfig_colors_thirdText" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.menu_colors_thirdText</title>
+                        <title>iw_sulu_tailwind_theme.menu_colors_thirdText</title>
                     </meta>
                     <params>
                         <param name="show_palette" value="true"/>
@@ -339,7 +339,7 @@
 
                 <property name="menuConfig_colors_divider" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.menu_colors_divider</title>
+                        <title>iw_sulu_tailwind_theme.menu_colors_divider</title>
                     </meta>
                     <params>
                         <param name="show_palette" value="true"/>
@@ -348,7 +348,7 @@
 
                 <property name="menuConfig_colors_burgerOpen" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.menu_colors_burgerOpen</title>
+                        <title>iw_sulu_tailwind_theme.menu_colors_burgerOpen</title>
                     </meta>
                     <params>
                         <param name="show_palette" value="true"/>
@@ -357,7 +357,7 @@
 
                 <property name="menuConfig_colors_burgerClose" type="iw_theme_color_token_editor" colspan="4">
                     <meta>
-                        <title>iw_sulu_theme.menu_colors_burgerClose</title>
+                        <title>iw_sulu_tailwind_theme.menu_colors_burgerClose</title>
                     </meta>
                     <params>
                         <param name="show_palette" value="true"/>
@@ -366,7 +366,7 @@
 
                 <property name="menuConfig_colors_socialMedia" type="iw_theme_color_token_editor" colspan="6">
                     <meta>
-                        <title>iw_sulu_theme.menu_colors_socialMedia</title>
+                        <title>iw_sulu_tailwind_theme.menu_colors_socialMedia</title>
                     </meta>
                     <params>
                         <param name="show_palette" value="true"/>
@@ -375,7 +375,7 @@
 
                 <property name="menuConfig_colors_socialMediaHover" type="iw_theme_color_token_editor" colspan="6">
                     <meta>
-                        <title>iw_sulu_theme.menu_colors_socialMediaHover</title>
+                        <title>iw_sulu_tailwind_theme.menu_colors_socialMediaHover</title>
                     </meta>
                     <params>
                         <param name="show_palette" value="true"/>

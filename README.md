@@ -1,4 +1,4 @@
-<h1 align="center">SuluThemeBundle</h1>
+<h1 align="center">SuluTailwindThemeBundle</h1>
 <h3 align="center">Complete theming system for <a href="https://sulu.io" target="_blank">Sulu CMS 3.x</a></h3>
 
 <p align="center">
@@ -45,7 +45,7 @@
 ### 1. Require the bundle
 
 ```bash
-composer require itech-world/sulu-theme-bundle
+composer require itech-world/sulu-tailwind-theme-bundle
 ```
 
 For local development with a path repository, add to your project's `composer.json`:
@@ -55,11 +55,11 @@ For local development with a path repository, add to your project's `composer.js
     "repositories": [
         {
             "type": "path",
-            "url": "../SuluThemeBundle"
+            "url": "../SuluTailwindThemeBundle"
         }
     ],
     "require": {
-        "itech-world/sulu-theme-bundle": "dev-dev"
+        "itech-world/sulu-tailwind-theme-bundle": "dev-dev"
     }
 }
 ```
@@ -71,7 +71,7 @@ If Symfony Flex doesn't register it automatically, add to `config/bundles.php`:
 ```php
 return [
     // ...
-    ItechWorld\SuluThemeBundle\ItechWorldSuluThemeBundle::class => ['all' => true],
+    ItechWorld\SuluTailwindThemeBundle\ItechWorldSuluTailwindThemeBundle::class => ['all' => true],
 ];
 ```
 
@@ -80,8 +80,8 @@ return [
 Add the following to your `config/routes.yaml`:
 
 ```yaml
-itech_world_sulu_theme:
-    resource: '@ItechWorldSuluThemeBundle/src/Controller/'
+itech_world_sulu_tailwind_theme:
+    resource: '@ItechWorldSuluTailwindThemeBundle/src/Controller/'
     type: attribute
 ```
 
@@ -94,7 +94,7 @@ The bundle provides Stimulus controllers and CSS that need to be compiled by Web
 ```json
 {
     "devDependencies": {
-        "@itech-world/sulu-theme-bundle": "file:vendor/itech-world/sulu-theme-bundle/assets"
+        "@itech-world/sulu-tailwind-theme-bundle": "file:vendor/itech-world/sulu-tailwind-theme-bundle/assets"
     }
 }
 ```
@@ -102,8 +102,8 @@ The bundle provides Stimulus controllers and CSS that need to be compiled by Web
 **Import the CSS** and add the bundle's templates as a Tailwind source in your `assets/styles/app.css`:
 
 ```css
-@import "@itech-world/sulu-theme-bundle";
-@source "../../vendor/itech-world/sulu-theme-bundle/templates";
+@import "@itech-world/sulu-tailwind-theme-bundle";
+@source "../../vendor/itech-world/sulu-tailwind-theme-bundle/templates";
 ```
 
 > The `@source` directive tells Tailwind CSS 4 to scan the bundle's Twig templates for utility classes. Without it, classes used in menu and block templates won't be compiled.
@@ -113,7 +113,7 @@ The bundle provides Stimulus controllers and CSS that need to be compiled by Web
 ```json
 {
     "controllers": {
-        "@itech-world/sulu-theme-bundle": {
+        "@itech-world/sulu-tailwind-theme-bundle": {
             "menu": {
                 "enabled": true,
                 "fetch": "lazy"
@@ -164,14 +164,14 @@ Edit the `assets/admin/package.json` to add the bundle to the list of bundles:
 {
     "dependencies": {
         // ...
-        "sulu-itech-world-sulu-theme-bundle": "file:../../vendor/itech-world/sulu-theme-bundle/public/js"
+        "sulu-itech-world-sulu-tailwind-theme-bundle": "file:../../vendor/itech-world/sulu-tailwind-theme-bundle/public/js"
     }
 }
 ```
 
 Edit the `assets/admin/app.js` to add the bundle in imports:
 ```js
-import 'sulu-itech-world-sulu-theme-bundle';
+import 'sulu-itech-world-sulu-tailwind-theme-bundle';
 ```
 
 In the `assets/admin/` folder, run the following command:
@@ -209,16 +209,52 @@ php bin/adminconsole cache:clear
 
 ## Configuration
 
-The bundle works with zero configuration. Optional settings can be added in `config/packages/itech_world_sulu_theme.yaml`:
+The bundle works with zero configuration. Optional settings can be added in `config/packages/itech_world_sulu_tailwind_theme.yaml`:
 
 ```yaml
-itech_world_sulu_theme:
+itech_world_sulu_tailwind_theme:
     # Directory where compiled CSS files are stored
-    css_output_dir: '%kernel.project_dir%/var/cache/iw_sulu_theme'
+    css_output_dir: '%kernel.project_dir%/var/cache/iw_sulu_tailwind_theme'
 
     # Public path prefix for serving compiled CSS
     public_css_path: '/build/iw-theme'
+
+    # Google Fonts API key for the font picker autocomplete (optional)
+    google_fonts_api_key: '%env(GOOGLE_FONTS_API_KEY)%'
 ```
+
+### Google Fonts API key (optional)
+
+The typography tab includes a **Font Picker** with autocomplete for Google Fonts. To enable it:
+
+1. **Get an API key** from the [Google Cloud Console](https://console.cloud.google.com/apis/credentials):
+   - Create a project (or use an existing one)
+   - Enable the **Google Fonts Developer API** in [API Library](https://console.cloud.google.com/apis/library/webfonts.googleapis.com)
+   - Create an API key in **Credentials**
+   - (Recommended) Restrict the key to the **Google Fonts Developer API** only
+
+2. **Add the key to your `.env` file**:
+
+   ```env
+   GOOGLE_FONTS_API_KEY=your_api_key_here
+   ```
+
+3. **Configure the bundle** in `config/packages/itech_world_sulu_tailwind_theme.yaml`:
+
+   ```yaml
+   itech_world_sulu_tailwind_theme:
+       google_fonts_api_key: '%env(GOOGLE_FONTS_API_KEY)%'
+   ```
+
+4. **Sync the font catalog** (first time or to update):
+
+   ```bash
+   php bin/adminconsole iw-sulu:theme:sync-fonts
+   ```
+
+   You can also sync from the admin UI by clicking the **sync button (↻)** in the Font Picker.
+
+> **Without an API key**, the Font Picker still works: the Google tab falls back to a free-text input, and the System tab lists 15 cross-platform fonts (Arial, Georgia, Courier New, etc.).
 
 ## Usage
 
@@ -228,7 +264,7 @@ Navigate to **Settings > Themes** in the Sulu admin panel. From there you can:
 
 1. **Create a theme**: Click "Add", fill in the name and label
 2. **Configure colors**: Set primary, secondary, background, text, and link colors
-3. **Configure typography**: Add Google Fonts families and assign them to headings/body/links
+3. **Configure typography**: Select fonts for headings/body/accent via the Font Picker (Google Fonts autocomplete, system fonts, or free text)
 4. **Configure buttons**: Set primary/secondary button styles (background, text, border, hover states, radius)
 5. **Configure borders**: Set border radius values (default, small, large, full, image)
 6. **Configure block variants**: Define color schemes (e.g., light, accent, dark) for content blocks
@@ -347,7 +383,7 @@ Since blocks are registered globally, creating a custom page template with a sub
 
 Each block has 3 sections: **Content** (block-specific), **Appearance** (variant + style), and **Settings** (margins, paddings, radius, background).
 
-> All labels use translation keys (`iw_sulu_theme.*`). See `translations/admin.fr.json` and `translations/admin.en.json` for the full list.
+> All labels use translation keys (`iw_sulu_tailwind_theme.*`). See `translations/admin.fr.json` and `translations/admin.en.json` for the full list.
 
 #### Using fragments via XInclude
 
@@ -372,11 +408,11 @@ Instead of manually writing header properties and block lists, you can **include
 
     <properties>
         <!-- Include header properties (title + url) from the bundle -->
-        <xi:include href="../../../vendor/itech-world/sulu-theme-bundle/config/templates/fragments/header.xml"
+        <xi:include href="../../../vendor/itech-world/sulu-tailwind-theme-bundle/config/templates/fragments/header.xml"
                     xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:property)"/>
 
         <!-- Include the full blocks container (all 11 types) -->
-        <xi:include href="../../../vendor/itech-world/sulu-theme-bundle/config/templates/fragments/blocks.xml"
+        <xi:include href="../../../vendor/itech-world/sulu-tailwind-theme-bundle/config/templates/fragments/blocks.xml"
                     xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:block)"/>
     </properties>
 </template>
@@ -392,13 +428,13 @@ Instead of manually writing header properties and block lists, you can **include
 | Variant | `fragments/components/variant.xml` | `variant` (iw_theme_variant_picker) |
 | Settings | `fragments/components/settings.xml` | All 9 settings properties (margins, paddings, radius, background) |
 
-> **Note:** The `href` path is relative to your template file location. Adjust `../../../vendor/` according to where your template sits relative to the project root. Typically, for templates in `config/templates/pages/`, the path is `../../../vendor/itech-world/sulu-theme-bundle/config/templates/fragments/...`.
+> **Note:** The `href` path is relative to your template file location. Adjust `../../../vendor/` according to where your template sits relative to the project root. Typically, for templates in `config/templates/pages/`, the path is `../../../vendor/itech-world/sulu-tailwind-theme-bundle/config/templates/fragments/...`.
 
 You can also **include individual settings properties** using XPointer with a `@name` selector:
 
 ```xml
 <!-- Include only marginTop from settings.xml -->
-<xi:include href="../../../vendor/itech-world/sulu-theme-bundle/config/templates/fragments/components/settings.xml"
+<xi:include href="../../../vendor/itech-world/sulu-tailwind-theme-bundle/config/templates/fragments/components/settings.xml"
             xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:property[@name='marginTop'])"/>
 ```
 
@@ -446,10 +482,10 @@ Here is a complete example:
     {% endblock %}
 
     {# Theme: Google Fonts #}
-    {{ iw_sulu_theme_fonts_link()|raw }}
+    {{ iw_sulu_tailwind_theme_fonts_link()|raw }}
 
     {# Theme: compiled CSS custom properties #}
-    {% set themeCssPath = iw_sulu_theme_css_path() %}
+    {% set themeCssPath = iw_sulu_tailwind_theme_css_path() %}
     {% if themeCssPath is not empty %}
         <link rel="stylesheet" href="{{ themeCssPath }}">
     {% endif %}
@@ -459,10 +495,10 @@ Here is a complete example:
 </head>
 <body class="bg-[var(--color-background)] text-[var(--color-text)]">
     {# Theme: dynamic menu #}
-    {% set menuConfig = iw_sulu_theme_menu_config() %}
+    {% set menuConfig = iw_sulu_tailwind_theme_menu_config() %}
     {% block header %}
         {% if menuConfig is not empty and menuConfig.type is defined %}
-            {% include '@ItechWorldSuluTheme/menu/_' ~ menuConfig.type ~ '.html.twig' with {config: menuConfig} %}
+            {% include '@ItechWorldSuluTailwindTheme/menu/_' ~ menuConfig.type ~ '.html.twig' with {config: menuConfig} %}
         {% else %}
             <header>
                 <nav class="container mx-auto px-4 py-4">
@@ -499,13 +535,13 @@ Here is a complete example:
 
 | Element | Code | Purpose |
 |---------|------|---------|
-| Google Fonts | `{{ iw_sulu_theme_fonts_link()\|raw }}` | Loads font families defined in the theme |
-| Theme CSS | `{{ iw_sulu_theme_css_path() }}` | Includes compiled CSS custom properties |
+| Google Fonts | `{{ iw_sulu_tailwind_theme_fonts_link()\|raw }}` | Loads font families defined in the theme |
+| Theme CSS | `{{ iw_sulu_tailwind_theme_css_path() }}` | Includes compiled CSS custom properties |
 | Body classes | `bg-[var(--color-background)] text-[var(--color-text)]` | Applies theme background and text colors |
-| Dynamic menu | `iw_sulu_theme_menu_config()` | Renders the menu type configured in the admin |
-| Menu templates | `@ItechWorldSuluTheme/menu/_<type>.html.twig` | Available types: `navbar`, `burger`, `fullscreen`, `sidebar` |
+| Dynamic menu | `iw_sulu_tailwind_theme_menu_config()` | Renders the menu type configured in the admin |
+| Menu templates | `@ItechWorldSuluTailwindTheme/menu/_<type>.html.twig` | Available types: `navbar`, `burger`, `fullscreen`, `sidebar` |
 
-> The bundle also provides a `@ItechWorldSuluTheme/base.html.twig` template that you can extend if you prefer, but integrating the functions directly gives you more flexibility.
+> The bundle also provides a `@ItechWorldSuluTailwindTheme/base.html.twig` template that you can extend if you prefer, but integrating the functions directly gives you more flexibility.
 
 ### Twig functions
 
@@ -513,19 +549,19 @@ Use these functions in your templates:
 
 ```twig
 {# Include the compiled theme CSS #}
-<link rel="stylesheet" href="{{ iw_sulu_theme_css_path() }}">
+<link rel="stylesheet" href="{{ iw_sulu_tailwind_theme_css_path() }}">
 
 {# Include Google Fonts #}
-{{ iw_sulu_theme_fonts_link()|raw }}
+{{ iw_sulu_tailwind_theme_fonts_link()|raw }}
 
 {# Get the menu configuration #}
-{% set menuConfig = iw_sulu_theme_menu_config() %}
+{% set menuConfig = iw_sulu_tailwind_theme_menu_config() %}
 
 {# Get all theme tokens #}
-{% set tokens = iw_sulu_theme_tokens() %}
+{% set tokens = iw_sulu_tailwind_theme_tokens() %}
 
 {# Get block styles configuration #}
-{% set blockStyles = iw_sulu_theme_block_styles() %}
+{% set blockStyles = iw_sulu_tailwind_theme_block_styles() %}
 
 {# Get block style template path #}
 {% set template = iw_sulu_block_style_template('gallery', 'grid') %}
@@ -540,11 +576,14 @@ php bin/adminconsole iw-sulu:theme:install <preset-name>
 # Recompile CSS for the active theme (or a specific one)
 php bin/adminconsole iw-sulu:theme:compile
 php bin/adminconsole iw-sulu:theme:compile --theme=corporate
+
+# Sync the Google Fonts catalog (requires API key)
+php bin/adminconsole iw-sulu:theme:sync-fonts
 ```
 
 ### Security
 
-The bundle registers the security context `sulu.iw_sulu_theme.themes` with VIEW, ADD, EDIT, and DELETE permissions. Configure role access in **Settings > Roles**.
+The bundle registers the security context `sulu.iw_sulu_tailwind_theme.themes` with VIEW, ADD, EDIT, and DELETE permissions. Configure role access in **Settings > Roles**.
 
 ## Using the theme in custom components
 
@@ -577,13 +616,14 @@ For the full reference, see the **[doc/](doc/)** directory:
 |----------|-------------|
 | [CSS Variables Reference](doc/css-variables.md) | All CSS custom properties: colors, palettes, typography, borders, buttons, menu |
 | [Block Variants](doc/block-variants.md) | Variant classes, auto-styled elements, separator styles, `.btn-variant` |
-| [Twig Reference](doc/twig-reference.md) | All Twig functions, global variable `iw_sulu_theme`, token structure |
+| [Twig Reference](doc/twig-reference.md) | All Twig functions, global variable `iw_sulu_tailwind_theme`, token structure |
 | [Custom Integration Guide](doc/custom-integration.md) | Step-by-step examples: custom CSS, Twig components, block templates, PHP services |
+| [Menus](doc/menus.md) | Menu types, configuration, and customization |
 
 ## Architecture
 
 ```
-SuluThemeBundle/
+SuluTailwindThemeBundle/
 ├── config/
 │   ├── forms/              # Sulu admin form XMLs (7 tabs)
 │   ├── lists/              # Sulu admin list XML
@@ -594,13 +634,13 @@ SuluThemeBundle/
 │   └── services.yaml       # Service definitions
 ├── src/
 │   ├── Admin/              # ThemeAdmin (navigation, views, security)
-│   ├── Command/            # CLI commands (install, compile)
+│   ├── Command/            # CLI commands (install, compile, sync-fonts)
 │   ├── Controller/Admin/   # REST API controller
 │   ├── DataFixtures/       # Preset theme fixtures
 │   ├── Entity/             # ThemeConfig Doctrine entity
 │   ├── EventSubscriber/    # Auto-recompile on save
 │   ├── Repository/         # ThemeConfigRepository
-│   ├── Service/            # ThemeCompiler, ThemeProvider, GoogleFontsResolver
+│   ├── Service/            # ThemeCompiler, ThemeProvider, GoogleFontsResolver, GoogleFontsCatalog
 │   └── Twig/               # ThemeExtension
 ├── templates/              # Twig templates (blocks, menus, base)
 ├── translations/           # Admin translations (fr, en)
@@ -612,10 +652,11 @@ SuluThemeBundle/
 
 * English
 * French
+* German
 
 ## 🐛 Bug and Idea
 
-See the [open issues](https://github.com/steeven-th/SuluThemeBundle/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/steeven-th/SuluTailwindThemeBundle/issues) for a list of proposed features (and known issues).
 
 ## 💰 Support me
 

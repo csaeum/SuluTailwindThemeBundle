@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace ItechWorld\SuluThemeBundle\Twig;
+namespace ItechWorld\SuluTailwindThemeBundle\Twig;
 
-use ItechWorld\SuluThemeBundle\Service\GoogleFontsResolver;
-use ItechWorld\SuluThemeBundle\Service\ThemeCompiler;
-use ItechWorld\SuluThemeBundle\Service\ThemeProvider;
+use ItechWorld\SuluTailwindThemeBundle\Service\GoogleFontsResolver;
+use ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler;
+use ItechWorld\SuluTailwindThemeBundle\Service\ThemeProvider;
 use Sulu\Component\Webspace\Analyzer\RequestAnalyzerInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
@@ -36,21 +36,21 @@ class ThemeExtension extends AbstractExtension implements GlobalsInterface
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('iw_sulu_theme_css_path', $this->getCssPath(...)),
-            new TwigFunction('iw_sulu_theme_fonts_link', $this->getFontsLink(...), [
+            new TwigFunction('iw_sulu_tailwind_theme_css_path', $this->getCssPath(...)),
+            new TwigFunction('iw_sulu_tailwind_theme_fonts_link', $this->getFontsLink(...), [
                 'is_safe' => ['html'],
             ]),
             new TwigFunction('iw_sulu_block_style_template', $this->getBlockStyleTemplate(...)),
-            new TwigFunction('iw_sulu_theme_menu_config', $this->getMenuConfig(...)),
-            new TwigFunction('iw_sulu_theme_tokens', $this->getTokens(...)),
-            new TwigFunction('iw_sulu_theme_block_styles', $this->getBlockStyles(...)),
+            new TwigFunction('iw_sulu_tailwind_theme_menu_config', $this->getMenuConfig(...)),
+            new TwigFunction('iw_sulu_tailwind_theme_tokens', $this->getTokens(...)),
+            new TwigFunction('iw_sulu_tailwind_theme_block_styles', $this->getBlockStyles(...)),
         ];
     }
 
     /**
      * Register global Twig variables.
      *
-     * Provides `iw_sulu_theme` global containing resolved tokens
+     * Provides `iw_sulu_tailwind_theme` global containing resolved tokens
      * for direct access in templates.
      *
      * @return array<string, mixed> The global variables
@@ -58,7 +58,7 @@ class ThemeExtension extends AbstractExtension implements GlobalsInterface
     public function getGlobals(): array
     {
         return [
-            'iw_sulu_theme' => $this->themeProvider->getTokens(),
+            'iw_sulu_tailwind_theme' => $this->themeProvider->getTokens(),
         ];
     }
 

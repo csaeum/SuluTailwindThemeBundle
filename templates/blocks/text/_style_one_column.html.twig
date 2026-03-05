@@ -1,15 +1,15 @@
 {# Text block — single column layout (CKEditor handles alignment) #}
-{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+{% extends '@ItechWorldSuluTailwindTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
-    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+    {% include '@ItechWorldSuluTailwindTheme/blocks/common/_titles.html.twig' with {
         title: title|default(''),
         subTitle: subTitle|default(''),
         titleAlignment: titleAlignment|default('left'),
         variant: variant|default(0)
     } only %}
 
-    {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
+    {% include '@ItechWorldSuluTailwindTheme/blocks/common/_paragraph.html.twig' with {
         text: text|default(''),
         paragraphImageRadius: resolvedParagraphRadius|default('')
     } only %}

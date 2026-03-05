@@ -5,7 +5,7 @@
 
 {# ── Wrapper logic (replicated from _block_wrapper) ───────────────────────── #}
 {% set variantIndex = variant|default(0) %}
-{% set allVariants = iw_sulu_theme.blockVariants|default([]) %}
+{% set allVariants = iw_sulu_tailwind_theme.blockVariants|default([]) %}
 {% if variantIndex >= allVariants|length %}
     {% set variantIndex = 0 %}
 {% endif %}
@@ -82,7 +82,7 @@
 >
     {% if not isBottom %}
         {# Image first — edge-to-edge, no radius (follows section edges) #}
-        {% include '@ItechWorldSuluTheme/blocks/common/_image_slider.html.twig' with {
+        {% include '@ItechWorldSuluTailwindTheme/blocks/common/_image_slider.html.twig' with {
             images: images|default([]),
             imageFormat: format,
             showName: showImagesName|default(false),
@@ -97,7 +97,7 @@
         <div class="container mx-auto">
         {% endif %}
 
-            {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+            {% include '@ItechWorldSuluTailwindTheme/blocks/common/_titles.html.twig' with {
                 title: title|default(''),
                 subTitle: subTitle|default(''),
                 titleAlignment: titleAlignment|default('left'),
@@ -107,13 +107,13 @@
             {# Paragraph: lateral margin when no paddingLateral (reset at sm in interior mode) #}
             {% if paraMargin %}
                 <div class="{{ paraMargin }}{% if lateralMode == 'interior' %} sm:mx-0{% endif %}">
-                    {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
+                    {% include '@ItechWorldSuluTailwindTheme/blocks/common/_paragraph.html.twig' with {
                         text: text|default(''),
                         paragraphImageRadius: radius
                     } only %}
                 </div>
             {% else %}
-                {% include '@ItechWorldSuluTheme/blocks/common/_paragraph.html.twig' with {
+                {% include '@ItechWorldSuluTailwindTheme/blocks/common/_paragraph.html.twig' with {
                     text: text|default(''),
                     paragraphImageRadius: radius
                 } only %}
@@ -126,7 +126,7 @@
 
     {% if isBottom %}
         {# Image last — edge-to-edge, no radius (follows section edges) #}
-        {% include '@ItechWorldSuluTheme/blocks/common/_image_slider.html.twig' with {
+        {% include '@ItechWorldSuluTailwindTheme/blocks/common/_image_slider.html.twig' with {
             images: images|default([]),
             imageFormat: format,
             showName: showImagesName|default(false),

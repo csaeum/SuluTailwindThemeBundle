@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace ItechWorld\SuluThemeBundle\Controller\Admin;
+namespace ItechWorld\SuluTailwindThemeBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
-use ItechWorld\SuluThemeBundle\Entity\ThemeConfig;
-use ItechWorld\SuluThemeBundle\Repository\ThemeConfigRepository;
-use ItechWorld\SuluThemeBundle\Service\ThemeCompiler;
+use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
+use ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository;
+use ItechWorld\SuluTailwindThemeBundle\Service\GoogleFontsCatalog;
+use ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler;
 use Sulu\Component\Rest\ListBuilder\Doctrine\DoctrineListBuilderFactoryInterface;
 use Sulu\Component\Rest\ListBuilder\Metadata\FieldDescriptorFactoryInterface;
 use Sulu\Component\Rest\ListBuilder\PaginatedRepresentation;
@@ -30,7 +31,7 @@ use Symfony\Component\Routing\Attribute\Route;
  *   - colors: colors_{key} → tokens.colors.{key}
  *   - borders: borders_{key} → tokens.borders.{key}
  *   - buttons: buttons_{variant}_{prop} → tokens.buttons.{variant}.{prop}
- *   - typography families: typography_fontFamilies (block) → tokens.typography.families
+ *   - typography families: typography_{role}_family / typography_{role}_source → tokens.typography.families
  *   - typography assignments: typography_assignments_{el}_{prop} → tokens.typography.assignments.{el}.{prop}
  *   - blockVariants: blockVariants (block) → tokens.blockVariants
  *   - menu: menuConfig_{key} / menuConfig_colors_{key} → menuConfig.{key} / menuConfig.colors.{key}
@@ -78,6 +79,16 @@ class ThemeConfigController extends AbstractController implements SecuredControl
     private const TYPO_ELEMENTS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'body', 'link'];
 
     /**
+     * Font role names for the 3 fixed font family slots.
+     */
+    private const FONT_ROLES = ['heading', 'body', 'accent'];
+
+    /**
+     * Properties for each typography assignment element.
+     */
+    private const TYPO_ASSIGNMENT_PROPS = ['family', 'weight', 'size', 'style', 'lineHeight'];
+
+    /**
      * Scalar menuConfig keys (non-color).
      */
     private const MENU_SCALAR_KEYS = [
@@ -97,6 +108,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         private readonly FieldDescriptorFactoryInterface $fieldDescriptorFactory,
         private readonly DoctrineListBuilderFactoryInterface $listBuilderFactory,
         private readonly RestHelperInterface $restHelper,
+        private readonly GoogleFontsCatalog $googleFontsCatalog,
     ) {
     }
 
@@ -107,7 +119,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      *
      * @return Response JSON response with _embedded list and total count
      */
-    #[Route('/admin/api/iw-theme-configs', name: 'iw_sulu_theme.get_theme_configs', methods: ['GET'])]
+    #[Route('/admin/api/iw-theme-configs', name: 'iw_sulu_tailwind_theme.get_theme_configs', methods: ['GET'])]
     public function cgetAction(Request $request): Response
     {
         $fieldDescriptors = $this->fieldDescriptorFactory->getFieldDescriptors(
@@ -141,7 +153,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      *
      * @throws NotFoundHttpException If the theme is not found
      */
-    #[Route('/admin/api/iw-theme-configs/{id}', name: 'iw_sulu_theme.get_theme_config', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[Route('/admin/api/iw-theme-configs/{id}', name: 'iw_sulu_tailwind_theme.get_theme_config', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function getAction(int $id): Response
     {
         $theme = $this->repository->find($id);
@@ -160,7 +172,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      *
      * @return Response JSON response with created theme data (HTTP 201)
      */
-    #[Route('/admin/api/iw-theme-configs', name: 'iw_sulu_theme.post_theme_config', methods: ['POST'])]
+    #[Route('/admin/api/iw-theme-configs', name: 'iw_sulu_tailwind_theme.post_theme_config', methods: ['POST'])]
     public function postAction(Request $request): Response
     {
         /** @var array<string, mixed> $data */
@@ -194,7 +206,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      *
      * @throws NotFoundHttpException If the theme is not found
      */
-    #[Route('/admin/api/iw-theme-configs/{id}', name: 'iw_sulu_theme.put_theme_config', methods: ['PUT'], requirements: ['id' => '\d+'])]
+    #[Route('/admin/api/iw-theme-configs/{id}', name: 'iw_sulu_tailwind_theme.put_theme_config', methods: ['PUT'], requirements: ['id' => '\d+'])]
     public function putAction(Request $request, int $id): Response
     {
         $theme = $this->repository->find($id);
@@ -241,7 +253,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      *
      * @throws NotFoundHttpException If the theme is not found
      */
-    #[Route('/admin/api/iw-theme-configs/{id}', name: 'iw_sulu_theme.delete_theme_config', methods: ['DELETE'], requirements: ['id' => '\d+'])]
+    #[Route('/admin/api/iw-theme-configs/{id}', name: 'iw_sulu_tailwind_theme.delete_theme_config', methods: ['DELETE'], requirements: ['id' => '\d+'])]
     public function deleteAction(int $id): Response
     {
         $theme = $this->repository->find($id);
@@ -266,7 +278,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      *
      * @throws NotFoundHttpException If the theme is not found
      */
-    #[Route('/admin/api/iw-theme-configs/{id}/activate', name: 'iw_sulu_theme.activate_theme_config', methods: ['POST'], requirements: ['id' => '\d+'])]
+    #[Route('/admin/api/iw-theme-configs/{id}/activate', name: 'iw_sulu_tailwind_theme.activate_theme_config', methods: ['POST'], requirements: ['id' => '\d+'])]
     public function activateAction(int $id): Response
     {
         $theme = $this->repository->find($id);
@@ -296,11 +308,11 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      *
      * @throws NotFoundHttpException If the CSS file is not found
      */
-    #[Route('/iw-theme/css/{filename}', name: 'iw_sulu_theme.serve_css', methods: ['GET'], requirements: ['filename' => '.+\.css'])]
+    #[Route('/iw-theme/css/{filename}', name: 'iw_sulu_tailwind_theme.serve_css', methods: ['GET'], requirements: ['filename' => '.+\.css'])]
     public function serveCssAction(string $filename): Response
     {
         /** @var string $cssOutputDir */
-        $cssOutputDir = $this->getParameter('itech_world_sulu_theme.css_output_dir');
+        $cssOutputDir = $this->getParameter('itech_world_sulu_tailwind_theme.css_output_dir');
         $filePath = $cssOutputDir . '/' . basename($filename);
 
         if (!is_file($filePath)) {
@@ -321,11 +333,56 @@ class ThemeConfigController extends AbstractController implements SecuredControl
     }
 
     /**
+     * Return the full font catalog (google, system, local).
+     *
+     * @return JsonResponse The catalog data with hasApiKey flag
+     */
+    #[Route('/admin/api/iw-theme-configs/font-catalog', name: 'iw_sulu_tailwind_theme.get_font_catalog', methods: ['GET'])]
+    public function getFontCatalogAction(): JsonResponse
+    {
+        $catalog = $this->googleFontsCatalog->getCatalog();
+
+        return new JsonResponse([
+            'google' => $catalog['google'],
+            'system' => $catalog['system'],
+            'local' => $catalog['local'],
+            'hasApiKey' => $this->googleFontsCatalog->hasApiKey(),
+        ]);
+    }
+
+    /**
+     * Synchronize the Google Fonts catalog from the API.
+     *
+     * @return JsonResponse Success with count or error message
+     */
+    #[Route('/admin/api/iw-theme-configs/font-catalog/sync', name: 'iw_sulu_tailwind_theme.sync_font_catalog', methods: ['POST'])]
+    public function syncFontCatalogAction(): JsonResponse
+    {
+        if (!$this->googleFontsCatalog->hasApiKey()) {
+            return new JsonResponse(
+                ['error' => 'Google Fonts API key is not configured.'],
+                Response::HTTP_FORBIDDEN,
+            );
+        }
+
+        try {
+            $count = $this->googleFontsCatalog->sync();
+
+            return new JsonResponse(['success' => true, 'count' => $count]);
+        } catch (\RuntimeException $e) {
+            return new JsonResponse(
+                ['error' => $e->getMessage()],
+                Response::HTTP_INTERNAL_SERVER_ERROR,
+            );
+        }
+    }
+
+    /**
      * @return string The security context identifier
      */
     public function getSecurityContext(): string
     {
-        return 'sulu.iw_sulu_theme.themes';
+        return 'sulu.iw_sulu_tailwind_theme.themes';
     }
 
     /**
@@ -398,10 +455,8 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         // Flatten buttons (depth 2): tokens.buttons.primary.bg → buttons_primary_bg
         $this->flattenDepth2($data, self::PREFIX_BUTTONS, $tokens['buttons'] ?? []);
 
-        // Typography: fontFamilies as Sulu block array
-        $data['typography_fontFamilies'] = $this->serializeFontFamilies(
-            $tokens['typography']['families'] ?? [],
-        );
+        // Typography: 3 fixed font family slots
+        $this->serializeFontFamilySlots($data, $tokens['typography']['families'] ?? []);
 
         // Typography assignments (depth 2): tokens.typography.assignments.h1.family → typography_assignments_h1_family
         $this->flattenDepth2($data, self::PREFIX_TYPO_ASSIGNMENTS, $tokens['typography']['assignments'] ?? []);
@@ -477,30 +532,39 @@ class ThemeConfigController extends AbstractController implements SecuredControl
     }
 
     /**
-     * Convert font families from DB format to Sulu block format.
+     * Serialize font families from DB format into 3 fixed flat slots.
      *
-     * DB: [{name, role, source, weights(array), fallback}, ...]
-     * Form: [{type(=role), family(=name), source, weights(comma-string)}, ...]
+     * DB: [{name, role, source, fallback}, ...]
+     * Form: typography_heading_font (JSON string), etc.
      *
+     * Also keeps the old _family / _source keys for backwards compatibility.
+     *
+     * @param array<string, mixed>               $data     Target array (mutated)
      * @param array<int, array<string, mixed>> $families DB font families
-     *
-     * @return array<int, array<string, mixed>> Sulu block formatted families
      */
-    private function serializeFontFamilies(array $families): array
+    private function serializeFontFamilySlots(array &$data, array $families): void
     {
-        return array_map(static function (array $family): array {
-            $weights = $family['weights'] ?? [];
-            if (is_array($weights)) {
-                $weights = implode(',', $weights);
-            }
+        // Index families by role for quick lookup
+        $byRole = [];
+        foreach ($families as $family) {
+            $role = $family['role'] ?? 'body';
+            $byRole[$role] = $family;
+        }
 
-            return [
-                'type' => $family['role'] ?? 'body',
-                'family' => $family['name'] ?? '',
-                'source' => $family['source'] ?? 'google',
-                'weights' => (string) $weights,
-            ];
-        }, $families);
+        foreach (self::FONT_ROLES as $role) {
+            $family = $byRole[$role] ?? [];
+            $name = $family['name'] ?? '';
+            $source = $family['source'] ?? 'google';
+
+            // New composite field: JSON string
+            $data['typography_' . $role . '_font'] = '' !== $name
+                ? json_encode(['name' => $name, 'source' => $source])
+                : '';
+
+            // Keep old fields for backwards compatibility
+            $data['typography_' . $role . '_family'] = $name;
+            $data['typography_' . $role . '_source'] = $source;
+        }
     }
 
     /**
@@ -622,7 +686,8 @@ class ThemeConfigController extends AbstractController implements SecuredControl
     /**
      * Unflatten typography form data back into nested structure.
      *
-     * Handles both fontFamilies (block) and assignments (flat keys).
+     * Handles the 3 fixed font family slots (new _font JSON or legacy _family/_source)
+     * and assignment properties.
      *
      * @param array<string, mixed> $data     Source flat data
      * @param array<string, mixed> $existing Existing typography config
@@ -631,8 +696,77 @@ class ThemeConfigController extends AbstractController implements SecuredControl
      */
     private function unflattenTypography(array $data, array $existing): array
     {
-        // Font families from Sulu block field
-        if (isset($data['typography_fontFamilies']) && is_array($data['typography_fontFamilies'])) {
+        // Check for new composite _font fields first, fallback to legacy _family/_source
+        $hasNewFont = false;
+        $hasLegacySlots = false;
+
+        foreach (self::FONT_ROLES as $role) {
+            $fontKey = 'typography_' . $role . '_font';
+            if (isset($data[$fontKey]) && '' !== $data[$fontKey]) {
+                $hasNewFont = true;
+                break;
+            }
+        }
+
+        if (!$hasNewFont) {
+            foreach (self::FONT_ROLES as $role) {
+                $familyKey = 'typography_' . $role . '_family';
+                if (isset($data[$familyKey]) && '' !== $data[$familyKey]) {
+                    $hasLegacySlots = true;
+                    break;
+                }
+            }
+        }
+
+        if ($hasNewFont || $hasLegacySlots) {
+            // Index existing families by role to preserve fallback values
+            $existingByRole = [];
+            foreach ($existing['families'] ?? [] as $family) {
+                $existingByRole[$family['role'] ?? 'body'] = $family;
+            }
+
+            $families = [];
+            foreach (self::FONT_ROLES as $role) {
+                $existingFamily = $existingByRole[$role] ?? [];
+
+                // Try new composite _font field first
+                $fontKey = 'typography_' . $role . '_font';
+                $raw = $data[$fontKey] ?? '';
+
+                if ('' !== $raw && is_string($raw)) {
+                    $fontData = json_decode($raw, true);
+
+                    if (is_array($fontData)) {
+                        $name = $fontData['name'] ?? '';
+                        $source = $fontData['source'] ?? 'google';
+                    } else {
+                        // Plain string fallback (backwards compat with plain text)
+                        $name = $raw;
+                        $source = $existingFamily['source'] ?? 'google';
+                    }
+                } else {
+                    // Fallback to legacy _family / _source fields
+                    $familyKey = 'typography_' . $role . '_family';
+                    $sourceKey = 'typography_' . $role . '_source';
+                    $name = $data[$familyKey] ?? '';
+                    $source = $data[$sourceKey] ?? $existingFamily['source'] ?? 'google';
+                }
+
+                if ('' === $name && 'accent' === $role) {
+                    // Accent is optional — skip if empty
+                    continue;
+                }
+
+                $families[] = [
+                    'name' => $name,
+                    'role' => $role,
+                    'source' => $source,
+                    'fallback' => $existingFamily['fallback'] ?? 'system-ui, sans-serif',
+                ];
+            }
+            $existing['families'] = $families;
+        } elseif (isset($data['typography_fontFamilies']) && is_array($data['typography_fontFamilies'])) {
+            // Legacy fallback: old block format (backwards compatibility)
             $existing['families'] = array_map(static function (array $blockItem): array {
                 $weights = $blockItem['weights'] ?? '';
                 if (is_string($weights)) {
@@ -649,21 +783,27 @@ class ThemeConfigController extends AbstractController implements SecuredControl
             }, $data['typography_fontFamilies']);
         }
 
-        // Assignments from flat keys
+        // Assignments from flat keys (all 5 properties)
         $assignments = $existing['assignments'] ?? [];
         foreach (self::TYPO_ELEMENTS as $element) {
-            $familyKey = self::PREFIX_TYPO_ASSIGNMENTS . $element . '_family';
-            $weightKey = self::PREFIX_TYPO_ASSIGNMENTS . $element . '_weight';
-
-            if (isset($data[$familyKey])) {
-                $assignments[$element]['family'] = $data[$familyKey];
-            }
-            if (isset($data[$weightKey])) {
-                $assignments[$element]['weight'] = $data[$weightKey];
+            foreach (self::TYPO_ASSIGNMENT_PROPS as $prop) {
+                $formKey = self::PREFIX_TYPO_ASSIGNMENTS . $element . '_' . $prop;
+                if (isset($data[$formKey])) {
+                    $assignments[$element][$prop] = $data[$formKey];
+                }
             }
         }
         if (!empty($assignments)) {
             $existing['assignments'] = $assignments;
+        }
+
+        // Derive baseFontSize / baseLineHeight from body assignment for backwards compat
+        $bodyAssignment = $assignments['body'] ?? [];
+        if (!empty($bodyAssignment['size'])) {
+            $existing['baseFontSize'] = $bodyAssignment['size'];
+        }
+        if (!empty($bodyAssignment['lineHeight'])) {
+            $existing['baseLineHeight'] = $bodyAssignment['lineHeight'];
         }
 
         return $existing;

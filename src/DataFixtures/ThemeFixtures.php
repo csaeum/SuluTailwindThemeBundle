@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItechWorld\SuluThemeBundle\DataFixtures;
+namespace ItechWorld\SuluTailwindThemeBundle\DataFixtures;
 
 /**
  * Provides preset theme data for the 6 built-in themes.
@@ -18,7 +18,10 @@ namespace ItechWorld\SuluThemeBundle\DataFixtures;
  * which are resolved to CSS values by the ThemeCompiler.
  *
  * Typography families use internal names:
- *   name, role, source, weights (array), fallback
+ *   name, role, source, fallback
+ *
+ * Typography assignments use 5 properties per element:
+ *   family, weight, size, style, lineHeight
  *
  * Block variants use indexed arrays (position 0, 1, 2) with properties:
  *   label, title, subtitle, paragraph, link, list, hr, paragraphBg, blockBg
@@ -64,21 +67,17 @@ class ThemeFixtures
                     'linkHover' => '#1e40af',
                 ],
                 'typography' => [
-                    'baseFontSize' => '16px',
-                    'baseLineHeight' => '1.6',
                     'families' => [
                         [
                             'name' => 'Inter',
                             'role' => 'heading',
                             'source' => 'google',
-                            'weights' => [500, 600, 700],
                             'fallback' => 'system-ui, sans-serif',
                         ],
                         [
                             'name' => 'Inter',
                             'role' => 'body',
                             'source' => 'google',
-                            'weights' => [400, 500],
                             'fallback' => 'system-ui, sans-serif',
                         ],
                     ],
@@ -94,14 +93,14 @@ class ThemeFixtures
                         '5xl' => '3rem',
                     ],
                     'assignments' => [
-                        'h1' => ['family' => 'heading', 'weight' => '700'],
-                        'h2' => ['family' => 'heading', 'weight' => '600'],
-                        'h3' => ['family' => 'heading', 'weight' => '600'],
-                        'h4' => ['family' => 'heading', 'weight' => '500'],
-                        'h5' => ['family' => 'heading', 'weight' => '500'],
-                        'h6' => ['family' => 'heading', 'weight' => '500'],
-                        'body' => ['family' => 'body', 'weight' => '400'],
-                        'link' => ['family' => 'body', 'weight' => '500'],
+                        'h1' => ['family' => 'heading', 'weight' => '700', 'size' => '2.5rem', 'style' => 'normal', 'lineHeight' => '1.2'],
+                        'h2' => ['family' => 'heading', 'weight' => '600', 'size' => '2rem', 'style' => 'normal', 'lineHeight' => '1.25'],
+                        'h3' => ['family' => 'heading', 'weight' => '600', 'size' => '1.5rem', 'style' => 'normal', 'lineHeight' => '1.3'],
+                        'h4' => ['family' => 'heading', 'weight' => '500', 'size' => '1.25rem', 'style' => 'normal', 'lineHeight' => '1.35'],
+                        'h5' => ['family' => 'heading', 'weight' => '500', 'size' => '1.125rem', 'style' => 'normal', 'lineHeight' => '1.4'],
+                        'h6' => ['family' => 'heading', 'weight' => '500', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.4'],
+                        'body' => ['family' => 'body', 'weight' => '400', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.6'],
+                        'link' => ['family' => 'body', 'weight' => '500', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.6'],
                     ],
                 ],
                 'borders' => [
@@ -230,21 +229,17 @@ class ThemeFixtures
                     'linkHover' => '#db2777',
                 ],
                 'typography' => [
-                    'baseFontSize' => '16px',
-                    'baseLineHeight' => '1.7',
                     'families' => [
                         [
                             'name' => 'Poppins',
                             'role' => 'heading',
                             'source' => 'google',
-                            'weights' => [600, 700, 800],
                             'fallback' => 'system-ui, sans-serif',
                         ],
                         [
                             'name' => 'DM Sans',
                             'role' => 'body',
                             'source' => 'google',
-                            'weights' => [400, 500],
                             'fallback' => 'system-ui, sans-serif',
                         ],
                     ],
@@ -260,14 +255,14 @@ class ThemeFixtures
                         '5xl' => '3.5rem',
                     ],
                     'assignments' => [
-                        'h1' => ['family' => 'heading', 'weight' => '800'],
-                        'h2' => ['family' => 'heading', 'weight' => '700'],
-                        'h3' => ['family' => 'heading', 'weight' => '700'],
-                        'h4' => ['family' => 'heading', 'weight' => '600'],
-                        'h5' => ['family' => 'heading', 'weight' => '600'],
-                        'h6' => ['family' => 'heading', 'weight' => '600'],
-                        'body' => ['family' => 'body', 'weight' => '400'],
-                        'link' => ['family' => 'body', 'weight' => '500'],
+                        'h1' => ['family' => 'heading', 'weight' => '800', 'size' => '3rem', 'style' => 'normal', 'lineHeight' => '1.15'],
+                        'h2' => ['family' => 'heading', 'weight' => '700', 'size' => '2.25rem', 'style' => 'normal', 'lineHeight' => '1.2'],
+                        'h3' => ['family' => 'heading', 'weight' => '700', 'size' => '1.75rem', 'style' => 'normal', 'lineHeight' => '1.25'],
+                        'h4' => ['family' => 'heading', 'weight' => '600', 'size' => '1.375rem', 'style' => 'normal', 'lineHeight' => '1.3'],
+                        'h5' => ['family' => 'heading', 'weight' => '600', 'size' => '1.125rem', 'style' => 'normal', 'lineHeight' => '1.35'],
+                        'h6' => ['family' => 'heading', 'weight' => '600', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.4'],
+                        'body' => ['family' => 'body', 'weight' => '400', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.7'],
+                        'link' => ['family' => 'body', 'weight' => '500', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.7'],
                     ],
                 ],
                 'borders' => [
@@ -396,21 +391,17 @@ class ThemeFixtures
                     'linkHover' => '#374151',
                 ],
                 'typography' => [
-                    'baseFontSize' => '18px',
-                    'baseLineHeight' => '1.8',
                     'families' => [
                         [
                             'name' => 'Playfair Display',
                             'role' => 'heading',
                             'source' => 'google',
-                            'weights' => [400, 700],
                             'fallback' => 'Georgia, serif',
                         ],
                         [
                             'name' => 'Inter',
                             'role' => 'body',
                             'source' => 'google',
-                            'weights' => [300, 400],
                             'fallback' => 'system-ui, sans-serif',
                         ],
                     ],
@@ -426,14 +417,14 @@ class ThemeFixtures
                         '5xl' => '3rem',
                     ],
                     'assignments' => [
-                        'h1' => ['family' => 'heading', 'weight' => '700'],
-                        'h2' => ['family' => 'heading', 'weight' => '700'],
-                        'h3' => ['family' => 'heading', 'weight' => '400'],
-                        'h4' => ['family' => 'heading', 'weight' => '400'],
-                        'h5' => ['family' => 'body', 'weight' => '400'],
-                        'h6' => ['family' => 'body', 'weight' => '400'],
-                        'body' => ['family' => 'body', 'weight' => '300'],
-                        'link' => ['family' => 'body', 'weight' => '400'],
+                        'h1' => ['family' => 'heading', 'weight' => '700', 'size' => '2.5rem', 'style' => 'normal', 'lineHeight' => '1.2'],
+                        'h2' => ['family' => 'heading', 'weight' => '700', 'size' => '2rem', 'style' => 'normal', 'lineHeight' => '1.25'],
+                        'h3' => ['family' => 'heading', 'weight' => '400', 'size' => '1.5rem', 'style' => 'italic', 'lineHeight' => '1.3'],
+                        'h4' => ['family' => 'heading', 'weight' => '400', 'size' => '1.25rem', 'style' => 'italic', 'lineHeight' => '1.35'],
+                        'h5' => ['family' => 'body', 'weight' => '400', 'size' => '1.125rem', 'style' => 'normal', 'lineHeight' => '1.4'],
+                        'h6' => ['family' => 'body', 'weight' => '400', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.4'],
+                        'body' => ['family' => 'body', 'weight' => '300', 'size' => '1.125rem', 'style' => 'normal', 'lineHeight' => '1.8'],
+                        'link' => ['family' => 'body', 'weight' => '400', 'size' => '1.125rem', 'style' => 'normal', 'lineHeight' => '1.8'],
                     ],
                 ],
                 'borders' => [
@@ -562,21 +553,17 @@ class ThemeFixtures
                     'linkHover' => '#059669',
                 ],
                 'typography' => [
-                    'baseFontSize' => '16px',
-                    'baseLineHeight' => '1.7',
                     'families' => [
                         [
                             'name' => 'DM Sans',
                             'role' => 'heading',
                             'source' => 'google',
-                            'weights' => [500, 600, 700],
                             'fallback' => 'system-ui, sans-serif',
                         ],
                         [
                             'name' => 'Open Sans',
                             'role' => 'body',
                             'source' => 'google',
-                            'weights' => [400, 500],
                             'fallback' => 'system-ui, sans-serif',
                         ],
                     ],
@@ -592,14 +579,14 @@ class ThemeFixtures
                         '5xl' => '3rem',
                     ],
                     'assignments' => [
-                        'h1' => ['family' => 'heading', 'weight' => '700'],
-                        'h2' => ['family' => 'heading', 'weight' => '600'],
-                        'h3' => ['family' => 'heading', 'weight' => '600'],
-                        'h4' => ['family' => 'heading', 'weight' => '500'],
-                        'h5' => ['family' => 'heading', 'weight' => '500'],
-                        'h6' => ['family' => 'heading', 'weight' => '500'],
-                        'body' => ['family' => 'body', 'weight' => '400'],
-                        'link' => ['family' => 'body', 'weight' => '500'],
+                        'h1' => ['family' => 'heading', 'weight' => '700', 'size' => '2.5rem', 'style' => 'normal', 'lineHeight' => '1.2'],
+                        'h2' => ['family' => 'heading', 'weight' => '600', 'size' => '2rem', 'style' => 'normal', 'lineHeight' => '1.25'],
+                        'h3' => ['family' => 'heading', 'weight' => '600', 'size' => '1.5rem', 'style' => 'normal', 'lineHeight' => '1.3'],
+                        'h4' => ['family' => 'heading', 'weight' => '500', 'size' => '1.25rem', 'style' => 'normal', 'lineHeight' => '1.35'],
+                        'h5' => ['family' => 'heading', 'weight' => '500', 'size' => '1.125rem', 'style' => 'normal', 'lineHeight' => '1.4'],
+                        'h6' => ['family' => 'heading', 'weight' => '500', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.4'],
+                        'body' => ['family' => 'body', 'weight' => '400', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.7'],
+                        'link' => ['family' => 'body', 'weight' => '500', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.7'],
                     ],
                 ],
                 'borders' => [
@@ -728,21 +715,17 @@ class ThemeFixtures
                     'linkHover' => '#fb923c',
                 ],
                 'typography' => [
-                    'baseFontSize' => '16px',
-                    'baseLineHeight' => '1.6',
                     'families' => [
                         [
                             'name' => 'Creepster',
                             'role' => 'heading',
                             'source' => 'google',
-                            'weights' => [400],
                             'fallback' => 'cursive, system-ui',
                         ],
                         [
                             'name' => 'Nunito Sans',
                             'role' => 'body',
                             'source' => 'google',
-                            'weights' => [400, 600],
                             'fallback' => 'system-ui, sans-serif',
                         ],
                     ],
@@ -758,14 +741,14 @@ class ThemeFixtures
                         '5xl' => '3.5rem',
                     ],
                     'assignments' => [
-                        'h1' => ['family' => 'heading', 'weight' => '400'],
-                        'h2' => ['family' => 'heading', 'weight' => '400'],
-                        'h3' => ['family' => 'heading', 'weight' => '400'],
-                        'h4' => ['family' => 'heading', 'weight' => '400'],
-                        'h5' => ['family' => 'body', 'weight' => '600'],
-                        'h6' => ['family' => 'body', 'weight' => '600'],
-                        'body' => ['family' => 'body', 'weight' => '400'],
-                        'link' => ['family' => 'body', 'weight' => '600'],
+                        'h1' => ['family' => 'heading', 'weight' => '400', 'size' => '3rem', 'style' => 'normal', 'lineHeight' => '1.15'],
+                        'h2' => ['family' => 'heading', 'weight' => '400', 'size' => '2.25rem', 'style' => 'normal', 'lineHeight' => '1.2'],
+                        'h3' => ['family' => 'heading', 'weight' => '400', 'size' => '1.75rem', 'style' => 'normal', 'lineHeight' => '1.25'],
+                        'h4' => ['family' => 'heading', 'weight' => '400', 'size' => '1.375rem', 'style' => 'normal', 'lineHeight' => '1.3'],
+                        'h5' => ['family' => 'body', 'weight' => '600', 'size' => '1.125rem', 'style' => 'normal', 'lineHeight' => '1.4'],
+                        'h6' => ['family' => 'body', 'weight' => '600', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.4'],
+                        'body' => ['family' => 'body', 'weight' => '400', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.6'],
+                        'link' => ['family' => 'body', 'weight' => '600', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.6'],
                     ],
                 ],
                 'borders' => [
@@ -894,21 +877,17 @@ class ThemeFixtures
                     'linkHover' => '#b91c1c',
                 ],
                 'typography' => [
-                    'baseFontSize' => '16px',
-                    'baseLineHeight' => '1.7',
                     'families' => [
                         [
                             'name' => 'Mountains of Christmas',
                             'role' => 'heading',
                             'source' => 'google',
-                            'weights' => [400, 700],
                             'fallback' => 'cursive, Georgia, serif',
                         ],
                         [
                             'name' => 'Source Sans 3',
                             'role' => 'body',
                             'source' => 'google',
-                            'weights' => [400, 600],
                             'fallback' => 'system-ui, sans-serif',
                         ],
                     ],
@@ -924,14 +903,14 @@ class ThemeFixtures
                         '5xl' => '3.25rem',
                     ],
                     'assignments' => [
-                        'h1' => ['family' => 'heading', 'weight' => '700'],
-                        'h2' => ['family' => 'heading', 'weight' => '700'],
-                        'h3' => ['family' => 'heading', 'weight' => '400'],
-                        'h4' => ['family' => 'heading', 'weight' => '400'],
-                        'h5' => ['family' => 'body', 'weight' => '600'],
-                        'h6' => ['family' => 'body', 'weight' => '600'],
-                        'body' => ['family' => 'body', 'weight' => '400'],
-                        'link' => ['family' => 'body', 'weight' => '600'],
+                        'h1' => ['family' => 'heading', 'weight' => '700', 'size' => '2.75rem', 'style' => 'normal', 'lineHeight' => '1.2'],
+                        'h2' => ['family' => 'heading', 'weight' => '700', 'size' => '2.25rem', 'style' => 'normal', 'lineHeight' => '1.25'],
+                        'h3' => ['family' => 'heading', 'weight' => '400', 'size' => '1.75rem', 'style' => 'normal', 'lineHeight' => '1.3'],
+                        'h4' => ['family' => 'heading', 'weight' => '400', 'size' => '1.375rem', 'style' => 'normal', 'lineHeight' => '1.35'],
+                        'h5' => ['family' => 'body', 'weight' => '600', 'size' => '1.125rem', 'style' => 'normal', 'lineHeight' => '1.4'],
+                        'h6' => ['family' => 'body', 'weight' => '600', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.4'],
+                        'body' => ['family' => 'body', 'weight' => '400', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.7'],
+                        'link' => ['family' => 'body', 'weight' => '600', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.7'],
                     ],
                 ],
                 'borders' => [
@@ -1140,21 +1119,17 @@ class ThemeFixtures
                     'linkHover' => '#4f46e5',
                 ],
                 'typography' => [
-                    'baseFontSize' => '16px',
-                    'baseLineHeight' => '1.6',
                     'families' => [
                         [
                             'name' => 'Inter',
                             'role' => 'heading',
                             'source' => 'google',
-                            'weights' => [500, 600, 700],
                             'fallback' => 'system-ui, sans-serif',
                         ],
                         [
                             'name' => 'Inter',
                             'role' => 'body',
                             'source' => 'google',
-                            'weights' => [400, 500],
                             'fallback' => 'system-ui, sans-serif',
                         ],
                     ],
@@ -1170,14 +1145,14 @@ class ThemeFixtures
                         '5xl' => '3rem',
                     ],
                     'assignments' => [
-                        'h1' => ['family' => 'heading', 'weight' => '700'],
-                        'h2' => ['family' => 'heading', 'weight' => '600'],
-                        'h3' => ['family' => 'heading', 'weight' => '600'],
-                        'h4' => ['family' => 'heading', 'weight' => '500'],
-                        'h5' => ['family' => 'heading', 'weight' => '500'],
-                        'h6' => ['family' => 'heading', 'weight' => '500'],
-                        'body' => ['family' => 'body', 'weight' => '400'],
-                        'link' => ['family' => 'body', 'weight' => '500'],
+                        'h1' => ['family' => 'heading', 'weight' => '700', 'size' => '2.5rem', 'style' => 'normal', 'lineHeight' => '1.2'],
+                        'h2' => ['family' => 'heading', 'weight' => '600', 'size' => '2rem', 'style' => 'normal', 'lineHeight' => '1.25'],
+                        'h3' => ['family' => 'heading', 'weight' => '600', 'size' => '1.5rem', 'style' => 'normal', 'lineHeight' => '1.3'],
+                        'h4' => ['family' => 'heading', 'weight' => '500', 'size' => '1.25rem', 'style' => 'normal', 'lineHeight' => '1.35'],
+                        'h5' => ['family' => 'heading', 'weight' => '500', 'size' => '1.125rem', 'style' => 'normal', 'lineHeight' => '1.4'],
+                        'h6' => ['family' => 'heading', 'weight' => '500', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.4'],
+                        'body' => ['family' => 'body', 'weight' => '400', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.6'],
+                        'link' => ['family' => 'body', 'weight' => '500', 'size' => '1rem', 'style' => 'normal', 'lineHeight' => '1.6'],
                     ],
                 ],
                 'borders' => [

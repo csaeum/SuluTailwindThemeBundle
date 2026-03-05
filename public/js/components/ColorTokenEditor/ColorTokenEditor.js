@@ -24,10 +24,10 @@ const SHADE_LEVELS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
  * Palette color names and their translation keys.
  */
 const PALETTE_COLORS = [
-    {key: 'primary', label: 'iw_sulu_theme.colors_primary'},
-    {key: 'secondary', label: 'iw_sulu_theme.colors_secondary'},
-    {key: 'accent', label: 'iw_sulu_theme.colors_accent'},
-    {key: 'background', label: 'iw_sulu_theme.colors_background'},
+    {key: 'primary', label: 'iw_sulu_tailwind_theme.colors_primary'},
+    {key: 'secondary', label: 'iw_sulu_tailwind_theme.colors_secondary'},
+    {key: 'accent', label: 'iw_sulu_tailwind_theme.colors_accent'},
+    {key: 'background', label: 'iw_sulu_tailwind_theme.colors_background'},
 ];
 
 /**
@@ -588,7 +588,7 @@ export default class ColorTokenEditor extends React.Component {
                                             }
                                             onClick={() => this.handleTabChange('palette')}
                                         >
-                                            {translate('iw_sulu_theme.palette_tab')}
+                                            {translate('iw_sulu_tailwind_theme.palette_tab')}
                                         </button>
                                         <button
                                             type="button"
@@ -598,7 +598,7 @@ export default class ColorTokenEditor extends React.Component {
                                             }
                                             onClick={() => this.handleTabChange('custom')}
                                         >
-                                            {translate('iw_sulu_theme.custom_tab')}
+                                            {translate('iw_sulu_tailwind_theme.custom_tab')}
                                         </button>
                                     </div>
 

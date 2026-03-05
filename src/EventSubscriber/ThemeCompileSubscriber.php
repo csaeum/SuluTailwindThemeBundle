@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace ItechWorld\SuluThemeBundle\EventSubscriber;
+namespace ItechWorld\SuluTailwindThemeBundle\EventSubscriber;
 
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsDoctrineListener;
 use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Events;
-use ItechWorld\SuluThemeBundle\Entity\ThemeConfig;
-use ItechWorld\SuluThemeBundle\Service\ThemeCompiler;
+use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
+use ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler;
 
 /**
  * Doctrine listener that triggers theme CSS recompilation.

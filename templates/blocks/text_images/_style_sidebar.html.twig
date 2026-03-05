@@ -4,7 +4,7 @@
 
 {# ── Wrapper logic (replicated from _block_wrapper) ───────────────────────── #}
 {% set variantIndex = variant|default(0) %}
-{% set allVariants = iw_sulu_theme.blockVariants|default([]) %}
+{% set allVariants = iw_sulu_tailwind_theme.blockVariants|default([]) %}
 {% if variantIndex >= allVariants|length %}
     {% set variantIndex = 0 %}
 {% endif %}
@@ -63,7 +63,7 @@
     <div class="container mx-auto">
     {% endif %}
 
-        {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+        {% include '@ItechWorldSuluTailwindTheme/blocks/common/_titles.html.twig' with {
             title: title|default(''),
             subTitle: subTitle|default(''),
             titleAlignment: titleAlignment|default('left'),
@@ -84,7 +84,7 @@
                Grid cell stretches to full row height; sticky child stays visible while text scrolls. #}
             <div class="md:col-span-2{{ isRight ? ' md:order-1' : ' md:order-2' }}">
                 <div class="{% if radius %}{{ radius }} overflow-hidden{% endif %}" style="position: sticky; top: 6rem;">
-                    {% include '@ItechWorldSuluTheme/blocks/common/_image_slider.html.twig' with {
+                    {% include '@ItechWorldSuluTailwindTheme/blocks/common/_image_slider.html.twig' with {
                         images: images|default([]),
                         imageFormat: format,
                         showName: showImagesName|default(false),

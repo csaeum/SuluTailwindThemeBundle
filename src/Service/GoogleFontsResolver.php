@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItechWorld\SuluThemeBundle\Service;
+namespace ItechWorld\SuluTailwindThemeBundle\Service;
 
 /**
  * Resolves typography tokens into a Google Fonts CSS2 API URL.
@@ -20,8 +20,10 @@ class GoogleFontsResolver
     /**
      * Resolve typography tokens into a Google Fonts CSS2 URL.
      *
-     * Extracts font family names and weights from the typography tokens
-     * and builds a Google Fonts URL that imports all required font variations.
+     * Extracts font family names from the typography tokens and collects
+     * required weights from the assignments (which elements use which weight
+     * for each font role). Falls back to families[].weights for backwards
+     * compatibility with older data.
      *
      * @param array<string, mixed> $typographyTokens The typography section of design tokens
      *
@@ -35,26 +37,37 @@ class GoogleFontsResolver
             return null;
         }
 
+        // Collect weights per role from assignments
+        $weightsByRole = $this->collectWeightsByRole($typographyTokens['assignments'] ?? []);
+
         $familyParams = [];
 
         foreach ($families as $family) {
             $name = $family['name'] ?? null;
             $source = $family['source'] ?? 'google';
-            $weights = $family['weights'] ?? [400];
+            $role = $family['role'] ?? 'body';
 
             // Only include Google Fonts (skip local and system fonts)
-            if (null === $name || 'google' !== $source) {
+            if (null === $name || '' === $name || 'google' !== $source) {
                 continue;
             }
 
+            // Determine weights: from assignments first, fallback to legacy families[].weights
+            $weights = $weightsByRole[$role] ?? [];
+            if (empty($weights) && !empty($family['weights'])) {
+                $weights = array_map('intval', $family['weights']);
+            }
+            if (empty($weights)) {
+                $weights = [400];
+            }
+
+            // Deduplicate and sort weights numerically for consistent URLs
+            $weights = array_unique($weights);
+            sort($weights);
+
             // URL-encode the family name (spaces become +)
             $encodedName = str_replace(' ', '+', $name);
-
-            // Sort weights numerically for consistent URLs
-            $weightValues = array_map('intval', $weights);
-            sort($weightValues);
-
-            $weightString = implode(';', $weightValues);
+            $weightString = implode(';', $weights);
             $familyParams[] = "family={$encodedName}:wght@{$weightString}";
         }
 
@@ -65,5 +78,31 @@ class GoogleFontsResolver
         $queryString = implode('&', $familyParams);
 
         return self::GOOGLE_FONTS_BASE_URL . '?' . $queryString . '&display=swap';
+    }
+
+    /**
+     * Collect weights by font role from assignment data.
+     *
+     * Iterates over all assignment elements (h1-h6, body, link) and groups
+     * their weight values by the font role they reference.
+     *
+     * @param array<string, array<string, string>> $assignments Assignment data
+     *
+     * @return array<string, array<int, int>> Weights grouped by role
+     */
+    private function collectWeightsByRole(array $assignments): array
+    {
+        $weightsByRole = [];
+
+        foreach ($assignments as $props) {
+            if (!is_array($props)) {
+                continue;
+            }
+            $role = $props['family'] ?? 'body';
+            $weight = (int) ($props['weight'] ?? 400);
+            $weightsByRole[$role][] = $weight;
+        }
+
+        return $weightsByRole;
     }
 }

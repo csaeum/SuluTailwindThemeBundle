@@ -88,7 +88,7 @@ When a variant's `paragraphBg` is set to a visible color (not empty, not `transp
 ```twig
 {# Resolve variant index with fallback #}
 {% set variantIndex = variant|default(0) %}
-{% set allVariants = iw_sulu_theme.blockVariants|default([]) %}
+{% set allVariants = iw_sulu_tailwind_theme.blockVariants|default([]) %}
 {% if variantIndex >= allVariants|length %}
     {% set variantIndex = 0 %}
 {% endif %}
@@ -105,7 +105,7 @@ When a variant's `paragraphBg` is set to a visible color (not empty, not `transp
 You can access individual variant properties for custom logic:
 
 ```twig
-{% set variantConfig = iw_sulu_theme.blockVariants[variantIndex]|default({}) %}
+{% set variantConfig = iw_sulu_tailwind_theme.blockVariants[variantIndex]|default({}) %}
 
 {# Read specific values #}
 {% set titleColor = variantConfig.title|default('#000') %}
@@ -116,11 +116,11 @@ You can access individual variant properties for custom logic:
 
 ### Using the block wrapper partial
 
-The bundle provides `@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig` that handles all the variant/margin/padding/container logic. Use it in your own block templates:
+The bundle provides `@ItechWorldSuluTailwindTheme/blocks/common/_block_wrapper.html.twig` that handles all the variant/margin/padding/container logic. Use it in your own block templates:
 
 ```twig
 {# my_custom_block.html.twig #}
-{% embed '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' with {
+{% embed '@ItechWorldSuluTailwindTheme/blocks/common/_block_wrapper.html.twig' with {
     variant: block.variant|default(0),
     marginTop: block.marginTop|default('mt-5'),
     marginBottom: block.marginBottom|default('mb-5'),

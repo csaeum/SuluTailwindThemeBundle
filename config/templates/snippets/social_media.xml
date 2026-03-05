@@ -6,19 +6,19 @@
     <key>iw_theme_social_media</key>
 
     <meta>
-        <title>iw_sulu_theme.snippet.social_media</title>
+        <title>iw_sulu_tailwind_theme.snippet.social_media</title>
     </meta>
 
     <areas>
         <area key="iw_theme_menu_social_media_links">
             <meta>
-                <title>iw_sulu_theme.snippet.social_media_menu_area</title>
+                <title>iw_sulu_tailwind_theme.snippet.social_media_menu_area</title>
             </meta>
         </area>
 
         <area key="iw_theme_footer_social_media_links" cache-invalidation="false">
             <meta>
-                <title>iw_sulu_theme.snippet.social_media_footer_area</title>
+                <title>iw_sulu_tailwind_theme.snippet.social_media_footer_area</title>
             </meta>
         </area>
     </areas>
@@ -26,37 +26,37 @@
     <properties>
         <property name="title" type="text_line" mandatory="true">
             <meta>
-                <title>iw_sulu_theme.snippet_title</title>
+                <title>iw_sulu_tailwind_theme.snippet_title</title>
             </meta>
             <tag name="sulu.node.name"/>
         </property>
 
         <block name="blocks_social_medias" minOccurs="1">
             <meta>
-                <title>iw_sulu_theme.social_medias</title>
+                <title>iw_sulu_tailwind_theme.social_medias</title>
             </meta>
 
             <types>
                 <type name="social_media">
                     <meta>
-                        <title>iw_sulu_theme.social_media_item</title>
+                        <title>iw_sulu_tailwind_theme.social_media_item</title>
                     </meta>
                     <properties>
                         <property name="name" type="text_line" mandatory="true">
                             <meta>
-                                <title>iw_sulu_theme.social_media_name</title>
+                                <title>iw_sulu_tailwind_theme.social_media_name</title>
                             </meta>
                         </property>
 
                         <property name="icon" type="single_media_selection">
                             <meta>
-                                <title>iw_sulu_theme.icon</title>
+                                <title>iw_sulu_tailwind_theme.icon</title>
                             </meta>
                         </property>
 
                         <property name="url" type="url" mandatory="true">
                             <meta>
-                                <title>iw_sulu_theme.url</title>
+                                <title>iw_sulu_tailwind_theme.url</title>
                             </meta>
                             <params>
                                 <param name="schemes" type="collection">

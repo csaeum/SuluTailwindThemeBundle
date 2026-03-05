@@ -1,5 +1,5 @@
 {# CTA block — split layout with image and text #}
-{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+{% extends '@ItechWorldSuluTailwindTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
     {% set alignMap = {'left': 'text-left', 'center': 'text-center', 'right': 'text-right'} %}
@@ -42,7 +42,7 @@
                 </div>
             {% endif %}
 
-            {% include '@ItechWorldSuluTheme/blocks/common/_cta_buttons.html.twig' with {
+            {% include '@ItechWorldSuluTailwindTheme/blocks/common/_cta_buttons.html.twig' with {
                 primaryButtonLink: primaryButtonLink|default(''),
                 primaryButtonView: view.blocks[_key].primaryButtonLink|default({}),
                 primaryButtonStyle: primaryButtonStyle|default('primary'),

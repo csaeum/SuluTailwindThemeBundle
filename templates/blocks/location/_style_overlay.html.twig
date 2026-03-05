@@ -1,5 +1,5 @@
 {# Location block — map with collapsible floating info card #}
-{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+{% extends '@ItechWorldSuluTailwindTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
     {% if location is defined and location.lat is defined and location.long is defined %}
@@ -93,7 +93,7 @@
                             rel="noopener noreferrer"
                             class="btn-variant inline-block px-4 py-2 text-sm text-center no-underline flex-shrink-0"
                         >
-                            {{ 'iw_sulu_theme.open_map'|trans|default('Open in maps') }} &#8599;
+                            {{ 'iw_sulu_tailwind_theme.open_map'|trans|default('Open in maps') }} &#8599;
                         </a>
                     </div>
 

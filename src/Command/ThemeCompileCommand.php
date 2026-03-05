@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ItechWorld\SuluThemeBundle\Command;
+namespace ItechWorld\SuluTailwindThemeBundle\Command;
 
-use ItechWorld\SuluThemeBundle\Repository\ThemeConfigRepository;
-use ItechWorld\SuluThemeBundle\Service\ThemeCompiler;
+use ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository;
+use ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

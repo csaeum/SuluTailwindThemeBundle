@@ -6,44 +6,44 @@
 
     <key>text_images</key>
     <meta>
-        <title>iw_sulu_theme.block.text_images</title>
+        <title>iw_sulu_tailwind_theme.block.text_images</title>
     </meta>
 
     <properties>
         <!-- ── Content ── -->
         <section name="content">
-            <meta><title>iw_sulu_theme.content</title></meta>
+            <meta><title>iw_sulu_tailwind_theme.content</title></meta>
             <properties>
                 <property name="title" type="text_line">
-                    <meta><title>iw_sulu_theme.title</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.title</title></meta>
                 </property>
                 <property name="subTitle" type="text_line">
-                    <meta><title>iw_sulu_theme.subtitle</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.subtitle</title></meta>
                 </property>
                 <property name="titleAlignment" type="single_select">
-                    <meta><title>iw_sulu_theme.title_alignment</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.title_alignment</title></meta>
                     <params>
                         <param name="default_value" value="left"/>
                         <param name="values" type="collection">
-                            <param name="left"><meta><title>iw_sulu_theme.align_left</title></meta></param>
-                            <param name="center"><meta><title>iw_sulu_theme.align_center</title></meta></param>
-                            <param name="right"><meta><title>iw_sulu_theme.align_right</title></meta></param>
+                            <param name="left"><meta><title>iw_sulu_tailwind_theme.align_left</title></meta></param>
+                            <param name="center"><meta><title>iw_sulu_tailwind_theme.align_center</title></meta></param>
+                            <param name="right"><meta><title>iw_sulu_tailwind_theme.align_right</title></meta></param>
                         </param>
                     </params>
                 </property>
                 <!-- Multiple images: hidden for overlay and hero_banner (use single image) -->
                 <property name="images" type="media_selection"
                           visibleCondition="__parent.style != 'overlay' AND __parent.style != 'hero_banner'">
-                    <meta><title>iw_sulu_theme.images</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.images</title></meta>
                 </property>
                 <!-- Single image: only for overlay and hero_banner layouts -->
                 <property name="image" type="single_media_selection"
                           visibleCondition="__parent.style == 'overlay' OR __parent.style == 'hero_banner'">
-                    <meta><title>iw_sulu_theme.image</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.image</title></meta>
                 </property>
                 <property name="imageFilter" type="single_select"
                           visibleCondition="__parent.style != 'overlay' AND __parent.style != 'mosaic' AND __parent.style != 'hero_banner' AND __parent.style != 'split_screen'">
-                    <meta><title>iw_sulu_theme.image_format</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.image_format</title></meta>
                     <params>
                         <param name="default_value" value="original"/>
                         <param name="values" type="collection">
@@ -51,27 +51,27 @@
                             <param name="4_3"><meta><title>4:3</title></meta></param>
                             <param name="1_1"><meta><title>1:1</title></meta></param>
                             <param name="3_4"><meta><title>3:4</title></meta></param>
-                            <param name="original"><meta><title>iw_sulu_theme.format_original</title></meta></param>
+                            <param name="original"><meta><title>iw_sulu_tailwind_theme.format_original</title></meta></param>
                         </param>
                     </params>
                 </property>
                 <property name="imagePosition" type="single_select"
                           visibleCondition="__parent.style != 'overlay' AND __parent.style != 'mosaic' AND __parent.style != 'sidebar' AND __parent.style != 'hero_banner' AND __parent.style != 'split_screen'">
-                    <meta><title>iw_sulu_theme.image_position</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.image_position</title></meta>
                     <params>
                         <param name="default_value" value="right"/>
                         <param name="values" type="collection">
-                            <param name="left"><meta><title>iw_sulu_theme.position_left</title></meta></param>
-                            <param name="right"><meta><title>iw_sulu_theme.position_right</title></meta></param>
-                            <param name="top"><meta><title>iw_sulu_theme.position_top</title></meta></param>
-                            <param name="bottom"><meta><title>iw_sulu_theme.position_bottom</title></meta></param>
-                            <param name="background"><meta><title>iw_sulu_theme.position_background</title></meta></param>
+                            <param name="left"><meta><title>iw_sulu_tailwind_theme.position_left</title></meta></param>
+                            <param name="right"><meta><title>iw_sulu_tailwind_theme.position_right</title></meta></param>
+                            <param name="top"><meta><title>iw_sulu_tailwind_theme.position_top</title></meta></param>
+                            <param name="bottom"><meta><title>iw_sulu_tailwind_theme.position_bottom</title></meta></param>
+                            <param name="background"><meta><title>iw_sulu_tailwind_theme.position_background</title></meta></param>
                         </param>
                     </params>
                 </property>
                 <property name="showImagesName" type="checkbox"
                           visibleCondition="__parent.style != 'overlay' AND __parent.style != 'hero_banner'">
-                    <meta><title>iw_sulu_theme.show_images_name</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.show_images_name</title></meta>
                 </property>
                 <!-- Overlay / Sidebar: toggle content position left/right -->
                 <property name="contentRight" type="checkbox"
@@ -80,7 +80,7 @@
                         <param name="type" value="toggler"/>
                         <param name="label">
                             <meta>
-                                <title>iw_sulu_theme.content_position_right</title>
+                                <title>iw_sulu_tailwind_theme.content_position_right</title>
                             </meta>
                         </param>
                     </params>
@@ -92,26 +92,26 @@
                         <param name="type" value="toggler"/>
                         <param name="label">
                             <meta>
-                                <title>iw_sulu_theme.image_position_bottom</title>
+                                <title>iw_sulu_tailwind_theme.image_position_bottom</title>
                             </meta>
                         </param>
                     </params>
                 </property>
                 <property name="text" type="text_editor">
-                    <meta><title>iw_sulu_theme.text</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.text</title></meta>
                 </property>
             </properties>
         </section>
 
         <!-- ── Appearance ── -->
         <section name="appearance">
-            <meta><title>iw_sulu_theme.appearance</title></meta>
+            <meta><title>iw_sulu_tailwind_theme.appearance</title></meta>
             <properties>
                 <property name="variant" type="iw_theme_variant_picker" colspan="6">
-                    <meta><title>iw_sulu_theme.color_variant</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.color_variant</title></meta>
                 </property>
                 <property name="style" type="iw_theme_style_picker" colspan="6">
-                    <meta><title>iw_sulu_theme.layout_style</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.layout_style</title></meta>
                     <params>
                         <param name="block_type" value="text_images"/>
                     </params>
@@ -121,65 +121,65 @@
 
         <!-- ── Settings ── -->
         <section name="settings">
-            <meta><title>iw_sulu_theme.settings</title></meta>
+            <meta><title>iw_sulu_tailwind_theme.settings</title></meta>
             <properties>
                 <property name="marginTop" type="iw_theme_margin_selector" colspan="6">
-                    <meta><title>iw_sulu_theme.margin_top</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.margin_top</title></meta>
                     <params>
                         <param name="default_value" value="mt-5"/>
                     </params>
                 </property>
                 <property name="marginBottom" type="iw_theme_margin_selector" colspan="6">
-                    <meta><title>iw_sulu_theme.margin_bottom</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.margin_bottom</title></meta>
                     <params>
                         <param name="default_value" value="mb-5"/>
                     </params>
                 </property>
                 <property name="lateralMargins" type="single_select"
                           visibleCondition="__parent.style != 'hero_banner'">
-                    <meta><title>iw_sulu_theme.lateral_margins</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.lateral_margins</title></meta>
                     <params>
                         <param name="default_value" value="exterior"/>
                         <param name="values" type="collection">
-                            <param name="exterior"><meta><title>iw_sulu_theme.lateral_margins_exterior</title></meta></param>
-                            <param name="interior"><meta><title>iw_sulu_theme.lateral_margins_interior</title></meta></param>
-                            <param name="none"><meta><title>iw_sulu_theme.lateral_margins_none</title></meta></param>
+                            <param name="exterior"><meta><title>iw_sulu_tailwind_theme.lateral_margins_exterior</title></meta></param>
+                            <param name="interior"><meta><title>iw_sulu_tailwind_theme.lateral_margins_interior</title></meta></param>
+                            <param name="none"><meta><title>iw_sulu_tailwind_theme.lateral_margins_none</title></meta></param>
                         </param>
                     </params>
                 </property>
                 <property name="paddingTop" type="iw_theme_margin_selector" colspan="6">
-                    <meta><title>iw_sulu_theme.padding_top</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.padding_top</title></meta>
                     <params>
                         <param name="default_value" value="pt-5"/>
                     </params>
                 </property>
                 <property name="paddingBottom" type="iw_theme_margin_selector" colspan="6">
-                    <meta><title>iw_sulu_theme.padding_bottom</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.padding_bottom</title></meta>
                     <params>
                         <param name="default_value" value="pb-5"/>
                     </params>
                 </property>
                 <property name="paddingLateral" type="iw_theme_margin_selector">
-                    <meta><title>iw_sulu_theme.padding_lateral</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.padding_lateral</title></meta>
                     <params>
                         <param name="prefix" value="px"/>
                         <param name="default_value" value="px-5"/>
                     </params>
                 </property>
                 <property name="blockRadius" type="iw_theme_radius_selector" colspan="6">
-                    <meta><title>iw_sulu_theme.block_radius</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.block_radius</title></meta>
                     <params>
                         <param name="default_value" value="rounded-none"/>
                     </params>
                 </property>
                 <property name="paragraphImageRadius" type="iw_theme_radius_selector" colspan="6">
-                    <meta><title>iw_sulu_theme.paragraph_image_radius</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.paragraph_image_radius</title></meta>
                     <params>
                         <param name="default_value" value="rounded-none"/>
                     </params>
                 </property>
                 <property name="showBackground" type="checkbox">
-                    <meta><title>iw_sulu_theme.show_background</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.show_background</title></meta>
                 </property>
             </properties>
         </section>

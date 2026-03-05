@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace ItechWorld\SuluThemeBundle\Service;
+namespace ItechWorld\SuluTailwindThemeBundle\Service;
 
-use ItechWorld\SuluThemeBundle\Entity\ThemeConfig;
-use ItechWorld\SuluThemeBundle\Repository\ThemeConfigRepository;
+use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
+use ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository;
 
 /**
  * Provides access to the currently active theme configuration.

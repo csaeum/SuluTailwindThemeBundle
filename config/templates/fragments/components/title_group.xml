@@ -5,21 +5,21 @@
 -->
 <properties xmlns="http://schemas.sulu.io/template/template">
     <property name="title" type="text_line">
-        <meta><title>iw_sulu_theme.title</title></meta>
+        <meta><title>iw_sulu_tailwind_theme.title</title></meta>
     </property>
 
     <property name="subTitle" type="text_line">
-        <meta><title>iw_sulu_theme.subtitle</title></meta>
+        <meta><title>iw_sulu_tailwind_theme.subtitle</title></meta>
     </property>
 
     <property name="titleAlignment" type="single_select">
-        <meta><title>iw_sulu_theme.title_alignment</title></meta>
+        <meta><title>iw_sulu_tailwind_theme.title_alignment</title></meta>
         <params>
             <param name="default_value" value="left"/>
             <param name="values" type="collection">
-                <param name="left"><meta><title>iw_sulu_theme.align_left</title></meta></param>
-                <param name="center"><meta><title>iw_sulu_theme.align_center</title></meta></param>
-                <param name="right"><meta><title>iw_sulu_theme.align_right</title></meta></param>
+                <param name="left"><meta><title>iw_sulu_tailwind_theme.align_left</title></meta></param>
+                <param name="center"><meta><title>iw_sulu_tailwind_theme.align_center</title></meta></param>
+                <param name="right"><meta><title>iw_sulu_tailwind_theme.align_right</title></meta></param>
             </param>
         </params>
     </property>

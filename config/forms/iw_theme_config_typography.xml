@@ -6,228 +6,125 @@
     <key>iw_theme_config_typography</key>
 
     <properties>
-        <!-- Font Families (block with heading/body/accent types) -->
+        <!-- Font Families: 3 fixed slots (heading / body / accent) -->
         <section name="fontFamilies">
             <meta>
-                <title>iw_sulu_theme.typography_font_families</title>
+                <title>iw_sulu_tailwind_theme.typography_font_families</title>
             </meta>
             <properties>
-                <block name="typography_fontFamilies" default-type="heading" minOccurs="1" maxOccurs="3">
+                <!-- Heading font -->
+                <property name="typography_heading_font" type="iw_theme_font_picker" mandatory="true" colspan="12">
                     <meta>
-                        <title>iw_sulu_theme.typography_font_families</title>
+                        <title>iw_sulu_tailwind_theme.typography_heading_family</title>
                     </meta>
-                    <types>
-                        <type name="heading">
-                            <meta>
-                                <title>iw_sulu_theme.typography_font_heading</title>
-                            </meta>
-                            <properties>
-                                <property name="family" type="text_line" mandatory="true" colspan="4">
-                                    <meta>
-                                        <title>iw_sulu_theme.typography_family</title>
-                                    </meta>
-                                </property>
-                                <property name="source" type="single_select" colspan="4">
-                                    <meta>
-                                        <title>iw_sulu_theme.typography_source</title>
-                                    </meta>
-                                    <params>
-                                        <param name="values" type="collection">
-                                            <param name="google">
-                                                <meta>
-                                                    <title>Google Fonts</title>
-                                                </meta>
-                                            </param>
-                                            <param name="local">
-                                                <meta>
-                                                    <title>iw_sulu_theme.typography_source_local</title>
-                                                </meta>
-                                            </param>
-                                            <param name="system">
-                                                <meta>
-                                                    <title>iw_sulu_theme.typography_source_system</title>
-                                                </meta>
-                                            </param>
-                                        </param>
-                                    </params>
-                                </property>
-                                <property name="weights" type="text_line" colspan="4">
-                                    <meta>
-                                        <title>iw_sulu_theme.typography_weights</title>
-                                        <info_text>iw_sulu_theme.typography_weights_info</info_text>
-                                    </meta>
-                                </property>
-                            </properties>
-                        </type>
-                        <type name="body">
-                            <meta>
-                                <title>iw_sulu_theme.typography_font_body</title>
-                            </meta>
-                            <properties>
-                                <property name="family" type="text_line" mandatory="true" colspan="4">
-                                    <meta>
-                                        <title>iw_sulu_theme.typography_family</title>
-                                    </meta>
-                                </property>
-                                <property name="source" type="single_select" colspan="4">
-                                    <meta>
-                                        <title>iw_sulu_theme.typography_source</title>
-                                    </meta>
-                                    <params>
-                                        <param name="values" type="collection">
-                                            <param name="google">
-                                                <meta>
-                                                    <title>Google Fonts</title>
-                                                </meta>
-                                            </param>
-                                            <param name="local">
-                                                <meta>
-                                                    <title>iw_sulu_theme.typography_source_local</title>
-                                                </meta>
-                                            </param>
-                                            <param name="system">
-                                                <meta>
-                                                    <title>iw_sulu_theme.typography_source_system</title>
-                                                </meta>
-                                            </param>
-                                        </param>
-                                    </params>
-                                </property>
-                                <property name="weights" type="text_line" colspan="4">
-                                    <meta>
-                                        <title>iw_sulu_theme.typography_weights</title>
-                                        <info_text>iw_sulu_theme.typography_weights_info</info_text>
-                                    </meta>
-                                </property>
-                            </properties>
-                        </type>
-                        <type name="accent">
-                            <meta>
-                                <title>iw_sulu_theme.typography_font_accent</title>
-                            </meta>
-                            <properties>
-                                <property name="family" type="text_line" mandatory="true" colspan="4">
-                                    <meta>
-                                        <title>iw_sulu_theme.typography_family</title>
-                                    </meta>
-                                </property>
-                                <property name="source" type="single_select" colspan="4">
-                                    <meta>
-                                        <title>iw_sulu_theme.typography_source</title>
-                                    </meta>
-                                    <params>
-                                        <param name="values" type="collection">
-                                            <param name="google">
-                                                <meta>
-                                                    <title>Google Fonts</title>
-                                                </meta>
-                                            </param>
-                                            <param name="local">
-                                                <meta>
-                                                    <title>iw_sulu_theme.typography_source_local</title>
-                                                </meta>
-                                            </param>
-                                            <param name="system">
-                                                <meta>
-                                                    <title>iw_sulu_theme.typography_source_system</title>
-                                                </meta>
-                                            </param>
-                                        </param>
-                                    </params>
-                                </property>
-                                <property name="weights" type="text_line" colspan="4">
-                                    <meta>
-                                        <title>iw_sulu_theme.typography_weights</title>
-                                        <info_text>iw_sulu_theme.typography_weights_info</info_text>
-                                    </meta>
-                                </property>
-                            </properties>
-                        </type>
-                    </types>
-                </block>
+                </property>
+
+                <!-- Body font -->
+                <property name="typography_body_font" type="iw_theme_font_picker" mandatory="true" colspan="12">
+                    <meta>
+                        <title>iw_sulu_tailwind_theme.typography_body_family</title>
+                    </meta>
+                </property>
+
+                <!-- Accent font (optional) -->
+                <property name="typography_accent_font" type="iw_theme_font_picker" colspan="12">
+                    <meta>
+                        <title>iw_sulu_tailwind_theme.typography_accent_family</title>
+                        <info_text>iw_sulu_tailwind_theme.typography_accent_info</info_text>
+                    </meta>
+                </property>
             </properties>
         </section>
 
-        <!-- Assignments: which font family and weight for each element -->
+        <!-- Assignments: family, weight, size, style, lineHeight for each element -->
         <section name="assignments">
             <meta>
-                <title>iw_sulu_theme.typography_assignments</title>
+                <title>iw_sulu_tailwind_theme.typography_assignments</title>
+                <info_text>iw_sulu_tailwind_theme.typography_assignments_info</info_text>
             </meta>
             <properties>
                 <!-- H1 -->
-                <property name="typography_assignments_h1_family" type="single_select" colspan="6">
+                <property name="typography_assignments_h1_family" type="single_select" colspan="3">
                     <meta>
-                        <title>iw_sulu_theme.typography_h1_family</title>
+                        <title>iw_sulu_tailwind_theme.typography_h1_family</title>
                     </meta>
                     <params>
+                        <param name="default_value" value="heading"/>
                         <param name="values" type="collection">
-                            <param name="heading">
-                                <meta>
-                                    <title>iw_sulu_theme.typography_font_heading</title>
-                                </meta>
-                            </param>
-                            <param name="body">
-                                <meta>
-                                    <title>iw_sulu_theme.typography_font_body</title>
-                                </meta>
-                            </param>
-                            <param name="accent">
-                                <meta>
-                                    <title>iw_sulu_theme.typography_font_accent</title>
-                                </meta>
-                            </param>
+                            <param name="heading"><meta><title>iw_sulu_tailwind_theme.typography_font_heading</title></meta></param>
+                            <param name="body"><meta><title>iw_sulu_tailwind_theme.typography_font_body</title></meta></param>
+                            <param name="accent"><meta><title>iw_sulu_tailwind_theme.typography_font_accent</title></meta></param>
                         </param>
                     </params>
                 </property>
-                <property name="typography_assignments_h1_weight" type="single_select" colspan="6">
+                <property name="typography_assignments_h1_weight" type="single_select" colspan="2">
                     <meta>
-                        <title>iw_sulu_theme.typography_h1_weight</title>
+                        <title>iw_sulu_tailwind_theme.typography_h1_weight</title>
                     </meta>
                     <params>
+                        <param name="default_value" value="700"/>
                         <param name="values" type="collection">
-                            <param name="400">
-                                <meta><title>400 (Regular)</title></meta>
-                            </param>
-                            <param name="500">
-                                <meta><title>500 (Medium)</title></meta>
-                            </param>
-                            <param name="600">
-                                <meta><title>600 (Semi-Bold)</title></meta>
-                            </param>
-                            <param name="700">
-                                <meta><title>700 (Bold)</title></meta>
-                            </param>
-                            <param name="800">
-                                <meta><title>800 (Extra-Bold)</title></meta>
-                            </param>
+                            <param name="400"><meta><title>400 (Regular)</title></meta></param>
+                            <param name="500"><meta><title>500 (Medium)</title></meta></param>
+                            <param name="600"><meta><title>600 (Semi-Bold)</title></meta></param>
+                            <param name="700"><meta><title>700 (Bold)</title></meta></param>
+                            <param name="800"><meta><title>800 (Extra-Bold)</title></meta></param>
                         </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_h1_size" type="number" colspan="2">
+                    <meta>
+                        <title>iw_sulu_tailwind_theme.typography_h1_size</title>
+                    </meta>
+                    <params>
+                        <param name="min" value="0.5"/>
+                        <param name="max" value="10"/>
+                        <param name="step" value="0.125"/>
+                        <param name="default_value" value="2.5"/>
+                    </params>
+                </property>
+                <property name="typography_assignments_h1_style" type="single_select" colspan="2">
+                    <meta>
+                        <title>iw_sulu_tailwind_theme.typography_h1_style</title>
+                    </meta>
+                    <params>
+                        <param name="default_value" value="normal"/>
+                        <param name="values" type="collection">
+                            <param name="normal"><meta><title>Normal</title></meta></param>
+                            <param name="italic"><meta><title>Italic</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_h1_lineHeight" type="number" colspan="3">
+                    <meta>
+                        <title>iw_sulu_tailwind_theme.typography_h1_lineHeight</title>
+                    </meta>
+                    <params>
+                        <param name="min" value="0.8"/>
+                        <param name="max" value="3"/>
+                        <param name="step" value="0.05"/>
+                        <param name="default_value" value="1.2"/>
                     </params>
                 </property>
 
                 <!-- H2 -->
-                <property name="typography_assignments_h2_family" type="single_select" colspan="6">
+                <property name="typography_assignments_h2_family" type="single_select" colspan="3">
                     <meta>
-                        <title>iw_sulu_theme.typography_h2_family</title>
+                        <title>iw_sulu_tailwind_theme.typography_h2_family</title>
                     </meta>
                     <params>
+                        <param name="default_value" value="heading"/>
                         <param name="values" type="collection">
-                            <param name="heading">
-                                <meta><title>iw_sulu_theme.typography_font_heading</title></meta>
-                            </param>
-                            <param name="body">
-                                <meta><title>iw_sulu_theme.typography_font_body</title></meta>
-                            </param>
-                            <param name="accent">
-                                <meta><title>iw_sulu_theme.typography_font_accent</title></meta>
-                            </param>
+                            <param name="heading"><meta><title>iw_sulu_tailwind_theme.typography_font_heading</title></meta></param>
+                            <param name="body"><meta><title>iw_sulu_tailwind_theme.typography_font_body</title></meta></param>
+                            <param name="accent"><meta><title>iw_sulu_tailwind_theme.typography_font_accent</title></meta></param>
                         </param>
                     </params>
                 </property>
-                <property name="typography_assignments_h2_weight" type="single_select" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.typography_h2_weight</title>
-                    </meta>
+                <property name="typography_assignments_h2_weight" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h2_weight</title></meta>
                     <params>
+                        <param name="default_value" value="600"/>
                         <param name="values" type="collection">
                             <param name="400"><meta><title>400 (Regular)</title></meta></param>
                             <param name="500"><meta><title>500 (Medium)</title></meta></param>
@@ -235,33 +132,53 @@
                             <param name="700"><meta><title>700 (Bold)</title></meta></param>
                             <param name="800"><meta><title>800 (Extra-Bold)</title></meta></param>
                         </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_h2_size" type="number" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h2_size</title></meta>
+                    <params>
+                        <param name="min" value="0.5"/>
+                        <param name="max" value="10"/>
+                        <param name="step" value="0.125"/>
+                        <param name="default_value" value="2"/>
+                    </params>
+                </property>
+                <property name="typography_assignments_h2_style" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h2_style</title></meta>
+                    <params>
+                        <param name="default_value" value="normal"/>
+                        <param name="values" type="collection">
+                            <param name="normal"><meta><title>Normal</title></meta></param>
+                            <param name="italic"><meta><title>Italic</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_h2_lineHeight" type="number" colspan="3">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h2_lineHeight</title></meta>
+                    <params>
+                        <param name="min" value="0.8"/>
+                        <param name="max" value="3"/>
+                        <param name="step" value="0.05"/>
+                        <param name="default_value" value="1.25"/>
                     </params>
                 </property>
 
                 <!-- H3 -->
-                <property name="typography_assignments_h3_family" type="single_select" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.typography_h3_family</title>
-                    </meta>
+                <property name="typography_assignments_h3_family" type="single_select" colspan="3">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h3_family</title></meta>
                     <params>
+                        <param name="default_value" value="heading"/>
                         <param name="values" type="collection">
-                            <param name="heading">
-                                <meta><title>iw_sulu_theme.typography_font_heading</title></meta>
-                            </param>
-                            <param name="body">
-                                <meta><title>iw_sulu_theme.typography_font_body</title></meta>
-                            </param>
-                            <param name="accent">
-                                <meta><title>iw_sulu_theme.typography_font_accent</title></meta>
-                            </param>
+                            <param name="heading"><meta><title>iw_sulu_tailwind_theme.typography_font_heading</title></meta></param>
+                            <param name="body"><meta><title>iw_sulu_tailwind_theme.typography_font_body</title></meta></param>
+                            <param name="accent"><meta><title>iw_sulu_tailwind_theme.typography_font_accent</title></meta></param>
                         </param>
                     </params>
                 </property>
-                <property name="typography_assignments_h3_weight" type="single_select" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.typography_h3_weight</title>
-                    </meta>
+                <property name="typography_assignments_h3_weight" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h3_weight</title></meta>
                     <params>
+                        <param name="default_value" value="600"/>
                         <param name="values" type="collection">
                             <param name="400"><meta><title>400 (Regular)</title></meta></param>
                             <param name="500"><meta><title>500 (Medium)</title></meta></param>
@@ -269,33 +186,53 @@
                             <param name="700"><meta><title>700 (Bold)</title></meta></param>
                             <param name="800"><meta><title>800 (Extra-Bold)</title></meta></param>
                         </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_h3_size" type="number" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h3_size</title></meta>
+                    <params>
+                        <param name="min" value="0.5"/>
+                        <param name="max" value="10"/>
+                        <param name="step" value="0.125"/>
+                        <param name="default_value" value="1.5"/>
+                    </params>
+                </property>
+                <property name="typography_assignments_h3_style" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h3_style</title></meta>
+                    <params>
+                        <param name="default_value" value="normal"/>
+                        <param name="values" type="collection">
+                            <param name="normal"><meta><title>Normal</title></meta></param>
+                            <param name="italic"><meta><title>Italic</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_h3_lineHeight" type="number" colspan="3">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h3_lineHeight</title></meta>
+                    <params>
+                        <param name="min" value="0.8"/>
+                        <param name="max" value="3"/>
+                        <param name="step" value="0.05"/>
+                        <param name="default_value" value="1.3"/>
                     </params>
                 </property>
 
                 <!-- H4 -->
-                <property name="typography_assignments_h4_family" type="single_select" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.typography_h4_family</title>
-                    </meta>
+                <property name="typography_assignments_h4_family" type="single_select" colspan="3">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h4_family</title></meta>
                     <params>
+                        <param name="default_value" value="heading"/>
                         <param name="values" type="collection">
-                            <param name="heading">
-                                <meta><title>iw_sulu_theme.typography_font_heading</title></meta>
-                            </param>
-                            <param name="body">
-                                <meta><title>iw_sulu_theme.typography_font_body</title></meta>
-                            </param>
-                            <param name="accent">
-                                <meta><title>iw_sulu_theme.typography_font_accent</title></meta>
-                            </param>
+                            <param name="heading"><meta><title>iw_sulu_tailwind_theme.typography_font_heading</title></meta></param>
+                            <param name="body"><meta><title>iw_sulu_tailwind_theme.typography_font_body</title></meta></param>
+                            <param name="accent"><meta><title>iw_sulu_tailwind_theme.typography_font_accent</title></meta></param>
                         </param>
                     </params>
                 </property>
-                <property name="typography_assignments_h4_weight" type="single_select" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.typography_h4_weight</title>
-                    </meta>
+                <property name="typography_assignments_h4_weight" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h4_weight</title></meta>
                     <params>
+                        <param name="default_value" value="600"/>
                         <param name="values" type="collection">
                             <param name="400"><meta><title>400 (Regular)</title></meta></param>
                             <param name="500"><meta><title>500 (Medium)</title></meta></param>
@@ -303,33 +240,53 @@
                             <param name="700"><meta><title>700 (Bold)</title></meta></param>
                             <param name="800"><meta><title>800 (Extra-Bold)</title></meta></param>
                         </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_h4_size" type="number" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h4_size</title></meta>
+                    <params>
+                        <param name="min" value="0.5"/>
+                        <param name="max" value="10"/>
+                        <param name="step" value="0.125"/>
+                        <param name="default_value" value="1.25"/>
+                    </params>
+                </property>
+                <property name="typography_assignments_h4_style" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h4_style</title></meta>
+                    <params>
+                        <param name="default_value" value="normal"/>
+                        <param name="values" type="collection">
+                            <param name="normal"><meta><title>Normal</title></meta></param>
+                            <param name="italic"><meta><title>Italic</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_h4_lineHeight" type="number" colspan="3">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h4_lineHeight</title></meta>
+                    <params>
+                        <param name="min" value="0.8"/>
+                        <param name="max" value="3"/>
+                        <param name="step" value="0.05"/>
+                        <param name="default_value" value="1.35"/>
                     </params>
                 </property>
 
                 <!-- H5 -->
-                <property name="typography_assignments_h5_family" type="single_select" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.typography_h5_family</title>
-                    </meta>
+                <property name="typography_assignments_h5_family" type="single_select" colspan="3">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h5_family</title></meta>
                     <params>
+                        <param name="default_value" value="body"/>
                         <param name="values" type="collection">
-                            <param name="heading">
-                                <meta><title>iw_sulu_theme.typography_font_heading</title></meta>
-                            </param>
-                            <param name="body">
-                                <meta><title>iw_sulu_theme.typography_font_body</title></meta>
-                            </param>
-                            <param name="accent">
-                                <meta><title>iw_sulu_theme.typography_font_accent</title></meta>
-                            </param>
+                            <param name="heading"><meta><title>iw_sulu_tailwind_theme.typography_font_heading</title></meta></param>
+                            <param name="body"><meta><title>iw_sulu_tailwind_theme.typography_font_body</title></meta></param>
+                            <param name="accent"><meta><title>iw_sulu_tailwind_theme.typography_font_accent</title></meta></param>
                         </param>
                     </params>
                 </property>
-                <property name="typography_assignments_h5_weight" type="single_select" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.typography_h5_weight</title>
-                    </meta>
+                <property name="typography_assignments_h5_weight" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h5_weight</title></meta>
                     <params>
+                        <param name="default_value" value="500"/>
                         <param name="values" type="collection">
                             <param name="400"><meta><title>400 (Regular)</title></meta></param>
                             <param name="500"><meta><title>500 (Medium)</title></meta></param>
@@ -337,33 +294,53 @@
                             <param name="700"><meta><title>700 (Bold)</title></meta></param>
                             <param name="800"><meta><title>800 (Extra-Bold)</title></meta></param>
                         </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_h5_size" type="number" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h5_size</title></meta>
+                    <params>
+                        <param name="min" value="0.5"/>
+                        <param name="max" value="10"/>
+                        <param name="step" value="0.125"/>
+                        <param name="default_value" value="1.125"/>
+                    </params>
+                </property>
+                <property name="typography_assignments_h5_style" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h5_style</title></meta>
+                    <params>
+                        <param name="default_value" value="normal"/>
+                        <param name="values" type="collection">
+                            <param name="normal"><meta><title>Normal</title></meta></param>
+                            <param name="italic"><meta><title>Italic</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_h5_lineHeight" type="number" colspan="3">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h5_lineHeight</title></meta>
+                    <params>
+                        <param name="min" value="0.8"/>
+                        <param name="max" value="3"/>
+                        <param name="step" value="0.05"/>
+                        <param name="default_value" value="1.4"/>
                     </params>
                 </property>
 
                 <!-- H6 -->
-                <property name="typography_assignments_h6_family" type="single_select" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.typography_h6_family</title>
-                    </meta>
+                <property name="typography_assignments_h6_family" type="single_select" colspan="3">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h6_family</title></meta>
                     <params>
+                        <param name="default_value" value="body"/>
                         <param name="values" type="collection">
-                            <param name="heading">
-                                <meta><title>iw_sulu_theme.typography_font_heading</title></meta>
-                            </param>
-                            <param name="body">
-                                <meta><title>iw_sulu_theme.typography_font_body</title></meta>
-                            </param>
-                            <param name="accent">
-                                <meta><title>iw_sulu_theme.typography_font_accent</title></meta>
-                            </param>
+                            <param name="heading"><meta><title>iw_sulu_tailwind_theme.typography_font_heading</title></meta></param>
+                            <param name="body"><meta><title>iw_sulu_tailwind_theme.typography_font_body</title></meta></param>
+                            <param name="accent"><meta><title>iw_sulu_tailwind_theme.typography_font_accent</title></meta></param>
                         </param>
                     </params>
                 </property>
-                <property name="typography_assignments_h6_weight" type="single_select" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.typography_h6_weight</title>
-                    </meta>
+                <property name="typography_assignments_h6_weight" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h6_weight</title></meta>
                     <params>
+                        <param name="default_value" value="500"/>
                         <param name="values" type="collection">
                             <param name="400"><meta><title>400 (Regular)</title></meta></param>
                             <param name="500"><meta><title>500 (Medium)</title></meta></param>
@@ -371,33 +348,53 @@
                             <param name="700"><meta><title>700 (Bold)</title></meta></param>
                             <param name="800"><meta><title>800 (Extra-Bold)</title></meta></param>
                         </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_h6_size" type="number" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h6_size</title></meta>
+                    <params>
+                        <param name="min" value="0.5"/>
+                        <param name="max" value="10"/>
+                        <param name="step" value="0.125"/>
+                        <param name="default_value" value="1"/>
+                    </params>
+                </property>
+                <property name="typography_assignments_h6_style" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h6_style</title></meta>
+                    <params>
+                        <param name="default_value" value="normal"/>
+                        <param name="values" type="collection">
+                            <param name="normal"><meta><title>Normal</title></meta></param>
+                            <param name="italic"><meta><title>Italic</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_h6_lineHeight" type="number" colspan="3">
+                    <meta><title>iw_sulu_tailwind_theme.typography_h6_lineHeight</title></meta>
+                    <params>
+                        <param name="min" value="0.8"/>
+                        <param name="max" value="3"/>
+                        <param name="step" value="0.05"/>
+                        <param name="default_value" value="1.4"/>
                     </params>
                 </property>
 
                 <!-- Body -->
-                <property name="typography_assignments_body_family" type="single_select" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.typography_body_family</title>
-                    </meta>
+                <property name="typography_assignments_body_family" type="single_select" colspan="3">
+                    <meta><title>iw_sulu_tailwind_theme.typography_body_family</title></meta>
                     <params>
+                        <param name="default_value" value="body"/>
                         <param name="values" type="collection">
-                            <param name="heading">
-                                <meta><title>iw_sulu_theme.typography_font_heading</title></meta>
-                            </param>
-                            <param name="body">
-                                <meta><title>iw_sulu_theme.typography_font_body</title></meta>
-                            </param>
-                            <param name="accent">
-                                <meta><title>iw_sulu_theme.typography_font_accent</title></meta>
-                            </param>
+                            <param name="heading"><meta><title>iw_sulu_tailwind_theme.typography_font_heading</title></meta></param>
+                            <param name="body"><meta><title>iw_sulu_tailwind_theme.typography_font_body</title></meta></param>
+                            <param name="accent"><meta><title>iw_sulu_tailwind_theme.typography_font_accent</title></meta></param>
                         </param>
                     </params>
                 </property>
-                <property name="typography_assignments_body_weight" type="single_select" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.typography_body_weight</title>
-                    </meta>
+                <property name="typography_assignments_body_weight" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_body_weight</title></meta>
                     <params>
+                        <param name="default_value" value="400"/>
                         <param name="values" type="collection">
                             <param name="400"><meta><title>400 (Regular)</title></meta></param>
                             <param name="500"><meta><title>500 (Medium)</title></meta></param>
@@ -405,33 +402,53 @@
                             <param name="700"><meta><title>700 (Bold)</title></meta></param>
                             <param name="800"><meta><title>800 (Extra-Bold)</title></meta></param>
                         </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_body_size" type="number" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_body_size</title></meta>
+                    <params>
+                        <param name="min" value="0.5"/>
+                        <param name="max" value="10"/>
+                        <param name="step" value="0.125"/>
+                        <param name="default_value" value="1"/>
+                    </params>
+                </property>
+                <property name="typography_assignments_body_style" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_body_style</title></meta>
+                    <params>
+                        <param name="default_value" value="normal"/>
+                        <param name="values" type="collection">
+                            <param name="normal"><meta><title>Normal</title></meta></param>
+                            <param name="italic"><meta><title>Italic</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_body_lineHeight" type="number" colspan="3">
+                    <meta><title>iw_sulu_tailwind_theme.typography_body_lineHeight</title></meta>
+                    <params>
+                        <param name="min" value="0.8"/>
+                        <param name="max" value="3"/>
+                        <param name="step" value="0.05"/>
+                        <param name="default_value" value="1.5"/>
                     </params>
                 </property>
 
                 <!-- Link -->
-                <property name="typography_assignments_link_family" type="single_select" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.typography_link_family</title>
-                    </meta>
+                <property name="typography_assignments_link_family" type="single_select" colspan="3">
+                    <meta><title>iw_sulu_tailwind_theme.typography_link_family</title></meta>
                     <params>
+                        <param name="default_value" value="body"/>
                         <param name="values" type="collection">
-                            <param name="heading">
-                                <meta><title>iw_sulu_theme.typography_font_heading</title></meta>
-                            </param>
-                            <param name="body">
-                                <meta><title>iw_sulu_theme.typography_font_body</title></meta>
-                            </param>
-                            <param name="accent">
-                                <meta><title>iw_sulu_theme.typography_font_accent</title></meta>
-                            </param>
+                            <param name="heading"><meta><title>iw_sulu_tailwind_theme.typography_font_heading</title></meta></param>
+                            <param name="body"><meta><title>iw_sulu_tailwind_theme.typography_font_body</title></meta></param>
+                            <param name="accent"><meta><title>iw_sulu_tailwind_theme.typography_font_accent</title></meta></param>
                         </param>
                     </params>
                 </property>
-                <property name="typography_assignments_link_weight" type="single_select" colspan="6">
-                    <meta>
-                        <title>iw_sulu_theme.typography_link_weight</title>
-                    </meta>
+                <property name="typography_assignments_link_weight" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_link_weight</title></meta>
                     <params>
+                        <param name="default_value" value="500"/>
                         <param name="values" type="collection">
                             <param name="400"><meta><title>400 (Regular)</title></meta></param>
                             <param name="500"><meta><title>500 (Medium)</title></meta></param>
@@ -439,6 +456,34 @@
                             <param name="700"><meta><title>700 (Bold)</title></meta></param>
                             <param name="800"><meta><title>800 (Extra-Bold)</title></meta></param>
                         </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_link_size" type="number" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_link_size</title></meta>
+                    <params>
+                        <param name="min" value="0.5"/>
+                        <param name="max" value="10"/>
+                        <param name="step" value="0.125"/>
+                        <param name="default_value" value="1"/>
+                    </params>
+                </property>
+                <property name="typography_assignments_link_style" type="single_select" colspan="2">
+                    <meta><title>iw_sulu_tailwind_theme.typography_link_style</title></meta>
+                    <params>
+                        <param name="default_value" value="normal"/>
+                        <param name="values" type="collection">
+                            <param name="normal"><meta><title>Normal</title></meta></param>
+                            <param name="italic"><meta><title>Italic</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="typography_assignments_link_lineHeight" type="number" colspan="3">
+                    <meta><title>iw_sulu_tailwind_theme.typography_link_lineHeight</title></meta>
+                    <params>
+                        <param name="min" value="0.8"/>
+                        <param name="max" value="3"/>
+                        <param name="step" value="0.05"/>
+                        <param name="default_value" value="1.5"/>
                     </params>
                 </property>
             </properties>

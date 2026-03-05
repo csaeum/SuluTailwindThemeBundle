@@ -1,6 +1,6 @@
 # Menu System
 
-The SuluThemeBundle provides a complete, configurable menu system with multiple variants. All settings are managed from the admin panel under **Theme > Menu**.
+The SuluTailwindThemeBundle provides a complete, configurable menu system with multiple variants. All settings are managed from the admin panel under **Theme > Menu**.
 
 ## Menu Types
 
@@ -249,10 +249,10 @@ Add the following to your `base.html.twig` layout. The menu type is resolved dyn
 
 ```twig
 {# Theme: dynamic menu #}
-{% set menuConfig = iw_sulu_theme_menu_config() %}
+{% set menuConfig = iw_sulu_tailwind_theme_menu_config() %}
 {% block header %}
     {% if menuConfig is not empty and menuConfig.type is defined %}
-        {% include '@ItechWorldSuluTheme/menu/_' ~ menuConfig.type ~ '.html.twig' with {config: menuConfig} %}
+        {% include '@ItechWorldSuluTailwindTheme/menu/_' ~ menuConfig.type ~ '.html.twig' with {config: menuConfig} %}
     {% else %}
         {# Fallback: basic navigation when no theme menu is configured #}
         <header>
@@ -271,6 +271,6 @@ Add the following to your `base.html.twig` layout. The menu type is resolved dyn
 {% endblock %}
 ```
 
-The `iw_sulu_theme_menu_config()` Twig function returns the full menu configuration object. When a menu type is configured, the matching template (`_navbar.html.twig`, `_burger.html.twig`, `_fullscreen.html.twig`, `_sidebar.html.twig`, or `_megamenu.html.twig`) is included automatically. The `else` block provides a basic fallback navigation if no theme is configured.
+The `iw_sulu_tailwind_theme_menu_config()` Twig function returns the full menu configuration object. When a menu type is configured, the matching template (`_navbar.html.twig`, `_burger.html.twig`, `_fullscreen.html.twig`, `_sidebar.html.twig`, or `_megamenu.html.twig`) is included automatically. The `else` block provides a basic fallback navigation if no theme is configured.
 
-See [Twig Reference](twig-reference.md) for details on `iw_sulu_theme_menu_config()`.
+See [Twig Reference](twig-reference.md) for details on `iw_sulu_tailwind_theme_menu_config()`.

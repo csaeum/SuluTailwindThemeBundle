@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ItechWorld\SuluThemeBundle;
+namespace ItechWorld\SuluTailwindThemeBundle;
 
 use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -10,12 +10,12 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
 /**
- * Main bundle class for the SuluThemeBundle.
+ * Main bundle class for the SuluTailwindThemeBundle.
  *
  * Provides a complete theming system based on design tokens (JSON)
  * compiled to CSS custom properties for Sulu CMS 3.x.
  */
-class ItechWorldSuluThemeBundle extends AbstractBundle
+class ItechWorldSuluTailwindThemeBundle extends AbstractBundle
 {
     /**
      * Define the bundle configuration schema.
@@ -25,12 +25,16 @@ class ItechWorldSuluThemeBundle extends AbstractBundle
         $definition->rootNode()
             ->children()
                 ->scalarNode('css_output_dir')
-                    ->defaultValue('%kernel.project_dir%/var/cache/iw_sulu_theme')
+                    ->defaultValue('%kernel.project_dir%/var/cache/iw_sulu_tailwind_theme')
                     ->info('Directory where compiled theme CSS files are stored')
                 ->end()
                 ->scalarNode('public_css_path')
                     ->defaultValue('/build/iw-theme')
                     ->info('Public path prefix for serving compiled CSS')
+                ->end()
+                ->scalarNode('google_fonts_api_key')
+                    ->defaultNull()
+                    ->info('Google Fonts API key (from env: %env(GOOGLE_FONTS_API_KEY)%)')
                 ->end()
             ->end();
     }
@@ -47,12 +51,12 @@ class ItechWorldSuluThemeBundle extends AbstractBundle
             $builder->prependExtensionConfig('doctrine', [
                 'orm' => [
                     'mappings' => [
-                        'ItechWorldSuluThemeBundle' => [
+                        'ItechWorldSuluTailwindThemeBundle' => [
                             'type' => 'attribute',
                             'is_bundle' => false,
                             'dir' => __DIR__ . '/Entity',
-                            'prefix' => 'ItechWorld\\SuluThemeBundle\\Entity',
-                            'alias' => 'ItechWorldSuluThemeBundle',
+                            'prefix' => 'ItechWorld\\SuluTailwindThemeBundle\\Entity',
+                            'alias' => 'ItechWorldSuluTailwindThemeBundle',
                         ],
                     ],
                 ],
@@ -75,8 +79,8 @@ class ItechWorldSuluThemeBundle extends AbstractBundle
                 'resources' => [
                     'iw_theme_configs' => [
                         'routes' => [
-                            'list' => 'iw_sulu_theme.get_theme_configs',
-                            'detail' => 'iw_sulu_theme.get_theme_config',
+                            'list' => 'iw_sulu_tailwind_theme.get_theme_configs',
+                            'detail' => 'iw_sulu_tailwind_theme.get_theme_config',
                         ],
                     ],
                 ],
@@ -87,7 +91,7 @@ class ItechWorldSuluThemeBundle extends AbstractBundle
                 'templates' => [
                     'page' => [
                         'directories' => [
-                            'iw_sulu_theme' => __DIR__ . '/../config/templates/pages',
+                            'iw_sulu_tailwind_theme' => __DIR__ . '/../config/templates/pages',
                         ],
                     ],
                 ],
@@ -98,7 +102,7 @@ class ItechWorldSuluThemeBundle extends AbstractBundle
                 'templates' => [
                     'block' => [
                         'directories' => [
-                            'iw_sulu_theme' => __DIR__ . '/../config/templates/blocks',
+                            'iw_sulu_tailwind_theme' => __DIR__ . '/../config/templates/blocks',
                         ],
                     ],
                 ],
@@ -109,7 +113,7 @@ class ItechWorldSuluThemeBundle extends AbstractBundle
                 'templates' => [
                     'snippet' => [
                         'directories' => [
-                            'iw_sulu_theme' => __DIR__ . '/../config/templates/snippets',
+                            'iw_sulu_tailwind_theme' => __DIR__ . '/../config/templates/snippets',
                         ],
                     ],
                 ],
@@ -126,12 +130,16 @@ class ItechWorldSuluThemeBundle extends AbstractBundle
         ContainerBuilder $builder,
     ): void {
         $container->parameters()->set(
-            'itech_world_sulu_theme.css_output_dir',
+            'itech_world_sulu_tailwind_theme.css_output_dir',
             $config['css_output_dir'],
         );
         $container->parameters()->set(
-            'itech_world_sulu_theme.public_css_path',
+            'itech_world_sulu_tailwind_theme.public_css_path',
             $config['public_css_path'],
+        );
+        $container->parameters()->set(
+            'itech_world_sulu_tailwind_theme.google_fonts_api_key',
+            $config['google_fonts_api_key'],
         );
 
         $container->import('../config/services.yaml');

@@ -1,6 +1,6 @@
 # Custom Integration Guide
 
-This guide explains how to use the SuluThemeBundle in your own custom components — CSS, Twig templates, block templates, and PHP services — so that your code automatically adapts to the active theme.
+This guide explains how to use the SuluTailwindThemeBundle in your own custom components — CSS, Twig templates, block templates, and PHP services — so that your code automatically adapts to the active theme.
 
 ## Table of contents
 
@@ -97,16 +97,16 @@ Each main color has 11 shades (50–950) via OKLCH. Perfect for gradients, hover
 
 ### Using the global variable
 
-The `iw_sulu_theme` global variable is available in every Twig template without any import. It contains the full token data from the active theme.
+The `iw_sulu_tailwind_theme` global variable is available in every Twig template without any import. It contains the full token data from the active theme.
 
 ```twig
 {# templates/components/footer.html.twig #}
 
 {# Read colors #}
-{% set primaryColor = iw_sulu_theme.colors.primary|default('#333') %}
+{% set primaryColor = iw_sulu_tailwind_theme.colors.primary|default('#333') %}
 
 {# Read typography families #}
-{% set bodyFont = iw_sulu_theme.typography.families|default([])|filter(f => f.role == 'body')|first %}
+{% set bodyFont = iw_sulu_tailwind_theme.typography.families|default([])|filter(f => f.role == 'body')|first %}
 {% set fontName = bodyFont.name|default('sans-serif') %}
 
 <footer style="font-family: '{{ fontName }}', sans-serif;">
@@ -118,7 +118,7 @@ The `iw_sulu_theme` global variable is available in every Twig template without 
 
 ```twig
 {# Show a styled separator only when a theme is active #}
-{% if iw_sulu_theme is not empty %}
+{% if iw_sulu_tailwind_theme is not empty %}
     <hr style="border-color: var(--color-primary-300);">
 {% else %}
     <hr>
@@ -134,7 +134,7 @@ Apply a variant class to your own sections for automatic color theming:
 
 {# variantIndex would come from a Sulu property or be hardcoded #}
 {% set variantIndex = heroVariant|default(0) %}
-{% set allVariants = iw_sulu_theme.blockVariants|default([]) %}
+{% set allVariants = iw_sulu_tailwind_theme.blockVariants|default([]) %}
 {% if variantIndex >= allVariants|length %}
     {% set variantIndex = 0 %}
 {% endif %}
@@ -161,18 +161,18 @@ Key points:
 {# templates/base.html.twig #}
 
 {# 1. Include theme CSS #}
-{% set themeCssPath = iw_sulu_theme_css_path() %}
+{% set themeCssPath = iw_sulu_tailwind_theme_css_path() %}
 {% if themeCssPath is not empty %}
     <link rel="stylesheet" href="{{ themeCssPath }}">
 {% endif %}
 
 {# 2. Include Google Fonts #}
-{{ iw_sulu_theme_fonts_link()|raw }}
+{{ iw_sulu_tailwind_theme_fonts_link()|raw }}
 
 {# 3. Render the themed menu #}
-{% set menuConfig = iw_sulu_theme_menu_config() %}
+{% set menuConfig = iw_sulu_tailwind_theme_menu_config() %}
 {% if menuConfig is not empty and menuConfig.type is defined %}
-    {% include '@ItechWorldSuluTheme/menu/_' ~ menuConfig.type ~ '.html.twig'
+    {% include '@ItechWorldSuluTailwindTheme/menu/_' ~ menuConfig.type ~ '.html.twig'
         with {config: menuConfig} %}
 {% endif %}
 
@@ -224,19 +224,19 @@ Register a global block type in `config/templates/blocks/my_block.xml`:
 
         <!-- Appearance section: variant + style pickers from the bundle -->
         <section name="appearance">
-            <meta><title>iw_sulu_theme.appearance</title></meta>
+            <meta><title>iw_sulu_tailwind_theme.appearance</title></meta>
             <properties>
                 <property name="variant" type="iw_theme_variant_picker" colspan="6">
-                    <meta><title>iw_sulu_theme.color_variant</title></meta>
+                    <meta><title>iw_sulu_tailwind_theme.color_variant</title></meta>
                 </property>
             </properties>
         </section>
 
         <!-- Settings section: include all settings from the bundle -->
         <section name="settings">
-            <meta><title>iw_sulu_theme.settings</title></meta>
+            <meta><title>iw_sulu_tailwind_theme.settings</title></meta>
             <properties>
-                <xi:include href="../../../vendor/itech-world/sulu-theme-bundle/config/templates/fragments/components/settings.xml"
+                <xi:include href="../../../vendor/itech-world/sulu-tailwind-theme-bundle/config/templates/fragments/components/settings.xml"
                             xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:property)"/>
             </properties>
         </section>
@@ -248,9 +248,9 @@ You can also include just specific settings properties using `@name` selectors:
 
 ```xml
 <!-- Only margin top and bottom -->
-<xi:include href="../../../vendor/itech-world/sulu-theme-bundle/config/templates/fragments/components/settings.xml"
+<xi:include href="../../../vendor/itech-world/sulu-tailwind-theme-bundle/config/templates/fragments/components/settings.xml"
             xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:property[@name='marginTop'])"/>
-<xi:include href="../../../vendor/itech-world/sulu-theme-bundle/config/templates/fragments/components/settings.xml"
+<xi:include href="../../../vendor/itech-world/sulu-tailwind-theme-bundle/config/templates/fragments/components/settings.xml"
             xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:property[@name='marginBottom'])"/>
 ```
 
@@ -261,7 +261,7 @@ Use the block wrapper `embed` to benefit from all variant/margin/padding logic:
 ```twig
 {# templates/blocks/my_block.html.twig #}
 
-{% embed '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' with {
+{% embed '@ItechWorldSuluTailwindTheme/blocks/common/_block_wrapper.html.twig' with {
     variant: block.variant|default(0),
     marginTop: block.marginTop|default('mt-5'),
     marginBottom: block.marginBottom|default('mb-5'),
@@ -308,7 +308,7 @@ If you only need variant colors without the full wrapper:
 
 ```twig
 {% set variantIndex = block.variant|default(0) %}
-{% set allVariants = iw_sulu_theme.blockVariants|default([]) %}
+{% set allVariants = iw_sulu_tailwind_theme.blockVariants|default([]) %}
 {% if variantIndex >= allVariants|length %}
     {% set variantIndex = 0 %}
 {% endif %}
@@ -334,7 +334,7 @@ Inject `ThemeProvider` in your Symfony services to access the active theme.
 services:
     App\Service\MyThemeAwareService:
         arguments:
-            $themeProvider: '@ItechWorld\SuluThemeBundle\Service\ThemeProvider'
+            $themeProvider: '@ItechWorld\SuluTailwindThemeBundle\Service\ThemeProvider'
 ```
 
 ### Usage in a service
@@ -346,7 +346,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use ItechWorld\SuluThemeBundle\Service\ThemeProvider;
+use ItechWorld\SuluTailwindThemeBundle\Service\ThemeProvider;
 
 class MyThemeAwareService
 {
@@ -409,7 +409,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use ItechWorld\SuluThemeBundle\Service\ThemeProvider;
+use ItechWorld\SuluTailwindThemeBundle\Service\ThemeProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -430,7 +430,7 @@ class MyController extends AbstractController
 }
 ```
 
-> **Note:** In most cases, you won't need to pass tokens to Twig manually — the global variable `iw_sulu_theme` already makes them available everywhere.
+> **Note:** In most cases, you won't need to pass tokens to Twig manually — the global variable `iw_sulu_tailwind_theme` already makes them available everywhere.
 
 ---
 

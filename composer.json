@@ -1,5 +1,5 @@
 {
-    "name": "itech-world/sulu-theme-bundle",
+    "name": "itech-world/sulu-tailwind-theme-bundle",
     "description": "Complete theming system for Sulu CMS 3.x based on design tokens compiled to CSS custom properties",
     "type": "sulu-bundle",
     "license": "MIT",
@@ -23,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "ItechWorld\\SuluThemeBundle\\": "src/"
+            "ItechWorld\\SuluTailwindThemeBundle\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ItechWorld\\SuluThemeBundle\\Tests\\": "tests/"
+            "ItechWorld\\SuluTailwindThemeBundle\\Tests\\": "tests/"
         }
     },
     "config": {

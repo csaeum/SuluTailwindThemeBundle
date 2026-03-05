@@ -1,5 +1,5 @@
 {# Gallery block — horizontal scroll slider with lightbox (+ single image mode) #}
-{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+{% extends '@ItechWorldSuluTailwindTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
     {# Resolve lateral mode and image radius #}
@@ -26,7 +26,7 @@
         {% set imageRadiusClass = '' %}
     {% endif %}
 
-    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+    {% include '@ItechWorldSuluTailwindTheme/blocks/common/_titles.html.twig' with {
         title: title|default(''),
         subTitle: subTitle|default(''),
         titleAlignment: titleAlignment|default('left'),

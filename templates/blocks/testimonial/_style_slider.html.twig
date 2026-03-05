@@ -1,8 +1,8 @@
 {# Testimonial block — carousel slider #}
-{% extends '@ItechWorldSuluTheme/blocks/common/_block_wrapper.html.twig' %}
+{% extends '@ItechWorldSuluTailwindTheme/blocks/common/_block_wrapper.html.twig' %}
 
 {% block block_content %}
-    {% include '@ItechWorldSuluTheme/blocks/common/_titles.html.twig' with {
+    {% include '@ItechWorldSuluTailwindTheme/blocks/common/_titles.html.twig' with {
         title: title|default(''),
         subTitle: subTitle|default(''),
         titleAlignment: titleAlignment|default('left'),
@@ -38,7 +38,7 @@
                             <div class="flex items-center justify-center gap-3 mt-6">
                                 {% if item.avatar is defined and item.avatar.id is defined %}
                                     {% set avatarMedia = sulu_resolve_media(item.avatar.id, app.request.locale) %}
-                                    {% include '@ItechWorldSuluTheme/blocks/common/_avatar.html.twig' with {
+                                    {% include '@ItechWorldSuluTailwindTheme/blocks/common/_avatar.html.twig' with {
                                         avatar: avatarMedia,
                                         name: item.author|default(''),
                                         size: 'lg'

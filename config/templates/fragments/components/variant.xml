@@ -5,6 +5,6 @@
 -->
 <properties xmlns="http://schemas.sulu.io/template/template">
     <property name="variant" type="iw_theme_variant_picker" colspan="6">
-        <meta><title>iw_sulu_theme.color_variant</title></meta>
+        <meta><title>iw_sulu_tailwind_theme.color_variant</title></meta>
     </property>
 </properties>

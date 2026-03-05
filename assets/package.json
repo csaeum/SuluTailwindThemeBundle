@@ -1,6 +1,6 @@
 {
-    "name": "@itech-world/sulu-theme-bundle",
-    "description": "Frontend assets (Stimulus controllers, CSS) for SuluThemeBundle",
+    "name": "@itech-world/sulu-tailwind-theme-bundle",
+    "description": "Frontend assets (Stimulus controllers, CSS) for SuluTailwindThemeBundle",
     "license": "MIT",
     "style": "styles/app.css",
     "dependencies": {
