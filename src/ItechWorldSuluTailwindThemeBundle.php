@@ -24,14 +24,6 @@ class ItechWorldSuluTailwindThemeBundle extends AbstractBundle
     {
         $definition->rootNode()
             ->children()
-                ->scalarNode('css_output_dir')
-                    ->defaultValue('%kernel.project_dir%/var/cache/iw_sulu_tailwind_theme')
-                    ->info('Directory where compiled theme CSS files are stored')
-                ->end()
-                ->scalarNode('public_css_path')
-                    ->defaultValue('/build/iw-theme')
-                    ->info('Public path prefix for serving compiled CSS')
-                ->end()
                 ->scalarNode('google_fonts_api_key')
                     ->defaultNull()
                     ->info('Google Fonts API key (from env: %env(GOOGLE_FONTS_API_KEY)%)')
@@ -131,11 +123,7 @@ class ItechWorldSuluTailwindThemeBundle extends AbstractBundle
     ): void {
         $container->parameters()->set(
             'itech_world_sulu_tailwind_theme.css_output_dir',
-            $config['css_output_dir'],
-        );
-        $container->parameters()->set(
-            'itech_world_sulu_tailwind_theme.public_css_path',
-            $config['public_css_path'],
+            '%kernel.project_dir%/var/cache/iw_sulu_tailwind_theme',
         );
         $container->parameters()->set(
             'itech_world_sulu_tailwind_theme.google_fonts_api_key',

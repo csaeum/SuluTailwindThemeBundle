@@ -311,8 +311,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
     #[Route('/iw-theme/css/{filename}', name: 'iw_sulu_tailwind_theme.serve_css', methods: ['GET'], requirements: ['filename' => '.+\.css'])]
     public function serveCssAction(string $filename): Response
     {
-        /** @var string $cssOutputDir */
-        $cssOutputDir = $this->getParameter('itech_world_sulu_tailwind_theme.css_output_dir');
+        $cssOutputDir = $this->compiler->getCssOutputDir();
         $filePath = $cssOutputDir . '/' . basename($filename);
 
         if (!is_file($filePath)) {

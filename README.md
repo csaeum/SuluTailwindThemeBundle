@@ -114,11 +114,11 @@ The bundle provides Stimulus controllers and CSS that need to be compiled by Web
 {
     "controllers": {
         "@itech-world/sulu-tailwind-theme-bundle": {
-            "menu": {
+            "lightbox": {
                 "enabled": true,
                 "fetch": "lazy"
             },
-            "gallery": {
+            "menu": {
                 "enabled": true,
                 "fetch": "lazy"
             },
@@ -126,7 +126,15 @@ The bundle provides Stimulus controllers and CSS that need to be compiled by Web
                 "enabled": true,
                 "fetch": "lazy"
             },
+            "carousel3d": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
             "key_figures": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
+            "location_overlay": {
                 "enabled": true,
                 "fetch": "lazy"
             }
@@ -209,19 +217,7 @@ php bin/adminconsole cache:clear
 
 ## Configuration
 
-The bundle works with zero configuration. Optional settings can be added in `config/packages/itech_world_sulu_tailwind_theme.yaml`:
-
-```yaml
-itech_world_sulu_tailwind_theme:
-    # Directory where compiled CSS files are stored
-    css_output_dir: '%kernel.project_dir%/var/cache/iw_sulu_tailwind_theme'
-
-    # Public path prefix for serving compiled CSS
-    public_css_path: '/build/iw-theme'
-
-    # Google Fonts API key for the font picker autocomplete (optional)
-    google_fonts_api_key: '%env(GOOGLE_FONTS_API_KEY)%'
-```
+The bundle works with **zero configuration**. The only optional setting is the Google Fonts API key for the Font Picker autocomplete.
 
 ### Google Fonts API key (optional)
 

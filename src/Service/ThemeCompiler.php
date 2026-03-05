@@ -42,6 +42,16 @@ class ThemeCompiler
     }
 
     /**
+     * Get the directory where compiled CSS files are stored.
+     *
+     * @return string The absolute path to the CSS output directory
+     */
+    public function getCssOutputDir(): string
+    {
+        return $this->cssOutputDir;
+    }
+
+    /**
      * Convert a Tailwind rounded-* class to a CSS border-radius value.
      *
      * Falls back to returning the raw value if it does not match a known class
