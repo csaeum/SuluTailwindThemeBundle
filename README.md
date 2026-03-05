@@ -199,7 +199,7 @@ php bin/adminconsole doctrine:schema:update --force
 php bin/adminconsole iw-sulu:theme:install corporate
 ```
 
-Available presets: `corporate`, `creative`, `minimal`, `nature`.
+Available presets: `corporate`, `creative`, `minimal`, `nature`, `halloween`, `christmas`, `megamenu`.
 
 ### 8. Clear the cache
 
