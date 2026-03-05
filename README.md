@@ -1,4 +1,8 @@
-<h1 align="center">SuluTailwindThemeBundle</h1>
+<div align="center">
+    <img width="150" src="./doc/images/logo.png" alt="Itech World logo">
+</div>
+
+<h1 align="center">Tailwind Theme Bundle</h1>
 <h3 align="center">Complete theming system for <a href="https://sulu.io" target="_blank">Sulu CMS 3.x</a></h3>
 
 <p align="center">
@@ -7,9 +11,6 @@
     </a>
     <a href="https://sulu.io/" target="_blank">
         <img src="https://img.shields.io/badge/sulu-%3E=3.0-cyan" alt="Sulu compatibility">
-    </a>
-    <a href="https://symfony.com/" target="_blank">
-        <img src="https://img.shields.io/badge/symfony-%3E=7.0-blue" alt="Symfony compatibility">
     </a>
 </p>
 
@@ -24,7 +25,6 @@
 
 * PHP >= 8.2
 * Sulu CMS >= 3.0
-* Symfony >= 7.0
 * Doctrine ORM >= 3.0
 
 ## Features
