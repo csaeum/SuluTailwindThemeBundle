@@ -2,6 +2,7 @@
 import {action, observable} from 'mobx';
 import {translate} from 'sulu-admin-bundle/utils';
 import {Requester} from 'sulu-admin-bundle/services';
+import initializer from 'sulu-admin-bundle/services/initializer';
 import AbstractListToolbarAction from 'sulu-admin-bundle/views/List/toolbarActions/AbstractListToolbarAction';
 
 /**
@@ -44,8 +45,10 @@ export default class ActivateToolbarAction extends AbstractListToolbarAction {
             .then(action(() => {
                 this.activating = false;
                 this.listStore.reload();
-                // Clear selection after activation
                 this.listStore.clearSelection();
+                // Reload admin config so that palette, buttons, variants
+                // reflect the newly activated theme in all components
+                initializer.initialize(true);
             }))
             .catch(action(() => {
                 this.activating = false;
