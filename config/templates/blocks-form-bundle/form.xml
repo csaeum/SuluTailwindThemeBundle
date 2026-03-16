@@ -1,0 +1,133 @@
+<?xml version="1.0" ?>
+<!-- Global block type: Form (with SuluFormBundle integration) -->
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+
+    <key>form</key>
+    <meta>
+        <title>iw_sulu_tailwind_theme.block.form</title>
+    </meta>
+
+    <properties>
+        <!-- ── Content ── -->
+        <section name="content">
+            <meta><title>iw_sulu_tailwind_theme.content</title></meta>
+            <properties>
+                <property name="title" type="text_line">
+                    <meta><title>iw_sulu_tailwind_theme.title</title></meta>
+                </property>
+                <property name="subTitle" type="text_line">
+                    <meta><title>iw_sulu_tailwind_theme.subtitle</title></meta>
+                </property>
+                <property name="titleAlignment" type="single_select">
+                    <meta><title>iw_sulu_tailwind_theme.title_alignment</title></meta>
+                    <params>
+                        <param name="default_value" value="left"/>
+                        <param name="values" type="collection">
+                            <param name="left"><meta><title>iw_sulu_tailwind_theme.align_left</title></meta></param>
+                            <param name="center"><meta><title>iw_sulu_tailwind_theme.align_center</title></meta></param>
+                            <param name="right"><meta><title>iw_sulu_tailwind_theme.align_right</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="useSuluFormBundle" type="checkbox">
+                    <meta><title>iw_sulu_tailwind_theme.form_use_bundle</title></meta>
+                    <params>
+                        <param name="type" value="toggler"/>
+                        <param name="label">
+                            <meta>
+                                <title>iw_sulu_tailwind_theme.form_use_bundle_label</title>
+                            </meta>
+                        </param>
+                    </params>
+                </property>
+                <property name="form" type="single_form_selection"
+                          visibleCondition="__parent.useSuluFormBundle == true">
+                    <meta><title>iw_sulu_tailwind_theme.form_select</title></meta>
+                </property>
+                <property name="twigTemplate" type="text_line"
+                          visibleCondition="__parent.useSuluFormBundle != true">
+                    <meta>
+                        <title>iw_sulu_tailwind_theme.form_twig_template</title>
+                        <info_text>iw_sulu_tailwind_theme.form_twig_template_info</info_text>
+                    </meta>
+                </property>
+            </properties>
+        </section>
+
+        <!-- ── Appearance ── -->
+        <section name="appearance">
+            <meta><title>iw_sulu_tailwind_theme.appearance</title></meta>
+            <properties>
+                <property name="variant" type="iw_theme_variant_picker" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.color_variant</title></meta>
+                </property>
+                <property name="style" type="iw_theme_style_picker" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.layout_style</title></meta>
+                    <params>
+                        <param name="block_type" value="form"/>
+                    </params>
+                </property>
+            </properties>
+        </section>
+
+        <!-- ── Settings ── -->
+        <section name="settings">
+            <meta><title>iw_sulu_tailwind_theme.settings</title></meta>
+            <properties>
+                <property name="marginTop" type="iw_theme_margin_selector" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.margin_top</title></meta>
+                    <params>
+                        <param name="default_value" value="mt-5"/>
+                    </params>
+                </property>
+                <property name="marginBottom" type="iw_theme_margin_selector" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.margin_bottom</title></meta>
+                    <params>
+                        <param name="default_value" value="mb-5"/>
+                    </params>
+                </property>
+                <property name="lateralMargins" type="single_select">
+                    <meta><title>iw_sulu_tailwind_theme.lateral_margins</title></meta>
+                    <params>
+                        <param name="default_value" value="exterior"/>
+                        <param name="values" type="collection">
+                            <param name="exterior"><meta><title>iw_sulu_tailwind_theme.lateral_margins_exterior</title></meta></param>
+                            <param name="interior"><meta><title>iw_sulu_tailwind_theme.lateral_margins_interior</title></meta></param>
+                            <param name="none"><meta><title>iw_sulu_tailwind_theme.lateral_margins_none</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+                <property name="paddingTop" type="iw_theme_margin_selector" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.padding_top</title></meta>
+                    <params>
+                        <param name="default_value" value="pt-5"/>
+                    </params>
+                </property>
+                <property name="paddingBottom" type="iw_theme_margin_selector" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.padding_bottom</title></meta>
+                    <params>
+                        <param name="default_value" value="pb-5"/>
+                    </params>
+                </property>
+                <property name="paddingLateral" type="iw_theme_margin_selector">
+                    <meta><title>iw_sulu_tailwind_theme.padding_lateral</title></meta>
+                    <params>
+                        <param name="prefix" value="px"/>
+                        <param name="default_value" value="px-5"/>
+                    </params>
+                </property>
+                <property name="blockRadius" type="iw_theme_radius_selector" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.block_radius</title></meta>
+                    <params>
+                        <param name="default_value" value="rounded-none"/>
+                    </params>
+                </property>
+                <property name="showBackground" type="checkbox">
+                    <meta><title>iw_sulu_tailwind_theme.show_background</title></meta>
+                </property>
+            </properties>
+        </section>
+    </properties>
+</template>

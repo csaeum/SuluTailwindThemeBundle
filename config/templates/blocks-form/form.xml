@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<!-- Global block type: Form -->
+<!-- Global block type: Form (basic — without SuluFormBundle) -->
 <template xmlns="http://schemas.sulu.io/template/template"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
@@ -31,8 +31,11 @@
                         </param>
                     </params>
                 </property>
-                <property name="formId" type="text_line">
-                    <meta><title>iw_sulu_tailwind_theme.form_id</title></meta>
+                <property name="twigTemplate" type="text_line">
+                    <meta>
+                        <title>iw_sulu_tailwind_theme.form_twig_template</title>
+                        <info_text>iw_sulu_tailwind_theme.form_twig_template_info</info_text>
+                    </meta>
                 </property>
             </properties>
         </section>

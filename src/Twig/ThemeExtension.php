@@ -44,6 +44,7 @@ class ThemeExtension extends AbstractExtension implements GlobalsInterface
             new TwigFunction('iw_sulu_tailwind_theme_menu_config', $this->getMenuConfig(...)),
             new TwigFunction('iw_sulu_tailwind_theme_tokens', $this->getTokens(...)),
             new TwigFunction('iw_sulu_tailwind_theme_block_styles', $this->getBlockStyles(...)),
+            new TwigFunction('iw_sulu_tailwind_theme_upload_max_size', $this->getUploadMaxSize(...)),
         ];
     }
 
@@ -185,5 +186,51 @@ class ThemeExtension extends AbstractExtension implements GlobalsInterface
     public function getTokens(): array
     {
         return $this->themeProvider->getTokens();
+    }
+
+    /**
+     * Get the maximum upload file size allowed by the server.
+     *
+     * Returns the smallest value between PHP's upload_max_filesize
+     * and post_max_size, as both a human-readable label and raw bytes.
+     *
+     * @return array{label: string, bytes: int} The maximum upload size
+     */
+    public function getUploadMaxSize(): array
+    {
+        $uploadMax = $this->parseIniSize(\ini_get('upload_max_filesize') ?: '8M');
+        $postMax = $this->parseIniSize(\ini_get('post_max_size') ?: '8M');
+
+        // post_max_size = 0 means unlimited
+        $maxBytes = $postMax > 0 ? min($uploadMax, $postMax) : $uploadMax;
+
+        if ($maxBytes >= 1048576) {
+            $label = round($maxBytes / 1048576) . ' MB';
+        } else {
+            $label = round($maxBytes / 1024) . ' KB';
+        }
+
+        return ['label' => $label, 'bytes' => $maxBytes];
+    }
+
+    /**
+     * Parse a PHP ini size value (e.g. "8M", "128K") to bytes.
+     *
+     * @param string $value The ini value
+     *
+     * @return int The size in bytes
+     */
+    private function parseIniSize(string $value): int
+    {
+        $value = trim($value);
+        $last = strtolower($value[strlen($value) - 1]);
+        $numericValue = (int) $value;
+
+        return match ($last) {
+            'g' => $numericValue * 1073741824,
+            'm' => $numericValue * 1048576,
+            'k' => $numericValue * 1024,
+            default => $numericValue,
+        };
     }
 }

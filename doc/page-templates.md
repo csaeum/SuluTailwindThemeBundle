@@ -106,7 +106,7 @@ Since blocks are registered globally, creating a custom page template with a sub
 | `key_figures` | Key figures/stats | Content (nested figures block), Appearance, Settings |
 | `linked_pages` | Internal/external links | Content (title group + links block), Appearance, Settings |
 | `location` | Map with address | Content (title group + coordinates + address), Appearance, Settings |
-| `form` | Form integration | Content (title group + form ID), Appearance, Settings |
+| `form` | Form integration | Content (title group + SuluFormBundle toggle + form ID or Twig template path), Appearance, Settings |
 | `document` | Document downloads | Content (title group + media), Appearance, Settings |
 | `cta` | Call to action | Content (title group + buttons + image), Appearance, Settings |
 | `testimonial` | Testimonials | Content (title group + testimonials block), Appearance, Settings |
