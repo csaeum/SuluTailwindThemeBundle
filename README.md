@@ -143,6 +143,14 @@ The bundle provides Stimulus controllers and CSS that need to be compiled by Web
             "location_overlay": {
                 "enabled": true,
                 "fetch": "lazy"
+            },
+            "combobox": {
+                "enabled": true,
+                "fetch": "lazy"
+            },
+            "fileinput": {
+                "enabled": true,
+                "fetch": "lazy"
             }
         }
     },

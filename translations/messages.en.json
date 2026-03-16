@@ -1,4 +1,12 @@
 {
     "iw_sulu_tailwind_theme.address": "Address",
-    "iw_sulu_tailwind_theme.open_map": "Open in maps"
+    "iw_sulu_tailwind_theme.open_map": "Open in maps",
+    "iw_sulu_tailwind_theme.form_bundle_not_installed": "SuluFormBundle is not installed.",
+    "iw_sulu_tailwind_theme.combobox_search": "Search...",
+    "iw_sulu_tailwind_theme.combobox_none": "No selection",
+    "iw_sulu_tailwind_theme.fileinput_select": "Select files",
+    "iw_sulu_tailwind_theme.fileinput_max_reached": "Maximum number of files reached.",
+    "iw_sulu_tailwind_theme.fileinput_size_exceeded": "File too large (max. {size}).",
+    "iw_sulu_tailwind_theme.fileinput_drop_or": "Drop your files here or",
+    "iw_sulu_tailwind_theme.fileinput_browse": "browse"
 }

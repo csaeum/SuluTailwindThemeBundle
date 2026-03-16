@@ -100,6 +100,23 @@ class ItechWorldSuluTailwindThemeBundle extends AbstractBundle
                 ],
             ]);
 
+            // Register the form block variant based on SuluFormBundle availability.
+            // When the bundle is installed, the form block includes a single_form_selection
+            // field; otherwise it only offers a Twig template path input.
+            $formBlockDir = class_exists(\Sulu\Bundle\FormBundle\SuluFormBundle::class)
+                ? __DIR__ . '/../config/templates/blocks-form-bundle'
+                : __DIR__ . '/../config/templates/blocks-form';
+
+            $builder->prependExtensionConfig('sulu_admin', [
+                'templates' => [
+                    'block' => [
+                        'directories' => [
+                            'iw_sulu_tailwind_theme_form' => $formBlockDir,
+                        ],
+                    ],
+                ],
+            ]);
+
             // Register snippet template directories
             $builder->prependExtensionConfig('sulu_admin', [
                 'templates' => [

@@ -43,6 +43,18 @@
                 "name": "location-overlay",
                 "fetch": "lazy",
                 "enabled": true
+            },
+            "combobox": {
+                "main": "controllers/combobox_controller.js",
+                "name": "combobox",
+                "fetch": "lazy",
+                "enabled": true
+            },
+            "fileinput": {
+                "main": "controllers/fileinput_controller.js",
+                "name": "fileinput",
+                "fetch": "lazy",
+                "enabled": true
             }
         },
         "importmap": {

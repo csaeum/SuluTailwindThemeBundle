@@ -1,0 +1,28 @@
+{# Form content — renders either a SuluFormBundle form or a custom Twig template include.
+   Expected variables:
+     - useSuluFormBundle: boolean toggle (true = SuluFormBundle, false = Twig template)
+     - form: the SuluFormBundle form ID from single_form_selection (when useSuluFormBundle is true)
+     - twigTemplate: path to a Twig template (when useSuluFormBundle is false)
+
+   SuluFormBundle mode:
+     Includes "forms/_sulu_form.html.twig" from the project's templates directory.
+     This file is NOT shipped by the bundle to avoid compile errors when SuluFormBundle
+     is not installed. The user must create it in their project. See documentation.
+#}
+
+{% if useSuluFormBundle|default(false) %}
+    {# SuluFormBundle 3.0 integration — delegates to a project-level bridge template
+       that calls sulu_form_get_by_id(). #}
+    {% if form is defined and form is not empty %}
+        {% include 'forms/_sulu_form.html.twig' ignore missing with {
+            formId: form,
+            formType: 'page',
+            formTypeId: page.id|default('')
+        } only %}
+    {% endif %}
+{% else %}
+    {# Custom Twig template include — user provides the template path from their project #}
+    {% if twigTemplate is defined and twigTemplate is not empty %}
+        {% include twigTemplate ignore missing %}
+    {% endif %}
+{% endif %}

@@ -13,6 +13,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -37,14 +38,20 @@ class ThemeInstallCommand extends Command
     }
 
     /**
-     * Configure the command arguments.
+     * Configure the command arguments and options.
      */
     protected function configure(): void
     {
         $this->addArgument(
             'name',
-            InputArgument::REQUIRED,
+            InputArgument::OPTIONAL,
             'The preset theme name (corporate, creative, minimal, nature, halloween, christmas, megamenu)',
+        );
+        $this->addOption(
+            'all',
+            null,
+            InputOption::VALUE_NONE,
+            'Install all available preset themes',
         );
     }
 
@@ -59,64 +66,98 @@ class ThemeInstallCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+        $presets = ThemeFixtures::getPresets();
+        $installAll = $input->getOption('all');
         $name = $input->getArgument('name');
 
-        $presets = ThemeFixtures::getPresets();
-
-        if (!isset($presets[$name])) {
+        if (!$installAll && null === $name) {
             $io->error(sprintf(
-                'Unknown theme preset "%s". Available presets: %s',
-                $name,
+                'Please provide a theme name or use --all. Available presets: %s',
                 implode(', ', array_keys($presets)),
             ));
 
             return Command::FAILURE;
         }
 
-        // Check if theme already exists
-        $existing = $this->repository->findByName($name);
-        if (null !== $existing) {
-            $io->warning(sprintf('Theme "%s" already exists (ID: %d). Updating...', $name, $existing->getId()));
-            $theme = $existing;
-        } else {
-            $theme = new ThemeConfig();
-            $io->info(sprintf('Creating new theme "%s"...', $name));
+        $themesToInstall = $installAll
+            ? array_keys($presets)
+            : [$name];
+
+        // Validate all names before installing
+        foreach ($themesToInstall as $themeName) {
+            if (!isset($presets[$themeName])) {
+                $io->error(sprintf(
+                    'Unknown theme preset "%s". Available presets: %s',
+                    $themeName,
+                    implode(', ', array_keys($presets)),
+                ));
+
+                return Command::FAILURE;
+            }
         }
 
-        $preset = $presets[$name];
+        $lastTheme = null;
 
-        $theme->setName($preset['name']);
-        $theme->setLabel($preset['label']);
-        $theme->setTokens($preset['tokens']);
-        $theme->setMenuConfig($preset['menuConfig']);
-        $theme->setBlockStyles($preset['blockStyles']);
+        foreach ($themesToInstall as $themeName) {
+            $existing = $this->repository->findByName($themeName);
+            if (null !== $existing) {
+                $io->warning(sprintf('Theme "%s" already exists (ID: %d). Updating...', $themeName, $existing->getId()));
+                $theme = $existing;
+            } else {
+                $theme = new ThemeConfig();
+                $io->info(sprintf('Creating new theme "%s"...', $themeName));
+            }
 
-        // Deactivate all themes and activate this one
+            $preset = $presets[$themeName];
+
+            $theme->setName($preset['name']);
+            $theme->setLabel($preset['label']);
+            $theme->setTokens($preset['tokens']);
+            $theme->setMenuConfig($preset['menuConfig']);
+            $theme->setBlockStyles($preset['blockStyles']);
+
+            $this->entityManager->persist($theme);
+            $lastTheme = $theme;
+        }
+
+        // Activate only the last installed theme
         $this->repository->deactivateAll();
-        $theme->setIsActive(true);
+        $lastTheme->setIsActive(true);
 
-        $this->entityManager->persist($theme);
         $this->entityManager->flush();
 
-        // Compile CSS
-        $cssPath = $this->compiler->compile($theme);
+        // Compile CSS for all installed themes
+        foreach ($themesToInstall as $themeName) {
+            $theme = $this->repository->findByName($themeName);
+            if (null !== $theme) {
+                $this->compiler->compile($theme);
+            }
+        }
 
-        $io->success(sprintf(
-            'Theme "%s" (%s) installed and activated successfully!',
-            $theme->getLabel(),
-            $theme->getName(),
-        ));
+        if ($installAll) {
+            $io->success(sprintf(
+                '%d themes installed! "%s" is active.',
+                count($themesToInstall),
+                $lastTheme->getLabel(),
+            ));
+        } else {
+            $io->success(sprintf(
+                'Theme "%s" (%s) installed and activated successfully!',
+                $lastTheme->getLabel(),
+                $lastTheme->getName(),
+            ));
+        }
+
         $io->table(
             ['Property', 'Value'],
             [
-                ['ID', (string) $theme->getId()],
-                ['Name', $theme->getName()],
-                ['Label', $theme->getLabel()],
+                ['ID', (string) $lastTheme->getId()],
+                ['Name', $lastTheme->getName()],
+                ['Label', $lastTheme->getLabel()],
                 ['Active', 'Yes'],
-                ['CSS File', $cssPath],
-                ['Colors', implode(', ', array_keys($theme->getTokens()['colors'] ?? []))],
-                ['Font Families', (string) count($theme->getTokens()['typography']['families'] ?? [])],
-                ['Block Variants', (string) count($theme->getTokens()['blockVariants'] ?? [])],
+                ['Colors', implode(', ', array_keys($lastTheme->getTokens()['colors'] ?? []))],
+                ['Font Families', (string) count($lastTheme->getTokens()['typography']['families'] ?? [])],
+                ['Block Variants', (string) count($lastTheme->getTokens()['blockVariants'] ?? [])],
             ],
         );
 
