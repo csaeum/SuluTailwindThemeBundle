@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
 use ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository;
 use ItechWorld\SuluTailwindThemeBundle\Service\GoogleFontsCatalog;
+use ItechWorld\SuluTailwindThemeBundle\Service\OklchPaletteGenerator;
 use ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler;
 use Sulu\Component\Rest\ListBuilder\Doctrine\DoctrineListBuilderFactoryInterface;
 use Sulu\Component\Rest\ListBuilder\Metadata\FieldDescriptorFactoryInterface;
@@ -109,6 +110,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         private readonly DoctrineListBuilderFactoryInterface $listBuilderFactory,
         private readonly RestHelperInterface $restHelper,
         private readonly GoogleFontsCatalog $googleFontsCatalog,
+        private readonly OklchPaletteGenerator $paletteGenerator,
     ) {
     }
 
@@ -297,6 +299,33 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         $this->compiler->compile($theme);
 
         return new JsonResponse($this->serializeTheme($theme));
+    }
+
+    /**
+     * Generate OKLCH palette from hex color values.
+     *
+     * Accepts color hex values as query parameters and returns the computed
+     * palette shades. Used by the ColorTokenEditor to display the palette
+     * for the theme being edited (which may not be the active theme).
+     *
+     * @param Request $request Query params: primary, secondary, accent, background (hex)
+     *
+     * @return JsonResponse The palette data
+     */
+    #[Route('/admin/api/iw-theme-palette', name: 'iw_sulu_tailwind_theme.palette', methods: ['GET'])]
+    public function paletteAction(Request $request): JsonResponse
+    {
+        $palette = [];
+        $colorNames = ['primary', 'secondary', 'accent', 'background'];
+
+        foreach ($colorNames as $name) {
+            $hex = $request->query->getString($name);
+            if ('' !== $hex) {
+                $palette[$name] = $this->paletteGenerator->generatePalette($hex);
+            }
+        }
+
+        return new JsonResponse($palette);
     }
 
     /**

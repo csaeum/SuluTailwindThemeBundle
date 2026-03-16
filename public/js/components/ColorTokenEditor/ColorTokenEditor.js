@@ -2,6 +2,7 @@
 import React, {Fragment} from 'react';
 import {ChromePicker} from 'react-color';
 import {translate} from 'sulu-admin-bundle/utils';
+import {Requester} from 'sulu-admin-bundle/services';
 import Input from 'sulu-admin-bundle/components/Input';
 import Popover from 'sulu-admin-bundle/components/Popover';
 
@@ -185,6 +186,7 @@ export default class ColorTokenEditor extends React.Component {
             popoverOpen: false,
             internalValue: props.value || '',
             activeTab: showPalette ? 'palette' : 'custom',
+            localPalette: null,
         };
 
         this.showPalette = showPalette;
@@ -193,6 +195,39 @@ export default class ColorTokenEditor extends React.Component {
 
     componentDidMount() {
         ensurePickerStyles();
+        this._loadPaletteFromForm();
+    }
+
+    /**
+     * Load palette from the current form data via API if we are inside
+     * a theme edit form (detected by the presence of colors_primary field).
+     * Falls back to the global themePalette if not in a theme form.
+     */
+    _loadPaletteFromForm() {
+        const {formInspector} = this.props;
+        if (!formInspector || !this.showPalette) return;
+
+        // Check if we are editing a theme (has colors_primary in form data)
+        const primary = formInspector.getValueByPath('/colors_primary');
+        if (!primary) return;
+
+        const secondary = formInspector.getValueByPath('/colors_secondary') || '';
+        const accent = formInspector.getValueByPath('/colors_accent') || '';
+        const background = formInspector.getValueByPath('/colors_background') || '';
+
+        const params = new URLSearchParams();
+        if (primary) params.set('primary', primary);
+        if (secondary) params.set('secondary', secondary);
+        if (accent) params.set('accent', accent);
+        if (background) params.set('background', background);
+
+        Requester.get('/admin/api/iw-theme-palette?' + params.toString())
+            .then((palette) => {
+                this.setState({localPalette: palette});
+            })
+            .catch(() => {
+                // Fallback to global palette on error
+            });
     }
 
     componentDidUpdate(prevProps) {
@@ -354,7 +389,7 @@ export default class ColorTokenEditor extends React.Component {
      * Render palette rows with swatches for each color.
      */
     renderPaletteTab() {
-        const palette = ColorTokenEditor.themePalette;
+        const palette = this.state.localPalette || ColorTokenEditor.themePalette;
         const {internalValue} = this.state;
         const normalizedValue = (internalValue || '').toLowerCase();
 

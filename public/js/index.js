@@ -1,6 +1,7 @@
 // @flow
 import {fieldRegistry} from 'sulu-admin-bundle/containers';
 import {listToolbarActionRegistry} from 'sulu-admin-bundle/views/List';
+import {formToolbarActionRegistry} from 'sulu-admin-bundle/views/Form';
 import initializer from 'sulu-admin-bundle/services/initializer';
 import VariantPicker from './components/VariantPicker/VariantPicker';
 import StylePicker from './components/StylePicker/StylePicker';
@@ -11,6 +12,7 @@ import RadiusSelector from './components/RadiusSelector/RadiusSelector';
 import ButtonStylePicker from './components/ButtonStylePicker/ButtonStylePicker';
 import collapsibleSections from './components/CollapsibleSections/CollapsibleSections';
 import ActivateToolbarAction from './components/ActivateToolbarAction/ActivateToolbarAction';
+import SaveWithConfigReloadAction from './components/SaveWithConfigReloadAction/SaveWithConfigReloadAction';
 
 /**
  * Register all custom field types for the SuluTailwindThemeBundle admin interface.
@@ -36,6 +38,7 @@ initializer.addUpdateConfigHook('iw_sulu_tailwind_theme', (config: Object, initi
     }
 
     listToolbarActionRegistry.add('iw_sulu_tailwind_theme.activate', ActivateToolbarAction);
+    formToolbarActionRegistry.add('iw_sulu_tailwind_theme.save', SaveWithConfigReloadAction);
 
     fieldRegistry.add(
         'iw_theme_variant_picker',

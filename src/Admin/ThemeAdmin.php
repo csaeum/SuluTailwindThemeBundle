@@ -179,7 +179,7 @@ class ThemeAdmin extends Admin
         }
 
         if ($this->securityChecker->hasPermission(static::SECURITY_CONTEXT, PermissionTypes::EDIT)) {
-            $formToolbarActions[] = new ToolbarAction('sulu_admin.save');
+            $formToolbarActions[] = new ToolbarAction('iw_sulu_tailwind_theme.save');
             $listToolbarActions[] = new ToolbarAction('iw_sulu_tailwind_theme.activate');
         }
 

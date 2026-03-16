@@ -41,9 +41,36 @@ export default class ButtonStylePicker extends React.Component {
         onChange(key);
     };
 
+    /**
+     * Read button data from formInspector if we are inside a theme edit form.
+     * Falls back to the global themeButtons otherwise.
+     */
+    _getButtons() {
+        const {formInspector} = this.props;
+
+        // Detect if we're in a theme form by checking for a button field
+        if (formInspector) {
+            const primaryBg = formInspector.getValueByPath('/buttons_primary_bg');
+            if (primaryBg !== undefined && primaryBg !== null) {
+                const result = {};
+                for (const variant of ['primary', 'secondary', 'accent']) {
+                    result[variant] = {
+                        bg: formInspector.getValueByPath(`/buttons_${variant}_bg`) || '',
+                        text: formInspector.getValueByPath(`/buttons_${variant}_text`) || '',
+                        border: formInspector.getValueByPath(`/buttons_${variant}_border`) || '',
+                        radius: formInspector.getValueByPath(`/buttons_${variant}_radius`) || '',
+                    };
+                }
+                return result;
+            }
+        }
+
+        return ButtonStylePicker.themeButtons;
+    }
+
     render() {
         const {value, disabled} = this.props;
-        const buttons = ButtonStylePicker.themeButtons;
+        const buttons = this._getButtons();
         const primary = getSuluPrimaryColor();
         const tint = getSuluPrimaryTint();
 
