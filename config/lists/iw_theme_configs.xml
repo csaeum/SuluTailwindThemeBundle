@@ -34,6 +34,17 @@
         </property>
 
         <property
+            name="webspaces"
+            visibility="yes"
+            translation="iw_sulu_tailwind_theme.webspaces"
+            sortable="false"
+            searchability="never"
+        >
+            <field-name>webspaces</field-name>
+            <entity-name>ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig</entity-name>
+        </property>
+
+        <property
             name="updatedAt"
             visibility="yes"
             translation="sulu_admin.changed"

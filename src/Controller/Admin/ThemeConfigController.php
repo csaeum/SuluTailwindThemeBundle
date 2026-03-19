@@ -132,7 +132,12 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         );
 
         $listBuilder = $this->listBuilderFactory->create(ThemeConfig::class);
-        $this->restHelper->initializeListBuilder($listBuilder, $fieldDescriptors);
+
+        // Exclude the virtual "webspaces" column from the ListBuilder SQL query.
+        // It is defined in the XML for the frontend column header, but populated post-query.
+        $dbFieldDescriptors = $fieldDescriptors;
+        unset($dbFieldDescriptors['webspaces']);
+        $this->restHelper->initializeListBuilder($listBuilder, $dbFieldDescriptors);
 
         $results = array_map([$this, 'normalizeDateFields'], $listBuilder->execute());
 
