@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
+import {Requester} from 'sulu-admin-bundle/services';
 import {getSuluPrimaryColor, getSuluPrimaryTint} from '../../utils/suluColors';
+import {resolveAllRefs} from '../../utils/colorRefResolver';
 
 /**
  * Available button style options.
@@ -33,6 +35,40 @@ export default class ButtonStylePicker extends React.Component {
     /** @type {Object} Button variant data from the active theme */
     static themeButtons = {};
 
+    /** @type {Object|null} Cached palette for ref resolution */
+    _palette = null;
+
+    componentDidMount() {
+        this._loadPalette();
+    }
+
+    /**
+     * Load OKLCH palette from the current form data via API.
+     * Used to resolve ref: values in button properties read from formInspector.
+     */
+    _loadPalette() {
+        const {formInspector} = this.props;
+        if (!formInspector) return;
+
+        const primary = formInspector.getValueByPath('/colors_primary');
+        if (!primary) return;
+
+        const params = new URLSearchParams();
+        ['primary', 'secondary', 'accent', 'background'].forEach((name) => {
+            const val = formInspector.getValueByPath(`/colors_${name}`);
+            if (val) params.set(name, val);
+        });
+
+        Requester.get('/admin/api/iw-theme-palette?' + params.toString())
+            .then((palette) => {
+                this._palette = palette;
+                this.forceUpdate();
+            })
+            .catch(() => {
+                // Palette loading failed — button previews will use raw values
+            });
+    }
+
     handleSelect = (key) => {
         const {onChange, disabled} = this.props;
         if (!onChange || disabled) {
@@ -61,10 +97,21 @@ export default class ButtonStylePicker extends React.Component {
                         radius: formInspector.getValueByPath(`/buttons_${variant}_radius`) || '',
                     };
                 }
+
+                // Resolve any ref: values using the loaded palette
+                if (this._palette) {
+                    for (const variant of ['primary', 'secondary', 'accent']) {
+                        if (result[variant]) {
+                            result[variant] = resolveAllRefs(result[variant], this._palette);
+                        }
+                    }
+                }
+
                 return result;
             }
         }
 
+        // Static themeButtons are already resolved by ThemeAdmin::getConfig()
         return ButtonStylePicker.themeButtons;
     }
 

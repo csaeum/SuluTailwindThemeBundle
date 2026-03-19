@@ -378,6 +378,24 @@ class ThemeAdmin extends Admin
             }
         }
 
+        // Resolve any ref: values in buttons before sending to the frontend,
+        // so that ButtonStylePicker.themeButtons (static) always contains usable hex
+        foreach ($buttons as $variant => &$btnProps) {
+            if (!is_array($btnProps)) {
+                continue;
+            }
+            foreach ($btnProps as $prop => &$val) {
+                if (is_string($val) && str_starts_with($val, 'ref:')) {
+                    $parts = explode('-', substr($val, 4), 2);
+                    if (count($parts) === 2 && isset($palette[$parts[0]][(int) $parts[1]])) {
+                        $val = $palette[$parts[0]][(int) $parts[1]];
+                    }
+                }
+            }
+            unset($val);
+        }
+        unset($btnProps);
+
         return [
             'variants' => $variants,
             'buttons' => $buttons,

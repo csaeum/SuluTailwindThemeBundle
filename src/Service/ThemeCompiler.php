@@ -19,6 +19,23 @@ use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
 class ThemeCompiler
 {
     /**
+     * Base colors currently being compiled, set at the start of compile().
+     * Used by resolveColorValue() to resolve ref: values without threading
+     * $colors through every method signature.
+     *
+     * @var array<string, string>
+     */
+    private array $currentColors = [];
+
+    /**
+     * Cache of generated OKLCH palettes per color name during a compile() call.
+     * Avoids regenerating the same palette multiple times.
+     *
+     * @var array<string, array<int, string>>
+     */
+    private array $resolvedPalettes = [];
+
+    /**
      * Mapping from Tailwind rounded-* class suffixes to CSS border-radius values.
      */
     private const RADIUS_MAP = [
@@ -162,6 +179,10 @@ class ThemeCompiler
     {
         $tokens = $theme->getTokens();
         $menuConfig = $theme->getMenuConfig();
+
+        // Initialize class-level state for ref: resolution
+        $this->currentColors = $tokens['colors'] ?? [];
+        $this->resolvedPalettes = [];
         $css = "/* Theme: {$theme->getLabel()} — Auto-generated, do not edit */\n\n";
 
         // Google Fonts import
@@ -193,7 +214,56 @@ class ThemeCompiler
         // Block variant classes
         $css .= $this->generateBlockVariantClasses($tokens['blockVariants'] ?? [], $tokens['buttons'] ?? []);
 
+        // Reset class-level state after compilation
+        $this->currentColors = [];
+        $this->resolvedPalettes = [];
+
         return $css;
+    }
+
+    /**
+     * Resolve a color value that may be a ref: reference.
+     *
+     * If the value starts with "ref:", parses the color name and shade level,
+     * generates (or retrieves from cache) the OKLCH palette for that color,
+     * and returns the corresponding hex value.
+     *
+     * Returns the value unchanged if it is not a ref.
+     * Returns #000000 as a safe CSS fallback for invalid/unresolvable refs.
+     *
+     * @param string $value The color value (hex, transparent, rgba, or ref:...)
+     *
+     * @return string The resolved hex color or the original value
+     */
+    private function resolveColorValue(string $value): string
+    {
+        if (!str_starts_with($value, 'ref:')) {
+            return $value;
+        }
+
+        $parts = explode('-', substr($value, 4), 2);
+        if (count($parts) !== 2) {
+            return '#000000';
+        }
+
+        [$colorName, $shade] = $parts;
+        $validColors = ['primary', 'secondary', 'accent', 'background'];
+        $validShades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+
+        if (!in_array($colorName, $validColors, true) || !in_array((int) $shade, $validShades, true)) {
+            return '#000000';
+        }
+
+        $baseHex = $this->currentColors[$colorName] ?? null;
+        if (!is_string($baseHex) || $baseHex === '') {
+            return '#000000';
+        }
+
+        if (!isset($this->resolvedPalettes[$colorName])) {
+            $this->resolvedPalettes[$colorName] = $this->paletteGenerator->generatePalette($baseHex);
+        }
+
+        return $this->resolvedPalettes[$colorName][(int) $shade] ?? '#000000';
     }
 
     /**
@@ -206,14 +276,18 @@ class ThemeCompiler
     private function generateColorVariables(array $colors): string
     {
         $css = "  /* Colors */\n";
+        // Base color keys are the source of truth — never resolve refs on them
+        $baseColorKeys = ['primary', 'secondary', 'accent', 'background'];
 
         foreach ($colors as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $subKey => $subValue) {
-                    $css .= "  --color-{$key}-{$subKey}: {$subValue};\n";
+                    $resolved = in_array($key, $baseColorKeys, true) ? $subValue : $this->resolveColorValue((string) $subValue);
+                    $css .= "  --color-{$key}-{$subKey}: {$resolved};\n";
                 }
             } else {
-                $css .= "  --color-{$key}: {$value};\n";
+                $resolved = in_array($key, $baseColorKeys, true) ? $value : $this->resolveColorValue((string) $value);
+                $css .= "  --color-{$key}: {$resolved};\n";
             }
         }
 
@@ -407,6 +481,8 @@ class ThemeCompiler
                 // Resolve radius Tailwind classes to valid CSS values
                 if ('radius' === $prop) {
                     $value = $this->resolveRadius((string) $value);
+                } else {
+                    $value = $this->resolveColorValue((string) $value);
                 }
                 $css .= "  --btn-{$variant}-{$prop}: {$value};\n";
             }
@@ -433,7 +509,8 @@ class ThemeCompiler
         $colors = $menuConfig['colors'] ?? [];
         foreach ($colors as $key => $value) {
             if (!is_array($value)) {
-                $css .= "  --menu-{$key}: {$value};\n";
+                $resolved = $this->resolveColorValue((string) $value);
+                $css .= "  --menu-{$key}: {$resolved};\n";
             }
         }
 
@@ -598,16 +675,16 @@ class ThemeCompiler
             }
             $css .= ".btn-{$variant} {\n";
             if (isset($props['bg'])) {
-                $css .= "  background-color: {$props['bg']};\n";
+                $css .= "  background-color: {$this->resolveColorValue((string) $props['bg'])};\n";
             }
             if (isset($props['text'])) {
-                $css .= "  color: {$props['text']};\n";
+                $css .= "  color: {$this->resolveColorValue((string) $props['text'])};\n";
             }
             if (isset($props['radius'])) {
                 $css .= "  border-radius: {$this->resolveRadius((string) $props['radius'])};\n";
             }
             if (isset($props['border']) && 'none' !== $props['border']) {
-                $css .= "  border: 1px solid {$props['border']};\n";
+                $css .= "  border: 1px solid {$this->resolveColorValue((string) $props['border'])};\n";
             } else {
                 $css .= "  border: none;\n";
             }
@@ -620,13 +697,13 @@ class ThemeCompiler
             // Hover state
             $css .= ".btn-{$variant}:hover {\n";
             if (isset($props['hoverBg'])) {
-                $css .= "  background-color: {$props['hoverBg']};\n";
+                $css .= "  background-color: {$this->resolveColorValue((string) $props['hoverBg'])};\n";
             }
             if (isset($props['hoverText'])) {
-                $css .= "  color: {$props['hoverText']};\n";
+                $css .= "  color: {$this->resolveColorValue((string) $props['hoverText'])};\n";
             }
             if (isset($props['hoverBorder']) && 'none' !== $props['hoverBorder']) {
-                $css .= "  border-color: {$props['hoverBorder']};\n";
+                $css .= "  border-color: {$this->resolveColorValue((string) $props['hoverBorder'])};\n";
             }
             $css .= "}\n\n";
         }
@@ -1030,16 +1107,17 @@ class ThemeCompiler
                 if (!isset($props[$tokenKey])) {
                     continue;
                 }
-                $css .= "  {$cssProperty}: {$props[$tokenKey]};\n";
+                $css .= "  {$cssProperty}: {$this->resolveColorValue((string) $props[$tokenKey])};\n";
             }
 
             // Apply title color as default text color for the block
             if (isset($props['title'])) {
-                $css .= "  color: {$props['title']};\n";
+                $css .= "  color: {$this->resolveColorValue((string) $props['title'])};\n";
             }
 
             // Subtle background for code, table headers, blockquotes
-            $blockBgHex = trim((string) ($props['blockBg'] ?? '#ffffff'));
+            // Resolve ref BEFORE passing to isLightBackground()
+            $blockBgHex = $this->resolveColorValue(trim((string) ($props['blockBg'] ?? '#ffffff')));
             $subtleBg = $this->isLightBackground($blockBgHex)
                 ? 'rgba(0,0,0,0.04)'
                 : 'rgba(255,255,255,0.07)';
@@ -1049,8 +1127,9 @@ class ThemeCompiler
 
             // Block background only visible when showBackground is checked (data-has-bg)
             if (!empty($props['blockBg'])) {
+                $resolvedBlockBg = $this->resolveColorValue((string) $props['blockBg']);
                 $css .= ".block-variant-{$index}[data-has-bg=\"true\"] {\n";
-                $css .= "  background-color: {$props['blockBg']};\n";
+                $css .= "  background-color: {$resolvedBlockBg};\n";
                 $css .= "}\n";
             }
 
@@ -1181,7 +1260,7 @@ class ThemeCompiler
             // template (mx-4) when the block has no lateral padding — adding it here
             // would stack with the block's own paddingLateral.
             // No visible paragraphBg → no background, no padding, no margin.
-            $pgBg = trim($props['paragraphBg'] ?? '');
+            $pgBg = $this->resolveColorValue(trim($props['paragraphBg'] ?? ''));
             if ($pgBg !== '' && strtolower($pgBg) !== 'transparent') {
                 $css .= ".block-variant-{$index} .block-text {\n";
                 $css .= "  background-color: var(--variant-paragraph-bg);\n";
@@ -1248,7 +1327,7 @@ class ThemeCompiler
         $css .= ".block-variant-{$variantName} {\n";
         foreach ($formProps as $tokenKey => $cssVar) {
             if (!empty($props[$tokenKey])) {
-                $css .= "  {$cssVar}: {$props[$tokenKey]};\n";
+                $css .= "  {$cssVar}: {$this->resolveColorValue((string) $props[$tokenKey])};\n";
             }
         }
         $css .= "}\n";
@@ -1329,16 +1408,16 @@ class ThemeCompiler
 
         $css = ".block-variant-{$variantName} .btn-variant {\n";
         if (isset($btnData['bg'])) {
-            $css .= "  background-color: {$btnData['bg']};\n";
+            $css .= "  background-color: {$this->resolveColorValue((string) $btnData['bg'])};\n";
         }
         if (isset($btnData['text'])) {
-            $css .= "  color: {$btnData['text']};\n";
+            $css .= "  color: {$this->resolveColorValue((string) $btnData['text'])};\n";
         }
         if (isset($btnData['radius'])) {
             $css .= "  border-radius: {$this->resolveRadius((string) $btnData['radius'])};\n";
         }
         if (isset($btnData['border']) && 'none' !== $btnData['border']) {
-            $css .= "  border: 1px solid {$btnData['border']};\n";
+            $css .= "  border: 1px solid {$this->resolveColorValue((string) $btnData['border'])};\n";
         } else {
             $css .= "  border: none;\n";
         }
@@ -1350,29 +1429,29 @@ class ThemeCompiler
 
         $css .= ".block-variant-{$variantName} .btn-variant:hover {\n";
         if (isset($btnData['hoverBg'])) {
-            $css .= "  background-color: {$btnData['hoverBg']};\n";
+            $css .= "  background-color: {$this->resolveColorValue((string) $btnData['hoverBg'])};\n";
         }
         if (isset($btnData['hoverText'])) {
-            $css .= "  color: {$btnData['hoverText']};\n";
+            $css .= "  color: {$this->resolveColorValue((string) $btnData['hoverText'])};\n";
         }
         if (isset($btnData['hoverBorder']) && 'none' !== $btnData['hoverBorder']) {
-            $css .= "  border-color: {$btnData['hoverBorder']};\n";
+            $css .= "  border-color: {$this->resolveColorValue((string) $btnData['hoverBorder'])};\n";
         }
         $css .= "}\n";
 
         // File input button — same style as .btn-variant
         $css .= ".block-variant-{$variantName} .iw-form-file::file-selector-button {\n";
         if (isset($btnData['bg'])) {
-            $css .= "  background-color: {$btnData['bg']};\n";
+            $css .= "  background-color: {$this->resolveColorValue((string) $btnData['bg'])};\n";
         }
         if (isset($btnData['text'])) {
-            $css .= "  color: {$btnData['text']};\n";
+            $css .= "  color: {$this->resolveColorValue((string) $btnData['text'])};\n";
         }
         if (isset($btnData['radius'])) {
             $css .= "  border-radius: {$this->resolveRadius((string) $btnData['radius'])};\n";
         }
         if (isset($btnData['border']) && 'none' !== $btnData['border']) {
-            $css .= "  border: 1px solid {$btnData['border']};\n";
+            $css .= "  border: 1px solid {$this->resolveColorValue((string) $btnData['border'])};\n";
         } else {
             $css .= "  border: none;\n";
         }
@@ -1380,10 +1459,10 @@ class ThemeCompiler
 
         $css .= ".block-variant-{$variantName} .iw-form-file::file-selector-button:hover {\n";
         if (isset($btnData['hoverBg'])) {
-            $css .= "  background-color: {$btnData['hoverBg']};\n";
+            $css .= "  background-color: {$this->resolveColorValue((string) $btnData['hoverBg'])};\n";
         }
         if (isset($btnData['hoverText'])) {
-            $css .= "  color: {$btnData['hoverText']};\n";
+            $css .= "  color: {$this->resolveColorValue((string) $btnData['hoverText'])};\n";
         }
         $css .= "}\n";
 
