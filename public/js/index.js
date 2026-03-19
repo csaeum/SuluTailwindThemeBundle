@@ -3,6 +3,7 @@ import {fieldRegistry} from 'sulu-admin-bundle/containers';
 import {formToolbarActionRegistry} from 'sulu-admin-bundle/views/Form';
 import {viewRegistry} from 'sulu-admin-bundle/containers';
 import initializer from 'sulu-admin-bundle/services/initializer';
+import themeConfigStore from './stores/themeConfigStore';
 import WebspaceThemeForm from './components/WebspaceThemeForm/WebspaceThemeForm';
 import VariantPicker from './components/VariantPicker/VariantPicker';
 import StylePicker from './components/StylePicker/StylePicker';
@@ -17,18 +18,15 @@ import SaveWithConfigReloadAction from './components/SaveWithConfigReloadAction/
 /**
  * Register all custom field types for the SuluTailwindThemeBundle admin interface.
  *
- * Receives config data from ThemeAdmin::getConfig() containing:
- * - variants: block variant definitions from the active theme
- * - blockStyles: available layout styles per block type
+ * Theme-specific data (variants, buttons, palette) is stored in a shared
+ * MobX observable store (themeConfigStore) and loaded per-webspace via API.
+ * Components decorated with @observer re-render automatically on webspace switch.
  */
 initializer.addUpdateConfigHook('iw_sulu_tailwind_theme', (config: Object, initialized: boolean) => {
     if (config) {
-        // Pass active theme data to components via static properties.
-        // This data is refreshed on each admin config reload.
-        VariantPicker.themeVariants = config.variants || [];
+        // Apply initial theme data to the observable store
+        themeConfigStore.update(config);
         StylePicker.blockStyles = config.blockStyles || {};
-        ButtonStylePicker.themeButtons = config.buttons || {};
-        ColorTokenEditor.themePalette = config.palette || {};
         collapsibleSections.init(config.collapsibleSections || {});
         FontPicker.hasApiKey = config.hasApiKey || false;
     }
@@ -40,38 +38,11 @@ initializer.addUpdateConfigHook('iw_sulu_tailwind_theme', (config: Object, initi
     viewRegistry.add('iw_sulu_tailwind_theme.webspace_theme_form', WebspaceThemeForm);
     formToolbarActionRegistry.add('iw_sulu_tailwind_theme.save', SaveWithConfigReloadAction);
 
-    fieldRegistry.add(
-        'iw_theme_variant_picker',
-        VariantPicker
-    );
-
-    fieldRegistry.add(
-        'iw_theme_style_picker',
-        StylePicker
-    );
-
-    fieldRegistry.add(
-        'iw_theme_margin_selector',
-        MarginSelector
-    );
-
-    fieldRegistry.add(
-        'iw_theme_color_token_editor',
-        ColorTokenEditor
-    );
-
-    fieldRegistry.add(
-        'iw_theme_font_picker',
-        FontPicker
-    );
-
-    fieldRegistry.add(
-        'iw_theme_radius_selector',
-        RadiusSelector
-    );
-
-    fieldRegistry.add(
-        'iw_theme_button_style_picker',
-        ButtonStylePicker
-    );
+    fieldRegistry.add('iw_theme_variant_picker', VariantPicker);
+    fieldRegistry.add('iw_theme_style_picker', StylePicker);
+    fieldRegistry.add('iw_theme_margin_selector', MarginSelector);
+    fieldRegistry.add('iw_theme_color_token_editor', ColorTokenEditor);
+    fieldRegistry.add('iw_theme_font_picker', FontPicker);
+    fieldRegistry.add('iw_theme_radius_selector', RadiusSelector);
+    fieldRegistry.add('iw_theme_button_style_picker', ButtonStylePicker);
 });

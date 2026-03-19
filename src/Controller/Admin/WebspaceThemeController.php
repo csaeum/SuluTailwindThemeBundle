@@ -9,6 +9,7 @@ use ItechWorld\SuluTailwindThemeBundle\Admin\WebspaceThemeAdmin;
 use ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository;
 use ItechWorld\SuluTailwindThemeBundle\Repository\WebspaceThemeRepository;
 use ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler;
+use ItechWorld\SuluTailwindThemeBundle\Service\ThemeConfigResolver;
 use Sulu\Component\Security\Authorization\PermissionTypes;
 use Sulu\Component\Security\Authorization\SecurityCheckerInterface;
 use Sulu\Component\Security\SecuredControllerInterface;
@@ -38,6 +39,7 @@ class WebspaceThemeController extends AbstractController implements SecuredContr
         private readonly EntityManagerInterface $entityManager,
         private readonly ThemeCompiler $compiler,
         private readonly SecurityCheckerInterface $securityChecker,
+        private readonly ThemeConfigResolver $themeConfigResolver,
     ) {
     }
 
@@ -159,6 +161,34 @@ class WebspaceThemeController extends AbstractController implements SecuredContr
         $this->webspaceThemeRepository->removeByWebspaceKey($webspaceKey);
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * Get the resolved theme config (variants, buttons, palette) for a specific webspace.
+     *
+     * Called by the admin JS when the user switches webspace in the page editor,
+     * so that VariantPicker and ButtonStylePicker show the correct theme data.
+     *
+     * @param Request $request The HTTP request (expects ?webspace=xxx)
+     *
+     * @return JsonResponse The resolved theme config data
+     */
+    #[Route(
+        '/admin/api/iw-webspace-theme-config',
+        name: 'iw_sulu_tailwind_theme.get_webspace_theme_config',
+        methods: ['GET'],
+    )]
+    public function getThemeConfigAction(Request $request): JsonResponse
+    {
+        $webspaceKey = $request->query->getString('webspace');
+
+        if ('' === $webspaceKey) {
+            return new JsonResponse($this->themeConfigResolver->resolve(null));
+        }
+
+        $theme = $this->webspaceThemeRepository->findThemeForWebspace($webspaceKey);
+
+        return new JsonResponse($this->themeConfigResolver->resolve($theme));
     }
 
     /**

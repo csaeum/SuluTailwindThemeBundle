@@ -10,10 +10,10 @@ services:
             - '@sulu_admin.view_builder_factory'
             - '@sulu_security.security_checker'
             - '@itech_world.sulu_tailwind_theme.repository'
-            - '@itech_world.sulu_tailwind_theme.palette_generator'
             - '@itech_world.sulu_tailwind_theme.google_fonts_catalog'
             - '@itech_world.sulu_tailwind_theme.webspace_theme_repository'
             - '@sulu_core.webspace.webspace_manager'
+            - '@itech_world.sulu_tailwind_theme.config_resolver'
         tags:
             - { name: 'sulu.admin' }
             - { name: 'sulu.context', context: 'admin' }
@@ -66,6 +66,11 @@ services:
             - '@itech_world.sulu_tailwind_theme.compiler'
             - '@itech_world.sulu_tailwind_theme.webspace_theme_repository'
             - '@?sulu_core.webspace.request_analyzer'
+
+    itech_world.sulu_tailwind_theme.config_resolver:
+        class: ItechWorld\SuluTailwindThemeBundle\Service\ThemeConfigResolver
+        arguments:
+            - '@itech_world.sulu_tailwind_theme.palette_generator'
 
     itech_world.sulu_tailwind_theme.google_fonts_resolver:
         class: ItechWorld\SuluTailwindThemeBundle\Service\GoogleFontsResolver
@@ -142,6 +147,7 @@ services:
     ItechWorld\SuluTailwindThemeBundle\Service\OklchPaletteGenerator: '@itech_world.sulu_tailwind_theme.palette_generator'
     ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler: '@itech_world.sulu_tailwind_theme.compiler'
     ItechWorld\SuluTailwindThemeBundle\Service\ThemeProvider: '@itech_world.sulu_tailwind_theme.provider'
+    ItechWorld\SuluTailwindThemeBundle\Service\ThemeConfigResolver: '@itech_world.sulu_tailwind_theme.config_resolver'
     ItechWorld\SuluTailwindThemeBundle\Service\GoogleFontsResolver: '@itech_world.sulu_tailwind_theme.google_fonts_resolver'
     ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository: '@itech_world.sulu_tailwind_theme.repository'
     ItechWorld\SuluTailwindThemeBundle\Repository\WebspaceThemeRepository: '@itech_world.sulu_tailwind_theme.webspace_theme_repository'

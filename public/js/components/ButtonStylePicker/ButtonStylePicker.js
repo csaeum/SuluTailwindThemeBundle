@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
+import {observer} from 'mobx-react';
 import {Requester} from 'sulu-admin-bundle/services';
+import themeConfigStore from '../../stores/themeConfigStore';
 import {getSuluPrimaryColor, getSuluPrimaryTint} from '../../utils/suluColors';
 import {resolveAllRefs} from '../../utils/colorRefResolver';
 
@@ -31,6 +33,7 @@ const BUTTON_OPTIONS = [
  * @param {Function} props.onChange - Callback when a value is selected
  * @param {boolean} props.disabled - Whether the field is disabled
  */
+@observer
 export default class ButtonStylePicker extends React.Component {
     /** @type {Object} Button variant data from the active theme */
     static themeButtons = {};
@@ -111,8 +114,8 @@ export default class ButtonStylePicker extends React.Component {
             }
         }
 
-        // Static themeButtons are already resolved by ThemeAdmin::getConfig()
-        return ButtonStylePicker.themeButtons;
+        // Read from observable store (resolved by ThemeConfigResolver)
+        return themeConfigStore.buttons;
     }
 
     render() {

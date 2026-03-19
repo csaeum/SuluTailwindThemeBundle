@@ -8,7 +8,7 @@ use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
 use ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository;
 use ItechWorld\SuluTailwindThemeBundle\Repository\WebspaceThemeRepository;
 use ItechWorld\SuluTailwindThemeBundle\Service\GoogleFontsCatalog;
-use ItechWorld\SuluTailwindThemeBundle\Service\OklchPaletteGenerator;
+use ItechWorld\SuluTailwindThemeBundle\Service\ThemeConfigResolver;
 use Sulu\Bundle\AdminBundle\Admin\Admin;
 use Sulu\Bundle\AdminBundle\Admin\Navigation\NavigationItem;
 use Sulu\Bundle\AdminBundle\Admin\Navigation\NavigationItemCollection;
@@ -128,19 +128,19 @@ class ThemeAdmin extends Admin
      * @param ViewBuilderFactoryInterface $viewBuilderFactory        The Sulu view builder factory
      * @param SecurityCheckerInterface    $securityChecker           The Sulu security checker
      * @param ThemeConfigRepository       $repository                The theme config repository
-     * @param OklchPaletteGenerator       $paletteGenerator          The OKLCH palette generator
      * @param GoogleFontsCatalog          $googleFontsCatalog        The Google Fonts catalog service
      * @param WebspaceThemeRepository     $webspaceThemeRepository   The webspace theme repository
      * @param WebspaceManagerInterface    $webspaceManager           The webspace manager
+     * @param ThemeConfigResolver         $themeConfigResolver       The theme config resolver
      */
     public function __construct(
         private ViewBuilderFactoryInterface $viewBuilderFactory,
         private SecurityCheckerInterface $securityChecker,
         private ThemeConfigRepository $repository,
-        private OklchPaletteGenerator $paletteGenerator,
         private GoogleFontsCatalog $googleFontsCatalog,
         private WebspaceThemeRepository $webspaceThemeRepository,
         private WebspaceManagerInterface $webspaceManager,
+        private ThemeConfigResolver $themeConfigResolver,
     ) {
     }
 
@@ -350,15 +350,7 @@ class ThemeAdmin extends Admin
      */
     public function getConfig(): ?array
     {
-        $variants = [];
-
-        // Find a theme to use as default config for admin JS.
-        // Pick the first webspace's assigned theme as the default.
-        // This ensures VariantPicker and ButtonStylePicker work in
-        // page/snippet block editors (not just theme forms).
-        // In multi-webspace setups with different themes, the admin picker
-        // shows one theme's variants — acceptable since the actual frontend
-        // rendering uses the correct webspace's theme.
+        // Pick the first webspace-assigned theme as default for initial load
         $activeTheme = null;
         foreach ($this->webspaceManager->getWebspaceCollection() as $webspace) {
             $activeTheme = $this->webspaceThemeRepository->findThemeForWebspace($webspace->getKey());
@@ -367,61 +359,13 @@ class ThemeAdmin extends Admin
             }
         }
 
-        if (null !== $activeTheme) {
-            $tokens = $activeTheme->getTokens();
-            $blockVariants = $tokens['blockVariants'] ?? [];
+        $themeData = $this->themeConfigResolver->resolve($activeTheme);
 
-            foreach ($blockVariants as $index => $props) {
-                if (!is_array($props)) {
-                    continue;
-                }
-
-                $variants[] = array_merge(['index' => $index], $props);
-            }
-        }
-
-        $buttons = [];
-        $palette = [];
-        if (null !== $activeTheme) {
-            $tokens = $activeTheme->getTokens();
-            $buttons = $tokens['buttons'] ?? [];
-
-            // Generate OKLCH palettes for the 4 main colors
-            $paletteColors = ['primary', 'secondary', 'accent', 'background'];
-            $colors = $tokens['colors'] ?? [];
-            foreach ($paletteColors as $colorName) {
-                $hex = $colors[$colorName] ?? null;
-                if (is_string($hex) && $hex !== '') {
-                    $palette[$colorName] = $this->paletteGenerator->generatePalette($hex);
-                }
-            }
-        }
-
-        // Resolve any ref: values in buttons before sending to the frontend,
-        // so that ButtonStylePicker.themeButtons (static) always contains usable hex
-        foreach ($buttons as $variant => &$btnProps) {
-            if (!is_array($btnProps)) {
-                continue;
-            }
-            foreach ($btnProps as $prop => &$val) {
-                if (is_string($val) && str_starts_with($val, 'ref:')) {
-                    $parts = explode('-', substr($val, 4), 2);
-                    if (count($parts) === 2 && isset($palette[$parts[0]][(int) $parts[1]])) {
-                        $val = $palette[$parts[0]][(int) $parts[1]];
-                    }
-                }
-            }
-            unset($val);
-        }
-        unset($btnProps);
-
-        return [
-            'variants' => $variants,
-            'buttons' => $buttons,
+        return array_merge($themeData, [
             'blockStyles' => self::BLOCK_STYLE_OPTIONS,
             'collapsibleSections' => self::COLLAPSIBLE_SECTIONS,
-            'palette' => $palette,
             'hasApiKey' => $this->googleFontsCatalog->hasApiKey(),
-        ];
+        ]);
     }
+
 }

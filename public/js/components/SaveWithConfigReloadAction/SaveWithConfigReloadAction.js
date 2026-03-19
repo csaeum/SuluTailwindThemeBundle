@@ -4,6 +4,7 @@ import {translate} from 'sulu-admin-bundle/utils';
 import {Requester} from 'sulu-admin-bundle/services';
 import Config from 'sulu-admin-bundle/services/Config';
 import initializer from 'sulu-admin-bundle/services/initializer';
+import themeConfigStore from '../../stores/themeConfigStore';
 import AbstractFormToolbarAction from 'sulu-admin-bundle/views/Form/toolbarActions/AbstractFormToolbarAction';
 
 /**
@@ -35,7 +36,9 @@ export default class SaveWithConfigReloadAction extends AbstractFormToolbarActio
                     () => this.resourceFormStore.saving,
                     (isSaving: boolean) => {
                         if (!isSaving) {
-                            // Save completed — reload only the bundle config
+                            // Save completed — reload the bundle config and
+                            // invalidate the webspace cache so components re-fetch
+                            themeConfigStore.invalidate();
                             Requester.get(Config.endpoints.config).then((config) => {
                                 const bundleConfig = config['iw_sulu_tailwind_theme'];
                                 if (bundleConfig && initializer.updateConfigHooks['iw_sulu_tailwind_theme']) {
