@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<form xmlns="http://schemas.sulu.io/template/template"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/form-1.0.xsd"
+>
+    <key>iw_webspace_theme</key>
+
+    <properties>
+        <property name="theme" type="single_selection">
+            <meta>
+                <title>iw_sulu_tailwind_theme.theme</title>
+                <info_text>iw_sulu_tailwind_theme.webspace_theme_info</info_text>
+            </meta>
+            <params>
+                <param name="resourceKey" value="iw_theme_configs"/>
+                <param name="displayProperty" value="label"/>
+                <param name="idProperty" value="id"/>
+            </params>
+        </property>
+    </properties>
+</form>

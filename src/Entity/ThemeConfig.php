@@ -65,12 +65,6 @@ class ThemeConfig
     #[ORM\Column(type: Types::JSON)]
     private array $blockStyles = [];
 
-    /**
-     * Whether this theme is currently active.
-     */
-    #[ORM\Column(type: Types::BOOLEAN)]
-    private bool $isActive = false;
-
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private \DateTimeImmutable $createdAt;
 
@@ -211,26 +205,6 @@ class ThemeConfig
     public function setBlockStyles(array $blockStyles): static
     {
         $this->blockStyles = $blockStyles;
-
-        return $this;
-    }
-
-    /**
-     * Check if this theme is currently active.
-     */
-    public function isActive(): bool
-    {
-        return $this->isActive;
-    }
-
-    /**
-     * Set the active state of this theme.
-     *
-     * @return $this
-     */
-    public function setIsActive(bool $isActive): static
-    {
-        $this->isActive = $isActive;
 
         return $this;
     }

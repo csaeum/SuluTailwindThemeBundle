@@ -6,6 +6,7 @@ namespace ItechWorld\SuluTailwindThemeBundle\Admin;
 
 use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
 use ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository;
+use ItechWorld\SuluTailwindThemeBundle\Repository\WebspaceThemeRepository;
 use ItechWorld\SuluTailwindThemeBundle\Service\GoogleFontsCatalog;
 use ItechWorld\SuluTailwindThemeBundle\Service\OklchPaletteGenerator;
 use Sulu\Bundle\AdminBundle\Admin\Admin;
@@ -16,6 +17,7 @@ use Sulu\Bundle\AdminBundle\Admin\View\ViewBuilderFactoryInterface;
 use Sulu\Bundle\AdminBundle\Admin\View\ViewCollection;
 use Sulu\Component\Security\Authorization\PermissionTypes;
 use Sulu\Component\Security\Authorization\SecurityCheckerInterface;
+use Sulu\Component\Webspace\Manager\WebspaceManagerInterface;
 
 /**
  * Registers the Sulu admin views, navigation items, and security contexts
@@ -123,11 +125,13 @@ class ThemeAdmin extends Admin
     ];
 
     /**
-     * @param ViewBuilderFactoryInterface $viewBuilderFactory   The Sulu view builder factory
-     * @param SecurityCheckerInterface    $securityChecker      The Sulu security checker
-     * @param ThemeConfigRepository       $repository           The theme config repository
-     * @param OklchPaletteGenerator       $paletteGenerator     The OKLCH palette generator
-     * @param GoogleFontsCatalog          $googleFontsCatalog   The Google Fonts catalog service
+     * @param ViewBuilderFactoryInterface $viewBuilderFactory        The Sulu view builder factory
+     * @param SecurityCheckerInterface    $securityChecker           The Sulu security checker
+     * @param ThemeConfigRepository       $repository                The theme config repository
+     * @param OklchPaletteGenerator       $paletteGenerator          The OKLCH palette generator
+     * @param GoogleFontsCatalog          $googleFontsCatalog        The Google Fonts catalog service
+     * @param WebspaceThemeRepository     $webspaceThemeRepository   The webspace theme repository
+     * @param WebspaceManagerInterface    $webspaceManager           The webspace manager
      */
     public function __construct(
         private ViewBuilderFactoryInterface $viewBuilderFactory,
@@ -135,6 +139,8 @@ class ThemeAdmin extends Admin
         private ThemeConfigRepository $repository,
         private OklchPaletteGenerator $paletteGenerator,
         private GoogleFontsCatalog $googleFontsCatalog,
+        private WebspaceThemeRepository $webspaceThemeRepository,
+        private WebspaceManagerInterface $webspaceManager,
     ) {
     }
 
@@ -180,7 +186,6 @@ class ThemeAdmin extends Admin
 
         if ($this->securityChecker->hasPermission(static::SECURITY_CONTEXT, PermissionTypes::EDIT)) {
             $formToolbarActions[] = new ToolbarAction('iw_sulu_tailwind_theme.save');
-            $listToolbarActions[] = new ToolbarAction('iw_sulu_tailwind_theme.activate');
         }
 
         if ($this->securityChecker->hasPermission(static::SECURITY_CONTEXT, PermissionTypes::DELETE)) {
@@ -346,7 +351,21 @@ class ThemeAdmin extends Admin
     public function getConfig(): ?array
     {
         $variants = [];
-        $activeTheme = $this->repository->findActive();
+
+        // Find a theme to use as default config for admin JS.
+        // Pick the first webspace's assigned theme as the default.
+        // This ensures VariantPicker and ButtonStylePicker work in
+        // page/snippet block editors (not just theme forms).
+        // In multi-webspace setups with different themes, the admin picker
+        // shows one theme's variants — acceptable since the actual frontend
+        // rendering uses the correct webspace's theme.
+        $activeTheme = null;
+        foreach ($this->webspaceManager->getWebspaceCollection() as $webspace) {
+            $activeTheme = $this->webspaceThemeRepository->findThemeForWebspace($webspace->getKey());
+            if (null !== $activeTheme) {
+                break;
+            }
+        }
 
         if (null !== $activeTheme) {
             $tokens = $activeTheme->getTokens();

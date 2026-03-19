@@ -34,16 +34,6 @@
         </property>
 
         <property
-            name="isActive"
-            visibility="yes"
-            translation="iw_sulu_tailwind_theme.active"
-        >
-            <field-name>isActive</field-name>
-            <entity-name>ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig</entity-name>
-            <transformer type="bool"/>
-        </property>
-
-        <property
             name="updatedAt"
             visibility="yes"
             translation="sulu_admin.changed"

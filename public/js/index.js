@@ -1,8 +1,9 @@
 // @flow
 import {fieldRegistry} from 'sulu-admin-bundle/containers';
-import {listToolbarActionRegistry} from 'sulu-admin-bundle/views/List';
 import {formToolbarActionRegistry} from 'sulu-admin-bundle/views/Form';
+import {viewRegistry} from 'sulu-admin-bundle/containers';
 import initializer from 'sulu-admin-bundle/services/initializer';
+import WebspaceThemeForm from './components/WebspaceThemeForm/WebspaceThemeForm';
 import VariantPicker from './components/VariantPicker/VariantPicker';
 import StylePicker from './components/StylePicker/StylePicker';
 import MarginSelector from './components/MarginSelector/MarginSelector';
@@ -11,7 +12,6 @@ import FontPicker from './components/FontPicker/FontPicker';
 import RadiusSelector from './components/RadiusSelector/RadiusSelector';
 import ButtonStylePicker from './components/ButtonStylePicker/ButtonStylePicker';
 import collapsibleSections from './components/CollapsibleSections/CollapsibleSections';
-import ActivateToolbarAction from './components/ActivateToolbarAction/ActivateToolbarAction';
 import SaveWithConfigReloadAction from './components/SaveWithConfigReloadAction/SaveWithConfigReloadAction';
 
 /**
@@ -37,7 +37,7 @@ initializer.addUpdateConfigHook('iw_sulu_tailwind_theme', (config: Object, initi
         return;
     }
 
-    listToolbarActionRegistry.add('iw_sulu_tailwind_theme.activate', ActivateToolbarAction);
+    viewRegistry.add('iw_sulu_tailwind_theme.webspace_theme_form', WebspaceThemeForm);
     formToolbarActionRegistry.add('iw_sulu_tailwind_theme.save', SaveWithConfigReloadAction);
 
     fieldRegistry.add(

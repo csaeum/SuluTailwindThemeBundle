@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use ItechWorld\SuluTailwindThemeBundle\DataFixtures\ThemeFixtures;
 use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
 use ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository;
+use ItechWorld\SuluTailwindThemeBundle\Repository\WebspaceThemeRepository;
 use ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -21,7 +22,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * Console command to install a preset theme.
  *
  * Loads preset data from ThemeFixtures, creates the entity,
- * activates it, and compiles the CSS.
+ * compiles the CSS, and optionally assigns it to a webspace.
  */
 #[AsCommand(
     name: 'iw-sulu:theme:install',
@@ -33,6 +34,7 @@ class ThemeInstallCommand extends Command
         private readonly ThemeConfigRepository $repository,
         private readonly ThemeCompiler $compiler,
         private readonly EntityManagerInterface $entityManager,
+        private readonly WebspaceThemeRepository $webspaceThemeRepository,
     ) {
         parent::__construct();
     }
@@ -53,6 +55,12 @@ class ThemeInstallCommand extends Command
             InputOption::VALUE_NONE,
             'Install all available preset themes',
         );
+        $this->addOption(
+            'webspace',
+            'w',
+            InputOption::VALUE_OPTIONAL,
+            'Assign the installed theme to this webspace',
+        );
     }
 
     /**
@@ -69,6 +77,7 @@ class ThemeInstallCommand extends Command
         $presets = ThemeFixtures::getPresets();
         $installAll = $input->getOption('all');
         $name = $input->getArgument('name');
+        $webspaceKey = $input->getOption('webspace');
 
         if (!$installAll && null === $name) {
             $io->error(sprintf(
@@ -120,11 +129,13 @@ class ThemeInstallCommand extends Command
             $lastTheme = $theme;
         }
 
-        // Activate only the last installed theme
-        $this->repository->deactivateAll();
-        $lastTheme->setIsActive(true);
-
         $this->entityManager->flush();
+
+        // Assign to webspace if --webspace option is provided
+        if (null !== $webspaceKey && null !== $lastTheme) {
+            $this->webspaceThemeRepository->setThemeForWebspace($webspaceKey, $lastTheme);
+            $this->entityManager->flush();
+        }
 
         // Compile CSS for all installed themes
         foreach ($themesToInstall as $themeName) {
@@ -136,15 +147,18 @@ class ThemeInstallCommand extends Command
 
         if ($installAll) {
             $io->success(sprintf(
-                '%d themes installed! "%s" is active.',
+                '%d themes installed!',
                 count($themesToInstall),
-                $lastTheme->getLabel(),
             ));
         } else {
+            $assignmentMsg = null !== $webspaceKey
+                ? sprintf(' and assigned to webspace "%s"', $webspaceKey)
+                : '';
             $io->success(sprintf(
-                'Theme "%s" (%s) installed and activated successfully!',
+                'Theme "%s" (%s) installed successfully%s!',
                 $lastTheme->getLabel(),
                 $lastTheme->getName(),
+                $assignmentMsg,
             ));
         }
 
@@ -154,7 +168,7 @@ class ThemeInstallCommand extends Command
                 ['ID', (string) $lastTheme->getId()],
                 ['Name', $lastTheme->getName()],
                 ['Label', $lastTheme->getLabel()],
-                ['Active', 'Yes'],
+                ['Webspace', $webspaceKey ?? 'None (use webspace settings to assign)'],
                 ['Colors', implode(', ', array_keys($lastTheme->getTokens()['colors'] ?? []))],
                 ['Font Families', (string) count($lastTheme->getTokens()['typography']['families'] ?? [])],
                 ['Block Variants', (string) count($lastTheme->getTokens()['blockVariants'] ?? [])],

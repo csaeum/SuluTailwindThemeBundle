@@ -16,7 +16,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Console command to compile a theme's CSS from its design tokens.
  *
- * Can compile a specific theme by name or the currently active theme.
+ * Can compile a specific theme by name or all themes in the catalog.
  */
 #[AsCommand(
     name: 'iw-sulu:theme:compile',
@@ -40,7 +40,7 @@ class ThemeCompileCommand extends Command
             'theme',
             't',
             InputOption::VALUE_OPTIONAL,
-            'The theme name to compile (defaults to the active theme)',
+            'The theme name to compile (compiles all themes if omitted)',
         );
     }
 
@@ -65,23 +65,30 @@ class ThemeCompileCommand extends Command
 
                 return Command::FAILURE;
             }
+
+            $io->info(sprintf('Compiling theme "%s" (%s)...', $theme->getLabel(), $theme->getName()));
+
+            $cssPath = $this->compiler->compile($theme);
+
+            $io->success('Theme compiled successfully!');
+            $io->writeln(sprintf('  CSS file: <info>%s</info>', $cssPath));
+            $io->writeln(sprintf('  Web path: <info>%s</info>', $this->compiler->getCssPath($theme)));
         } else {
-            $theme = $this->repository->findActive();
+            $themes = $this->repository->findAll();
 
-            if (null === $theme) {
-                $io->error('No active theme found. Specify a theme name with --theme.');
+            if (empty($themes)) {
+                $io->warning('No themes found in the database.');
 
-                return Command::FAILURE;
+                return Command::SUCCESS;
             }
+
+            foreach ($themes as $theme) {
+                $io->info(sprintf('Compiling theme "%s" (%s)...', $theme->getLabel(), $theme->getName()));
+                $this->compiler->compile($theme);
+            }
+
+            $io->success(sprintf('%d theme(s) compiled successfully!', count($themes)));
         }
-
-        $io->info(sprintf('Compiling theme "%s" (%s)...', $theme->getLabel(), $theme->getName()));
-
-        $cssPath = $this->compiler->compile($theme);
-
-        $io->success(sprintf('Theme compiled successfully!'));
-        $io->writeln(sprintf('  CSS file: <info>%s</info>', $cssPath));
-        $io->writeln(sprintf('  Web path: <info>%s</info>', $this->compiler->getCssPath($theme)));
 
         return Command::SUCCESS;
     }

@@ -75,6 +75,11 @@ class ItechWorldSuluTailwindThemeBundle extends AbstractBundle
                             'detail' => 'iw_sulu_tailwind_theme.get_theme_config',
                         ],
                     ],
+                    'iw_webspace_themes' => [
+                        'routes' => [
+                            'detail' => 'iw_sulu_tailwind_theme.get_webspace_theme',
+                        ],
+                    ],
                 ],
             ]);
 
