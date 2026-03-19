@@ -34,13 +34,14 @@
         </property>
 
         <property
-            name="isActive"
+            name="webspaces"
             visibility="yes"
-            translation="iw_sulu_tailwind_theme.active"
+            translation="iw_sulu_tailwind_theme.webspaces"
+            sortable="false"
+            searchability="never"
         >
-            <field-name>isActive</field-name>
+            <field-name>webspaces</field-name>
             <entity-name>ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig</entity-name>
-            <transformer type="bool"/>
         </property>
 
         <property

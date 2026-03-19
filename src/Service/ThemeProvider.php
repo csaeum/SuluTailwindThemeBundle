@@ -6,41 +6,75 @@ namespace ItechWorld\SuluTailwindThemeBundle\Service;
 
 use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
 use ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository;
+use ItechWorld\SuluTailwindThemeBundle\Repository\WebspaceThemeRepository;
+use Sulu\Component\Webspace\Analyzer\RequestAnalyzerInterface;
 
 /**
- * Provides access to the currently active theme configuration.
+ * Provides access to the theme configuration for the current webspace.
  *
- * Uses an in-memory cache to avoid repeated database queries within
- * a single request. Delegates CSS compilation to the ThemeCompiler service.
+ * Resolves the active theme per webspace via WebspaceThemeRepository and
+ * RequestAnalyzerInterface. Uses an in-memory cache keyed by webspace
+ * to avoid repeated database queries within a single request.
+ *
+ * In CLI context, RequestAnalyzer returns null — callers must pass
+ * an explicit webspaceKey to getThemeForWebspace().
  */
 class ThemeProvider
 {
     /**
-     * In-memory cache for the active theme (false = not loaded yet).
+     * In-memory cache keyed by webspace key.
+     *
+     * @var array<string, ThemeConfig|null>
      */
-    private ThemeConfig|null|false $activeThemeCache = false;
+    private array $themeCache = [];
 
     public function __construct(
         private readonly ThemeConfigRepository $repository,
         private readonly ThemeCompiler $compiler,
+        private readonly WebspaceThemeRepository $webspaceThemeRepository,
+        private readonly ?RequestAnalyzerInterface $requestAnalyzer = null,
     ) {
     }
 
     /**
-     * Get the currently active theme configuration.
+     * Get the theme for a specific webspace, or auto-detect from the current request.
      *
-     * Uses an in-memory cache to avoid repeated database queries
-     * within the same request lifecycle.
+     * When $webspaceKey is null, resolves the webspace from RequestAnalyzerInterface.
+     * In CLI context (no RequestAnalyzer or no webspace), returns null.
      *
-     * @return ThemeConfig|null The active theme, or null if none is active
+     * @param string|null $webspaceKey The webspace key, or null to auto-detect
+     *
+     * @return ThemeConfig|null The theme for the webspace, or null if none assigned
+     */
+    public function getThemeForWebspace(?string $webspaceKey = null): ?ThemeConfig
+    {
+        if (null === $webspaceKey && null !== $this->requestAnalyzer) {
+            $webspace = $this->requestAnalyzer->getWebspace();
+            $webspaceKey = $webspace?->getKey();
+        }
+
+        if (null === $webspaceKey) {
+            return null;
+        }
+
+        if (!array_key_exists($webspaceKey, $this->themeCache)) {
+            $this->themeCache[$webspaceKey] = $this->webspaceThemeRepository->findThemeForWebspace($webspaceKey);
+        }
+
+        return $this->themeCache[$webspaceKey];
+    }
+
+    /**
+     * Get the currently active theme for the current webspace.
+     *
+     * Wrapper around getThemeForWebspace() for backward compatibility.
+     * All existing callers (ThemeExtension, etc.) continue to work unchanged.
+     *
+     * @return ThemeConfig|null The active theme, or null if none is assigned
      */
     public function getActiveTheme(): ?ThemeConfig
     {
-        if (false === $this->activeThemeCache) {
-            $this->activeThemeCache = $this->repository->findActive();
-        }
-
-        return $this->activeThemeCache;
+        return $this->getThemeForWebspace();
     }
 
     /**
@@ -110,10 +144,11 @@ class ThemeProvider
     /**
      * Reset the in-memory cache.
      *
-     * Should be called after theme activation changes within the same request.
+     * Should be called when iterating over webspaces in CLI commands
+     * or after theme assignment changes within the same request.
      */
     public function resetCache(): void
     {
-        $this->activeThemeCache = false;
+        $this->themeCache = [];
     }
 }

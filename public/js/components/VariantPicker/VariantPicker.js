@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+import {observer} from 'mobx-react';
+import themeConfigStore from '../../stores/themeConfigStore';
 import {getSuluPrimaryColor, getSuluPrimaryAlpha} from '../../utils/suluColors';
 
 /**
@@ -14,17 +16,18 @@ const DEFAULT_COLOR = '#cccccc';
  * colored bars representing different text elements (title, subtitle, paragraph,
  * link, hr) over the block background color. Clicking a wireframe selects the variant.
  *
- * Variant data is injected via the static `themeVariants` property, set by the
- * initializer config hook in index.js from ThemeAdmin::getConfig().
+ * Reads variant data from the shared themeConfigStore (MobX observable),
+ * which is updated dynamically when the user switches webspace.
  *
  * @param {Object} props - Component props from Sulu form field
  * @param {*} props.value - Currently selected variant key
  * @param {Function} props.onChange - Callback when a variant is selected
  */
+@observer
 export default class VariantPicker extends React.Component {
     /**
      * Block variants from the active theme, set by the config hook.
-     * Array of objects with index, label, blockBg, title, subtitle, paragraph, link, hr, list.
+     * Kept for backward compatibility — the component now reads from themeConfigStore.
      *
      * @type {Array<Object>}
      */
@@ -32,16 +35,33 @@ export default class VariantPicker extends React.Component {
 
     /**
      * Apply default value (first variant) when field is empty on mount.
-     * Uses setTimeout to ensure the Sulu form is fully initialized before
-     * calling onChange, which avoids race conditions with form state setup.
+     * Also triggers webspace-aware theme config loading.
      */
     componentDidMount() {
+        this._syncWebspaceTheme();
+
         const {value, onChange} = this.props;
         if ((value === null || value === undefined || value === '') && onChange) {
-            const variants = VariantPicker.themeVariants || [];
+            const variants = themeConfigStore.variants;
             if (variants.length > 0) {
                 setTimeout(() => onChange(0), 0);
             }
+        }
+    }
+
+    componentDidUpdate() {
+        this._syncWebspaceTheme();
+    }
+
+    /**
+     * Detect the current webspace from the URL hash and ensure
+     * the theme config store has the correct data loaded.
+     */
+    _syncWebspaceTheme() {
+        const hash = window.location.hash || '';
+        const match = hash.match(/\/webspaces\/([^/]+)/);
+        if (match) {
+            themeConfigStore.ensureWebspace(match[1]);
         }
     }
 
@@ -181,7 +201,7 @@ export default class VariantPicker extends React.Component {
 
     render() {
         const {value} = this.props;
-        const variants = VariantPicker.themeVariants || [];
+        const variants = themeConfigStore.variants;
 
         if (variants.length === 0) {
             return (

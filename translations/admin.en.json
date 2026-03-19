@@ -5,8 +5,8 @@
     "iw_sulu_tailwind_theme.name_info": "Unique theme identifier (e.g. corporate, creative)",
     "iw_sulu_tailwind_theme.label": "Label",
     "iw_sulu_tailwind_theme.label_info": "Display name shown in the admin interface",
-    "iw_sulu_tailwind_theme.active": "Active",
-    "iw_sulu_tailwind_theme.active_info": "Only one theme can be active at a time",
+    "iw_sulu_tailwind_theme.webspaces": "Webspaces",
+    "iw_sulu_tailwind_theme.webspace_theme_info": "Select the theme to use for this webspace",
     "iw_sulu_tailwind_theme.details": "Details",
 
     "iw_sulu_tailwind_theme.colors": "Colors",
@@ -362,8 +362,6 @@
 
     "iw_sulu_tailwind_theme.palette_tab": "Palette",
     "iw_sulu_tailwind_theme.custom_tab": "Custom",
-
-    "iw_sulu_tailwind_theme.activate": "Activate",
 
     "iw_sulu_tailwind_theme.snippet.social_media": "Social Media",
     "iw_sulu_tailwind_theme.snippet.social_media_menu_area": "Social media in the menu",

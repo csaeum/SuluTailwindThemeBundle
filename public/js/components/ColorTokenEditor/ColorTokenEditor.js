@@ -1,8 +1,10 @@
 // @flow
 import React, {Fragment} from 'react';
+import {observer} from 'mobx-react';
 import {ChromePicker} from 'react-color';
 import {translate} from 'sulu-admin-bundle/utils';
 import {Requester} from 'sulu-admin-bundle/services';
+import themeConfigStore from '../../stores/themeConfigStore';
 import Input from 'sulu-admin-bundle/components/Input';
 import Popover from 'sulu-admin-bundle/components/Popover';
 import {isRef, resolveRef} from '../../utils/colorRefResolver';
@@ -171,6 +173,7 @@ function ensurePickerStyles() {
  * @param {boolean} props.disabled - Whether the field is disabled
  * @param {Object} props.schemaOptions - Schema params from XML config
  */
+@observer
 export default class ColorTokenEditor extends React.Component {
     /**
      * Theme palette data populated by index.js from ThemeAdmin::getConfig().
@@ -390,7 +393,7 @@ export default class ColorTokenEditor extends React.Component {
     handleCopy = () => {
         const {internalValue} = this.state;
         if (internalValue && navigator.clipboard) {
-            const palette = this.state.localPalette || ColorTokenEditor.themePalette;
+            const palette = this.state.localPalette || themeConfigStore.palette;
             const resolved = resolveRef(internalValue, palette);
             navigator.clipboard.writeText(resolved);
         }
@@ -407,7 +410,7 @@ export default class ColorTokenEditor extends React.Component {
      * Render palette rows with swatches for each color.
      */
     renderPaletteTab() {
-        const palette = this.state.localPalette || ColorTokenEditor.themePalette;
+        const palette = this.state.localPalette || themeConfigStore.palette;
         const {internalValue} = this.state;
         const normalizedValue = (internalValue || '').toLowerCase();
 
@@ -590,7 +593,7 @@ export default class ColorTokenEditor extends React.Component {
         const {popoverOpen, internalValue, activeTab} = this.state;
 
         const isTransparent = internalValue === 'transparent';
-        const palette = this.state.localPalette || ColorTokenEditor.themePalette;
+        const palette = this.state.localPalette || themeConfigStore.palette;
         const resolvedValue = isRef(internalValue)
             ? resolveRef(internalValue, palette)
             : internalValue;
@@ -603,8 +606,8 @@ export default class ColorTokenEditor extends React.Component {
         };
 
         const hasPalette = this.showPalette
-            && ColorTokenEditor.themePalette
-            && Object.keys(ColorTokenEditor.themePalette).length > 0;
+            && themeConfigStore.palette
+            && Object.keys(themeConfigStore.palette).length > 0;
 
         return (
             <Fragment>

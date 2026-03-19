@@ -6,7 +6,9 @@ namespace ItechWorld\SuluTailwindThemeBundle\Controller\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
 use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
+use ItechWorld\SuluTailwindThemeBundle\Entity\WebspaceTheme;
 use ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository;
+use ItechWorld\SuluTailwindThemeBundle\Repository\WebspaceThemeRepository;
 use ItechWorld\SuluTailwindThemeBundle\Service\GoogleFontsCatalog;
 use ItechWorld\SuluTailwindThemeBundle\Service\OklchPaletteGenerator;
 use ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler;
@@ -111,6 +113,7 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         private readonly RestHelperInterface $restHelper,
         private readonly GoogleFontsCatalog $googleFontsCatalog,
         private readonly OklchPaletteGenerator $paletteGenerator,
+        private readonly WebspaceThemeRepository $webspaceThemeRepository,
     ) {
     }
 
@@ -129,9 +132,30 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         );
 
         $listBuilder = $this->listBuilderFactory->create(ThemeConfig::class);
-        $this->restHelper->initializeListBuilder($listBuilder, $fieldDescriptors);
+
+        // Exclude the virtual "webspaces" column from the ListBuilder SQL query.
+        // It is defined in the XML for the frontend column header, but populated post-query.
+        $dbFieldDescriptors = $fieldDescriptors;
+        unset($dbFieldDescriptors['webspaces']);
+        $this->restHelper->initializeListBuilder($listBuilder, $dbFieldDescriptors);
 
         $results = array_map([$this, 'normalizeDateFields'], $listBuilder->execute());
+
+        // Enrich each row with assigned webspace keys
+        $results = array_map(function (array $row): array {
+            $themeId = $row['id'] ?? null;
+            if (null !== $themeId) {
+                $webspaceThemes = $this->webspaceThemeRepository->findByThemeId((int) $themeId);
+                $row['webspaces'] = implode(', ', array_map(
+                    fn(WebspaceTheme $wt) => $wt->getWebspaceKey(),
+                    $webspaceThemes,
+                ));
+            } else {
+                $row['webspaces'] = '';
+            }
+
+            return $row;
+        }, $results);
 
         $listRepresentation = new PaginatedRepresentation(
             $results,
@@ -183,15 +207,11 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         $theme = new ThemeConfig();
         $this->mapDataToEntity($data, $theme);
 
-        // Deactivate all others if this theme will be active
-        if ($theme->isActive()) {
-            $this->repository->deactivateAll();
-        }
-
         $this->entityManager->persist($theme);
         $this->entityManager->flush();
 
-        if ($theme->isActive()) {
+        // Only compile if the theme is assigned to at least one webspace
+        if (count($this->webspaceThemeRepository->findByTheme($theme)) > 0) {
             $this->compiler->compile($theme);
         }
 
@@ -222,22 +242,10 @@ class ThemeConfigController extends AbstractController implements SecuredControl
 
         $this->mapDataToEntity($data, $theme);
 
-        // Handle activation: check AFTER mapDataToEntity so we detect
-        // when a theme is being activated (not just already active).
-        // deactivateAll() uses DQL which bypasses the UnitOfWork, so Doctrine
-        // still thinks the entity has isActive=true (original loaded value).
-        // We must refresh() the entity so Doctrine sees the DB state (is_active=0),
-        // then re-apply our changes so the UPDATE includes is_active=1.
-        if ($theme->isActive()) {
-            $this->repository->deactivateAll();
-            $this->entityManager->refresh($theme);
-            $this->mapDataToEntity($data, $theme);
-            $theme->setIsActive(true);
-        }
-
         $this->entityManager->flush();
 
-        if ($theme->isActive()) {
+        // Only compile if the theme is assigned to at least one webspace
+        if (count($this->webspaceThemeRepository->findByTheme($theme)) > 0) {
             $this->compiler->compile($theme);
         } else {
             $this->compiler->invalidate($theme);
@@ -269,36 +277,6 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         $this->entityManager->flush();
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
-    }
-
-    /**
-     * Activate a specific theme, deactivating all others.
-     *
-     * @param int $id The theme configuration ID
-     *
-     * @return Response JSON response with activated theme data
-     *
-     * @throws NotFoundHttpException If the theme is not found
-     */
-    #[Route('/admin/api/iw-theme-configs/{id}/activate', name: 'iw_sulu_tailwind_theme.activate_theme_config', methods: ['POST'], requirements: ['id' => '\d+'])]
-    public function activateAction(int $id): Response
-    {
-        $theme = $this->repository->find($id);
-
-        if (null === $theme) {
-            throw new NotFoundHttpException(sprintf('Theme config with ID "%d" not found.', $id));
-        }
-
-        // Deactivate all themes, then activate this one
-        $this->repository->deactivateAll();
-        $this->entityManager->refresh($theme);
-        $theme->setIsActive(true);
-        $this->entityManager->flush();
-
-        // Compile CSS for the newly activated theme
-        $this->compiler->compile($theme);
-
-        return new JsonResponse($this->serializeTheme($theme));
     }
 
     /**
@@ -466,7 +444,6 @@ class ThemeConfigController extends AbstractController implements SecuredControl
             'id' => $theme->getId(),
             'name' => $theme->getName(),
             'label' => $theme->getLabel(),
-            'isActive' => $theme->isActive(),
             'blockStyles' => $theme->getBlockStyles(),
             'createdAt' => $theme->getCreatedAt()->format('c'),
             'updatedAt' => $theme->getUpdatedAt()->format('c'),
@@ -636,10 +613,6 @@ class ThemeConfigController extends AbstractController implements SecuredControl
 
         if (isset($data['label'])) {
             $theme->setLabel($data['label']);
-        }
-
-        if (array_key_exists('isActive', $data)) {
-            $theme->setIsActive((bool) $data['isActive']);
         }
 
         if (isset($data['blockStyles'])) {

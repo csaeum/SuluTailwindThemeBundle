@@ -9,14 +9,15 @@ use Doctrine\ORM\Event\PostPersistEventArgs;
 use Doctrine\ORM\Event\PostUpdateEventArgs;
 use Doctrine\ORM\Events;
 use ItechWorld\SuluTailwindThemeBundle\Entity\ThemeConfig;
+use ItechWorld\SuluTailwindThemeBundle\Repository\WebspaceThemeRepository;
 use ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler;
 
 /**
  * Doctrine listener that triggers theme CSS recompilation.
  *
  * Listens to postPersist and postUpdate events on ThemeConfig entities.
- * When an active theme is saved, its CSS is automatically recompiled
- * to reflect the latest token changes.
+ * When a theme assigned to at least one webspace is saved, its CSS is
+ * automatically recompiled to reflect the latest token changes.
  */
 #[AsDoctrineListener(event: Events::postPersist)]
 #[AsDoctrineListener(event: Events::postUpdate)]
@@ -24,6 +25,7 @@ class ThemeCompileSubscriber
 {
     public function __construct(
         private readonly ThemeCompiler $compiler,
+        private readonly WebspaceThemeRepository $webspaceThemeRepository,
     ) {
     }
 
@@ -50,7 +52,7 @@ class ThemeCompileSubscriber
     /**
      * Process a ThemeConfig entity event.
      *
-     * Only triggers recompilation for active themes.
+     * Only triggers recompilation for themes assigned to at least one webspace.
      *
      * @param object $entity The Doctrine entity
      */
@@ -60,7 +62,7 @@ class ThemeCompileSubscriber
             return;
         }
 
-        if ($entity->isActive()) {
+        if (count($this->webspaceThemeRepository->findByTheme($entity)) > 0) {
             $this->compiler->compile($entity);
         }
     }

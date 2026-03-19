@@ -37,13 +37,15 @@
 
 * **Design tokens**: Store all theme settings as structured JSON, compiled to CSS custom properties
 * **Admin interface**: Full CRUD with 7 tabs (details, colors, typography, buttons, borders, block variants, menu)
+* **Multi-webspace support**: Assign different themes to different webspaces (sites) in a multi-site Sulu installation
 * **Multiple themes**: Create and switch between 7 preset themes (corporate, creative, minimal, nature, halloween, christmas, megamenu)
 * **CSS compilation**: Automatic generation of `:root` variables, `.block-variant-*` classes, `.btn-*` styles
+* **Shared CSS**: Multiple webspaces using the same theme share a single compiled CSS file
 * **Google Fonts**: Automatic resolution and inclusion of Google Fonts from typography settings
 * **Block variants**: Per-block color schemes (light, accent, dark) applied via CSS custom properties
 * **Menu configuration**: Configurable menu type, colors, animation, and display options
 * **Twig integration**: Helper functions for including theme CSS, fonts, block styles, and menu config
-* **CLI commands**: Install preset themes and recompile CSS from the command line
+* **CLI commands**: Install preset themes, assign to webspaces, and recompile CSS from the command line
 * **Auto-recompile**: Doctrine listener recompiles CSS on theme save
 
 ## Installation
@@ -221,11 +223,16 @@ php bin/adminconsole doctrine:schema:update --force
 # Install a single preset theme
 php bin/adminconsole iw-sulu:theme:install corporate
 
+# Install and assign to a specific webspace
+php bin/adminconsole iw-sulu:theme:install corporate --webspace=website
+
 # Install all available preset themes at once
 php bin/adminconsole iw-sulu:theme:install --all
 ```
 
 Available presets: `corporate`, `creative`, `minimal`, `nature`, `halloween`, `christmas`, `megamenu`.
+
+Themes are created in the catalog. To assign them to webspaces, use the `--webspace` option or assign them via the admin UI (see Multi-site setup below).
 
 ### 8. Clear the cache
 
@@ -283,7 +290,18 @@ Navigate to **Settings > Themes** in the Sulu admin panel. From there you can:
 5. **Configure borders**: Set border radius values (default, small, large, full, image)
 6. **Configure block variants**: Define color schemes (e.g., light, accent, dark) for content blocks
 7. **Configure menu**: Choose menu type, colors, animation, and display options
-8. **Activate**: Toggle the `isActive` flag to make a theme the active one
+
+### Multi-site setup
+
+In a multi-webspace Sulu installation, you can assign different themes to different webspaces:
+
+1. Navigate to **Webspaces** in the Sulu admin
+2. Select a webspace and go to the **"Theme"** tab
+3. Choose a theme from the dropdown and save
+
+The same theme can be shared across multiple webspaces — they will share the same compiled CSS file. Each webspace can also have its own unique theme.
+
+The theme list in **Settings > Themes** shows a "Webspaces" column indicating which webspaces use each theme.
 
 ### Page templates
 
@@ -346,23 +364,58 @@ The global variable `iw_sulu_tailwind_theme` is available in all templates and c
 ### CLI commands
 
 ```bash
-# Install a single preset theme and activate it
+# Install a single preset theme
 php bin/adminconsole iw-sulu:theme:install <preset-name>
 
-# Install all preset themes at once (last one is activated)
+# Install and assign to a webspace
+php bin/adminconsole iw-sulu:theme:install <preset-name> --webspace=website
+
+# Install all preset themes at once
 php bin/adminconsole iw-sulu:theme:install --all
 
-# Recompile CSS for the active theme (or a specific one)
+# Recompile CSS for a specific theme (or all)
 php bin/adminconsole iw-sulu:theme:compile
 php bin/adminconsole iw-sulu:theme:compile --theme=corporate
 
 # Sync the Google Fonts catalog (requires API key)
 php bin/adminconsole iw-sulu:theme:sync-fonts
+
+# Migrate from isActive to multi-webspace (upgrade from previous version)
+php bin/adminconsole iw-sulu:theme:migrate-webspaces
 ```
 
 ### Security
 
-The bundle registers the security context `sulu.iw_sulu_tailwind_theme.themes` with VIEW, ADD, EDIT, and DELETE permissions. Configure role access in **Settings > Roles**.
+The bundle registers two types of security contexts:
+
+* **Theme catalog**: `sulu.iw_sulu_tailwind_theme.themes` with VIEW, ADD, EDIT, and DELETE permissions (Settings > Themes CRUD).
+* **Per-webspace theme assignment**: `sulu.iw_sulu_tailwind_theme.{webspaceKey}.themes` with VIEW and EDIT permissions. Controls who can see and modify the "Theme" tab for each webspace.
+
+Configure role access in **Settings > Roles**. After upgrading, make sure to update roles to include the new per-webspace security contexts.
+
+## Upgrading from previous versions
+
+### Upgrading to multi-webspace support
+
+This version replaces the global `isActive` theme activation with per-webspace theme assignment. Follow these steps:
+
+```bash
+# 1. Update the bundle
+composer update itech-world/sulu-tailwind-theme-bundle
+
+# 2. Migrate existing active theme to all webspaces (BEFORE schema update)
+php bin/adminconsole iw-sulu:theme:migrate-webspaces
+
+# 3. Update the database schema (creates new table, drops isActive column)
+php bin/adminconsole doctrine:schema:update --force
+
+# 4. Clear the cache
+php bin/adminconsole cache:clear
+```
+
+After upgrading:
+- Update admin roles in **Settings > Roles** to include the new per-webspace security contexts (`sulu.iw_sulu_tailwind_theme.{webspaceKey}.themes`), otherwise the "Theme" tab will be invisible.
+- The admin JS assets need to be rebuilt (`npm run build` in `assets/admin/`).
 
 ## Documentation
 
@@ -391,13 +444,13 @@ SuluTailwindThemeBundle/
 │   │   └── fragments/      # Shared property fragments (reference)
 │   └── services.yaml       # Service definitions
 ├── src/
-│   ├── Admin/              # ThemeAdmin (navigation, views, security)
-│   ├── Command/            # CLI commands (install, compile, sync-fonts)
-│   ├── Controller/Admin/   # REST API controller
+│   ├── Admin/              # ThemeAdmin, WebspaceThemeAdmin (navigation, views, security)
+│   ├── Command/            # CLI commands (install, compile, sync-fonts, migrate-webspaces)
+│   ├── Controller/Admin/   # REST API controllers (themes, webspace-theme assignment)
 │   ├── DataFixtures/       # Preset theme fixtures
-│   ├── Entity/             # ThemeConfig Doctrine entity
+│   ├── Entity/             # ThemeConfig, WebspaceTheme Doctrine entities
 │   ├── EventSubscriber/    # Auto-recompile on save
-│   ├── Repository/         # ThemeConfigRepository
+│   ├── Repository/         # ThemeConfigRepository, WebspaceThemeRepository
 │   ├── Service/            # ThemeCompiler, ThemeProvider, GoogleFontsResolver, GoogleFontsCatalog
 │   └── Twig/               # ThemeExtension
 ├── templates/              # Twig templates (blocks, menus, base)
