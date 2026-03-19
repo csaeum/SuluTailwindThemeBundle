@@ -218,7 +218,11 @@ php bin/adminconsole doctrine:schema:update --force
 ### 7. Install a preset theme (optional)
 
 ```bash
+# Install a single preset theme
 php bin/adminconsole iw-sulu:theme:install corporate
+
+# Install all available preset themes at once
+php bin/adminconsole iw-sulu:theme:install --all
 ```
 
 Available presets: `corporate`, `creative`, `minimal`, `nature`, `halloween`, `christmas`, `megamenu`.
@@ -342,8 +346,11 @@ The global variable `iw_sulu_tailwind_theme` is available in all templates and c
 ### CLI commands
 
 ```bash
-# Install a preset theme and activate it
+# Install a single preset theme and activate it
 php bin/adminconsole iw-sulu:theme:install <preset-name>
+
+# Install all preset themes at once (last one is activated)
+php bin/adminconsole iw-sulu:theme:install --all
 
 # Recompile CSS for the active theme (or a specific one)
 php bin/adminconsole iw-sulu:theme:compile

@@ -5,6 +5,7 @@ import {translate} from 'sulu-admin-bundle/utils';
 import {Requester} from 'sulu-admin-bundle/services';
 import Input from 'sulu-admin-bundle/components/Input';
 import Popover from 'sulu-admin-bundle/components/Popover';
+import {isRef, resolveRef} from '../../utils/colorRefResolver';
 
 /**
  * Regex for validating hex color codes (3, 6 or 8 digit with alpha).
@@ -270,6 +271,12 @@ export default class ColorTokenEditor extends React.Component {
             return;
         }
 
+        // Accept ref: values without hex validation
+        if (isRef(value)) {
+            this.props.onChange(value);
+            return;
+        }
+
         if (value === 'transparent' || HEX_COLOR_PATTERN.test(value)) {
             this.props.onChange(value);
         }
@@ -281,7 +288,10 @@ export default class ColorTokenEditor extends React.Component {
     handleBlur = () => {
         const {internalValue} = this.state;
 
-        if (internalValue === 'transparent' || internalValue === '') {
+        if (internalValue === 'transparent' || internalValue === '' || isRef(internalValue)) {
+            if (this.props.onFinish) {
+                this.props.onFinish();
+            }
             return;
         }
 
@@ -358,10 +368,16 @@ export default class ColorTokenEditor extends React.Component {
 
     /**
      * Handle palette swatch click.
+     * Stores a semantic ref (ref:colorKey-shade) instead of raw hex.
+     *
+     * @param {string} hex       The resolved hex color of the swatch
+     * @param {string} colorKey  The palette color name (primary, secondary, etc.)
+     * @param {number} shade     The shade level (50, 100, ..., 950)
      */
-    handleSwatchClick = (hex) => {
-        this.setState({internalValue: hex});
-        this.props.onChange(hex);
+    handleSwatchClick = (hex, colorKey, shade) => {
+        const refValue = `ref:${colorKey}-${shade}`;
+        this.setState({internalValue: refValue});
+        this.props.onChange(refValue);
 
         if (this.props.onFinish) {
             this.props.onFinish();
@@ -374,7 +390,9 @@ export default class ColorTokenEditor extends React.Component {
     handleCopy = () => {
         const {internalValue} = this.state;
         if (internalValue && navigator.clipboard) {
-            navigator.clipboard.writeText(internalValue);
+            const palette = this.state.localPalette || ColorTokenEditor.themePalette;
+            const resolved = resolveRef(internalValue, palette);
+            navigator.clipboard.writeText(resolved);
         }
     };
 
@@ -411,7 +429,9 @@ export default class ColorTokenEditor extends React.Component {
                                     const hex = shades[shade];
                                     if (!hex) return null;
 
-                                    const isSelected = normalizedValue === hex.toLowerCase();
+                                    const refStr = 'ref:' + key + '-' + shade;
+                                    const isSelected = normalizedValue === refStr
+                                        || normalizedValue === hex.toLowerCase();
                                     const swatchClass = 'iw-palette-swatch'
                                         + (isSelected ? ' iw-palette-swatch--selected' : '');
 
@@ -420,7 +440,7 @@ export default class ColorTokenEditor extends React.Component {
                                             key={shade}
                                             className={swatchClass}
                                             style={{backgroundColor: hex}}
-                                            onClick={() => this.handleSwatchClick(hex)}
+                                            onClick={() => this.handleSwatchClick(hex, key, shade)}
                                             title={`${key}-${shade}`}
                                         >
                                             <span className="iw-palette-tooltip">
@@ -570,9 +590,13 @@ export default class ColorTokenEditor extends React.Component {
         const {popoverOpen, internalValue, activeTab} = this.state;
 
         const isTransparent = internalValue === 'transparent';
+        const palette = this.state.localPalette || ColorTokenEditor.themePalette;
+        const resolvedValue = isRef(internalValue)
+            ? resolveRef(internalValue, palette)
+            : internalValue;
         const displayColor = isTransparent
             ? 'transparent'
-            : (HEX_COLOR_PATTERN.test(internalValue) ? internalValue : '#000000');
+            : (HEX_COLOR_PATTERN.test(resolvedValue) ? resolvedValue : '#000000');
 
         const iconStyle = {
             color: isTransparent ? 'transparent' : displayColor,
