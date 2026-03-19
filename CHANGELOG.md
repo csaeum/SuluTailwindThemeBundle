@@ -1,3 +1,24 @@
+# [](https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v1.2.0...v) (2026-03-19)
+
+
+* feat!: add multi-webspace theme support ([0362156](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/03621560f7a5599020a20be99b91bd9bd08753c1))
+
+
+### Bug Fixes
+
+* add webspaces column to theme list with post-query enrichment ([d42c29c](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/d42c29c072494c91d7c5c605109bb5f8afaaefc9))
+
+
+### Features
+
+* add per-webspace theme config resolution in admin JS ([1f37f3c](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/1f37f3ca8f570dfc752ffaea8e0ffdb305f5d5a1))
+
+
+### BREAKING CHANGES
+
+* removes isActive from ThemeConfig, replaces global
+theme activation with per-webspace assignment via WebspaceTheme entity.
+Run iw-sulu:theme:migrate-webspaces before doctrine:schema:update.
 # Changelog
 
 All notable changes to this project will be documented in this file.
