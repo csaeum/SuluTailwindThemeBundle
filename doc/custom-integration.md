@@ -452,32 +452,21 @@ The theme CSS custom properties work seamlessly with Tailwind's arbitrary value 
 </div>
 ```
 
-### Extending Tailwind config (optional)
+### Extending Tailwind with theme aliases (optional)
 
-If you use the same theme variables frequently, you can map them in your `tailwind.config.js`:
+In Tailwind CSS 4, you can define custom utilities via `@theme` in your CSS file. If you use the same theme variables frequently, add this to your `assets/styles/app.css`:
 
-```js
-// tailwind.config.js
-module.exports = {
-    theme: {
-        extend: {
-            colors: {
-                'theme-primary': 'var(--color-primary)',
-                'theme-secondary': 'var(--color-secondary)',
-                'theme-accent': 'var(--color-accent)',
-                'theme-bg': 'var(--color-background)',
-                'theme-text': 'var(--color-text)',
-            },
-            fontFamily: {
-                'theme-body': 'var(--font-family-body)',
-                'theme-heading': 'var(--font-family-heading)',
-            },
-            borderRadius: {
-                'theme': 'var(--border-radius)',
-            },
-        },
-    },
-};
+```css
+@theme {
+    --color-theme-primary: var(--color-primary);
+    --color-theme-secondary: var(--color-secondary);
+    --color-theme-accent: var(--color-accent);
+    --color-theme-bg: var(--color-background);
+    --color-theme-text: var(--color-text);
+    --font-family-theme-body: var(--font-family-body);
+    --font-family-theme-heading: var(--font-family-heading);
+    --radius-theme: var(--border-radius);
+}
 ```
 
 Then use them as standard Tailwind classes:
@@ -488,4 +477,4 @@ Then use them as standard Tailwind classes:
 </div>
 ```
 
-> **Reminder:** When modifying Tailwind config or adding custom CSS, you need to rebuild your frontend assets (`npm run build`).
+> **Reminder:** After modifying your CSS, you need to rebuild your frontend assets (`npm run build`).

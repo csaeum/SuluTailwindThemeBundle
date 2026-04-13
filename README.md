@@ -30,8 +30,10 @@
 * PHP >= 8.2
 * Sulu CMS >= 3.0
 * Doctrine ORM >= 3.0
-* Tailwind CSS >= 4.0
+* Tailwind CSS >= 4.0 (configured with PostCSS)
 * Webpack Encore
+
+> **Important:** Tailwind CSS must be installed and configured with PostCSS in your Webpack Encore project **before** installing this bundle. Follow the official [Tailwind CSS Symfony guide](https://tailwindcss.com/docs/installation/framework-guides/symfony) if you haven't set it up yet. This includes installing `@tailwindcss/postcss`, creating a `postcss.config.js`, and enabling `.enablePostCssLoader()` in your `webpack.config.js`.
 
 ## Features
 
@@ -110,10 +112,13 @@ The bundle provides Stimulus controllers and CSS that need to be compiled by Web
 **Import the CSS** and add the bundle's templates as a Tailwind source in your `assets/styles/app.css`:
 
 ```css
+@import "tailwindcss";
 @import "@itech-world/sulu-tailwind-theme-bundle";
 @source "../../vendor/itech-world/sulu-tailwind-theme-bundle/templates";
 ```
 
+> `@import "tailwindcss"` **must come first** — it activates the Tailwind compiler. Without it, your CSS is processed as plain CSS and no utility class will work.
+>
 > The `@source` directive tells Tailwind CSS 4 to scan the bundle's Twig templates for utility classes. Without it, classes used in menu and block templates won't be compiled.
 
 **Register the Stimulus controllers** in your `assets/controllers.json`:
