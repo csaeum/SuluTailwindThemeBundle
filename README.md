@@ -338,7 +338,7 @@ Add the theme functions to your `templates/base.html.twig`:
 <body class="bg-[var(--color-background)] text-[var(--color-text)]">
     {# Dynamic menu #}
     {% set menuConfig = iw_sulu_tailwind_theme_menu_config() %}
-    {% if menuConfig is not empty and menuConfig.type is defined %}
+    {% if menuConfig is not empty and menuConfig.type is defined and menuConfig.type %}
         {% include '@ItechWorldSuluTailwindTheme/menu/_' ~ menuConfig.type ~ '.html.twig'
             with {config: menuConfig} %}
     {% endif %}
