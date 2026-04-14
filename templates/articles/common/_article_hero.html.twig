@@ -1,0 +1,46 @@
+{#
+    Article hero image component.
+
+    Parameters:
+    - image: media ID or resolved media object
+    - style: 'fullwidth' (default) | 'contained' | 'parallax'
+    - maxHeight: CSS max-height value (default: '500px')
+#}
+{% set heroStyle = style|default('fullwidth') %}
+{% set heroMaxHeight = maxHeight|default('500px') %}
+
+{% if image is defined and image is not empty %}
+    {% if image is iterable and image.url is defined %}
+        {% set media = image %}
+    {% else %}
+        {% set mediaIds = image %}
+        {% if mediaIds is iterable %}
+            {% set mediaId = mediaIds|first %}
+        {% else %}
+            {% set mediaId = mediaIds %}
+        {% endif %}
+        {% set media = mediaId ? sulu_resolve_media(mediaId, app.request.locale) : null %}
+    {% endif %}
+
+    {% if media is not null %}
+        {% set imgUrl = media.thumbnails['iw_hero_lg']|default(media.thumbnails['sulu-400x400']|default(media.url)) %}
+        {% set imgAlt = media.title|default('') %}
+
+        {% if heroStyle == 'fullwidth' %}
+            <div class="article-hero w-full overflow-hidden" style="max-height: {{ heroMaxHeight }}">
+                <img src="{{ imgUrl }}" alt="{{ imgAlt }}" class="w-full h-full object-cover" loading="eager" itemprop="image">
+            </div>
+        {% elseif heroStyle == 'contained' %}
+            <div class="article-hero container mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+                <img src="{{ imgUrl }}" alt="{{ imgAlt }}"
+                     class="w-full rounded-[var(--border-imageRadius,var(--border-radius))] object-cover"
+                     style="max-height: {{ heroMaxHeight }}" loading="eager" itemprop="image">
+            </div>
+        {% elseif heroStyle == 'parallax' %}
+            <div class="article-hero w-full overflow-hidden relative" style="max-height: {{ heroMaxHeight }}">
+                <img src="{{ imgUrl }}" alt="{{ imgAlt }}"
+                     class="w-full h-full object-cover parallax-slide-img" loading="eager" itemprop="image">
+            </div>
+        {% endif %}
+    {% endif %}
+{% endif %}

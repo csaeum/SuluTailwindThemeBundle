@@ -315,6 +315,17 @@ Three article templates will appear in the admin, each in its own tab:
 
 All templates use shared [XML fragments](config/templates/fragments/) (`article-hero`, `article-authors`, `article-dates`, etc.) that you can also include in your own custom article templates via `xi:include`.
 
+Each article type comes with **multiple page styles** that can be selected via theme configuration:
+
+| Type | Available styles | Default |
+|------|-----------------|---------|
+| **News** | `classic`, `magazine`, `minimal` | `classic` |
+| **Event** | `card_info`, `timeline` | `card_info` |
+| **Blog Post** | `classic`, `editorial`, `sidebar` | `classic` |
+| **Listing** | `grid`, `list`, `cards` | `grid` |
+
+Article templates extend the project's `base.html.twig` — your menu, footer, and layout are automatically inherited.
+
 > You can restrict which templates are loaded using the `types` whitelist:
 > ```yaml
 > itech_world_sulu_tailwind_theme:
@@ -402,8 +413,15 @@ Add the theme functions to your `templates/base.html.twig`:
 | `iw_sulu_tailwind_theme_tokens()` | Full design tokens array |
 | `iw_sulu_tailwind_theme_block_styles()` | Block style configuration |
 | `iw_sulu_block_style_template(type, style)` | Resolved template path for a block style |
+| `iw_sulu_tailwind_theme_format_date(date, format?)` | Localized date string (ICU formatting) |
+| `iw_sulu_tailwind_theme_reading_time(content)` | Estimated reading time in minutes |
+| `iw_sulu_tailwind_theme_author_name(authorBlock)` | Resolved author name (custom/contact/organization) |
+| `iw_sulu_tailwind_theme_article_style(type)` | Active page style for an article type |
+| `iw_sulu_tailwind_theme_listing_style()` | Active listing style (grid/list/cards) |
 
 The global variable `iw_sulu_tailwind_theme` is available in all templates and contains the active theme tokens.
+
+> The article functions are only available when `article_templates.enabled: true`.
 
 > See **[Twig Reference](doc/twig-reference.md)** for the full API, return types, and token structure.
 

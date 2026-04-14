@@ -1,0 +1,9 @@
+{#
+    News article dispatcher.
+    Reads the active style from theme config and extends the matching style template.
+    Fallback: classic.
+#}
+{% extends [
+    '@ItechWorldSuluTailwindTheme/articles/news/_style_' ~ iw_sulu_tailwind_theme_article_style('news') ~ '.html.twig',
+    '@ItechWorldSuluTailwindTheme/articles/news/_style_classic.html.twig'
+] %}

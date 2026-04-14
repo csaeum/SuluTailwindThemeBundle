@@ -1,0 +1,27 @@
+{#
+    Listing style: List
+    Full-width list with thumbnail left + title/meta/excerpt right.
+#}
+{% if articles is defined and articles is iterable and articles|length > 0 %}
+    <div class="space-y-6">
+        {% for article in articles %}
+            <div class="{{ not loop.last ? 'pb-6 border-b border-[var(--color-border)]' : '' }}">
+                {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_card.html.twig' with {
+                    article: article,
+                    layout: 'horizontal',
+                    imageRatio: '4/3',
+                } only %}
+            </div>
+        {% endfor %}
+    </div>
+
+    {% include '@ItechWorldSuluTailwindTheme/articles/common/_pagination.html.twig' with {
+        currentPage: currentPage|default(1),
+        totalPages: totalPages|default(1),
+        baseUrl: baseUrl|default(''),
+    } only %}
+{% else %}
+    <p class="text-center text-[var(--color-secondary-500)] py-12">
+        {{ 'iw_sulu_tailwind_theme.article.no_articles'|trans }}
+    </p>
+{% endif %}

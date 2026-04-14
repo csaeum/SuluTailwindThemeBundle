@@ -1,0 +1,74 @@
+{#
+    Base layout for all article pages.
+    Extends the bundle's base template and defines article-specific blocks.
+
+    Blocks available for override:
+    - article_hero: hero image area
+    - article_header: title + subtitle
+    - article_meta: date, authors, categories, reading time
+    - article_content: main content (blocks)
+    - article_footer: tags, share buttons
+    - article_related: related articles section
+
+    Variables expected:
+    - content: the article content object (from Sulu)
+#}
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<article class="article" itemscope itemtype="https://schema.org/Article">
+    {% block article_hero %}{% endblock %}
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        {% block article_header %}
+            <header class="article-header mb-6">
+                <h1 class="font-[var(--font-family-heading)] text-[var(--font-size-h1)] font-[var(--font-h1-weight)] leading-[var(--line-height-h1)] mb-4" itemprop="headline">
+                    {{ content.title }}
+                </h1>
+                {% if content.subtitle is defined and content.subtitle is not empty %}
+                    <p class="text-[var(--font-size-h4)] text-[var(--color-secondary-600)] leading-relaxed">
+                        {{ content.subtitle }}
+                    </p>
+                {% endif %}
+            </header>
+        {% endblock %}
+
+        {% block article_meta %}{% endblock %}
+
+        {% block article_content %}
+            {% if content.blocks is defined and content.blocks is iterable %}
+                <div class="article-body mt-8">
+                    {% for contentBlock in content.blocks %}
+                        {% set blockType = contentBlock.type|default('text') %}
+                        {% set blockStyle = contentBlock.style|default('') %}
+
+                        {% set defaultStyles = {
+                            'text': 'one_column',
+                            'text_images': 'classic',
+                            'gallery': 'grid',
+                            'cta': 'centered',
+                            'document': 'default',
+                            'testimonial': 'default',
+                            'separator': 'default',
+                            'location': 'default',
+                        } %}
+
+                        {% if blockStyle is empty %}
+                            {% set blockStyle = defaultStyles[blockType]|default('default') %}
+                        {% endif %}
+
+                        {% set templatePath = '@ItechWorldSuluTailwindTheme/blocks/' ~ blockType ~ '/_style_' ~ blockStyle ~ '.html.twig' %}
+                        {% set fallbackPath = '@ItechWorldSuluTailwindTheme/blocks/' ~ blockType ~ '/_style_' ~ defaultStyles[blockType]|default('default') ~ '.html.twig' %}
+
+                        {% include [templatePath, fallbackPath] ignore missing with contentBlock %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endblock %}
+
+        {% block article_footer %}{% endblock %}
+    </div>
+
+    {% block article_related %}{% endblock %}
+</article>
+{% endblock %}

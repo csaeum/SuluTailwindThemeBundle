@@ -1,0 +1,23 @@
+{#
+    Listing style: Grid
+    3-column grid on desktop, 2 on tablet, 1 on mobile.
+#}
+{% if articles is defined and articles is iterable and articles|length > 0 %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for article in articles %}
+            {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_card.html.twig' with {
+                article: article,
+            } only %}
+        {% endfor %}
+    </div>
+
+    {% include '@ItechWorldSuluTailwindTheme/articles/common/_pagination.html.twig' with {
+        currentPage: currentPage|default(1),
+        totalPages: totalPages|default(1),
+        baseUrl: baseUrl|default(''),
+    } only %}
+{% else %}
+    <p class="text-center text-[var(--color-secondary-500)] py-12">
+        {{ 'iw_sulu_tailwind_theme.article.no_articles'|trans }}
+    </p>
+{% endif %}

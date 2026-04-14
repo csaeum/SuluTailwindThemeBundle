@@ -8,5 +8,18 @@
     "iw_sulu_tailwind_theme.fileinput_max_reached": "Maximale Anzahl an Dateien erreicht.",
     "iw_sulu_tailwind_theme.fileinput_size_exceeded": "Datei zu groß (max. {size}).",
     "iw_sulu_tailwind_theme.fileinput_drop_or": "Dateien hierher ziehen oder",
-    "iw_sulu_tailwind_theme.fileinput_browse": "durchsuchen"
+    "iw_sulu_tailwind_theme.fileinput_browse": "durchsuchen",
+
+    "iw_sulu_tailwind_theme.article.related_articles": "Verwandte Artikel",
+    "iw_sulu_tailwind_theme.article.no_articles": "Keine Artikel gefunden.",
+    "iw_sulu_tailwind_theme.article.event_until": "bis",
+    "iw_sulu_tailwind_theme.article.event_online_badge": "Online",
+    "iw_sulu_tailwind_theme.article.event_join_link": "Online-Veranstaltung beitreten",
+    "iw_sulu_tailwind_theme.article.organized_by": "Organisiert von",
+    "iw_sulu_tailwind_theme.article.about_author": "Über den Autor",
+    "iw_sulu_tailwind_theme.article.sidebar_categories": "Kategorien",
+    "iw_sulu_tailwind_theme.article.sidebar_tags": "Tags",
+    "iw_sulu_tailwind_theme.article.pagination_previous": "Vorherige Seite",
+    "iw_sulu_tailwind_theme.article.pagination_next": "Nächste Seite",
+    "iw_sulu_tailwind_theme.article.pagination_info": "Seite %current% von %total%"
 }

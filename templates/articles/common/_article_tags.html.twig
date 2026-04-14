@@ -1,0 +1,16 @@
+{#
+    Article tags component — renders tags as badges.
+    Tags come from Sulu's Excerpt tab.
+
+    Parameters:
+    - tags: array of tag objects (from excerpt)
+#}
+{% if tags is defined and tags is iterable and tags|length > 0 %}
+    <div class="article-tags flex flex-wrap gap-2">
+        {% for tag in tags %}
+            <span class="inline-block px-3 py-1 text-xs font-medium rounded-full border border-[var(--color-border)] text-[var(--color-secondary-600)] hover:bg-[var(--color-primary-50)] hover:text-[var(--color-primary-700)] hover:border-[var(--color-primary-200)] transition-colors">
+                {{ tag.name|default(tag) }}
+            </span>
+        {% endfor %}
+    </div>
+{% endif %}

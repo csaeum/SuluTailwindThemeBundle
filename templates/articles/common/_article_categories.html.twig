@@ -1,0 +1,16 @@
+{#
+    Article categories component — renders categories as colored badges.
+    Categories come from Sulu's Excerpt tab.
+
+    Parameters:
+    - categories: array of category objects (from excerpt)
+#}
+{% if categories is defined and categories is iterable and categories|length > 0 %}
+    <div class="article-categories flex flex-wrap gap-2">
+        {% for category in categories %}
+            <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-[var(--color-primary-100)] text-[var(--color-primary-700)]">
+                {{ category.name|default(category.title|default('')) }}
+            </span>
+        {% endfor %}
+    </div>
+{% endif %}
