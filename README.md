@@ -30,8 +30,10 @@
 * PHP >= 8.2
 * Sulu CMS >= 3.0
 * Doctrine ORM >= 3.0
-* Tailwind CSS >= 4.0
+* Tailwind CSS >= 4.0 (configured with PostCSS)
 * Webpack Encore
+
+> **Important:** Tailwind CSS must be installed and configured with PostCSS in your Webpack Encore project **before** installing this bundle. Follow the official [Tailwind CSS Symfony guide](https://tailwindcss.com/docs/installation/framework-guides/symfony) if you haven't set it up yet. This includes installing `@tailwindcss/postcss`, creating a `postcss.config.js`, and enabling `.enablePostCssLoader()` in your `webpack.config.js`.
 
 ## Features
 
@@ -110,10 +112,16 @@ The bundle provides Stimulus controllers and CSS that need to be compiled by Web
 **Import the CSS** and add the bundle's templates as a Tailwind source in your `assets/styles/app.css`:
 
 ```css
+@import "tailwindcss";
 @import "@itech-world/sulu-tailwind-theme-bundle";
+@import "@itech-world/sulu-tailwind-theme-bundle/styles/tailwind-theme-bridge.css";
 @source "../../vendor/itech-world/sulu-tailwind-theme-bundle/templates";
 ```
 
+> `@import "tailwindcss"` **must come first** — it activates the Tailwind compiler. Without it, your CSS is processed as plain CSS and no utility class will work.
+>
+> The **theme bridge** registers all CSS custom properties (colors, typography, borders, buttons, menu) as Tailwind 4 `@theme` tokens. This enables utility classes like `bg-primary`, `text-error-500`, `font-heading`, `rounded-image`, etc. Without it, you would need to use the verbose `bg-[var(--color-primary)]` syntax.
+>
 > The `@source` directive tells Tailwind CSS 4 to scan the bundle's Twig templates for utility classes. Without it, classes used in menu and block templates won't be compiled.
 
 **Register the Stimulus controllers** in your `assets/controllers.json`:
@@ -333,7 +341,7 @@ Add the theme functions to your `templates/base.html.twig`:
 <body class="bg-[var(--color-background)] text-[var(--color-text)]">
     {# Dynamic menu #}
     {% set menuConfig = iw_sulu_tailwind_theme_menu_config() %}
-    {% if menuConfig is not empty and menuConfig.type is defined %}
+    {% if menuConfig is not empty and menuConfig.type is defined and menuConfig.type %}
         {% include '@ItechWorldSuluTailwindTheme/menu/_' ~ menuConfig.type ~ '.html.twig'
             with {config: menuConfig} %}
     {% endif %}
@@ -428,7 +436,8 @@ The theme compiles design tokens into **CSS custom properties** and exposes data
 | [CSS Variables Reference](doc/css-variables.md) | All CSS custom properties: colors, palettes, typography, borders, buttons, menu |
 | [Block Variants](doc/block-variants.md) | Variant classes, auto-styled elements, separator styles, `.btn-variant` |
 | [Twig Reference](doc/twig-reference.md) | All Twig functions, global variable `iw_sulu_tailwind_theme`, token structure |
-| [Custom Integration Guide](doc/custom-integration.md) | Custom CSS, Twig components, block templates, PHP services, Tailwind integration |
+| [Tailwind Integration](doc/tailwind-integration.md) | Theme bridge setup, available tokens, custom colors, manual setup, Tailwind 4.x compatibility |
+| [Custom Integration Guide](doc/custom-integration.md) | Custom CSS, Twig components, block templates, PHP services |
 | [Menus](doc/menus.md) | Menu types, configuration, and customization |
 
 ## Architecture
