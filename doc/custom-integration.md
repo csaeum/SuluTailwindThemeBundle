@@ -436,45 +436,33 @@ class MyController extends AbstractController
 
 ## 5. Tailwind CSS integration
 
-The theme CSS custom properties work seamlessly with Tailwind's arbitrary value syntax.
+The bundle provides a **theme bridge** that registers all CSS custom properties as Tailwind 4 `@theme` tokens. This enables clean utility classes like `bg-primary`, `text-error-500`, `font-heading`, etc.
 
-### Using theme variables in Tailwind classes
-
-```twig
-{# Arbitrary values referencing theme CSS variables #}
-<div class="bg-[var(--color-primary-50)] border-[var(--color-border)] rounded-[var(--border-radius)]">
-    <h2 class="text-[var(--color-primary-700)] font-[var(--font-family-heading)]">
-        Title
-    </h2>
-    <p class="text-[var(--color-text)]">
-        Content
-    </p>
-</div>
-```
-
-### Extending Tailwind with theme aliases (optional)
-
-In Tailwind CSS 4, you can define custom utilities via `@theme` in your CSS file. If you use the same theme variables frequently, add this to your `assets/styles/app.css`:
+### Recommended setup
 
 ```css
-@theme {
-    --color-theme-primary: var(--color-primary);
-    --color-theme-secondary: var(--color-secondary);
-    --color-theme-accent: var(--color-accent);
-    --color-theme-bg: var(--color-background);
-    --color-theme-text: var(--color-text);
-    --font-family-theme-body: var(--font-family-body);
-    --font-family-theme-heading: var(--font-family-heading);
-    --radius-theme: var(--border-radius);
-}
+@import "tailwindcss";
+@import "@itech-world/sulu-tailwind-theme-bundle";
+@import "@itech-world/sulu-tailwind-theme-bundle/styles/tailwind-theme-bridge.css";
+@source "../../vendor/itech-world/sulu-tailwind-theme-bundle/templates";
 ```
 
-Then use them as standard Tailwind classes:
+### Using theme utilities
 
 ```twig
-<div class="bg-theme-primary text-white rounded-theme font-theme-heading">
-    Themed component
+{# Clean utility classes (with bridge) #}
+<div class="bg-primary-50 border-border rounded">
+    <h2 class="text-primary-700 font-heading">Title</h2>
+    <p class="text-text">Content</p>
 </div>
 ```
 
-> **Reminder:** After modifying your CSS, you need to rebuild your frontend assets (`npm run build`).
+The bridge also provides semantic color palettes (error, warning, success) with hardcoded defaults:
+
+```twig
+<div class="bg-error-50 text-error-700 border border-error rounded p-4">
+    Validation error message
+</div>
+```
+
+> See **[Tailwind Integration](tailwind-integration.md)** for the full reference: all available tokens, adding custom colors, manual setup without bridge, and Tailwind 4.x compatibility.
