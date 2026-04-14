@@ -409,5 +409,52 @@
     "iw_sulu_tailwind_theme.mega_ratio_square": "Square (1:1)",
     "iw_sulu_tailwind_theme.mega_ratio_portrait": "Portrait (9:16)",
     "iw_sulu_tailwind_theme.mega_ratio_landscape": "Landscape (16:9)",
-    "iw_sulu_tailwind_theme.mega_card_show_background": "Show background"
+    "iw_sulu_tailwind_theme.mega_card_show_background": "Show background",
+
+    "iw_sulu_tailwind_theme.article.news": "News",
+    "iw_sulu_tailwind_theme.article.event": "Event",
+    "iw_sulu_tailwind_theme.article.blog_post": "Blog Post",
+
+    "iw_sulu_tailwind_theme.article.section_hero": "Hero",
+    "iw_sulu_tailwind_theme.article.section_meta": "Meta",
+    "iw_sulu_tailwind_theme.article.section_content": "Content",
+    "iw_sulu_tailwind_theme.article.section_related": "Related articles",
+    "iw_sulu_tailwind_theme.article.section_event_details": "Event details",
+    "iw_sulu_tailwind_theme.article.section_organizer": "Organizer",
+
+    "iw_sulu_tailwind_theme.article.hero_image": "Hero image",
+    "iw_sulu_tailwind_theme.article.hero_image_info": "Main image displayed at the top of the article",
+    "iw_sulu_tailwind_theme.article.subtitle": "Subtitle",
+
+    "iw_sulu_tailwind_theme.article.authors": "Authors",
+    "iw_sulu_tailwind_theme.article.author_custom": "Custom author",
+    "iw_sulu_tailwind_theme.article.author_contact": "Sulu contact",
+    "iw_sulu_tailwind_theme.article.author_organization": "Organization",
+    "iw_sulu_tailwind_theme.article.author_name": "Name",
+    "iw_sulu_tailwind_theme.article.author_role": "Role",
+    "iw_sulu_tailwind_theme.article.author_avatar": "Avatar",
+    "iw_sulu_tailwind_theme.article.author_contact_select": "Select a contact",
+    "iw_sulu_tailwind_theme.article.author_organization_select": "Select an organization",
+
+    "iw_sulu_tailwind_theme.article.date_published": "Publication date",
+
+    "iw_sulu_tailwind_theme.article.related_articles": "Related articles",
+    "iw_sulu_tailwind_theme.article.related_articles_info": "Automatically fetched or manually selected related articles",
+
+    "iw_sulu_tailwind_theme.article.event_start_date": "Start date",
+    "iw_sulu_tailwind_theme.article.event_end_date": "End date",
+    "iw_sulu_tailwind_theme.article.event_is_online": "Online event",
+    "iw_sulu_tailwind_theme.article.event_is_online_info": "Check if this event takes place online (hides physical location)",
+    "iw_sulu_tailwind_theme.article.event_location": "Location",
+    "iw_sulu_tailwind_theme.article.event_location_url": "Event URL",
+    "iw_sulu_tailwind_theme.article.event_location_url_info": "Link to the online event platform (Zoom, Teams, etc.)",
+
+    "iw_sulu_tailwind_theme.article.organizer": "Organizer",
+    "iw_sulu_tailwind_theme.article.organizer_name": "Organizer name",
+    "iw_sulu_tailwind_theme.article.organizer_url": "Organizer website",
+    "iw_sulu_tailwind_theme.article.organizer_contact_select": "Select a contact",
+    "iw_sulu_tailwind_theme.article.organizer_organization_select": "Select an organization",
+
+    "iw_sulu_tailwind_theme.article.reading_time": "Reading time",
+    "iw_sulu_tailwind_theme.article.reading_time_info": "Estimated reading time (e.g. \"5 min\")"
 }

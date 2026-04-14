@@ -1,0 +1,140 @@
+<?xml version="1.0" ?>
+<!--
+    Article template: Event.
+    Provides an event article structure with start/end dates, location,
+    organizer, hero, and content blocks. Categories, tags, description,
+    and SEO are handled by Sulu's native Excerpt tab.
+-->
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+
+    <key>iw_event</key>
+    <group>events</group>
+    <view>@ItechWorldSuluTailwindTheme/articles/event</view>
+    <controller>Sulu\Content\UserInterface\Controller\Website\ContentController::indexAction</controller>
+    <cacheLifetime>604800</cacheLifetime>
+
+    <meta>
+        <title>iw_sulu_tailwind_theme.article.event</title>
+    </meta>
+
+    <properties>
+        <!-- Header -->
+        <property name="title" type="text_line" mandatory="true">
+            <meta><title>iw_sulu_tailwind_theme.title</title></meta>
+            <params>
+                <param name="headline" value="true"/>
+            </params>
+            <tag name="sulu.rlp.part"/>
+        </property>
+
+        <property name="url" type="page_tree_route">
+            <meta><title>iw_sulu_tailwind_theme.url</title></meta>
+            <tag name="sulu.rlp"/>
+        </property>
+
+        <!-- Hero section -->
+        <section name="hero">
+            <meta><title>iw_sulu_tailwind_theme.article.section_hero</title></meta>
+            <properties>
+                <xi:include href="../fragments/article-hero.xml"
+                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:property)"/>
+            </properties>
+        </section>
+
+        <!-- Event details section -->
+        <section name="eventDetails">
+            <meta><title>iw_sulu_tailwind_theme.article.section_event_details</title></meta>
+            <properties>
+                <property name="startDate" type="datetime" mandatory="true" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.article.event_start_date</title></meta>
+                </property>
+
+                <property name="endDate" type="datetime" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.article.event_end_date</title></meta>
+                </property>
+
+                <property name="isOnline" type="checkbox" colspan="12">
+                    <meta>
+                        <title>iw_sulu_tailwind_theme.article.event_is_online</title>
+                        <info_text>iw_sulu_tailwind_theme.article.event_is_online_info</info_text>
+                    </meta>
+                </property>
+
+                <property name="location" type="text_line" colspan="12"
+                          visibleCondition="isOnline == false OR isOnline == null">
+                    <meta><title>iw_sulu_tailwind_theme.article.event_location</title></meta>
+                </property>
+
+                <property name="locationUrl" type="url" colspan="12"
+                          visibleCondition="isOnline == true">
+                    <meta>
+                        <title>iw_sulu_tailwind_theme.article.event_location_url</title>
+                        <info_text>iw_sulu_tailwind_theme.article.event_location_url_info</info_text>
+                    </meta>
+                </property>
+            </properties>
+        </section>
+
+        <!-- Organizer section -->
+        <section name="organizer">
+            <meta><title>iw_sulu_tailwind_theme.article.section_organizer</title></meta>
+            <properties>
+                <block name="organizer" default-type="custom" minOccurs="0" maxOccurs="1">
+                    <meta><title>iw_sulu_tailwind_theme.article.organizer</title></meta>
+                    <types>
+                        <type name="custom">
+                            <meta><title>iw_sulu_tailwind_theme.article.author_custom</title></meta>
+                            <properties>
+                                <property name="name" type="text_line" mandatory="true" colspan="6">
+                                    <meta><title>iw_sulu_tailwind_theme.article.organizer_name</title></meta>
+                                </property>
+                                <property name="url" type="url" colspan="6">
+                                    <meta><title>iw_sulu_tailwind_theme.article.organizer_url</title></meta>
+                                </property>
+                            </properties>
+                        </type>
+                        <type name="contact">
+                            <meta><title>iw_sulu_tailwind_theme.article.author_contact</title></meta>
+                            <properties>
+                                <property name="contact" type="single_contact_selection" mandatory="true" colspan="12">
+                                    <meta><title>iw_sulu_tailwind_theme.article.organizer_contact_select</title></meta>
+                                </property>
+                            </properties>
+                        </type>
+                        <type name="organization">
+                            <meta><title>iw_sulu_tailwind_theme.article.author_organization</title></meta>
+                            <properties>
+                                <property name="organization" type="single_account_selection" mandatory="true" colspan="12">
+                                    <meta><title>iw_sulu_tailwind_theme.article.organizer_organization_select</title></meta>
+                                </property>
+                            </properties>
+                        </type>
+                    </types>
+                </block>
+            </properties>
+        </section>
+
+        <!-- Content blocks -->
+        <section name="content">
+            <meta><title>iw_sulu_tailwind_theme.article.section_content</title></meta>
+            <properties>
+                <block name="blocks" default-type="text" minOccurs="0">
+                    <meta><title>iw_sulu_tailwind_theme.content_blocks</title></meta>
+                    <types>
+                        <type ref="text"/>
+                        <type ref="text_images"/>
+                        <type ref="gallery"/>
+                        <type ref="location"/>
+                        <type ref="cta"/>
+                        <type ref="document"/>
+                        <type ref="separator"/>
+                    </types>
+                </block>
+            </properties>
+        </section>
+
+    </properties>
+</template>

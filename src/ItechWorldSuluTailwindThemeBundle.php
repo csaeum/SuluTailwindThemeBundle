@@ -18,6 +18,11 @@ use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 class ItechWorldSuluTailwindThemeBundle extends AbstractBundle
 {
     /**
+     * Available article template type keys.
+     */
+    private const ARTICLE_TYPES = ['news', 'event', 'blog_post'];
+
+    /**
      * Define the bundle configuration schema.
      */
     public function configure(DefinitionConfigurator $definition): void
@@ -27,6 +32,21 @@ class ItechWorldSuluTailwindThemeBundle extends AbstractBundle
                 ->scalarNode('google_fonts_api_key')
                     ->defaultNull()
                     ->info('Google Fonts API key (from env: %env(GOOGLE_FONTS_API_KEY)%)')
+                ->end()
+                ->arrayNode('article_templates')
+                    ->addDefaultsIfNotSet()
+                    ->info('Opt-in article templates (requires sulu/sulu article package)')
+                    ->children()
+                        ->booleanNode('enabled')
+                            ->defaultFalse()
+                            ->info('Enable article template registration')
+                        ->end()
+                        ->arrayNode('types')
+                            ->defaultValue(self::ARTICLE_TYPES)
+                            ->scalarPrototype()->end()
+                            ->info('Whitelist of article types to register (news, event, blog_post)')
+                        ->end()
+                    ->end()
                 ->end()
             ->end();
     }
@@ -122,6 +142,9 @@ class ItechWorldSuluTailwindThemeBundle extends AbstractBundle
                 ],
             ]);
 
+            // Register article template directories (opt-in, requires SuluArticleBundle)
+            $this->registerArticleTemplates($builder);
+
             // Register snippet template directories
             $builder->prependExtensionConfig('sulu_admin', [
                 'templates' => [
@@ -151,7 +174,80 @@ class ItechWorldSuluTailwindThemeBundle extends AbstractBundle
             'itech_world_sulu_tailwind_theme.google_fonts_api_key',
             $config['google_fonts_api_key'],
         );
+        $container->parameters()->set(
+            'itech_world_sulu_tailwind_theme.article_templates_enabled',
+            $config['article_templates']['enabled'],
+        );
+        $container->parameters()->set(
+            'itech_world_sulu_tailwind_theme.article_templates_types',
+            $config['article_templates']['types'],
+        );
 
         $container->import('../config/services.yaml');
+    }
+
+    /**
+     * Register the article template directory based on configuration.
+     *
+     * Checks both that the SuluArticleBundle is available and that the
+     * developer has opted in via the article_templates config. All article
+     * templates live in a single config/templates/articles/ directory
+     * following the Sulu convention.
+     *
+     * @param ContainerBuilder $builder The container builder
+     */
+    private function registerArticleTemplates(ContainerBuilder $builder): void
+    {
+        if (!class_exists(\Sulu\Article\Infrastructure\Symfony\HttpKernel\SuluArticleBundle::class)) {
+            return;
+        }
+
+        // Read raw config to check if article templates are enabled.
+        // prependExtension() runs before loadExtension(), so processed
+        // config is not available yet — we must inspect the raw arrays.
+        $articleConfig = $this->resolveArticleConfig($builder);
+
+        if (!$articleConfig['enabled']) {
+            return;
+        }
+
+        $builder->prependExtensionConfig('sulu_admin', [
+            'templates' => [
+                'article' => [
+                    'directories' => [
+                        'iw_sulu_tailwind_theme' => __DIR__ . '/../config/templates/articles',
+                    ],
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * Resolve article_templates config from raw extension config arrays.
+     *
+     * Since prependExtension() runs before config processing, we must
+     * manually merge the raw config arrays to find the effective values.
+     *
+     * @return array{enabled: bool, types: list<string>}
+     */
+    private function resolveArticleConfig(ContainerBuilder $builder): array
+    {
+        $defaults = [
+            'enabled' => false,
+            'types' => self::ARTICLE_TYPES,
+        ];
+
+        $configs = $builder->getExtensionConfig('itech_world_sulu_tailwind_theme');
+
+        foreach ($configs as $config) {
+            if (isset($config['article_templates']['enabled'])) {
+                $defaults['enabled'] = (bool) $config['article_templates']['enabled'];
+            }
+            if (isset($config['article_templates']['types'])) {
+                $defaults['types'] = (array) $config['article_templates']['types'];
+            }
+        }
+
+        return $defaults;
     }
 }

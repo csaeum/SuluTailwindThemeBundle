@@ -285,6 +285,44 @@ The typography tab includes a **Font Picker** with autocomplete for Google Fonts
 
 > **Without an API key**, the Font Picker still works: the Google tab falls back to a free-text input, and the System tab lists 15 cross-platform fonts (Arial, Georgia, Courier New, etc.).
 
+### Article templates (optional)
+
+The bundle provides ready-to-use article templates (News, Event, Blog Post) that integrate with [SuluArticleBundle](https://github.com/sulu/sulu). They are **opt-in** and disabled by default.
+
+**Requirements:** The Sulu article package must be installed in your project (`sulu/sulu` includes it by default in 3.x).
+
+**Enable the templates** in `config/packages/itech_world_sulu_tailwind_theme.yaml`:
+
+```yaml
+itech_world_sulu_tailwind_theme:
+    article_templates:
+        enabled: true
+```
+
+After enabling, clear the admin cache:
+
+```bash
+php bin/adminconsole cache:clear
+```
+
+Three article templates will appear in the admin, each in its own tab:
+
+| Template | Group | Description |
+|----------|-------|-------------|
+| **News** (`iw_news`) | news | Press/news articles with hero, authors, dates, categories, tags |
+| **Event** (`iw_event`) | events | Events with start/end dates, location (physical or online), organizer |
+| **Blog Post** (`iw_blog_post`) | publications | Blog/journal articles with excerpt, reading time, related articles |
+
+All templates use shared [XML fragments](config/templates/fragments/) (`article-hero`, `article-authors`, `article-dates`, etc.) that you can also include in your own custom article templates via `xi:include`.
+
+> You can restrict which templates are loaded using the `types` whitelist:
+> ```yaml
+> itech_world_sulu_tailwind_theme:
+>     article_templates:
+>         enabled: true
+>         types: ['news', 'event']  # blog_post will not be registered
+> ```
+
 ## Usage
 
 ### Admin interface

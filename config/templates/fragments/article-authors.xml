@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<!--
+    Fragment: Article authors block.
+    Supports three author types: free text, Sulu contact, or Sulu organization.
+-->
+<properties xmlns="http://schemas.sulu.io/template/template">
+    <block name="authors" default-type="custom" minOccurs="1" maxOccurs="5">
+        <meta><title>iw_sulu_tailwind_theme.article.authors</title></meta>
+        <types>
+            <type name="custom">
+                <meta><title>iw_sulu_tailwind_theme.article.author_custom</title></meta>
+                <properties>
+                    <property name="name" type="text_line" mandatory="true" colspan="6">
+                        <meta><title>iw_sulu_tailwind_theme.article.author_name</title></meta>
+                    </property>
+                    <property name="role" type="text_line" colspan="6">
+                        <meta><title>iw_sulu_tailwind_theme.article.author_role</title></meta>
+                    </property>
+                    <property name="avatar" type="media_selection" colspan="12">
+                        <meta><title>iw_sulu_tailwind_theme.article.author_avatar</title></meta>
+                        <params>
+                            <param name="types" value="image"/>
+                        </params>
+                    </property>
+                </properties>
+            </type>
+            <type name="contact">
+                <meta><title>iw_sulu_tailwind_theme.article.author_contact</title></meta>
+                <properties>
+                    <property name="contact" type="single_contact_selection" mandatory="true" colspan="12">
+                        <meta><title>iw_sulu_tailwind_theme.article.author_contact_select</title></meta>
+                    </property>
+                </properties>
+            </type>
+            <type name="organization">
+                <meta><title>iw_sulu_tailwind_theme.article.author_organization</title></meta>
+                <properties>
+                    <property name="organization" type="single_account_selection" mandatory="true" colspan="12">
+                        <meta><title>iw_sulu_tailwind_theme.article.author_organization_select</title></meta>
+                    </property>
+                </properties>
+            </type>
+        </types>
+    </block>
+</properties>
