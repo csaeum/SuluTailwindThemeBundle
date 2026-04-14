@@ -1,3 +1,9 @@
+# [](https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v2.0.0...v) (2026-04-14)
+
+
+### Features
+
+* add Tailwind 4 theme bridge CSS ([70d7168](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/70d7168c93f5a563840cd779373b1e49e41ccf61))
 # [](https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v1.2.0...v) (2026-03-19)
 
 
