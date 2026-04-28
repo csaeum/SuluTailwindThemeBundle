@@ -1,36 +1,15 @@
-# [](https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v2.0.0...v) (2026-04-14)
-
-
-### Features
-
-* add Tailwind 4 theme bridge CSS ([70d7168](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/70d7168c93f5a563840cd779373b1e49e41ccf61))
-# [](https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v1.2.0...v) (2026-03-19)
-
-
-* feat!: add multi-webspace theme support ([0362156](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/03621560f7a5599020a20be99b91bd9bd08753c1))
-
-
-### Bug Fixes
-
-* add webspaces column to theme list with post-query enrichment ([d42c29c](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/d42c29c072494c91d7c5c605109bb5f8afaaefc9))
-
-
-### Features
-
-* add per-webspace theme config resolution in admin JS ([1f37f3c](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/1f37f3ca8f570dfc752ffaea8e0ffdb305f5d5a1))
-
-
-### BREAKING CHANGES
-
-* removes isActive from ThemeConfig, replaces global
-theme activation with per-webspace assignment via WebspaceTheme entity.
-Run iw-sulu:theme:migrate-webspaces before doctrine:schema:update.
 # Changelog
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.1.0] - 2026-04-14
+
+### Added
+
+- **Tailwind 4 theme bridge CSS**: import `bridge.css` to use theme design tokens as Tailwind 4 `@theme` values ([70d7168](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/70d7168c93f5a563840cd779373b1e49e41ccf61))
 
 ## [2.0.0] - 2026-03-19
 
@@ -135,6 +114,7 @@ php bin/adminconsole cache:clear
 - Auto-recompile via Doctrine listener
 - Translations (English, French, German)
 
+[2.1.0]: https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v1.2.0...v2.0.0
 [1.2.0]: https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v1.1.1...v1.2.0
 [1.1.1]: https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v1.1.0...v1.1.1

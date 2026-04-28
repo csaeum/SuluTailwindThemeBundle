@@ -144,6 +144,17 @@ services:
         tags:
             - { name: 'console.command' }
 
+    ItechWorld\SuluTailwindThemeBundle\Command\ThemeCheckCommand:
+        arguments:
+            - '@itech_world.sulu_tailwind_theme.repository'
+            - '@itech_world.sulu_tailwind_theme.webspace_theme_repository'
+            - '@sulu_core.webspace.webspace_manager'
+            - '@itech_world.sulu_tailwind_theme.compiler'
+            - '@kernel'
+            - '%itech_world_sulu_tailwind_theme.css_output_dir%'
+        tags:
+            - { name: 'console.command' }
+
     # ─── Article Twig Extension (loaded when article_templates.enabled) ─
     itech_world.sulu_tailwind_theme.article_twig_extension:
         class: ItechWorld\SuluTailwindThemeBundle\Twig\ArticleExtension

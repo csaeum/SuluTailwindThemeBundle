@@ -72,6 +72,16 @@ Choose the **menu type** (navbar, burger, fullscreen, sidebar, megamenu), config
 
 ---
 
+## Articles tab
+
+Configure **article display settings**: page styles per article type (news, event, blog post), listing style (grid/list/cards), and display element visibility (dates, excerpts, categories, reading time, author).
+
+![Articles configuration](images/screen/settings-theme-articles.png)
+
+> See [Article templates](../README.md#article-templates) for the full configuration reference.
+
+---
+
 ## Block editing
 
 Each block in a page has **3 collapsible sections**: Content, Appearance, and Settings.

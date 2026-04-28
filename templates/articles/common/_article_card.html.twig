@@ -10,11 +10,14 @@
     - showCategory: bool (default true)
     - imageRatio: aspect ratio string (default '16/9')
     - layout: 'vertical' (default) | 'horizontal'
+    - cardMode: bool (default false) — when true, disables image border-radius
+      and adds inner padding on text, for use inside a card container
 #}
 {% set showImage = showImage is defined ? showImage : true %}
 {% set showDate = showDate is defined ? showDate : true %}
 {% set showExcerpt = showExcerpt is defined ? showExcerpt : true %}
 {% set showCategory = showCategory is defined ? showCategory : true %}
+{% set cardMode = cardMode is defined ? cardMode : false %}
 {% set imageRatio = imageRatio|default('16/9') %}
 {% set layout = layout|default('vertical') %}
 
@@ -40,7 +43,7 @@
 
         {% if imgMedia %}
             <a href="{{ articleUrl }}" class="{{ layout == 'horizontal' ? 'w-1/3 flex-shrink-0' : 'w-full' }}">
-                <div class="overflow-hidden rounded-[var(--border-imageRadius)]">
+                <div class="overflow-hidden {{ (not cardMode or layout == 'horizontal') ? 'rounded-[var(--border-imageRadius)]' : '' }}">
                     <img src="{{ imgMedia.thumbnails['iw_theme_16_9']|default(imgMedia.url) }}"
                          alt="{{ imgMedia.title|default(articleTitle) }}"
                          class="w-full object-cover transition-transform duration-300 group-hover:scale-105"
@@ -51,7 +54,7 @@
         {% endif %}
     {% endif %}
 
-    <div class="{{ layout == 'horizontal' ? 'flex-1 min-w-0' : 'mt-4' }}">
+    <div class="{{ layout == 'horizontal' ? 'flex-1 min-w-0' : (cardMode ? 'px-4 pb-4 pt-3' : 'mt-4') }}">
         {% if showCategory and articleCategories is iterable and articleCategories|length > 0 %}
             <div class="mb-2">
                 {% for category in articleCategories|slice(0, 1) %}

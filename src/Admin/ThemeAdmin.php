@@ -122,6 +122,19 @@ class ThemeAdmin extends Admin
             ['key' => 'spacer', 'label' => 'iw_sulu_tailwind_theme.style.spacer'],
             ['key' => 'divider', 'label' => 'iw_sulu_tailwind_theme.style.divider'],
         ],
+        'article_list' => [
+            ['key' => 'grid', 'label' => 'iw_sulu_tailwind_theme.style.grid'],
+            ['key' => 'list', 'label' => 'iw_sulu_tailwind_theme.style.list'],
+            ['key' => 'cards', 'label' => 'iw_sulu_tailwind_theme.style.cards'],
+        ],
+        'article_carousel' => [
+            ['key' => 'carousel', 'label' => 'iw_sulu_tailwind_theme.style.carousel'],
+        ],
+        'article_featured' => [
+            ['key' => 'hero', 'label' => 'iw_sulu_tailwind_theme.style.hero'],
+            ['key' => 'side_by_side', 'label' => 'iw_sulu_tailwind_theme.style.side_by_side'],
+            ['key' => 'spotlight', 'label' => 'iw_sulu_tailwind_theme.style.spotlight'],
+        ],
     ];
 
     /**

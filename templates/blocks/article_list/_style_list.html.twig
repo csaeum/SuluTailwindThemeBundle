@@ -1,0 +1,44 @@
+{# Article list block — full-width list with horizontal cards and card backgrounds #}
+{% extends '@ItechWorldSuluTailwindTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTailwindTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default(''),
+        titleAlignment: titleAlignment|default('left'),
+        variant: variant|default(0)
+    } only %}
+
+    {% set articleItems = articles|default([]) %}
+    {% set maxCount = articlesCount|default(6) %}
+
+    {% if articleItems is iterable and articleItems|length > 0 %}
+        <div class="space-y-6">
+            {% for article in articleItems|slice(0, maxCount) %}
+                <div class="bg-[var(--variant-paragraph-bg,var(--variant-subtle-bg))] rounded-[var(--border-imageRadius)] shadow-sm overflow-hidden p-4">
+                    {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_card.html.twig' with {
+                        article: article,
+                        layout: 'horizontal',
+                        imageRatio: '4/3',
+                        showDate: true,
+                        showExcerpt: true,
+                        showCategory: true,
+                        cardMode: true,
+                    } only %}
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if showPagination is defined and showPagination %}
+            {% include '@ItechWorldSuluTailwindTheme/articles/common/_pagination.html.twig' with {
+                currentPage: articles.page|default(1),
+                totalPages: articles.pages|default(1),
+                baseUrl: app.request.pathInfo,
+            } only %}
+        {% endif %}
+    {% else %}
+        <p class="text-center text-[var(--color-secondary-500)] py-12">
+            {{ 'iw_sulu_tailwind_theme.article.no_articles'|trans }}
+        </p>
+    {% endif %}
+{% endblock %}

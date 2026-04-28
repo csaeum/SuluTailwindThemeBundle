@@ -47,7 +47,8 @@
 * **Block variants**: Per-block color schemes (light, accent, dark) applied via CSS custom properties
 * **Menu configuration**: Configurable menu type, colors, animation, and display options
 * **Twig integration**: Helper functions for including theme CSS, fonts, block styles, and menu config
-* **CLI commands**: Install preset themes, assign to webspaces, and recompile CSS from the command line
+* **Article blocks**: 3 article-specific blocks for pages — article list (grid/list/cards), article carousel, article featured (hero/side-by-side/spotlight)
+* **CLI commands**: Install preset themes, assign to webspaces, recompile CSS, and run integration diagnostics from the command line
 * **Auto-recompile**: Doctrine listener recompiles CSS on theme save
 
 ## Installation
@@ -362,7 +363,7 @@ The theme list in **Settings > Themes** shows a "Webspaces" column indicating wh
 
 ### Page templates
 
-The bundle ships with a ready-to-use page template (`iw_theme_default`) that includes **11 block types**: `text`, `text_images`, `gallery`, `key_figures`, `linked_pages`, `location`, `form`, `document`, `cta`, `testimonial`, and `separator`.
+The bundle ships with a ready-to-use page template (`iw_theme_default`) that includes **14 block types**: `text`, `text_images`, `gallery`, `key_figures`, `linked_pages`, `location`, `form`, `document`, `cta`, `testimonial`, `separator`, `article_list`, `article_carousel`, and `article_featured`.
 
 To use it, simply select **"Page par défaut"** (or **"Default page"**) as the template when creating a page in the Sulu admin.
 
@@ -455,6 +456,9 @@ php bin/adminconsole iw-sulu:theme:sync-fonts
 
 # Migrate from isActive to multi-webspace (upgrade from previous version)
 php bin/adminconsole iw-sulu:theme:migrate-webspaces
+
+# Run integration diagnostics (check theme, CSS, assets, article bundle)
+php bin/adminconsole iw:tailwind-theme:check
 ```
 
 ### Security
@@ -514,12 +518,12 @@ SuluTailwindThemeBundle/
 │   ├── lists/              # Sulu admin list XML
 │   ├── templates/
 │   │   ├── pages/          # Page template XML (uses <type ref="..."/>)
-│   │   ├── blocks/         # Global block type definitions (11 types)
+│   │   ├── blocks/         # Global block type definitions (14 types)
 │   │   └── fragments/      # Shared property fragments (reference)
 │   └── services.yaml       # Service definitions
 ├── src/
 │   ├── Admin/              # ThemeAdmin, WebspaceThemeAdmin (navigation, views, security)
-│   ├── Command/            # CLI commands (install, compile, sync-fonts, migrate-webspaces)
+│   ├── Command/            # CLI commands (install, compile, sync-fonts, migrate-webspaces, check)
 │   ├── Controller/Admin/   # REST API controllers (themes, webspace-theme assignment)
 │   ├── DataFixtures/       # Preset theme fixtures
 │   ├── Entity/             # ThemeConfig, WebspaceTheme Doctrine entities

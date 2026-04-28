@@ -1,0 +1,77 @@
+{# Article carousel block — horizontal scrollable article cards using slider_controller #}
+{% extends '@ItechWorldSuluTailwindTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTailwindTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default(''),
+        titleAlignment: titleAlignment|default('left'),
+        variant: variant|default(0)
+    } only %}
+
+    {% set articleItems = articles|default([]) %}
+    {% set maxCount = articlesCount|default(6) %}
+    {% set isAutoplay = autoplay is defined ? autoplay : false %}
+    {% set autoplayInterval = interval|default(5000) %}
+
+    {% if articleItems is iterable and articleItems|length > 0 %}
+        {% set displayedArticles = articleItems|slice(0, maxCount) %}
+
+        <div
+            data-controller="slider"
+            data-slider-mode-value="scroll"
+            data-slider-autoplay-value="{{ isAutoplay ? 'true' : 'false' }}"
+            data-slider-interval-value="{{ autoplayInterval }}"
+            class="relative"
+        >
+            {# Navigation arrows — positioned above the track #}
+            <div class="flex justify-end gap-2 mb-4">
+                <button
+                    type="button"
+                    data-action="slider#prev"
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--variant-paragraph-bg,var(--variant-subtle-bg))] shadow-sm text-[var(--color-secondary-600)] hover:text-[var(--color-primary)] transition-colors"
+                    aria-label="{{ 'iw_sulu_tailwind_theme.article.pagination_previous'|trans }}"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <button
+                    type="button"
+                    data-action="slider#next"
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-[var(--variant-paragraph-bg,var(--variant-subtle-bg))] shadow-sm text-[var(--color-secondary-600)] hover:text-[var(--color-primary)] transition-colors"
+                    aria-label="{{ 'iw_sulu_tailwind_theme.article.pagination_next'|trans }}"
+                >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
+
+            {# Scrollable track — cards fill full width with calculated sizes #}
+            <div
+                data-slider-target="track"
+                class="flex overflow-x-auto scroll-smooth snap-x snap-mandatory gap-6 pb-2 scrollbar-hide"
+            >
+                {% for article in displayedArticles %}
+                    <div class="flex-none w-[85%] sm:w-[calc((100%-1.5rem)/2)] lg:w-[calc((100%-3rem)/3)] snap-start">
+                        <div class="bg-[var(--variant-paragraph-bg,var(--variant-subtle-bg))] rounded-[var(--border-imageRadius)] shadow-sm overflow-hidden h-full">
+                            {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_card.html.twig' with {
+                                article: article,
+                                imageRatio: '16/9',
+                                showDate: true,
+                                showExcerpt: true,
+                                showCategory: true,
+                                cardMode: true,
+                            } only %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <p class="text-center text-[var(--color-secondary-500)] py-12">
+            {{ 'iw_sulu_tailwind_theme.article.no_articles'|trans }}
+        </p>
+    {% endif %}
+{% endblock %}
