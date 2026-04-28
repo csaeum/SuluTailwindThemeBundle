@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [2.2.0] - 2026-04-28
+
+### Added
+
+- add article blocks, CLI diagnostic command, and fix release pipeline ([c3e0bba](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/c3e0bbad059c9fbdafcf504e41be8be0a2549de3))
+- add SEO templates, admin articles config, and multiple fixes ([8da5dc2](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/8da5dc2c90fe9ecb4b9c08a2aa794058ec03ff91))
+- add article Twig rendering with multiple page styles ([6da114b](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/6da114b1eda4800cfd40b6c00a511192424ad418))
+
 ## [2.1.0] - 2026-04-14
 
 ### Added
@@ -114,6 +123,7 @@ php bin/adminconsole cache:clear
 - Auto-recompile via Doctrine listener
 - Translations (English, French, German)
 
+[2.2.0]: https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v1.2.0...v2.0.0
 [1.2.0]: https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v1.1.1...v1.2.0
