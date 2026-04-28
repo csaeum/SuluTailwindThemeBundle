@@ -1,0 +1,33 @@
+{#
+    Twitter Card meta tags.
+    Uses summary_large_image card type with fallback to OG values.
+#}
+{% set twitterTitle = extension.seo.title|default(content.title|default('')) %}
+{% set twitterDescription = extension.excerpt.description|default(extension.seo.description|default('')) %}
+
+{# Resolve image: same logic as OG #}
+{% set twitterImageUrl = null %}
+{% if extension.excerpt.images is defined and extension.excerpt.images.ids is defined and extension.excerpt.images.ids|length > 0 %}
+    {% set twitterMedia = sulu_resolve_media(extension.excerpt.images.ids|first, app.request.locale) %}
+    {% set twitterImageUrl = twitterMedia.thumbnails['iw_og_image']|default(twitterMedia.thumbnails['sulu-400x400']|default(twitterMedia.url)) %}
+{% elseif content.heroImage is defined and content.heroImage is not empty %}
+    {% set heroIds = content.heroImage %}
+    {% if heroIds is iterable %}
+        {% set heroId = heroIds|first %}
+    {% else %}
+        {% set heroId = heroIds %}
+    {% endif %}
+    {% if heroId %}
+        {% set twitterMedia = sulu_resolve_media(heroId, app.request.locale) %}
+        {% set twitterImageUrl = twitterMedia.thumbnails['iw_og_image']|default(twitterMedia.thumbnails['sulu-400x400']|default(twitterMedia.url)) %}
+    {% endif %}
+{% endif %}
+
+<meta name="twitter:card" content="{{ twitterImageUrl ? 'summary_large_image' : 'summary' }}">
+<meta name="twitter:title" content="{{ twitterTitle|e('html_attr') }}">
+{% if twitterDescription is not empty %}
+    <meta name="twitter:description" content="{{ twitterDescription|striptags|trim|slice(0, 200)|e('html_attr') }}">
+{% endif %}
+{% if twitterImageUrl %}
+    <meta name="twitter:image" content="{{ absolute_url(twitterImageUrl) }}">
+{% endif %}

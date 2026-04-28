@@ -1,0 +1,29 @@
+{#
+    JSON-LD structured data for BreadcrumbList.
+    Generates schema.org BreadcrumbList from navigation items.
+
+    Parameters:
+    - items: array of {title, url} objects (breadcrumb trail)
+#}
+{% if items is defined and items is iterable and items|length > 0 %}
+{% set listItems = [] %}
+{% for item in items %}
+    {% set listItem = {
+        '@type': 'ListItem',
+        'position': loop.index,
+        'name': item.title|default(''),
+    } %}
+    {% if not loop.last and item.url is defined %}
+        {% set listItem = listItem|merge({'item': absolute_url(item.url)}) %}
+    {% endif %}
+    {% set listItems = listItems|merge([listItem]) %}
+{% endfor %}
+
+<script type="application/ld+json">
+{{ {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': listItems,
+}|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_PRETTY_PRINT'))|raw }}
+</script>
+{% endif %}

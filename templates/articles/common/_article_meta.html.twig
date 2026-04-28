@@ -12,11 +12,11 @@
     - showReadingTime: bool (default true)
     - compact: bool (default false) — uses smaller layout
 #}
-{% set showDate = showDate|default(true) %}
-{% set showAuthors = showAuthors|default(true) %}
-{% set showCategories = showCategories|default(true) %}
-{% set showReadingTime = showReadingTime|default(true) %}
-{% set compact = compact|default(false) %}
+{% set showDate = showDate is defined ? showDate : true %}
+{% set showAuthors = showAuthors is defined ? showAuthors : true %}
+{% set showCategories = showCategories is defined ? showCategories : true %}
+{% set showReadingTime = showReadingTime is defined ? showReadingTime : true %}
+{% set compact = compact is defined ? compact : false %}
 
 <div class="article-meta flex flex-wrap items-center gap-3 {{ compact ? 'text-sm' : 'text-base' }} text-[var(--color-secondary-600)]">
     {% if showDate and date is defined and date is not empty %}
@@ -44,7 +44,7 @@
     {% if showCategories and categories is defined and categories is iterable and categories|length > 0 %}
         <span class="text-[var(--color-border)]">|</span>
         {% for category in categories %}
-            <span class="inline-block px-2 py-0.5 text-xs font-medium rounded-full bg-[var(--color-primary-100)] text-[var(--color-primary-700)]">
+            <span class="inline-block px-2 py-0.5 text-xs font-medium rounded-[var(--border-radius)] bg-[var(--color-primary-100)] text-[var(--color-primary-700)]">
                 {{ category.name|default(category.title|default('')) }}
             </span>
         {% endfor %}

@@ -13,14 +13,20 @@
 
 {% block article_header %}
     <header class="article-header mt-8 mb-6">
+        {% if articleConfig.showBreadcrumbs|iw_article_visible('page') %}
+            {% include '@ItechWorldSuluTailwindTheme/articles/common/_breadcrumbs.html.twig' with {
+                items: breadcrumb|default([]),
+            } only %}
+        {% endif %}
+
         <h1 class="font-[var(--font-family-heading)] text-[var(--font-size-h1)] font-[var(--font-h1-weight)] leading-[var(--line-height-h1)] mb-6" itemprop="headline">
             {{ content.title }}
         </h1>
 
         {# Prominent author display #}
-        {% if content.authors is defined and content.authors is iterable and content.authors|length > 0 %}
+        {% if articleConfig.showAuthors|iw_article_visible('page') and articleAuthors is defined and articleAuthors|length > 0 %}
             <div class="flex items-center gap-4 mb-4">
-                {% for author in content.authors %}
+                {% for author in articleAuthors %}
                     {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_author.html.twig' with {
                         author: author,
                         size: 'lg',
@@ -30,10 +36,12 @@
         {% endif %}
 
         {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_meta.html.twig' with {
-            date: content.datePublished|default(null),
+            date: authored|default(null),
             readingTime: content.readingTime|default(null),
             categories: content.excerptCategories|default([]),
+            showDate: articleConfig.showDates|iw_article_visible('page'),
             showAuthors: false,
+            showCategories: articleConfig.showCategories|iw_article_visible('page'),
         } only %}
     </header>
     <hr class="mb-8 border-[var(--color-border)]">
@@ -50,9 +58,10 @@
 {% endblock %}
 
 {% block article_related %}
-    {% if content.relatedArticles is defined and content.relatedArticles is iterable %}
+    {% if articleConfig.showRelated|iw_article_visible('page') and content.relatedArticles is defined and content.relatedArticles is iterable %}
         {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_related.html.twig' with {
             articles: content.relatedArticles,
+            maxItems: articleConfig.relatedCount|default(3),
         } only %}
     {% endif %}
 {% endblock %}

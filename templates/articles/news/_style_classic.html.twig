@@ -13,6 +13,12 @@
 
 {% block article_header %}
     <header class="article-header mt-8 mb-6">
+        {% if articleConfig.showBreadcrumbs|iw_article_visible('page') %}
+            {% include '@ItechWorldSuluTailwindTheme/articles/common/_breadcrumbs.html.twig' with {
+                items: breadcrumb|default([]),
+            } only %}
+        {% endif %}
+
         <h1 class="font-[var(--font-family-heading)] text-[var(--font-size-h1)] font-[var(--font-h1-weight)] leading-[var(--line-height-h1)] mb-4" itemprop="headline">
             {{ content.title }}
         </h1>
@@ -26,9 +32,12 @@
 
 {% block article_meta %}
     {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_meta.html.twig' with {
-        date: content.datePublished|default(null),
-        authors: content.authors|default([]),
+        date: authored|default(null),
+        authors: articleAuthors|default([]),
         categories: content.excerptCategories|default([]),
+        showDate: articleConfig.showDates|iw_article_visible('page'),
+        showAuthors: articleConfig.showAuthors|iw_article_visible('page'),
+        showCategories: articleConfig.showCategories|iw_article_visible('page'),
     } only %}
     <hr class="my-6 border-[var(--color-border)]">
 {% endblock %}

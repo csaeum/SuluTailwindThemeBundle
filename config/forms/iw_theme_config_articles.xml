@@ -1,0 +1,159 @@
+<?xml version="1.0" ?>
+<!--
+    Admin form: Articles tab.
+    Style pickers for article page layouts, listing config, and display toggles.
+-->
+<form xmlns="http://schemas.sulu.io/template/template"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/form-1.0.xsd"
+>
+    <key>iw_theme_config_articles</key>
+
+    <properties>
+        <!-- Page styles section -->
+        <section name="articlePageStyles">
+            <meta>
+                <title>iw_sulu_tailwind_theme.articles_section_page_styles</title>
+            </meta>
+            <properties>
+                <property name="articles_newsStyle" type="iw_theme_article_style_picker" colspan="12">
+                    <meta><title>iw_sulu_tailwind_theme.articles_news_style</title></meta>
+                    <params>
+                        <param name="article_type" value="news"/>
+                    </params>
+                </property>
+
+                <property name="articles_eventStyle" type="iw_theme_article_style_picker" colspan="12">
+                    <meta><title>iw_sulu_tailwind_theme.articles_event_style</title></meta>
+                    <params>
+                        <param name="article_type" value="event"/>
+                    </params>
+                </property>
+
+                <property name="articles_blogStyle" type="iw_theme_article_style_picker" colspan="12">
+                    <meta><title>iw_sulu_tailwind_theme.articles_blog_style</title></meta>
+                    <params>
+                        <param name="article_type" value="blog"/>
+                    </params>
+                </property>
+            </properties>
+        </section>
+
+        <!-- Listing section -->
+        <section name="articleListing">
+            <meta>
+                <title>iw_sulu_tailwind_theme.articles_section_listing</title>
+            </meta>
+            <properties>
+                <property name="articles_listingStyle" type="iw_theme_article_style_picker" colspan="12">
+                    <meta><title>iw_sulu_tailwind_theme.articles_listing_style</title></meta>
+                    <params>
+                        <param name="article_type" value="listing"/>
+                    </params>
+                </property>
+
+                <property name="articles_cardImageRatio" type="single_select" colspan="4">
+                    <meta><title>iw_sulu_tailwind_theme.articles_card_image_ratio</title></meta>
+                    <params>
+                        <param name="default_value" value="16:9"/>
+                        <param name="values" type="collection">
+                            <param name="16:9"><meta><title>16:9</title></meta></param>
+                            <param name="4:3"><meta><title>4:3</title></meta></param>
+                            <param name="1:1"><meta><title>1:1</title></meta></param>
+                            <param name="9:16"><meta><title>9:16</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+            </properties>
+        </section>
+
+        <!-- Display elements section -->
+        <section name="articleDisplay">
+            <meta>
+                <title>iw_sulu_tailwind_theme.articles_section_display</title>
+            </meta>
+            <properties>
+                <property name="articles_showDates" type="single_select" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.articles_show_dates</title></meta>
+                    <params>
+                        <param name="default_value" value="both"/>
+                        <param name="values" type="collection">
+                            <param name="hidden"><meta><title>iw_sulu_tailwind_theme.articles_visibility_hidden</title></meta></param>
+                            <param name="page"><meta><title>iw_sulu_tailwind_theme.articles_visibility_page</title></meta></param>
+                            <param name="listing"><meta><title>iw_sulu_tailwind_theme.articles_visibility_listing</title></meta></param>
+                            <param name="both"><meta><title>iw_sulu_tailwind_theme.articles_visibility_both</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+
+                <property name="articles_showAuthors" type="single_select" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.articles_show_authors</title></meta>
+                    <params>
+                        <param name="default_value" value="both"/>
+                        <param name="values" type="collection">
+                            <param name="hidden"><meta><title>iw_sulu_tailwind_theme.articles_visibility_hidden</title></meta></param>
+                            <param name="page"><meta><title>iw_sulu_tailwind_theme.articles_visibility_page</title></meta></param>
+                            <param name="listing"><meta><title>iw_sulu_tailwind_theme.articles_visibility_listing</title></meta></param>
+                            <param name="both"><meta><title>iw_sulu_tailwind_theme.articles_visibility_both</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+
+                <property name="articles_showCategories" type="single_select" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.articles_show_categories</title></meta>
+                    <params>
+                        <param name="default_value" value="both"/>
+                        <param name="values" type="collection">
+                            <param name="hidden"><meta><title>iw_sulu_tailwind_theme.articles_visibility_hidden</title></meta></param>
+                            <param name="page"><meta><title>iw_sulu_tailwind_theme.articles_visibility_page</title></meta></param>
+                            <param name="listing"><meta><title>iw_sulu_tailwind_theme.articles_visibility_listing</title></meta></param>
+                            <param name="both"><meta><title>iw_sulu_tailwind_theme.articles_visibility_both</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+
+                <property name="articles_showExcerpts" type="single_select" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.articles_show_excerpts</title></meta>
+                    <params>
+                        <param name="default_value" value="listing"/>
+                        <param name="values" type="collection">
+                            <param name="hidden"><meta><title>iw_sulu_tailwind_theme.articles_visibility_hidden</title></meta></param>
+                            <param name="listing"><meta><title>iw_sulu_tailwind_theme.articles_visibility_listing</title></meta></param>
+                            <param name="both"><meta><title>iw_sulu_tailwind_theme.articles_visibility_both</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+
+                <property name="articles_showBreadcrumbs" type="single_select" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.articles_show_breadcrumbs</title></meta>
+                    <params>
+                        <param name="default_value" value="page"/>
+                        <param name="values" type="collection">
+                            <param name="hidden"><meta><title>iw_sulu_tailwind_theme.articles_visibility_hidden</title></meta></param>
+                            <param name="page"><meta><title>iw_sulu_tailwind_theme.articles_visibility_page</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+
+                <property name="articles_showRelated" type="single_select" colspan="6">
+                    <meta><title>iw_sulu_tailwind_theme.articles_show_related</title></meta>
+                    <params>
+                        <param name="default_value" value="page"/>
+                        <param name="values" type="collection">
+                            <param name="hidden"><meta><title>iw_sulu_tailwind_theme.articles_visibility_hidden</title></meta></param>
+                            <param name="page"><meta><title>iw_sulu_tailwind_theme.articles_visibility_page</title></meta></param>
+                        </param>
+                    </params>
+                </property>
+
+                <property name="articles_relatedCount" type="number" colspan="4"
+                          visibleCondition="articles_showRelated != 'hidden'">
+                    <meta><title>iw_sulu_tailwind_theme.articles_related_count</title></meta>
+                    <params>
+                        <param name="default_value" value="3"/>
+                    </params>
+                </property>
+            </properties>
+        </section>
+    </properties>
+</form>

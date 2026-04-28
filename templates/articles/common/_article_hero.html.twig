@@ -23,7 +23,7 @@
     {% endif %}
 
     {% if media is not null %}
-        {% set imgUrl = media.thumbnails['iw_hero_lg']|default(media.thumbnails['sulu-400x400']|default(media.url)) %}
+        {% set imgUrl = media.thumbnails['iw_hero_lg']|default(media.thumbnails['iw_theme_16_9']|default(media.url)) %}
         {% set imgAlt = media.title|default('') %}
 
         {% if heroStyle == 'fullwidth' %}
@@ -32,9 +32,10 @@
             </div>
         {% elseif heroStyle == 'contained' %}
             <div class="article-hero container mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-                <img src="{{ imgUrl }}" alt="{{ imgAlt }}"
-                     class="w-full rounded-[var(--border-imageRadius,var(--border-radius))] object-cover"
-                     style="max-height: {{ heroMaxHeight }}" loading="eager" itemprop="image">
+                <div class="overflow-hidden rounded-[var(--border-imageRadius)]" style="max-height: {{ heroMaxHeight }}">
+                    <img src="{{ imgUrl }}" alt="{{ imgAlt }}"
+                         class="w-full h-full object-cover" loading="eager" itemprop="image">
+                </div>
             </div>
         {% elseif heroStyle == 'parallax' %}
             <div class="article-hero w-full overflow-hidden relative" style="max-height: {{ heroMaxHeight }}">

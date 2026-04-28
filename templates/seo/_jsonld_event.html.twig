@@ -1,0 +1,72 @@
+{#
+    JSON-LD structured data for Event articles.
+    Generates Event schema.org markup with location/organizer.
+#}
+
+{# Resolve image URL #}
+{% set imageUrl = null %}
+{% if extension.excerpt.images is defined and extension.excerpt.images.ids is defined and extension.excerpt.images.ids|length > 0 %}
+    {% set imgMedia = sulu_resolve_media(extension.excerpt.images.ids|first, app.request.locale) %}
+    {% set imageUrl = absolute_url(imgMedia.thumbnails['iw_og_image']|default(imgMedia.url)) %}
+{% elseif content.heroImage is defined and content.heroImage is not empty %}
+    {% set heroIds = content.heroImage %}
+    {% set heroId = heroIds is iterable ? heroIds|first : heroIds %}
+    {% if heroId %}
+        {% set imgMedia = sulu_resolve_media(heroId, app.request.locale) %}
+        {% set imageUrl = absolute_url(imgMedia.thumbnails['iw_og_image']|default(imgMedia.url)) %}
+    {% endif %}
+{% endif %}
+
+{# Resolve description #}
+{% set description = extension.excerpt.description|default('')|striptags|trim %}
+{% if description is empty and content.subtitle is defined %}
+    {% set description = content.subtitle|striptags|trim %}
+{% endif %}
+
+{# Attendance mode #}
+{% set isOnline = content.isOnline|default(false) %}
+{% set attendanceMode = isOnline ? 'https://schema.org/OnlineEventAttendanceMode' : 'https://schema.org/OfflineEventAttendanceMode' %}
+
+{# Location #}
+{% set locationData = null %}
+{% if isOnline and content.locationUrl is defined and content.locationUrl is not empty %}
+    {% set locationData = {
+        '@type': 'VirtualLocation',
+        'url': content.locationUrl,
+    } %}
+{% elseif not isOnline and content.location is defined and content.location is not empty %}
+    {% set locationData = {
+        '@type': 'Place',
+        'name': content.location,
+    } %}
+{% endif %}
+
+{# Organizer #}
+{% set organizerData = null %}
+{% if content.organizer is defined and content.organizer is iterable and content.organizer|length > 0 %}
+    {% set org = content.organizer|first %}
+    {% set orgName = iw_sulu_tailwind_theme_author_name(org) %}
+    {% if orgName is not empty %}
+        {% set orgType = org.type|default('custom') == 'organization' ? 'Organization' : 'Person' %}
+        {% set organizerData = {'@type': orgType, 'name': orgName} %}
+        {% if org.url is defined and org.url is not empty %}
+            {% set organizerData = organizerData|merge({'url': org.url}) %}
+        {% endif %}
+    {% endif %}
+{% endif %}
+
+<script type="application/ld+json">
+{{ {
+    '@context': 'https://schema.org',
+    '@type': 'Event',
+    'name': content.title|default(''),
+    'startDate': content.startDate is defined and content.startDate is not empty ? content.startDate|date('c') : null,
+    'endDate': content.endDate is defined and content.endDate is not empty ? content.endDate|date('c') : null,
+    'eventAttendanceMode': attendanceMode,
+    'eventStatus': 'https://schema.org/EventScheduled',
+    'location': locationData,
+    'image': imageUrl,
+    'description': description is not empty ? description|slice(0, 300) : null,
+    'organizer': organizerData,
+}|filter(v => v is not null)|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_PRETTY_PRINT'))|raw }}
+</script>

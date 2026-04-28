@@ -385,6 +385,13 @@ Add the theme functions to your `templates/base.html.twig`:
         <link rel="stylesheet" href="{{ themeCssPath }}">
     {% endif %}
 
+    {# SEO: Open Graph + Twitter Cards (renders meta tags for social sharing) #}
+    {% include '@ItechWorldSuluTailwindTheme/seo/_opengraph.html.twig' ignore missing %}
+    {% include '@ItechWorldSuluTailwindTheme/seo/_twitter_card.html.twig' ignore missing %}
+
+    {# SEO: JSON-LD structured data — leave empty, article templates fill it automatically #}
+    {% block seo_structured_data %}{% endblock %}
+
     {{ encore_entry_link_tags('app') }}
 </head>
 <body class="bg-[var(--color-background)] text-[var(--color-text)]">
@@ -400,6 +407,8 @@ Add the theme functions to your `templates/base.html.twig`:
     {{ encore_entry_script_tags('app') }}
 </body>
 ```
+
+> The `{% block seo_structured_data %}` block is required for article JSON-LD (schema.org) to appear in the `<head>`. Article templates automatically fill this block with NewsArticle, BlogPosting, or Event structured data.
 
 > The bundle also provides `@ItechWorldSuluTailwindTheme/base.html.twig` as a ready-to-extend base template. See **[Custom Integration Guide](doc/custom-integration.md)** for a complete example with SEO, fallback navigation, and more.
 

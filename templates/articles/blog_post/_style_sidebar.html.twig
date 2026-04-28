@@ -14,13 +14,21 @@
 
 {% block article_header %}
     <header class="article-header mb-6">
+        {% if articleConfig.showBreadcrumbs|iw_article_visible('page') %}
+            {% include '@ItechWorldSuluTailwindTheme/articles/common/_breadcrumbs.html.twig' with {
+                items: breadcrumb|default([]),
+            } only %}
+        {% endif %}
+
         <h1 class="font-[var(--font-family-heading)] text-[var(--font-size-h1)] font-[var(--font-h1-weight)] leading-[var(--line-height-h1)] mb-4" itemprop="headline">
             {{ content.title }}
         </h1>
         {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_meta.html.twig' with {
-            date: content.datePublished|default(null),
-            authors: content.authors|default([]),
+            date: authored|default(null),
+            authors: articleAuthors|default([]),
             readingTime: content.readingTime|default(null),
+            showDate: articleConfig.showDates|iw_article_visible('page'),
+            showAuthors: articleConfig.showAuthors|iw_article_visible('page'),
             showCategories: false,
             compact: true,
         } only %}
@@ -50,14 +58,14 @@
 
         {# Sidebar (30%) #}
         <aside class="lg:col-span-3">
-            <div class="lg:sticky lg:top-4 space-y-8">
+            <div class="lg:sticky lg:top-24 space-y-8">
                 {# Author card #}
-                {% if content.authors is defined and content.authors is iterable and content.authors|length > 0 %}
+                {% if articleConfig.showAuthors|iw_article_visible('page') and articleAuthors is defined and articleAuthors|length > 0 %}
                     <div class="p-5 rounded-[var(--border-radius)] bg-[var(--color-background-100)]">
                         <h3 class="text-xs uppercase tracking-wide text-[var(--color-secondary-500)] font-semibold mb-4">
                             {{ 'iw_sulu_tailwind_theme.article.about_author'|trans }}
                         </h3>
-                        {% for author in content.authors %}
+                        {% for author in articleAuthors %}
                             {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_author.html.twig' with {
                                 author: author,
                                 size: 'lg',
@@ -67,7 +75,7 @@
                 {% endif %}
 
                 {# Categories #}
-                {% if content.excerptCategories is defined and content.excerptCategories|length > 0 %}
+                {% if articleConfig.showCategories|iw_article_visible('page') and content.excerptCategories is defined and content.excerptCategories|length > 0 %}
                     <div>
                         <h3 class="text-xs uppercase tracking-wide text-[var(--color-secondary-500)] font-semibold mb-3">
                             {{ 'iw_sulu_tailwind_theme.article.sidebar_categories'|trans }}
@@ -91,13 +99,13 @@
                 {% endif %}
 
                 {# Related articles in sidebar #}
-                {% if content.relatedArticles is defined and content.relatedArticles is iterable and content.relatedArticles|length > 0 %}
+                {% if articleConfig.showRelated|iw_article_visible('page') and content.relatedArticles is defined and content.relatedArticles is iterable and content.relatedArticles|length > 0 %}
                     <div>
                         <h3 class="text-xs uppercase tracking-wide text-[var(--color-secondary-500)] font-semibold mb-3">
                             {{ 'iw_sulu_tailwind_theme.article.related_articles'|trans }}
                         </h3>
                         <div class="space-y-4">
-                            {% for article in content.relatedArticles|slice(0, 3) %}
+                            {% for article in content.relatedArticles|slice(0, articleConfig.relatedCount|default(3)) %}
                                 {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_card.html.twig' with {
                                     article: article,
                                     showExcerpt: false,

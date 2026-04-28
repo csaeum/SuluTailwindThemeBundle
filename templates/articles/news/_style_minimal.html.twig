@@ -8,10 +8,19 @@
 
 {% block article_header %}
     <header class="article-header mt-12 mb-8 max-w-3xl mx-auto">
+        {% if articleConfig.showBreadcrumbs|iw_article_visible('page') %}
+            {% include '@ItechWorldSuluTailwindTheme/articles/common/_breadcrumbs.html.twig' with {
+                items: breadcrumb|default([]),
+            } only %}
+        {% endif %}
+
         {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_meta.html.twig' with {
-            date: content.datePublished|default(null),
-            authors: content.authors|default([]),
+            date: authored|default(null),
+            authors: articleAuthors|default([]),
             categories: content.excerptCategories|default([]),
+            showDate: articleConfig.showDates|iw_article_visible('page'),
+            showAuthors: articleConfig.showAuthors|iw_article_visible('page'),
+            showCategories: articleConfig.showCategories|iw_article_visible('page'),
             compact: true,
         } only %}
 

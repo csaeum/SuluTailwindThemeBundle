@@ -1,0 +1,64 @@
+<?xml version="1.0" ?>
+<!--
+    Page template: Article listing.
+    Provides a configurable article listing page with smart_content filtering,
+    pagination, and multiple display styles (grid/list/cards).
+    Uses Sulu's native smart_content provider for articles.
+-->
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+
+    <key>iw_article_listing</key>
+    <view>@ItechWorldSuluTailwindTheme/pages/article_listing</view>
+    <controller>Sulu\Content\UserInterface\Controller\Website\ContentController::indexAction</controller>
+    <cacheLifetime>3600</cacheLifetime>
+
+    <meta>
+        <title>iw_sulu_tailwind_theme.page.article_listing</title>
+    </meta>
+
+    <properties>
+        <property name="title" type="text_line" mandatory="true">
+            <meta><title>iw_sulu_tailwind_theme.title</title></meta>
+            <params>
+                <param name="headline" value="true"/>
+            </params>
+            <tag name="sulu.rlp.part"/>
+        </property>
+
+        <property name="url" type="route" mandatory="true">
+            <meta><title>iw_sulu_tailwind_theme.url</title></meta>
+            <tag name="sulu.rlp"/>
+        </property>
+
+        <!-- Article source -->
+        <section name="articles">
+            <meta><title>iw_sulu_tailwind_theme.article.listing_source</title></meta>
+            <properties>
+                <property name="articles" type="smart_content">
+                    <meta><title>iw_sulu_tailwind_theme.article.listing_articles</title></meta>
+                    <params>
+                        <param name="provider" value="articles"/>
+                        <param name="max_per_page" value="12"/>
+                        <param name="page_parameter" value="page"/>
+                        <param name="properties" type="collection">
+                            <param name="title" value="title"/>
+                            <param name="url" value="url"/>
+                            <param name="heroImage" value="heroImage"/>
+                            <param name="subtitle" value="subtitle"/>
+                            <param name="authored" value="authored"/>
+                            <param name="readingTime" value="readingTime"/>
+                            <param name="excerptTitle" value="excerpt.title"/>
+                            <param name="excerptDescription" value="excerpt.description"/>
+                            <param name="excerptMore" value="excerpt.more"/>
+                            <param name="excerptImages" value="excerpt.images"/>
+                            <param name="excerptCategories" value="excerpt.categories"/>
+                            <param name="excerptTags" value="excerpt.tags"/>
+                        </param>
+                    </params>
+                </property>
+            </properties>
+        </section>
+    </properties>
+</template>

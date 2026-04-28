@@ -2,12 +2,17 @@
     Listing style: Cards
     Larger cards in 2 columns with prominent images.
 #}
+{% set config = iw_sulu_tailwind_theme_article_config() %}
+
 {% if articles is defined and articles is iterable and articles|length > 0 %}
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
         {% for article in articles %}
             {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_card.html.twig' with {
                 article: article,
-                imageRatio: '16/9',
+                imageRatio: config.cardImageRatio|default('16:9')|replace({':': '/'}),
+                showDate: config.showDates|iw_article_visible('listing'),
+                showExcerpt: config.showExcerpts|iw_article_visible('listing'),
+                showCategory: config.showCategories|iw_article_visible('listing'),
             } only %}
         {% endfor %}
     </div>

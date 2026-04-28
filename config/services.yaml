@@ -14,6 +14,7 @@ services:
             - '@itech_world.sulu_tailwind_theme.webspace_theme_repository'
             - '@sulu_core.webspace.webspace_manager'
             - '@itech_world.sulu_tailwind_theme.config_resolver'
+            - '%itech_world_sulu_tailwind_theme.article_templates_enabled%'
         tags:
             - { name: 'sulu.admin' }
             - { name: 'sulu.context', context: 'admin' }
@@ -148,6 +149,7 @@ services:
         class: ItechWorld\SuluTailwindThemeBundle\Twig\ArticleExtension
         arguments:
             - '@itech_world.sulu_tailwind_theme.twig_extension'
+            - '@?sulu.repository.user'
         tags:
             - { name: 'twig.extension' }
 

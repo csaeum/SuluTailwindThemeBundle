@@ -29,23 +29,25 @@
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
 
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pb-12 pt-32">
-            {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_categories.html.twig' with {
-                categories: content.excerptCategories|default([]),
-            } only %}
+            {% if articleConfig.showCategories|iw_article_visible('page') %}
+                {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_categories.html.twig' with {
+                    categories: content.excerptCategories|default([]),
+                } only %}
+            {% endif %}
 
             <h1 class="font-[var(--font-family-heading)] text-4xl md:text-5xl lg:text-6xl font-[var(--font-h1-weight)] leading-tight text-white mt-4 mb-4" itemprop="headline">
                 {{ content.title }}
             </h1>
 
             <div class="flex flex-wrap items-center gap-4 text-white/80 text-sm">
-                {% if content.authors is defined and content.authors|length > 0 %}
-                    {% for author in content.authors %}
+                {% if articleConfig.showAuthors|iw_article_visible('page') and articleAuthors is defined and articleAuthors|length > 0 %}
+                    {% for author in articleAuthors %}
                         <span>{{ iw_sulu_tailwind_theme_author_name(author) }}</span>
                     {% endfor %}
                 {% endif %}
-                {% if content.datePublished is defined and content.datePublished is not empty %}
+                {% if articleConfig.showDates|iw_article_visible('page') and authored is defined and authored is not empty %}
                     <span>&middot;</span>
-                    <time datetime="{{ content.datePublished|date('c') }}">{{ iw_sulu_tailwind_theme_format_date(content.datePublished) }}</time>
+                    <time datetime="{{ authored|date('c') }}">{{ iw_sulu_tailwind_theme_format_date(authored) }}</time>
                 {% endif %}
                 {% if content.readingTime is defined and content.readingTime is not empty %}
                     <span>&middot;</span>
@@ -100,9 +102,10 @@
 {% endblock %}
 
 {% block article_related %}
-    {% if content.relatedArticles is defined and content.relatedArticles is iterable %}
+    {% if articleConfig.showRelated|iw_article_visible('page') and content.relatedArticles is defined and content.relatedArticles is iterable %}
         {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_related.html.twig' with {
             articles: content.relatedArticles,
+            maxItems: articleConfig.relatedCount|default(3),
         } only %}
     {% endif %}
 {% endblock %}

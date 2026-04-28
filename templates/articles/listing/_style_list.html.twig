@@ -2,6 +2,9 @@
     Listing style: List
     Full-width list with thumbnail left + title/meta/excerpt right.
 #}
+{% set config = iw_sulu_tailwind_theme_article_config() %}
+{% set cardRatio = config.cardImageRatio|default('4:3')|replace({':': '/'}) %}
+
 {% if articles is defined and articles is iterable and articles|length > 0 %}
     <div class="space-y-6">
         {% for article in articles %}
@@ -9,7 +12,10 @@
                 {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_card.html.twig' with {
                     article: article,
                     layout: 'horizontal',
-                    imageRatio: '4/3',
+                    imageRatio: cardRatio,
+                    showDate: config.showDates|iw_article_visible('listing'),
+                    showExcerpt: config.showExcerpts|iw_article_visible('listing'),
+                    showCategory: config.showCategories|iw_article_visible('listing'),
                 } only %}
             </div>
         {% endfor %}

@@ -9,7 +9,7 @@
     - locationUrl: string (online event URL)
     - organizer: array (organizer block entry) or null
 #}
-{% set isOnline = isOnline|default(false) %}
+{% set isOnline = isOnline is defined ? isOnline : false %}
 
 <div class="event-info-card bg-white/95 backdrop-blur-md rounded-[var(--border-radius)] shadow-lg p-6 space-y-4">
     {# Dates #}
@@ -38,7 +38,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
             </svg>
             <div>
-                <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-[var(--color-success-100)] text-[var(--color-success-700)]">
+                <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-[var(--border-radius)] bg-[var(--color-success-100)] text-[var(--color-success-700)]">
                     {{ 'iw_sulu_tailwind_theme.article.event_online_badge'|trans }}
                 </span>
                 {% if locationUrl is defined and locationUrl is not empty %}

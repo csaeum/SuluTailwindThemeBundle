@@ -2,11 +2,13 @@
     Article author component — avatar + name + role.
 
     Parameters:
-    - author: a single author block entry (type: custom|contact|organization)
+    - author: a single author entry (type: sulu_user|custom|contact|organization)
     - showAvatar: bool (default true)
     - size: 'sm' | 'md' (default) | 'lg'
+
+    For sulu_user type, the author name is resolved from the Sulu user's contact.
 #}
-{% set showAvatar = showAvatar|default(true) %}
+{% set showAvatar = showAvatar is defined ? showAvatar : true %}
 {% set size = size|default('md') %}
 {% set sizeClasses = {
     'sm': 'w-8 h-8 text-sm',
@@ -14,9 +16,11 @@
     'lg': 'w-14 h-14 text-lg',
 } %}
 
-{% set authorName = iw_sulu_tailwind_theme_author_name(author) %}
-{% set authorRole = author.role|default('') %}
 {% set authorType = author.type|default('custom') %}
+{% set authorRole = author.role|default('') %}
+
+{# Resolve author name — handles all types: sulu_user, custom, contact, organization #}
+{% set authorName = iw_sulu_tailwind_theme_author_name(author) %}
 
 {% if authorName is not empty %}
     <div class="article-author flex items-center gap-3" itemprop="author" itemscope itemtype="https://schema.org/Person">

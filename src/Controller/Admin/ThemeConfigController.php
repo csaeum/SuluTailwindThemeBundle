@@ -472,6 +472,20 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         // Flatten menuConfig scalars and nested colors
         $this->flattenMenuConfig($data, $menuConfig);
 
+        // Article configuration: flat keys passed through directly
+        $articleKeys = [
+            'articles_newsStyle', 'articles_eventStyle', 'articles_blogStyle',
+            'articles_listingStyle', 'articles_cardImageRatio',
+            'articles_showDates', 'articles_showAuthors', 'articles_showCategories',
+            'articles_showExcerpts', 'articles_showBreadcrumbs', 'articles_showRelated',
+            'articles_relatedCount',
+        ];
+        foreach ($articleKeys as $key) {
+            if (isset($tokens[$key])) {
+                $data[$key] = $tokens[$key];
+            }
+        }
+
         return $data;
     }
 
@@ -626,6 +640,21 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         $tokens['buttons'] = $this->unflattenButtons($data, $tokens['buttons'] ?? []);
         $tokens['typography'] = $this->unflattenTypography($data, $tokens['typography'] ?? []);
         $tokens['blockVariants'] = $this->unflattenBlockVariants($data, $tokens['blockVariants'] ?? []);
+
+        // Article configuration: flat keys stored directly in tokens
+        $articleKeys = [
+            'articles_newsStyle', 'articles_eventStyle', 'articles_blogStyle',
+            'articles_listingStyle', 'articles_cardImageRatio',
+            'articles_showDates', 'articles_showAuthors', 'articles_showCategories',
+            'articles_showExcerpts', 'articles_showBreadcrumbs', 'articles_showRelated',
+            'articles_relatedCount',
+        ];
+        foreach ($articleKeys as $key) {
+            if (\array_key_exists($key, $data)) {
+                $tokens[$key] = $data[$key];
+            }
+        }
+
         $theme->setTokens($tokens);
 
         // Reconstruct menuConfig from flat keys

@@ -15,6 +15,13 @@
         }) }}
     {% endblock %}
 
+    {# SEO: Open Graph + Twitter Cards #}
+    {% include '@ItechWorldSuluTailwindTheme/seo/_opengraph.html.twig' ignore missing %}
+    {% include '@ItechWorldSuluTailwindTheme/seo/_twitter_card.html.twig' ignore missing %}
+
+    {# SEO: JSON-LD — filled automatically by article templates #}
+    {% block seo_structured_data %}{% endblock %}
+
     {# Theme: Google Fonts #}
     {{ iw_sulu_tailwind_theme_fonts_link()|raw }}
 

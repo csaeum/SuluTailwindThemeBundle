@@ -1,0 +1,73 @@
+{#
+    Open Graph meta tags for articles and pages.
+
+    Automatically resolves:
+    - og:title from content title or SEO title
+    - og:description from excerpt description
+    - og:image from excerpt image or hero image
+    - og:type from article type (article for news/blog, event for events)
+
+    Override this block in your template to customize OG tags.
+#}
+{% set ogTitle = extension.seo.title|default(content.title|default('')) %}
+{% set ogDescription = extension.excerpt.description|default(extension.seo.description|default('')) %}
+{% set ogUrl = app.request.uri %}
+{% set ogSiteName = sulu_page_navigation_root_tree('main', 0)|length > 0 ? '' : '' %}
+
+{# Resolve OG image: excerpt image → hero image #}
+{% set ogImageUrl = null %}
+{% if extension.excerpt.images is defined and extension.excerpt.images.ids is defined and extension.excerpt.images.ids|length > 0 %}
+    {% set ogMedia = sulu_resolve_media(extension.excerpt.images.ids|first, app.request.locale) %}
+    {% set ogImageUrl = ogMedia.thumbnails['iw_og_image']|default(ogMedia.thumbnails['sulu-400x400']|default(ogMedia.url)) %}
+{% elseif content.heroImage is defined and content.heroImage is not empty %}
+    {% set heroIds = content.heroImage %}
+    {% if heroIds is iterable %}
+        {% set heroId = heroIds|first %}
+    {% else %}
+        {% set heroId = heroIds %}
+    {% endif %}
+    {% if heroId %}
+        {% set ogMedia = sulu_resolve_media(heroId, app.request.locale) %}
+        {% set ogImageUrl = ogMedia.thumbnails['iw_og_image']|default(ogMedia.thumbnails['sulu-400x400']|default(ogMedia.url)) %}
+    {% endif %}
+{% endif %}
+
+{# Determine og:type #}
+{% set ogType = 'website' %}
+{% if content.startDate is defined %}
+    {% set ogType = 'event' %}
+{% elseif articleAuthors is defined or (template is defined and template starts with 'iw_') %}
+    {% set ogType = 'article' %}
+{% endif %}
+
+<meta property="og:title" content="{{ ogTitle|e('html_attr') }}">
+{% if ogDescription is not empty %}
+    <meta property="og:description" content="{{ ogDescription|striptags|trim|slice(0, 200)|e('html_attr') }}">
+{% endif %}
+<meta property="og:url" content="{{ ogUrl }}">
+<meta property="og:type" content="{{ ogType }}">
+{% if ogImageUrl %}
+    <meta property="og:image" content="{{ absolute_url(ogImageUrl) }}">
+{% endif %}
+
+{# Article-specific OG tags #}
+{% if ogType == 'article' %}
+    {% if authored is defined and authored is not empty %}
+        <meta property="article:published_time" content="{{ authored|date('c') }}">
+    {% endif %}
+    {% if articleAuthors is defined and articleAuthors is iterable %}
+        {% for author in articleAuthors %}
+            <meta property="article:author" content="{{ iw_sulu_tailwind_theme_author_name(author)|e('html_attr') }}">
+        {% endfor %}
+    {% endif %}
+    {% if extension.excerpt.categories is defined %}
+        {% for category in extension.excerpt.categories|slice(0, 1) %}
+            <meta property="article:section" content="{{ (category.name|default(category.title|default('')))|e('html_attr') }}">
+        {% endfor %}
+    {% endif %}
+    {% if extension.excerpt.tags is defined %}
+        {% for tag in extension.excerpt.tags %}
+            <meta property="article:tag" content="{{ (tag.name|default(tag))|e('html_attr') }}">
+        {% endfor %}
+    {% endif %}
+{% endif %}

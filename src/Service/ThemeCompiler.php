@@ -200,6 +200,7 @@ class ThemeCompiler
         $css .= $this->generateBorderVariables($tokens['borders'] ?? []);
         $css .= $this->generateButtonVariables($tokens['buttons'] ?? []);
         $css .= $this->generateMenuVariables($menuConfig);
+        $css .= $this->generateArticleVariables($tokens);
         $css .= "}\n\n";
 
         // Button classes
@@ -219,6 +220,50 @@ class ThemeCompiler
         $this->resolvedPalettes = [];
 
         return $css;
+    }
+
+    /**
+     * Generate CSS custom properties for article configuration tokens.
+     *
+     * Compiles article-related settings (styles, display preferences, listing config)
+     * into CSS custom properties prefixed with --article-*.
+     *
+     * @param array<string, mixed> $tokens All theme tokens
+     *
+     * @return string CSS variable declarations
+     */
+    private function generateArticleVariables(array $tokens): string
+    {
+        $articleKeys = [
+            'articles_newsStyle',
+            'articles_eventStyle',
+            'articles_blogStyle',
+            'articles_listingStyle',
+            'articles_cardImageRatio',
+        ];
+
+        $hasAny = false;
+        foreach ($articleKeys as $key) {
+            if (!empty($tokens[$key])) {
+                $hasAny = true;
+                break;
+            }
+        }
+
+        if (!$hasAny) {
+            return '';
+        }
+
+        $css = "  /* Article configuration */\n";
+
+        foreach ($articleKeys as $key) {
+            if (!empty($tokens[$key])) {
+                $cssKey = str_replace('_', '-', $key);
+                $css .= "  --{$cssKey}: {$tokens[$key]};\n";
+            }
+        }
+
+        return $css . "\n";
     }
 
     /**
@@ -406,6 +451,10 @@ class ThemeCompiler
         if (!empty($scale)) {
             $css .= "\n  /* Typography — Scale */\n";
             foreach ($scale as $key => $value) {
+                // Skip 'base' — already generated in "Base values" section above
+                if ('base' === $key) {
+                    continue;
+                }
                 $css .= "  --font-size-{$key}: {$value};\n";
             }
         }
@@ -458,6 +507,9 @@ class ThemeCompiler
                 $css .= "  --border-{$key}: {$resolved};\n";
             }
         }
+
+        // Alias for app.css compatibility (img global rule uses --radius-img)
+        $css .= "  --radius-img: var(--border-imageRadius, var(--border-radius));\n";
 
         return $css . "\n";
     }

@@ -426,7 +426,8 @@
     "iw_sulu_tailwind_theme.article.hero_image_info": "Main image displayed at the top of the article",
     "iw_sulu_tailwind_theme.article.subtitle": "Subtitle",
 
-    "iw_sulu_tailwind_theme.article.authors": "Authors",
+    "iw_sulu_tailwind_theme.article.additional_authors": "Additional authors",
+    "iw_sulu_tailwind_theme.article.additional_authors_info": "The primary author is set in the article settings. Add co-authors or contributors here.",
     "iw_sulu_tailwind_theme.article.author_custom": "Custom author",
     "iw_sulu_tailwind_theme.article.author_contact": "Sulu contact",
     "iw_sulu_tailwind_theme.article.author_organization": "Organization",
@@ -435,8 +436,6 @@
     "iw_sulu_tailwind_theme.article.author_avatar": "Avatar",
     "iw_sulu_tailwind_theme.article.author_contact_select": "Select a contact",
     "iw_sulu_tailwind_theme.article.author_organization_select": "Select an organization",
-
-    "iw_sulu_tailwind_theme.article.date_published": "Publication date",
 
     "iw_sulu_tailwind_theme.article.related_articles": "Related articles",
     "iw_sulu_tailwind_theme.article.related_articles_info": "Automatically fetched or manually selected related articles",
@@ -456,5 +455,44 @@
     "iw_sulu_tailwind_theme.article.organizer_organization_select": "Select an organization",
 
     "iw_sulu_tailwind_theme.article.reading_time": "Reading time",
-    "iw_sulu_tailwind_theme.article.reading_time_info": "Estimated reading time (e.g. \"5 min\")"
+    "iw_sulu_tailwind_theme.article.reading_time_info": "Estimated reading time (e.g. \"5 min\")",
+
+    "iw_sulu_tailwind_theme.page.article_listing": "Article listing",
+    "iw_sulu_tailwind_theme.article.listing_source": "Article source",
+    "iw_sulu_tailwind_theme.article.listing_articles": "Articles",
+
+    "iw_sulu_tailwind_theme.articles": "Articles",
+    "iw_sulu_tailwind_theme.articles_section_page_styles": "Page styles",
+    "iw_sulu_tailwind_theme.articles_section_listing": "Listing",
+    "iw_sulu_tailwind_theme.articles_section_display": "Display elements",
+    "iw_sulu_tailwind_theme.articles_news_style": "News page style",
+    "iw_sulu_tailwind_theme.articles_event_style": "Event page style",
+    "iw_sulu_tailwind_theme.articles_blog_style": "Blog post page style",
+    "iw_sulu_tailwind_theme.articles_listing_style": "Listing style",
+
+    "iw_sulu_tailwind_theme.articles_card_image_ratio": "Card image ratio",
+    "iw_sulu_tailwind_theme.articles_show_dates": "Show dates",
+    "iw_sulu_tailwind_theme.articles_show_authors": "Show authors",
+    "iw_sulu_tailwind_theme.articles_show_categories": "Show categories (badges)",
+    "iw_sulu_tailwind_theme.articles_show_excerpts": "Show excerpts",
+    "iw_sulu_tailwind_theme.articles_show_breadcrumbs": "Show breadcrumbs",
+    "iw_sulu_tailwind_theme.articles_show_related": "Show related articles",
+    "iw_sulu_tailwind_theme.articles_related_count": "Number of related articles",
+    "iw_sulu_tailwind_theme.articles_visibility_hidden": "Hidden",
+    "iw_sulu_tailwind_theme.articles_visibility_page": "Page only",
+    "iw_sulu_tailwind_theme.articles_visibility_listing": "Listing only",
+    "iw_sulu_tailwind_theme.articles_visibility_both": "Both",
+    "iw_sulu_tailwind_theme.articles_no_styles": "No styles available.",
+
+    "iw_sulu_tailwind_theme.style.article_news_classic": "Classic",
+    "iw_sulu_tailwind_theme.style.article_news_magazine": "Magazine",
+    "iw_sulu_tailwind_theme.style.article_news_minimal": "Minimal",
+    "iw_sulu_tailwind_theme.style.article_event_card_info": "Card Info",
+    "iw_sulu_tailwind_theme.style.article_event_timeline": "Timeline",
+    "iw_sulu_tailwind_theme.style.article_blog_classic": "Classic",
+    "iw_sulu_tailwind_theme.style.article_blog_editorial": "Editorial",
+    "iw_sulu_tailwind_theme.style.article_blog_sidebar": "Sidebar",
+    "iw_sulu_tailwind_theme.style.article_listing_grid": "Grid",
+    "iw_sulu_tailwind_theme.style.article_listing_list": "List",
+    "iw_sulu_tailwind_theme.style.article_listing_cards": "Cards"
 }

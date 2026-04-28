@@ -11,17 +11,20 @@
     - imageRatio: aspect ratio string (default '16/9')
     - layout: 'vertical' (default) | 'horizontal'
 #}
-{% set showImage = showImage|default(true) %}
-{% set showDate = showDate|default(true) %}
-{% set showExcerpt = showExcerpt|default(true) %}
-{% set showCategory = showCategory|default(true) %}
+{% set showImage = showImage is defined ? showImage : true %}
+{% set showDate = showDate is defined ? showDate : true %}
+{% set showExcerpt = showExcerpt is defined ? showExcerpt : true %}
+{% set showCategory = showCategory is defined ? showCategory : true %}
 {% set imageRatio = imageRatio|default('16/9') %}
 {% set layout = layout|default('vertical') %}
 
 {% set articleTitle = article.title|default('') %}
-{% set articleUrl = article.routePath|default('#') %}
+{% set articleUrl = article.routePath|default(article.url|default('#')) %}
+{% if articleUrl != '#' %}
+    {% set articleUrl = sulu_content_path(articleUrl) %}
+{% endif %}
 {% set articleExcerpt = article.excerptDescription|default(article.excerpt.description|default('')) %}
-{% set articleDate = article.datePublished|default(article.authored|default(null)) %}
+{% set articleDate = article.authored|default(null) %}
 {% set articleImage = article.excerptImages|default(article.excerpt.images|default(article.heroImage|default(null))) %}
 {% set articleCategories = article.excerptCategories|default(article.excerpt.categories|default([])) %}
 
@@ -37,8 +40,8 @@
 
         {% if imgMedia %}
             <a href="{{ articleUrl }}" class="{{ layout == 'horizontal' ? 'w-1/3 flex-shrink-0' : 'w-full' }}">
-                <div class="overflow-hidden rounded-[var(--border-imageRadius,var(--border-radius))]">
-                    <img src="{{ imgMedia.thumbnails['iw_theme_16_9']|default(imgMedia.thumbnails['sulu-400x400']|default(imgMedia.url)) }}"
+                <div class="overflow-hidden rounded-[var(--border-imageRadius)]">
+                    <img src="{{ imgMedia.thumbnails['iw_theme_16_9']|default(imgMedia.url) }}"
                          alt="{{ imgMedia.title|default(articleTitle) }}"
                          class="w-full object-cover transition-transform duration-300 group-hover:scale-105"
                          style="aspect-ratio: {{ imageRatio }}"
@@ -52,7 +55,7 @@
         {% if showCategory and articleCategories is iterable and articleCategories|length > 0 %}
             <div class="mb-2">
                 {% for category in articleCategories|slice(0, 1) %}
-                    <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-full bg-[var(--color-primary-100)] text-[var(--color-primary-700)]">
+                    <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-[var(--border-radius)] bg-[var(--color-primary-100)] text-[var(--color-primary-700)]">
                         {{ category.name|default(category.title|default('')) }}
                     </span>
                 {% endfor %}

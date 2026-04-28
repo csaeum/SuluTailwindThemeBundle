@@ -14,9 +14,17 @@
 
 {% block article_header %}
     <header class="article-header mb-6">
-        {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_categories.html.twig' with {
-            categories: content.excerptCategories|default([]),
-        } only %}
+        {% if articleConfig.showBreadcrumbs|iw_article_visible('page') %}
+            {% include '@ItechWorldSuluTailwindTheme/articles/common/_breadcrumbs.html.twig' with {
+                items: breadcrumb|default([]),
+            } only %}
+        {% endif %}
+
+        {% if articleConfig.showCategories|iw_article_visible('page') %}
+            {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_categories.html.twig' with {
+                categories: content.excerptCategories|default([]),
+            } only %}
+        {% endif %}
 
         <h1 class="font-[var(--font-family-heading)] text-[var(--font-size-h1)] font-[var(--font-h1-weight)] leading-[var(--line-height-h1)] mt-3 mb-4" itemprop="headline">
             {{ content.title }}
@@ -30,7 +38,7 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mt-8">
         {# Sidebar: event details #}
         <aside class="md:col-span-1">
-            <div class="md:sticky md:top-4 space-y-6">
+            <div class="md:sticky md:top-24 space-y-6">
                 {% include '@ItechWorldSuluTailwindTheme/articles/common/_event_info_card.html.twig' with {
                     startDate: content.startDate|default(null),
                     endDate: content.endDate|default(null),

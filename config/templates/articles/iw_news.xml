@@ -48,8 +48,6 @@
         <section name="meta">
             <meta><title>iw_sulu_tailwind_theme.article.section_meta</title></meta>
             <properties>
-                <xi:include href="../fragments/article-dates.xml"
-                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:property)"/>
                 <xi:include href="../fragments/article-authors.xml"
                             xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:block)"/>
             </properties>
