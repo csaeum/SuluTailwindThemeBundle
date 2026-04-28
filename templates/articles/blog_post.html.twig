@@ -1,0 +1,9 @@
+{#
+    Blog post article dispatcher.
+    Reads the active style from theme config and extends the matching style template.
+    Fallback: classic.
+#}
+{% extends [
+    '@ItechWorldSuluTailwindTheme/articles/blog_post/_style_' ~ iw_sulu_tailwind_theme_article_style('blog_post') ~ '.html.twig',
+    '@ItechWorldSuluTailwindTheme/articles/blog_post/_style_classic.html.twig'
+] %}

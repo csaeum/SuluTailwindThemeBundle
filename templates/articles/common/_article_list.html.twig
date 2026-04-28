@@ -1,0 +1,15 @@
+{#
+    Article list dispatcher — reads active listing style and includes the matching template.
+
+    Parameters:
+    - articles: array of resolved article objects
+    - currentPage: int (1-based)
+    - totalPages: int
+    - baseUrl: string (pagination base URL)
+#}
+{% set activeStyle = iw_sulu_tailwind_theme_listing_style() %}
+
+{% set stylePath = '@ItechWorldSuluTailwindTheme/articles/listing/_style_' ~ activeStyle ~ '.html.twig' %}
+{% set fallbackPath = '@ItechWorldSuluTailwindTheme/articles/listing/_style_grid.html.twig' %}
+
+{% include [stylePath, fallbackPath] %}

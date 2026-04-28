@@ -375,6 +375,15 @@ function scanForSections(root: HTMLElement): void {
                     continue;
                 }
 
+                // Only match sections INSIDE a block container.
+                // Prevents collapsing template-level sections (e.g., article templates)
+                // that happen to share the same translated label as block sections.
+                // Sulu's Block component renders as <section role="switch">.
+                if (!sectionEl.closest('section[role="switch"]')) {
+                    candidate = headerContainer;
+                    continue;
+                }
+
                 if (!isDividerLike(headerContainer)) {
                     candidate = headerContainer;
                     continue;

@@ -1,0 +1,73 @@
+{#
+    JSON-LD structured data for News and Blog articles.
+    Generates NewsArticle or BlogPosting schema.org markup.
+
+    Parameters:
+    - type: 'NewsArticle' (default) or 'BlogPosting'
+#}
+{% set schemaType = type|default('NewsArticle') %}
+
+{# Resolve image URL #}
+{% set imageUrl = null %}
+{% if extension.excerpt.images is defined and extension.excerpt.images.ids is defined and extension.excerpt.images.ids|length > 0 %}
+    {% set imgMedia = sulu_resolve_media(extension.excerpt.images.ids|first, app.request.locale) %}
+    {% set imageUrl = absolute_url(imgMedia.thumbnails['iw_og_image']|default(imgMedia.url)) %}
+{% elseif content.heroImage is defined and content.heroImage is not empty %}
+    {% set heroIds = content.heroImage %}
+    {% set heroId = heroIds is iterable ? heroIds|first : heroIds %}
+    {% if heroId %}
+        {% set imgMedia = sulu_resolve_media(heroId, app.request.locale) %}
+        {% set imageUrl = absolute_url(imgMedia.thumbnails['iw_og_image']|default(imgMedia.url)) %}
+    {% endif %}
+{% endif %}
+
+{# Resolve description #}
+{% set description = extension.excerpt.description|default('')|striptags|trim %}
+{% if description is empty and content.subtitle is defined %}
+    {% set description = content.subtitle|striptags|trim %}
+{% endif %}
+
+{# Build authors array #}
+{% set authorsList = [] %}
+{% if articleAuthors is defined and articleAuthors is iterable %}
+    {% for author in articleAuthors %}
+        {% set authorName = iw_sulu_tailwind_theme_author_name(author) %}
+        {% if authorName is not empty %}
+            {% set authorType = author.type|default('custom') == 'organization' ? 'Organization' : 'Person' %}
+            {% set authorsList = authorsList|merge([{'@type': authorType, 'name': authorName}]) %}
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+{# Build categories/tags #}
+{% set categories = [] %}
+{% if extension.excerpt.categories is defined %}
+    {% for cat in extension.excerpt.categories %}
+        {% set categories = categories|merge([cat.name|default(cat.title|default(''))]) %}
+    {% endfor %}
+{% endif %}
+{% set keywords = [] %}
+{% if extension.excerpt.tags is defined %}
+    {% for tag in extension.excerpt.tags %}
+        {% set keywords = keywords|merge([tag.name|default(tag)]) %}
+    {% endfor %}
+{% endif %}
+
+<script type="application/ld+json">
+{{ {
+    '@context': 'https://schema.org',
+    '@type': schemaType,
+    'headline': content.title|default(''),
+    'datePublished': authored is defined and authored is not empty ? authored|date('c') : null,
+    'dateModified': lastModified is defined and lastModified is not null ? lastModified|date('c') : null,
+    'author': authorsList|length == 1 ? authorsList|first : (authorsList|length > 1 ? authorsList : null),
+    'image': imageUrl,
+    'description': description is not empty ? description|slice(0, 300) : null,
+    'mainEntityOfPage': {
+        '@type': 'WebPage',
+        '@id': app.request.uri
+    },
+    'articleSection': categories|length > 0 ? categories|first : null,
+    'keywords': keywords|length > 0 ? keywords|join(', ') : null,
+}|filter(v => v is not null)|json_encode(constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_PRETTY_PRINT'))|raw }}
+</script>

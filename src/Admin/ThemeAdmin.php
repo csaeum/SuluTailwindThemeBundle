@@ -122,6 +122,46 @@ class ThemeAdmin extends Admin
             ['key' => 'spacer', 'label' => 'iw_sulu_tailwind_theme.style.spacer'],
             ['key' => 'divider', 'label' => 'iw_sulu_tailwind_theme.style.divider'],
         ],
+        'article_list' => [
+            ['key' => 'grid', 'label' => 'iw_sulu_tailwind_theme.style.grid'],
+            ['key' => 'list', 'label' => 'iw_sulu_tailwind_theme.style.list'],
+            ['key' => 'cards', 'label' => 'iw_sulu_tailwind_theme.style.cards'],
+        ],
+        'article_carousel' => [
+            ['key' => 'carousel', 'label' => 'iw_sulu_tailwind_theme.style.carousel'],
+        ],
+        'article_featured' => [
+            ['key' => 'hero', 'label' => 'iw_sulu_tailwind_theme.style.hero'],
+            ['key' => 'side_by_side', 'label' => 'iw_sulu_tailwind_theme.style.side_by_side'],
+            ['key' => 'spotlight', 'label' => 'iw_sulu_tailwind_theme.style.spotlight'],
+        ],
+    ];
+
+    /**
+     * Available layout styles per article type, displayed in the Articles admin tab.
+     *
+     * @var array<string, list<array{key: string, label: string}>>
+     */
+    private const ARTICLE_STYLE_OPTIONS = [
+        'news' => [
+            ['key' => 'classic', 'label' => 'iw_sulu_tailwind_theme.style.article_news_classic'],
+            ['key' => 'magazine', 'label' => 'iw_sulu_tailwind_theme.style.article_news_magazine'],
+            ['key' => 'minimal', 'label' => 'iw_sulu_tailwind_theme.style.article_news_minimal'],
+        ],
+        'event' => [
+            ['key' => 'card_info', 'label' => 'iw_sulu_tailwind_theme.style.article_event_card_info'],
+            ['key' => 'timeline', 'label' => 'iw_sulu_tailwind_theme.style.article_event_timeline'],
+        ],
+        'blog' => [
+            ['key' => 'classic', 'label' => 'iw_sulu_tailwind_theme.style.article_blog_classic'],
+            ['key' => 'editorial', 'label' => 'iw_sulu_tailwind_theme.style.article_blog_editorial'],
+            ['key' => 'sidebar', 'label' => 'iw_sulu_tailwind_theme.style.article_blog_sidebar'],
+        ],
+        'listing' => [
+            ['key' => 'grid', 'label' => 'iw_sulu_tailwind_theme.style.article_listing_grid'],
+            ['key' => 'list', 'label' => 'iw_sulu_tailwind_theme.style.article_listing_list'],
+            ['key' => 'cards', 'label' => 'iw_sulu_tailwind_theme.style.article_listing_cards'],
+        ],
     ];
 
     /**
@@ -132,6 +172,7 @@ class ThemeAdmin extends Admin
      * @param WebspaceThemeRepository     $webspaceThemeRepository   The webspace theme repository
      * @param WebspaceManagerInterface    $webspaceManager           The webspace manager
      * @param ThemeConfigResolver         $themeConfigResolver       The theme config resolver
+     * @param bool                       $articleTemplatesEnabled    Whether article templates are enabled
      */
     public function __construct(
         private ViewBuilderFactoryInterface $viewBuilderFactory,
@@ -141,6 +182,7 @@ class ThemeAdmin extends Admin
         private WebspaceThemeRepository $webspaceThemeRepository,
         private WebspaceManagerInterface $webspaceManager,
         private ThemeConfigResolver $themeConfigResolver,
+        private bool $articleTemplatesEnabled = false,
     ) {
     }
 
@@ -301,6 +343,18 @@ class ThemeAdmin extends Admin
                     ->addToolbarActions($formToolbarActions)
                     ->setParent(static::EDIT_FORM_VIEW)
             );
+
+            // ── Edit form: articles tab (only if article_templates enabled) ──
+            if ($this->articleTemplatesEnabled) {
+                $viewCollection->add(
+                    $this->viewBuilderFactory->createFormViewBuilder(static::EDIT_FORM_VIEW . '.articles', '/articles')
+                        ->setResourceKey(ThemeConfig::RESOURCE_KEY)
+                        ->setFormKey('iw_theme_config_articles')
+                        ->setTabTitle('iw_sulu_tailwind_theme.articles')
+                        ->addToolbarActions($formToolbarActions)
+                        ->setParent(static::EDIT_FORM_VIEW)
+                );
+            }
         }
     }
 
@@ -363,6 +417,7 @@ class ThemeAdmin extends Admin
 
         return array_merge($themeData, [
             'blockStyles' => self::BLOCK_STYLE_OPTIONS,
+            'articleStyles' => self::ARTICLE_STYLE_OPTIONS,
             'collapsibleSections' => self::COLLAPSIBLE_SECTIONS,
             'hasApiKey' => $this->googleFontsCatalog->hasApiKey(),
         ]);

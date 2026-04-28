@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<!--
+    Fragment: Article hero section properties.
+    Provides hero image and subtitle for article templates.
+    Summary/description, categories, tags, and SEO fields are handled
+    natively by Sulu's Excerpt tab.
+-->
+<properties xmlns="http://schemas.sulu.io/template/template">
+    <property name="heroImage" type="media_selection" colspan="12">
+        <meta>
+            <title>iw_sulu_tailwind_theme.article.hero_image</title>
+            <info_text>iw_sulu_tailwind_theme.article.hero_image_info</info_text>
+        </meta>
+        <params>
+            <param name="types" value="image"/>
+            <param name="formats" type="collection">
+                <param name="iw_hero_lg" />
+                <param name="iw_hero_md" />
+            </param>
+        </params>
+    </property>
+
+    <property name="subtitle" type="text_line" colspan="12">
+        <meta><title>iw_sulu_tailwind_theme.article.subtitle</title></meta>
+    </property>
+</properties>

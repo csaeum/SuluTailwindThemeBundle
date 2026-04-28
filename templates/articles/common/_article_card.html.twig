@@ -1,0 +1,86 @@
+{#
+    Article card component for listings.
+    Renders a single article as a card with image, title, excerpt, date, category.
+
+    Parameters:
+    - article: resolved article content object
+    - showImage: bool (default true)
+    - showDate: bool (default true)
+    - showExcerpt: bool (default true)
+    - showCategory: bool (default true)
+    - imageRatio: aspect ratio string (default '16/9')
+    - layout: 'vertical' (default) | 'horizontal'
+    - cardMode: bool (default false) — when true, disables image border-radius
+      and adds inner padding on text, for use inside a card container
+#}
+{% set showImage = showImage is defined ? showImage : true %}
+{% set showDate = showDate is defined ? showDate : true %}
+{% set showExcerpt = showExcerpt is defined ? showExcerpt : true %}
+{% set showCategory = showCategory is defined ? showCategory : true %}
+{% set cardMode = cardMode is defined ? cardMode : false %}
+{% set imageRatio = imageRatio|default('16/9') %}
+{% set layout = layout|default('vertical') %}
+
+{% set articleTitle = article.title|default('') %}
+{% set articleUrl = article.routePath|default(article.url|default('#')) %}
+{% if articleUrl != '#' %}
+    {% set articleUrl = sulu_content_path(articleUrl) %}
+{% endif %}
+{% set articleExcerpt = article.excerptDescription|default(article.excerpt.description|default('')) %}
+{% set articleDate = article.authored|default(null) %}
+{% set articleImage = article.excerptImages|default(article.excerpt.images|default(article.heroImage|default(null))) %}
+{% set articleCategories = article.excerptCategories|default(article.excerpt.categories|default([])) %}
+
+<article class="article-card group {{ layout == 'horizontal' ? 'flex gap-4' : 'flex flex-col' }}">
+    {% if showImage and articleImage is not empty %}
+        {% set imgMedia = null %}
+        {% if articleImage is iterable and articleImage|length > 0 %}
+            {% set imgId = articleImage.ids|default(articleImage)|first %}
+            {% if imgId %}
+                {% set imgMedia = sulu_resolve_media(imgId, app.request.locale) %}
+            {% endif %}
+        {% endif %}
+
+        {% if imgMedia %}
+            <a href="{{ articleUrl }}" class="{{ layout == 'horizontal' ? 'w-1/3 flex-shrink-0' : 'w-full' }}">
+                <div class="overflow-hidden {{ (not cardMode or layout == 'horizontal') ? 'rounded-[var(--border-imageRadius)]' : '' }}">
+                    <img src="{{ imgMedia.thumbnails['iw_theme_16_9']|default(imgMedia.url) }}"
+                         alt="{{ imgMedia.title|default(articleTitle) }}"
+                         class="w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                         style="aspect-ratio: {{ imageRatio }}"
+                         loading="lazy">
+                </div>
+            </a>
+        {% endif %}
+    {% endif %}
+
+    <div class="{{ layout == 'horizontal' ? 'flex-1 min-w-0' : (cardMode ? 'px-4 pb-4 pt-3' : 'mt-4') }}">
+        {% if showCategory and articleCategories is iterable and articleCategories|length > 0 %}
+            <div class="mb-2">
+                {% for category in articleCategories|slice(0, 1) %}
+                    <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-[var(--border-radius)] bg-[var(--color-primary-100)] text-[var(--color-primary-700)]">
+                        {{ category.name|default(category.title|default('')) }}
+                    </span>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <h3 class="font-[var(--font-family-heading)] font-semibold text-lg leading-snug mb-2">
+            <a href="{{ articleUrl }}" class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors">
+                {{ articleTitle }}
+            </a>
+        </h3>
+
+        {% if showDate and articleDate is not empty %}
+            <time datetime="{{ articleDate|date('c') }}" class="text-sm text-[var(--color-secondary-500)] mb-2 block">
+                {{ iw_sulu_tailwind_theme_format_date(articleDate, 'medium') }}
+            </time>
+        {% endif %}
+
+        {% if showExcerpt and articleExcerpt is not empty %}
+            <p class="text-sm text-[var(--color-secondary-600)] line-clamp-2">
+                {{ articleExcerpt|striptags|trim }}
+            </p>
+        {% endif %}
+    </div>
+</article>

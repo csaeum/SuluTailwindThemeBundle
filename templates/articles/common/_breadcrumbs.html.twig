@@ -1,0 +1,31 @@
+{#
+    Breadcrumbs component with schema.org BreadcrumbList microdata.
+
+    Parameters:
+    - items: array of {title, url} objects (breadcrumb trail)
+              If not provided, uses Sulu navigation.
+#}
+{% if items is defined and items is iterable and items|length > 0 %}
+    <nav aria-label="Breadcrumb" class="article-breadcrumbs mb-6">
+        <ol class="flex flex-wrap items-center gap-1.5 text-sm text-[var(--color-secondary-500)]"
+            itemscope itemtype="https://schema.org/BreadcrumbList">
+            {% for item in items %}
+                <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"
+                    class="flex items-center gap-1.5">
+                    {% if not loop.last %}
+                        <a href="{{ item.url }}" itemprop="item" class="hover:text-[var(--color-primary)] transition-colors">
+                            <span itemprop="name">{{ item.title }}</span>
+                        </a>
+                        <meta itemprop="position" content="{{ loop.index }}">
+                        <svg class="w-3.5 h-3.5 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    {% else %}
+                        <span itemprop="name" class="text-[var(--color-text)] font-medium">{{ item.title }}</span>
+                        <meta itemprop="position" content="{{ loop.index }}">
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ol>
+    </nav>
+{% endif %}

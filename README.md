@@ -47,7 +47,8 @@
 * **Block variants**: Per-block color schemes (light, accent, dark) applied via CSS custom properties
 * **Menu configuration**: Configurable menu type, colors, animation, and display options
 * **Twig integration**: Helper functions for including theme CSS, fonts, block styles, and menu config
-* **CLI commands**: Install preset themes, assign to webspaces, and recompile CSS from the command line
+* **Article blocks**: 3 article-specific blocks for pages — article list (grid/list/cards), article carousel, article featured (hero/side-by-side/spotlight)
+* **CLI commands**: Install preset themes, assign to webspaces, recompile CSS, and run integration diagnostics from the command line
 * **Auto-recompile**: Doctrine listener recompiles CSS on theme save
 
 ## Installation
@@ -285,6 +286,55 @@ The typography tab includes a **Font Picker** with autocomplete for Google Fonts
 
 > **Without an API key**, the Font Picker still works: the Google tab falls back to a free-text input, and the System tab lists 15 cross-platform fonts (Arial, Georgia, Courier New, etc.).
 
+### Article templates (optional)
+
+The bundle provides ready-to-use article templates (News, Event, Blog Post) that integrate with [SuluArticleBundle](https://github.com/sulu/sulu). They are **opt-in** and disabled by default.
+
+**Requirements:** The Sulu article package must be installed in your project (`sulu/sulu` includes it by default in 3.x).
+
+**Enable the templates** in `config/packages/itech_world_sulu_tailwind_theme.yaml`:
+
+```yaml
+itech_world_sulu_tailwind_theme:
+    article_templates:
+        enabled: true
+```
+
+After enabling, clear the admin cache:
+
+```bash
+php bin/adminconsole cache:clear
+```
+
+Three article templates will appear in the admin, each in its own tab:
+
+| Template | Group | Description |
+|----------|-------|-------------|
+| **News** (`iw_news`) | news | Press/news articles with hero, authors, dates, categories, tags |
+| **Event** (`iw_event`) | events | Events with start/end dates, location (physical or online), organizer |
+| **Blog Post** (`iw_blog_post`) | publications | Blog/journal articles with excerpt, reading time, related articles |
+
+All templates use shared [XML fragments](config/templates/fragments/) (`article-hero`, `article-authors`, `article-dates`, etc.) that you can also include in your own custom article templates via `xi:include`.
+
+Each article type comes with **multiple page styles** that can be selected via theme configuration:
+
+| Type | Available styles | Default |
+|------|-----------------|---------|
+| **News** | `classic`, `magazine`, `minimal` | `classic` |
+| **Event** | `card_info`, `timeline` | `card_info` |
+| **Blog Post** | `classic`, `editorial`, `sidebar` | `classic` |
+| **Listing** | `grid`, `list`, `cards` | `grid` |
+
+Article templates extend the project's `base.html.twig` — your menu, footer, and layout are automatically inherited.
+
+> You can restrict which templates are loaded using the `types` whitelist:
+> ```yaml
+> itech_world_sulu_tailwind_theme:
+>     article_templates:
+>         enabled: true
+>         types: ['news', 'event']  # blog_post will not be registered
+> ```
+
 ## Usage
 
 ### Admin interface
@@ -313,7 +363,7 @@ The theme list in **Settings > Themes** shows a "Webspaces" column indicating wh
 
 ### Page templates
 
-The bundle ships with a ready-to-use page template (`iw_theme_default`) that includes **11 block types**: `text`, `text_images`, `gallery`, `key_figures`, `linked_pages`, `location`, `form`, `document`, `cta`, `testimonial`, and `separator`.
+The bundle ships with a ready-to-use page template (`iw_theme_default`) that includes **14 block types**: `text`, `text_images`, `gallery`, `key_figures`, `linked_pages`, `location`, `form`, `document`, `cta`, `testimonial`, `separator`, `article_list`, `article_carousel`, and `article_featured`.
 
 To use it, simply select **"Page par défaut"** (or **"Default page"**) as the template when creating a page in the Sulu admin.
 
@@ -336,6 +386,13 @@ Add the theme functions to your `templates/base.html.twig`:
         <link rel="stylesheet" href="{{ themeCssPath }}">
     {% endif %}
 
+    {# SEO: Open Graph + Twitter Cards (renders meta tags for social sharing) #}
+    {% include '@ItechWorldSuluTailwindTheme/seo/_opengraph.html.twig' ignore missing %}
+    {% include '@ItechWorldSuluTailwindTheme/seo/_twitter_card.html.twig' ignore missing %}
+
+    {# SEO: JSON-LD structured data — leave empty, article templates fill it automatically #}
+    {% block seo_structured_data %}{% endblock %}
+
     {{ encore_entry_link_tags('app') }}
 </head>
 <body class="bg-[var(--color-background)] text-[var(--color-text)]">
@@ -352,6 +409,8 @@ Add the theme functions to your `templates/base.html.twig`:
 </body>
 ```
 
+> The `{% block seo_structured_data %}` block is required for article JSON-LD (schema.org) to appear in the `<head>`. Article templates automatically fill this block with NewsArticle, BlogPosting, or Event structured data.
+
 > The bundle also provides `@ItechWorldSuluTailwindTheme/base.html.twig` as a ready-to-extend base template. See **[Custom Integration Guide](doc/custom-integration.md)** for a complete example with SEO, fallback navigation, and more.
 
 ### Twig functions
@@ -364,8 +423,15 @@ Add the theme functions to your `templates/base.html.twig`:
 | `iw_sulu_tailwind_theme_tokens()` | Full design tokens array |
 | `iw_sulu_tailwind_theme_block_styles()` | Block style configuration |
 | `iw_sulu_block_style_template(type, style)` | Resolved template path for a block style |
+| `iw_sulu_tailwind_theme_format_date(date, format?)` | Localized date string (ICU formatting) |
+| `iw_sulu_tailwind_theme_reading_time(content)` | Estimated reading time in minutes |
+| `iw_sulu_tailwind_theme_author_name(authorBlock)` | Resolved author name (custom/contact/organization) |
+| `iw_sulu_tailwind_theme_article_style(type)` | Active page style for an article type |
+| `iw_sulu_tailwind_theme_listing_style()` | Active listing style (grid/list/cards) |
 
 The global variable `iw_sulu_tailwind_theme` is available in all templates and contains the active theme tokens.
+
+> The article functions are only available when `article_templates.enabled: true`.
 
 > See **[Twig Reference](doc/twig-reference.md)** for the full API, return types, and token structure.
 
@@ -390,6 +456,9 @@ php bin/adminconsole iw-sulu:theme:sync-fonts
 
 # Migrate from isActive to multi-webspace (upgrade from previous version)
 php bin/adminconsole iw-sulu:theme:migrate-webspaces
+
+# Run integration diagnostics (check theme, CSS, assets, article bundle)
+php bin/adminconsole iw:tailwind-theme:check
 ```
 
 ### Security
@@ -449,12 +518,12 @@ SuluTailwindThemeBundle/
 │   ├── lists/              # Sulu admin list XML
 │   ├── templates/
 │   │   ├── pages/          # Page template XML (uses <type ref="..."/>)
-│   │   ├── blocks/         # Global block type definitions (11 types)
+│   │   ├── blocks/         # Global block type definitions (14 types)
 │   │   └── fragments/      # Shared property fragments (reference)
 │   └── services.yaml       # Service definitions
 ├── src/
 │   ├── Admin/              # ThemeAdmin, WebspaceThemeAdmin (navigation, views, security)
-│   ├── Command/            # CLI commands (install, compile, sync-fonts, migrate-webspaces)
+│   ├── Command/            # CLI commands (install, compile, sync-fonts, migrate-webspaces, check)
 │   ├── Controller/Admin/   # REST API controllers (themes, webspace-theme assignment)
 │   ├── DataFixtures/       # Preset theme fixtures
 │   ├── Entity/             # ThemeConfig, WebspaceTheme Doctrine entities

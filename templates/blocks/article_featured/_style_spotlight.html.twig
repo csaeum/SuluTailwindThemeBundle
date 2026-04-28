@@ -1,0 +1,157 @@
+{# Article featured block — spotlight: 1 main article + 2 secondary horizontal cards filling full height #}
+{% extends '@ItechWorldSuluTailwindTheme/blocks/common/_block_wrapper.html.twig' %}
+
+{% block block_content %}
+    {% include '@ItechWorldSuluTailwindTheme/blocks/common/_titles.html.twig' with {
+        title: title|default(''),
+        subTitle: subTitle|default(''),
+        titleAlignment: titleAlignment|default('left'),
+        variant: variant|default(0)
+    } only %}
+
+    {% set articleItems = articles|default([]) %}
+
+    {% if articleItems is iterable and articleItems|length > 0 %}
+        {% set mainArticle = articleItems|first %}
+        {% set secondaryArticles = articleItems|slice(1, 2) %}
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {# ── Main article (left) — determines the row height ── #}
+            {% set articleTitle = mainArticle.title|default('') %}
+            {% set articleUrl = mainArticle.routePath|default(mainArticle.url|default('#')) %}
+            {% if articleUrl != '#' %}
+                {% set articleUrl = sulu_content_path(articleUrl) %}
+            {% endif %}
+            {% set articleExcerpt = mainArticle.excerptDescription|default(mainArticle.excerpt.description|default('')) %}
+            {% set articleDate = mainArticle.authored|default(null) %}
+            {% set articleImage = mainArticle.excerptImages|default(mainArticle.excerpt.images|default(mainArticle.heroImage|default(null))) %}
+            {% set articleCategories = mainArticle.excerptCategories|default(mainArticle.excerpt.categories|default([])) %}
+
+            <a href="{{ articleUrl }}" class="group block bg-[var(--variant-paragraph-bg,var(--variant-subtle-bg))] rounded-[var(--border-imageRadius)] shadow-sm overflow-hidden">
+                {% if articleImage is not empty %}
+                    {% set imgMedia = null %}
+                    {% if articleImage is iterable and articleImage|length > 0 %}
+                        {% set imgId = articleImage.ids|default(articleImage)|first %}
+                        {% if imgId %}
+                            {% set imgMedia = sulu_resolve_media(imgId, app.request.locale) %}
+                        {% endif %}
+                    {% endif %}
+
+                    {% if imgMedia %}
+                        <div class="overflow-hidden">
+                            <img
+                                src="{{ imgMedia.thumbnails['iw_theme_16_9']|default(imgMedia.url) }}"
+                                alt="{{ imgMedia.title|default(articleTitle) }}"
+                                class="w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                style="aspect-ratio: 16/9"
+                                loading="lazy"
+                            >
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                <div class="p-5">
+                    {% if articleCategories is iterable and articleCategories|length > 0 %}
+                        <div class="mb-2">
+                            {% for category in articleCategories|slice(0, 1) %}
+                                <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-[var(--border-radius)] bg-[var(--color-primary-100)] text-[var(--color-primary-700)]">
+                                    {{ category.name|default(category.title|default('')) }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <h3 class="font-[var(--font-family-heading)] font-bold text-2xl leading-snug mb-3 text-[var(--color-text)] group-hover:text-[var(--color-primary)] transition-colors">
+                        {{ articleTitle }}
+                    </h3>
+
+                    {% if articleExcerpt is not empty %}
+                        <p class="text-[var(--color-secondary-600)] line-clamp-3 mb-3">
+                            {{ articleExcerpt|striptags|trim }}
+                        </p>
+                    {% endif %}
+
+                    {% if articleDate is not empty %}
+                        <time datetime="{{ articleDate|date('c') }}" class="text-sm text-[var(--color-secondary-500)]">
+                            {{ iw_sulu_tailwind_theme_format_date(articleDate, 'medium') }}
+                        </time>
+                    {% endif %}
+                </div>
+            </a>
+
+            {# ── Secondary articles (right, horizontal cards splitting full height) ── #}
+            {% if secondaryArticles|length > 0 %}
+                <div class="flex flex-col gap-8">
+                    {% for article in secondaryArticles %}
+                        {% set secTitle = article.title|default('') %}
+                        {% set secUrl = article.routePath|default(article.url|default('#')) %}
+                        {% if secUrl != '#' %}
+                            {% set secUrl = sulu_content_path(secUrl) %}
+                        {% endif %}
+                        {% set secExcerpt = article.excerptDescription|default(article.excerpt.description|default('')) %}
+                        {% set secDate = article.authored|default(null) %}
+                        {% set secImage = article.excerptImages|default(article.excerpt.images|default(article.heroImage|default(null))) %}
+                        {% set secCategories = article.excerptCategories|default(article.excerpt.categories|default([])) %}
+
+                        <a href="{{ secUrl }}" class="group flex-1 flex bg-[var(--variant-paragraph-bg,var(--variant-subtle-bg))] rounded-[var(--border-imageRadius)] shadow-sm overflow-hidden">
+                            {# Image left — fills card height #}
+                            {% if secImage is not empty %}
+                                {% set secImgMedia = null %}
+                                {% if secImage is iterable and secImage|length > 0 %}
+                                    {% set secImgId = secImage.ids|default(secImage)|first %}
+                                    {% if secImgId %}
+                                        {% set secImgMedia = sulu_resolve_media(secImgId, app.request.locale) %}
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if secImgMedia %}
+                                    <div class="w-2/5 flex-shrink-0 overflow-hidden">
+                                        <img
+                                            src="{{ secImgMedia.thumbnails['iw_theme_4_3']|default(secImgMedia.url) }}"
+                                            alt="{{ secImgMedia.title|default(secTitle) }}"
+                                            class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                            loading="lazy"
+                                        >
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+
+                            {# Text right #}
+                            <div class="flex-1 min-w-0 p-4 flex flex-col justify-center">
+                                {% if secCategories is iterable and secCategories|length > 0 %}
+                                    <div class="mb-2">
+                                        {% for category in secCategories|slice(0, 1) %}
+                                            <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-[var(--border-radius)] bg-[var(--color-primary-100)] text-[var(--color-primary-700)]">
+                                                {{ category.name|default(category.title|default('')) }}
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                <h3 class="font-[var(--font-family-heading)] font-semibold text-lg leading-snug mb-2 text-[var(--color-text)] group-hover:text-[var(--color-primary)] transition-colors">
+                                    {{ secTitle }}
+                                </h3>
+
+                                {% if secExcerpt is not empty %}
+                                    <p class="text-sm text-[var(--color-secondary-600)] line-clamp-3 mb-2">
+                                        {{ secExcerpt|striptags|trim }}
+                                    </p>
+                                {% endif %}
+
+                                {% if secDate is not empty %}
+                                    <time datetime="{{ secDate|date('c') }}" class="text-xs text-[var(--color-secondary-500)]">
+                                        {{ iw_sulu_tailwind_theme_format_date(secDate, 'medium') }}
+                                    </time>
+                                {% endif %}
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        <p class="text-center text-[var(--color-secondary-500)] py-12">
+            {{ 'iw_sulu_tailwind_theme.article.no_articles'|trans }}
+        </p>
+    {% endif %}
+{% endblock %}

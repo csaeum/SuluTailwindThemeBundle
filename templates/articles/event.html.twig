@@ -1,0 +1,9 @@
+{#
+    Event article dispatcher.
+    Reads the active style from theme config and extends the matching style template.
+    Fallback: card_info.
+#}
+{% extends [
+    '@ItechWorldSuluTailwindTheme/articles/event/_style_' ~ iw_sulu_tailwind_theme_article_style('event') ~ '.html.twig',
+    '@ItechWorldSuluTailwindTheme/articles/event/_style_card_info.html.twig'
+] %}

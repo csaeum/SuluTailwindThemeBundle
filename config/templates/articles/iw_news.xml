@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<!--
+    Article template: News.
+    Provides a news/press article structure with hero, authors, dates,
+    and content blocks. Categories, tags, description, and SEO are
+    handled by Sulu's native Excerpt tab.
+-->
+<template xmlns="http://schemas.sulu.io/template/template"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:xi="http://www.w3.org/2001/XInclude"
+          xsi:schemaLocation="http://schemas.sulu.io/template/template http://schemas.sulu.io/template/template-1.0.xsd">
+
+    <key>iw_news</key>
+    <group>news</group>
+    <view>@ItechWorldSuluTailwindTheme/articles/news</view>
+    <controller>Sulu\Content\UserInterface\Controller\Website\ContentController::indexAction</controller>
+    <cacheLifetime>604800</cacheLifetime>
+
+    <meta>
+        <title>iw_sulu_tailwind_theme.article.news</title>
+    </meta>
+
+    <properties>
+        <!-- Header -->
+        <property name="title" type="text_line" mandatory="true">
+            <meta><title>iw_sulu_tailwind_theme.title</title></meta>
+            <params>
+                <param name="headline" value="true"/>
+            </params>
+            <tag name="sulu.rlp.part"/>
+        </property>
+
+        <property name="url" type="page_tree_route">
+            <meta><title>iw_sulu_tailwind_theme.url</title></meta>
+            <tag name="sulu.rlp"/>
+        </property>
+
+        <!-- Hero section -->
+        <section name="hero">
+            <meta><title>iw_sulu_tailwind_theme.article.section_hero</title></meta>
+            <properties>
+                <xi:include href="../fragments/article-hero.xml"
+                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:property)"/>
+            </properties>
+        </section>
+
+        <!-- Meta section -->
+        <section name="meta">
+            <meta><title>iw_sulu_tailwind_theme.article.section_meta</title></meta>
+            <properties>
+                <xi:include href="../fragments/article-authors.xml"
+                            xpointer="xmlns(sulu=http://schemas.sulu.io/template/template) xpointer(/sulu:properties/sulu:block)"/>
+            </properties>
+        </section>
+
+        <!-- Content blocks -->
+        <section name="content">
+            <meta><title>iw_sulu_tailwind_theme.article.section_content</title></meta>
+            <properties>
+                <block name="blocks" default-type="text" minOccurs="0">
+                    <meta><title>iw_sulu_tailwind_theme.content_blocks</title></meta>
+                    <types>
+                        <type ref="text"/>
+                        <type ref="text_images"/>
+                        <type ref="gallery"/>
+                        <type ref="cta"/>
+                        <type ref="document"/>
+                        <type ref="separator"/>
+                    </types>
+                </block>
+            </properties>
+        </section>
+
+    </properties>
+</template>

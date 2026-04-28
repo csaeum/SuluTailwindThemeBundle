@@ -1,0 +1,111 @@
+{#
+    Blog Post style: Editorial
+    Large title as hero text with background image overlay → drop cap on first paragraph → content → related.
+    No inline style — uses a Twig <style> block for the background image.
+#}
+{% extends '@ItechWorldSuluTailwindTheme/articles/common/_article_base.html.twig' %}
+
+{% block article_hero %}
+    {# Resolve hero image for background #}
+    {% set heroBgUrl = null %}
+    {% if content.heroImage is defined and content.heroImage is not empty %}
+        {% set heroIds = content.heroImage %}
+        {% if heroIds is iterable %}
+            {% set heroId = heroIds|first %}
+        {% else %}
+            {% set heroId = heroIds %}
+        {% endif %}
+        {% if heroId %}
+            {% set heroMedia = sulu_resolve_media(heroId, app.request.locale) %}
+            {% set heroBgUrl = heroMedia.thumbnails['iw_hero_lg']|default(heroMedia.url) %}
+        {% endif %}
+    {% endif %}
+
+    <div class="article-hero-editorial relative flex items-end min-h-[60vh] {{ heroBgUrl ? 'bg-cover bg-center' : 'bg-[var(--color-primary-900)]' }}" itemprop="image" content="{{ heroBgUrl|default('') }}">
+        {% if heroBgUrl %}
+            <style>.article-hero-editorial { background-image: url('{{ heroBgUrl }}'); }</style>
+        {% endif %}
+        {# Dark overlay for text readability #}
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pb-12 pt-32">
+            {% if articleConfig.showCategories|iw_article_visible('page') %}
+                {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_categories.html.twig' with {
+                    categories: content.excerptCategories|default([]),
+                } only %}
+            {% endif %}
+
+            <h1 class="font-[var(--font-family-heading)] text-4xl md:text-5xl lg:text-6xl font-[var(--font-h1-weight)] leading-tight text-white mt-4 mb-4" itemprop="headline">
+                {{ content.title }}
+            </h1>
+
+            <div class="flex flex-wrap items-center gap-4 text-white/80 text-sm">
+                {% if articleConfig.showAuthors|iw_article_visible('page') and articleAuthors is defined and articleAuthors|length > 0 %}
+                    {% for author in articleAuthors %}
+                        <span>{{ iw_sulu_tailwind_theme_author_name(author) }}</span>
+                    {% endfor %}
+                {% endif %}
+                {% if articleConfig.showDates|iw_article_visible('page') and authored is defined and authored is not empty %}
+                    <span>&middot;</span>
+                    <time datetime="{{ authored|date('c') }}">{{ iw_sulu_tailwind_theme_format_date(authored) }}</time>
+                {% endif %}
+                {% if content.readingTime is defined and content.readingTime is not empty %}
+                    <span>&middot;</span>
+                    <span>{{ content.readingTime }}</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block article_header %}{% endblock %}
+{% block article_meta %}{% endblock %}
+
+{% block article_content %}
+    <div class="article-body mt-10 max-w-3xl mx-auto">
+        {# Drop cap styling via first-letter pseudo-element #}
+        <style>
+            .article-dropcap > *:first-child::first-letter {
+                float: left;
+                font-size: 3.5em;
+                line-height: 0.8;
+                padding-right: 0.1em;
+                font-family: var(--font-family-heading);
+                font-weight: 700;
+                color: var(--color-primary);
+            }
+        </style>
+        <div class="article-dropcap">
+            {% if content.blocks is defined and content.blocks is iterable %}
+                {% for contentBlock in content.blocks %}
+                    {% set blockType = contentBlock.type|default('text') %}
+                    {% set blockStyle = contentBlock.style|default('') %}
+                    {% set defaultStyles = {'text': 'one_column', 'text_images': 'classic', 'gallery': 'grid', 'cta': 'centered', 'testimonial': 'default', 'document': 'default', 'separator': 'default'} %}
+                    {% if blockStyle is empty %}
+                        {% set blockStyle = defaultStyles[blockType]|default('default') %}
+                    {% endif %}
+                    {% set templatePath = '@ItechWorldSuluTailwindTheme/blocks/' ~ blockType ~ '/_style_' ~ blockStyle ~ '.html.twig' %}
+                    {% set fallbackPath = '@ItechWorldSuluTailwindTheme/blocks/' ~ blockType ~ '/_style_' ~ defaultStyles[blockType]|default('default') ~ '.html.twig' %}
+                    {% include [templatePath, fallbackPath] ignore missing with contentBlock %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block article_footer %}
+    <footer class="article-footer mt-10 pt-6 border-t border-[var(--color-border)]">
+        {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_tags.html.twig' with {
+            tags: content.excerptTags|default([]),
+        } only %}
+    </footer>
+{% endblock %}
+
+{% block article_related %}
+    {% if articleConfig.showRelated|iw_article_visible('page') and content.relatedArticles is defined and content.relatedArticles is iterable %}
+        {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_related.html.twig' with {
+            articles: content.relatedArticles,
+            maxItems: articleConfig.relatedCount|default(3),
+        } only %}
+    {% endif %}
+{% endblock %}

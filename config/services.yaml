@@ -14,6 +14,7 @@ services:
             - '@itech_world.sulu_tailwind_theme.webspace_theme_repository'
             - '@sulu_core.webspace.webspace_manager'
             - '@itech_world.sulu_tailwind_theme.config_resolver'
+            - '%itech_world_sulu_tailwind_theme.article_templates_enabled%'
         tags:
             - { name: 'sulu.admin' }
             - { name: 'sulu.context', context: 'admin' }
@@ -143,6 +144,26 @@ services:
         tags:
             - { name: 'console.command' }
 
+    ItechWorld\SuluTailwindThemeBundle\Command\ThemeCheckCommand:
+        arguments:
+            - '@itech_world.sulu_tailwind_theme.repository'
+            - '@itech_world.sulu_tailwind_theme.webspace_theme_repository'
+            - '@sulu_core.webspace.webspace_manager'
+            - '@itech_world.sulu_tailwind_theme.compiler'
+            - '@kernel'
+            - '%itech_world_sulu_tailwind_theme.css_output_dir%'
+        tags:
+            - { name: 'console.command' }
+
+    # ─── Article Twig Extension (loaded when article_templates.enabled) ─
+    itech_world.sulu_tailwind_theme.article_twig_extension:
+        class: ItechWorld\SuluTailwindThemeBundle\Twig\ArticleExtension
+        arguments:
+            - '@itech_world.sulu_tailwind_theme.twig_extension'
+            - '@?sulu.repository.user'
+        tags:
+            - { name: 'twig.extension' }
+
     # ─── FQCN Aliases ────────────────────────────────────────────────────
     ItechWorld\SuluTailwindThemeBundle\Service\OklchPaletteGenerator: '@itech_world.sulu_tailwind_theme.palette_generator'
     ItechWorld\SuluTailwindThemeBundle\Service\ThemeCompiler: '@itech_world.sulu_tailwind_theme.compiler'
@@ -152,4 +173,5 @@ services:
     ItechWorld\SuluTailwindThemeBundle\Repository\ThemeConfigRepository: '@itech_world.sulu_tailwind_theme.repository'
     ItechWorld\SuluTailwindThemeBundle\Repository\WebspaceThemeRepository: '@itech_world.sulu_tailwind_theme.webspace_theme_repository'
     ItechWorld\SuluTailwindThemeBundle\Twig\ThemeExtension: '@itech_world.sulu_tailwind_theme.twig_extension'
+    ItechWorld\SuluTailwindThemeBundle\Twig\ArticleExtension: '@itech_world.sulu_tailwind_theme.article_twig_extension'
     ItechWorld\SuluTailwindThemeBundle\Service\GoogleFontsCatalog: '@itech_world.sulu_tailwind_theme.google_fonts_catalog'
