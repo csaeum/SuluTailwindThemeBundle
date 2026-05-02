@@ -48,12 +48,12 @@ The theme compiles all design tokens into CSS custom properties on `:root`. You 
 
 ### Buttons
 
-Use the pre-generated `.btn-primary`, `.btn-secondary`, `.btn-accent` classes, or reference the variables for custom styling:
+Use the pre-generated `.btn-primary`, `.btn-secondary`, `.btn-accent` classes, or reference the variables for custom styling. The `.btn-*` classes already pick up the configured padding, border (with width/style), and the five-axis hover effects — see [Button hover effects](button-effects.md).
 
 ```css
-/* Use the built-in classes */
+/* Use the built-in classes (recommended) */
 .my-cta a {
-    @apply btn-primary inline-block px-6 py-3;
+    @apply btn-primary;
 }
 
 /* Or build your own using the CSS variables */
@@ -61,7 +61,9 @@ Use the pre-generated `.btn-primary`, `.btn-secondary`, `.btn-accent` classes, o
     background-color: var(--btn-primary-bg);
     color: var(--btn-primary-text);
     border-radius: var(--btn-primary-radius);
-    border: 1px solid var(--btn-primary-border);
+    /* --btn-primary-border holds a full shorthand (width style color), so drop it directly */
+    border: var(--btn-primary-border);
+    padding: var(--btn-padding-y) var(--btn-padding-x);
     transition: all 0.3s ease;
 }
 .my-custom-btn:hover {
