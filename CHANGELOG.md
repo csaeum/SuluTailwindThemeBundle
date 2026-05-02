@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.2.1] - 2026-05-02
 
+### Fixed
+
+- button border CSS variable should include width and style ([7a42ecc](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/7a42ecc2e54ee61bfeab2fcaa3c137ae7a393d0a))
+
 ## [2.2.0] - 2026-04-28
 
 ### Added
