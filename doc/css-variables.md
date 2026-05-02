@@ -184,19 +184,30 @@ Generated from **Settings > Themes > Borders** tab.
 
 ## Button variables
 
-Generated from **Settings > Themes > Buttons** tab. Three button variants are available: `primary`, `secondary`, `accent`.
+Generated from **Settings > Themes > Buttons** tab. Three button variants are available: `primary`, `secondary`, `accent`, plus a global section that controls padding shared by every variant.
+
+### Global
+
+| Variable | Description |
+|----------|-------------|
+| `--btn-padding-x` | Horizontal padding shared by every button variant |
+| `--btn-padding-y` | Vertical padding shared by every button variant |
+
+### Per-variant
 
 | Variable pattern | Description |
 |-----------------|-------------|
 | `--btn-{variant}-bg` | Background color |
 | `--btn-{variant}-text` | Text color |
-| `--btn-{variant}-border` | Border color (or `none`) |
+| `--btn-{variant}-border` | Full border shorthand (`{width} {style} {color}`) or `none` |
 | `--btn-{variant}-radius` | Border radius |
 | `--btn-{variant}-hoverBg` | Background on hover |
 | `--btn-{variant}-hoverText` | Text color on hover |
-| `--btn-{variant}-hoverBorder` | Border color on hover |
+| `--btn-{variant}-hoverBorder` | Border shorthand on hover (or `none`) |
 
 Where `{variant}` is `primary`, `secondary`, or `accent`.
+
+> Border `width` and `style` are configured per variant in the admin and folded directly into the `--btn-{variant}-border` shorthand. Hover effects (shadow, transform, opacity, duration, easing) are applied in the generated `.btn-{variant}` rules and do not produce standalone CSS variables — see [Button hover effects](button-effects.md) for the full catalog.
 
 **Usage example:**
 ```css
@@ -204,6 +215,7 @@ Where `{variant}` is `primary`, `secondary`, or `accent`.
     background-color: var(--btn-primary-bg);
     color: var(--btn-primary-text);
     border-radius: var(--btn-primary-radius);
+    padding: var(--btn-padding-y) var(--btn-padding-x);
 }
 .my-custom-button:hover {
     background-color: var(--btn-primary-hoverBg);

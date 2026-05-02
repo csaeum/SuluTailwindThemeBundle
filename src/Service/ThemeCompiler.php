@@ -517,6 +517,12 @@ class ThemeCompiler
     /**
      * Generate CSS custom properties for button tokens.
      *
+     * Emits one --btn-<variant>-<prop> entry per token plus two global
+     * --btn-padding-x / --btn-padding-y vars driven by the buttons.global
+     * sub-array. Border and hoverBorder are emitted as full shorthands
+     * (width style color) so app.css can drop them straight into a
+     * border declaration without producing invalid CSS.
+     *
      * @param array<string, mixed> $buttons Button token values
      *
      * @return string CSS variable declarations
@@ -525,12 +531,34 @@ class ThemeCompiler
     {
         $css = "  /* Buttons */\n";
 
+        // Global button padding (shared across every variant)
+        $global = $buttons['global'] ?? [];
+        if (is_array($global)) {
+            $paddingX = isset($global['paddingX']) ? (string) $global['paddingX'] : '1.5rem';
+            $paddingY = isset($global['paddingY']) ? (string) $global['paddingY'] : '0.75rem';
+            $css .= "  --btn-padding-x: {$paddingX};\n";
+            $css .= "  --btn-padding-y: {$paddingY};\n";
+        }
+
         foreach ($buttons as $variant => $props) {
-            if (!is_array($props)) {
+            if ('global' === $variant || !is_array($props)) {
                 continue;
             }
+
+            // Border shorthand uses the variant's own width/style settings
+            $borderWidth = isset($props['borderWidth']) ? (string) $props['borderWidth'] : '1px';
+            $borderStyle = isset($props['borderStyle']) ? (string) $props['borderStyle'] : 'solid';
+
             foreach ($props as $prop => $value) {
-                // Resolve radius Tailwind classes to valid CSS values
+                // borderWidth and borderStyle are folded into the border shorthand below
+                if ('borderWidth' === $prop || 'borderStyle' === $prop) {
+                    continue;
+                }
+                // Hover effect axes are consumed by generateButtonClasses(), not exposed as vars
+                if (in_array($prop, ['hoverShadow', 'hoverTransform', 'hoverOpacity', 'hoverDuration', 'hoverEasing'], true)) {
+                    continue;
+                }
+
                 if ('radius' === $prop) {
                     $value = $this->resolveRadius((string) $value);
                 } elseif ('border' === $prop || 'hoverBorder' === $prop) {
@@ -539,7 +567,7 @@ class ThemeCompiler
                     // to an invalid `border: <color>` declaration.
                     $value = ('none' === $value)
                         ? 'none'
-                        : '1px solid ' . $this->resolveColorValue((string) $value);
+                        : "{$borderWidth} {$borderStyle} " . $this->resolveColorValue((string) $value);
                 } else {
                     $value = $this->resolveColorValue((string) $value);
                 }
@@ -720,6 +748,13 @@ class ThemeCompiler
     /**
      * Generate CSS classes for button variants.
      *
+     * Each variant produces a base .btn-<variant> rule plus a :hover rule.
+     * Hover effects (shadow, transform, opacity, duration, easing, background)
+     * are resolved via ButtonEffectCatalog so the mapping table can evolve
+     * independently of this compiler. Animated effects (glow-pulse-* and the
+     * pulse-bg background effect) emit @keyframes globally and reference them
+     * with an animation rule on :hover.
+     *
      * @param array<string, mixed> $buttons Button token values
      *
      * @return string CSS class declarations
@@ -728,10 +763,40 @@ class ThemeCompiler
     {
         $css = "/* Button classes */\n";
 
+        // Shared @keyframes emitted once for any variant that uses an animated
+        // glow shadow (small footprint, harmless when unused).
+        $css .= ButtonEffectCatalog::buildSharedKeyframes();
+
+        // Per-variant @keyframes emitted only when bg-pulse is configured.
         foreach ($buttons as $variant => $props) {
-            if (!is_array($props)) {
+            if ('global' === $variant || !is_array($props)) {
                 continue;
             }
+            $bgEffectKey = (string) ($props['hoverBgEffect'] ?? ButtonEffectCatalog::DEFAULT_BG_EFFECT);
+            if (ButtonEffectCatalog::bgEffectNeedsKeyframes($bgEffectKey)) {
+                $css .= ButtonEffectCatalog::buildBgPulseKeyframes($variant);
+            }
+        }
+        $css .= "\n";
+
+        // Global padding fallback (used when the variant compiles before vars apply)
+        $global = is_array($buttons['global'] ?? null) ? $buttons['global'] : [];
+        $paddingX = isset($global['paddingX']) ? (string) $global['paddingX'] : '1.5rem';
+        $paddingY = isset($global['paddingY']) ? (string) $global['paddingY'] : '0.75rem';
+
+        foreach ($buttons as $variant => $props) {
+            if ('global' === $variant || !is_array($props)) {
+                continue;
+            }
+
+            $borderWidth = isset($props['borderWidth']) ? (string) $props['borderWidth'] : '1px';
+            $borderStyle = isset($props['borderStyle']) ? (string) $props['borderStyle'] : 'solid';
+
+            $duration = ButtonEffectCatalog::resolveDuration((string) ($props['hoverDuration'] ?? ButtonEffectCatalog::DEFAULT_DURATION));
+            $easing = ButtonEffectCatalog::resolveEasing((string) ($props['hoverEasing'] ?? ButtonEffectCatalog::DEFAULT_EASING));
+            $bgEffectKey = (string) ($props['hoverBgEffect'] ?? ButtonEffectCatalog::DEFAULT_BG_EFFECT);
+            $hasBgEffect = ButtonEffectCatalog::isActiveBgEffect($bgEffectKey);
+
             $css .= ".btn-{$variant} {\n";
             if (isset($props['bg'])) {
                 $css .= "  background-color: {$this->resolveColorValue((string) $props['bg'])};\n";
@@ -743,29 +808,163 @@ class ThemeCompiler
                 $css .= "  border-radius: {$this->resolveRadius((string) $props['radius'])};\n";
             }
             if (isset($props['border']) && 'none' !== $props['border']) {
-                $css .= "  border: 1px solid {$this->resolveColorValue((string) $props['border'])};\n";
+                $css .= "  border: {$borderWidth} {$borderStyle} {$this->resolveColorValue((string) $props['border'])};\n";
             } else {
                 $css .= "  border: none;\n";
             }
+            $css .= "  padding: var(--btn-padding-y, {$paddingY}) var(--btn-padding-x, {$paddingX});\n";
             $css .= "  cursor: pointer;\n";
             $css .= "  display: inline-block;\n";
             $css .= "  text-decoration: none;\n";
-            $css .= "  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;\n";
+            if ($hasBgEffect && 'pulse-bg' !== $bgEffectKey) {
+                // Required for the ::before overlay (slide / gradient) to be
+                // confined to the button and stack below the text.
+                $css .= "  position: relative;\n";
+                $css .= "  overflow: hidden;\n";
+                $css .= "  isolation: isolate;\n";
+            }
+            $css .= '  transition: ' . ButtonEffectCatalog::buildTransition($duration, $easing) . ";\n";
             $css .= "}\n";
 
+            // Overlay pseudo-element for slide-* / gradient-shift effects
+            $css .= $this->generateButtonBgEffectBefore(".btn-{$variant}", $variant, $bgEffectKey, $duration, $easing);
+
             // Hover state
-            $css .= ".btn-{$variant}:hover {\n";
-            if (isset($props['hoverBg'])) {
-                $css .= "  background-color: {$this->resolveColorValue((string) $props['hoverBg'])};\n";
-            }
-            if (isset($props['hoverText'])) {
-                $css .= "  color: {$this->resolveColorValue((string) $props['hoverText'])};\n";
-            }
-            if (isset($props['hoverBorder']) && 'none' !== $props['hoverBorder']) {
-                $css .= "  border-color: {$this->resolveColorValue((string) $props['hoverBorder'])};\n";
-            }
-            $css .= "}\n\n";
+            $css .= $this->generateButtonHoverRules(".btn-{$variant}", $variant, $props, $bgEffectKey);
         }
+
+        return $css;
+    }
+
+    /**
+     * Generate the ::before overlay rule for slide-* and gradient-shift bg effects.
+     *
+     * Returns an empty string for "none" and "pulse-bg" (which use a keyframes
+     * animation directly on :hover instead of an overlay). The pseudo-element
+     * sits at z-index -1 so the button content remains visible on top.
+     *
+     * @param string $baseSelector The selector that targets the button (e.g. ".btn-primary")
+     * @param string $variant      The variant key (primary/secondary/accent), used in CSS var refs
+     * @param string $bgEffectKey  The configured bg effect key
+     * @param string $duration     Resolved CSS duration
+     * @param string $easing       Resolved CSS easing function
+     *
+     * @return string CSS rules for ::before and :hover::before, or empty string
+     */
+    private function generateButtonBgEffectBefore(string $baseSelector, string $variant, string $bgEffectKey, string $duration, string $easing): string
+    {
+        if (!ButtonEffectCatalog::isActiveBgEffect($bgEffectKey) || 'pulse-bg' === $bgEffectKey) {
+            return '';
+        }
+
+        $css = "{$baseSelector}::before {\n";
+        $css .= "  content: \"\";\n";
+        $css .= "  position: absolute;\n";
+        $css .= "  inset: 0;\n";
+        $css .= "  z-index: -1;\n";
+
+        if ('gradient-shift' === $bgEffectKey) {
+            // Gradient overlay that fades in on hover for a smooth color transition.
+            // Opacity is clamped to [0, 1] so even a "bounce" easing stays well-behaved.
+            $css .= "  background-image: linear-gradient(135deg, var(--btn-{$variant}-hoverBg, var(--color-primary)), var(--color-accent));\n";
+            $css .= "  opacity: 0;\n";
+            $css .= "  transition: opacity {$duration} {$easing};\n";
+            $css .= "}\n";
+            $css .= "{$baseSelector}:hover::before {\n";
+            $css .= "  opacity: 1;\n";
+            $css .= "}\n";
+
+            return $css;
+        }
+
+        // slide-right / slide-left / slide-up: solid hoverBg overlay that translates in.
+        // The slide always uses ease-out: a "bounce" easing here would make the
+        // overlay overshoot the button boundaries (curve goes outside [0, 1]),
+        // breaking the illusion of a clean fill. The bounce easing remains in
+        // effect for the button's own transform (.btn-X transition).
+        $css .= "  background-color: var(--btn-{$variant}-hoverBg);\n";
+        $initial = match ($bgEffectKey) {
+            'slide-right' => 'translateX(-100%)',
+            'slide-left' => 'translateX(100%)',
+            'slide-up' => 'translateY(100%)',
+            default => 'translateX(-100%)',
+        };
+        $css .= "  transform: {$initial};\n";
+        $css .= "  transition: transform {$duration} ease-out;\n";
+        $css .= "}\n";
+        $css .= "{$baseSelector}:hover::before {\n";
+        $css .= "  transform: translate(0, 0);\n";
+        $css .= "}\n";
+
+        return $css;
+    }
+
+    /**
+     * Generate the :hover rule for a button variant.
+     *
+     * Composes hover declarations from props (colors, border) and from the
+     * resolved hover-effect axes (shadow, transform, opacity, bg effect).
+     * Animated effects (pulse-bg, glow-pulse-*) emit a single composite
+     * `animation` declaration so multiple keyframes can run together.
+     *
+     * @param string               $baseSelector  Selector for the button (e.g. ".btn-primary")
+     * @param string               $variant       Variant key used in animation names
+     * @param array<string, mixed> $props         Variant token values
+     * @param string               $bgEffectKey   The configured background effect key
+     *
+     * @return string CSS rule for the :hover state
+     */
+    private function generateButtonHoverRules(string $baseSelector, string $variant, array $props, string $bgEffectKey): string
+    {
+        $shadowKey = (string) ($props['hoverShadow'] ?? ButtonEffectCatalog::DEFAULT_SHADOW);
+        $shadowAnimated = ButtonEffectCatalog::isShadowAnimated($shadowKey);
+
+        // Collect any animations driven by this variant's hover effects.
+        $animations = [];
+        if ('pulse-bg' === $bgEffectKey) {
+            $animations[] = "btn-{$variant}-bg-pulse 2s ease-in-out infinite";
+        }
+        if (ButtonEffectCatalog::isActiveShadow($shadowKey) && $shadowAnimated) {
+            $shadowAnim = ButtonEffectCatalog::resolveShadowAnimation($shadowKey);
+            if (null !== $shadowAnim) {
+                $animations[] = "{$shadowAnim} 2s ease-in-out infinite";
+            }
+        }
+
+        $css = "{$baseSelector}:hover {\n";
+
+        // hoverBg is owned by the bg-effect rendering when configured:
+        //   - slide-* / gradient-shift: the ::before overlay carries the hoverBg color
+        //   - pulse-bg: the @keyframes animation swaps bg <-> hoverBg
+        // Emitting `background-color: hoverBg` in parallel would tint the
+        // underlying button while the overlay is mid-slide, masking the effect
+        // (the overlay and the now-tinted bg merge into a single flat color
+        // before the slide finishes). Only emit it when no bg-effect is active.
+        if (!ButtonEffectCatalog::isActiveBgEffect($bgEffectKey) && isset($props['hoverBg'])) {
+            $css .= "  background-color: {$this->resolveColorValue((string) $props['hoverBg'])};\n";
+        }
+        if (isset($props['hoverText'])) {
+            $css .= "  color: {$this->resolveColorValue((string) $props['hoverText'])};\n";
+        }
+        if (isset($props['hoverBorder']) && 'none' !== $props['hoverBorder']) {
+            $css .= "  border-color: {$this->resolveColorValue((string) $props['hoverBorder'])};\n";
+        }
+        // Static box-shadow only when the configured shadow is non-animated.
+        if (ButtonEffectCatalog::isActiveShadow($shadowKey) && !$shadowAnimated) {
+            $css .= '  box-shadow: ' . ButtonEffectCatalog::resolveShadow($shadowKey) . ";\n";
+        }
+        $transformKey = (string) ($props['hoverTransform'] ?? ButtonEffectCatalog::DEFAULT_TRANSFORM);
+        if (ButtonEffectCatalog::isActiveTransform($transformKey)) {
+            $css .= '  transform: ' . ButtonEffectCatalog::resolveTransform($transformKey) . ";\n";
+        }
+        $opacityKey = (string) ($props['hoverOpacity'] ?? ButtonEffectCatalog::DEFAULT_OPACITY);
+        if (ButtonEffectCatalog::isActiveOpacity($opacityKey)) {
+            $css .= '  opacity: ' . ButtonEffectCatalog::resolveOpacity($opacityKey) . ";\n";
+        }
+        if (!empty($animations)) {
+            $css .= '  animation: ' . implode(', ', $animations) . ";\n";
+        }
+        $css .= "}\n\n";
 
         return $css;
     }
@@ -1443,8 +1642,11 @@ class ThemeCompiler
      *
      * Reads the variant's buttonStyle choice (primary, secondary, accent) and
      * generates a `.btn-variant` class with the chosen button's direct values.
-     * Uses the same resolution logic as generateButtonClasses() to ensure
-     * radius and border properties are correctly handled.
+     * Mirrors generateButtonClasses() so that block-variant buttons inherit
+     * the same border, padding, and hover effects as the standalone .btn-*
+     * classes. The file-selector-button shares padding and opacity with the
+     * main button but skips transform/shadow because those would feel out of
+     * place on a native input control.
      *
      * @param string               $variantName The variant key
      * @param array<string, mixed> $props       The variant properties
@@ -1465,7 +1667,21 @@ class ThemeCompiler
             return '';
         }
 
-        $css = ".block-variant-{$variantName} .btn-variant {\n";
+        $global = is_array($buttons['global'] ?? null) ? $buttons['global'] : [];
+        $paddingX = isset($global['paddingX']) ? (string) $global['paddingX'] : '1.5rem';
+        $paddingY = isset($global['paddingY']) ? (string) $global['paddingY'] : '0.75rem';
+
+        $borderWidth = isset($btnData['borderWidth']) ? (string) $btnData['borderWidth'] : '1px';
+        $borderStyle = isset($btnData['borderStyle']) ? (string) $btnData['borderStyle'] : 'solid';
+
+        $duration = ButtonEffectCatalog::resolveDuration((string) ($btnData['hoverDuration'] ?? ButtonEffectCatalog::DEFAULT_DURATION));
+        $easing = ButtonEffectCatalog::resolveEasing((string) ($btnData['hoverEasing'] ?? ButtonEffectCatalog::DEFAULT_EASING));
+        $bgEffectKey = (string) ($btnData['hoverBgEffect'] ?? ButtonEffectCatalog::DEFAULT_BG_EFFECT);
+        $hasBgEffect = ButtonEffectCatalog::isActiveBgEffect($bgEffectKey);
+
+        $btnSelector = ".block-variant-{$variantName} .btn-variant";
+
+        $css = "{$btnSelector} {\n";
         if (isset($btnData['bg'])) {
             $css .= "  background-color: {$this->resolveColorValue((string) $btnData['bg'])};\n";
         }
@@ -1476,29 +1692,33 @@ class ThemeCompiler
             $css .= "  border-radius: {$this->resolveRadius((string) $btnData['radius'])};\n";
         }
         if (isset($btnData['border']) && 'none' !== $btnData['border']) {
-            $css .= "  border: 1px solid {$this->resolveColorValue((string) $btnData['border'])};\n";
+            $css .= "  border: {$borderWidth} {$borderStyle} {$this->resolveColorValue((string) $btnData['border'])};\n";
         } else {
             $css .= "  border: none;\n";
         }
+        $css .= "  padding: var(--btn-padding-y, {$paddingY}) var(--btn-padding-x, {$paddingX});\n";
         $css .= "  cursor: pointer;\n";
         $css .= "  display: inline-block;\n";
         $css .= "  text-decoration: none;\n";
-        $css .= "  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;\n";
+        if ($hasBgEffect && 'pulse-bg' !== $bgEffectKey) {
+            $css .= "  position: relative;\n";
+            $css .= "  overflow: hidden;\n";
+            $css .= "  isolation: isolate;\n";
+        }
+        $css .= '  transition: ' . ButtonEffectCatalog::buildTransition($duration, $easing) . ";\n";
         $css .= "}\n";
 
-        $css .= ".block-variant-{$variantName} .btn-variant:hover {\n";
-        if (isset($btnData['hoverBg'])) {
-            $css .= "  background-color: {$this->resolveColorValue((string) $btnData['hoverBg'])};\n";
-        }
-        if (isset($btnData['hoverText'])) {
-            $css .= "  color: {$this->resolveColorValue((string) $btnData['hoverText'])};\n";
-        }
-        if (isset($btnData['hoverBorder']) && 'none' !== $btnData['hoverBorder']) {
-            $css .= "  border-color: {$this->resolveColorValue((string) $btnData['hoverBorder'])};\n";
-        }
-        $css .= "}\n";
+        // ::before overlay reuses the per-variant CSS vars (--btn-{primary|secondary|accent}-hoverBg)
+        // emitted globally by generateButtonVariables.
+        $css .= $this->generateButtonBgEffectBefore($btnSelector, $buttonStyle, $bgEffectKey, $duration, $easing);
 
-        // File input button — same style as .btn-variant
+        // :hover state (animations reference the variant-level keyframes already emitted)
+        $css .= $this->generateButtonHoverRules($btnSelector, $buttonStyle, $btnData, $bgEffectKey);
+
+        // File input button — same colors and padding as .btn-variant, but
+        // we skip transform/shadow/bg-effect because those would feel
+        // awkward on a native form control.
+        $opacityKey = (string) ($btnData['hoverOpacity'] ?? ButtonEffectCatalog::DEFAULT_OPACITY);
         $css .= ".block-variant-{$variantName} .iw-form-file::file-selector-button {\n";
         if (isset($btnData['bg'])) {
             $css .= "  background-color: {$this->resolveColorValue((string) $btnData['bg'])};\n";
@@ -1510,10 +1730,12 @@ class ThemeCompiler
             $css .= "  border-radius: {$this->resolveRadius((string) $btnData['radius'])};\n";
         }
         if (isset($btnData['border']) && 'none' !== $btnData['border']) {
-            $css .= "  border: 1px solid {$this->resolveColorValue((string) $btnData['border'])};\n";
+            $css .= "  border: {$borderWidth} {$borderStyle} {$this->resolveColorValue((string) $btnData['border'])};\n";
         } else {
             $css .= "  border: none;\n";
         }
+        $css .= "  padding: var(--btn-padding-y, {$paddingY}) var(--btn-padding-x, {$paddingX});\n";
+        $css .= "  transition: background-color {$duration} {$easing}, color {$duration} {$easing}, opacity {$duration} {$easing};\n";
         $css .= "}\n";
 
         $css .= ".block-variant-{$variantName} .iw-form-file::file-selector-button:hover {\n";
@@ -1522,6 +1744,9 @@ class ThemeCompiler
         }
         if (isset($btnData['hoverText'])) {
             $css .= "  color: {$this->resolveColorValue((string) $btnData['hoverText'])};\n";
+        }
+        if (ButtonEffectCatalog::isActiveOpacity($opacityKey)) {
+            $css .= '  opacity: ' . ButtonEffectCatalog::resolveOpacity($opacityKey) . ";\n";
         }
         $css .= "}\n";
 

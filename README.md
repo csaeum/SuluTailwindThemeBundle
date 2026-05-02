@@ -344,7 +344,7 @@ Navigate to **Settings > Themes** in the Sulu admin panel. From there you can:
 1. **Create a theme**: Click "Add", fill in the name and label
 2. **Configure colors**: Set primary, secondary, accent, and background colors + text, link, and link hover colors
 3. **Configure typography**: Select fonts for headings/body/accent via the Font Picker (Google Fonts autocomplete, system fonts, or free text)
-4. **Configure buttons**: Set primary/secondary/accent button styles (background, text, border, hover states, radius)
+4. **Configure buttons**: Set global padding plus primary/secondary/accent button styles — colors, hover states, radius, border width/style, and five composable hover effects (shadow, transform, opacity, duration, easing). See [Button hover effects](doc/button-effects.md) for the full catalog.
 5. **Configure borders**: Set border radius values (default, small, large, full, image)
 6. **Configure block variants**: Define color schemes (e.g., light, accent, dark) for content blocks
 7. **Configure menu**: Choose menu type, colors, animation, and display options
@@ -504,6 +504,7 @@ The theme compiles design tokens into **CSS custom properties** and exposes data
 | [Page Templates](doc/page-templates.md) | Modular architecture, creating custom templates, block types, XInclude fragments |
 | [CSS Variables Reference](doc/css-variables.md) | All CSS custom properties: colors, palettes, typography, borders, buttons, menu |
 | [Block Variants](doc/block-variants.md) | Variant classes, auto-styled elements, separator styles, `.btn-variant` |
+| [Button Hover Effects](doc/button-effects.md) | Catalog of composable hover effects (shadow, transform, opacity, duration, easing) |
 | [Twig Reference](doc/twig-reference.md) | All Twig functions, global variable `iw_sulu_tailwind_theme`, token structure |
 | [Tailwind Integration](doc/tailwind-integration.md) | Theme bridge setup, available tokens, custom colors, manual setup, Tailwind 4.x compatibility |
 | [Custom Integration Guide](doc/custom-integration.md) | Custom CSS, Twig components, block templates, PHP services |

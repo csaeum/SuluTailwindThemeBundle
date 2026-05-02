@@ -99,18 +99,21 @@ a:hover {
     color: var(--btn-primary-text, #fff);
     border: var(--btn-primary-border, none);
     border-radius: var(--btn-primary-radius, var(--border-radius, 6px));
-    padding: 0.75rem 1.5rem;
+    padding: var(--btn-padding-y, 0.75rem) var(--btn-padding-x, 1.5rem);
     font-weight: 600;
     font-family: inherit;
     font-size: inherit;
     cursor: pointer;
-    transition: background-color 0.2s ease, opacity 0.2s ease;
     text-decoration: none;
+    /* Transition is owned by the ThemeCompiler so every animated axis
+     * (background, color, border, box-shadow, transform, opacity) is covered
+     * with the variant's configured duration and easing. */
 }
 
+/* Hover colors are owned by the ThemeCompiler so they can coexist with hover
+ * background effects (slide / gradient / pulse). The fallback opacity below
+ * still gives a minimal feedback when no compiled theme stylesheet is loaded. */
 .btn-primary:hover {
-    background-color: var(--btn-primary-hoverBg, var(--btn-primary-bg, var(--color-primary, #333)));
-    color: var(--btn-primary-hoverText, var(--btn-primary-text, #fff));
     opacity: 0.9;
 }
 
@@ -120,18 +123,15 @@ a:hover {
     color: var(--btn-secondary-text, var(--color-primary, #333));
     border: var(--btn-secondary-border, 2px solid currentColor);
     border-radius: var(--btn-secondary-radius, var(--border-radius, 6px));
-    padding: 0.75rem 1.5rem;
+    padding: var(--btn-padding-y, 0.75rem) var(--btn-padding-x, 1.5rem);
     font-weight: 600;
     font-family: inherit;
     font-size: inherit;
     cursor: pointer;
-    transition: background-color 0.2s ease, opacity 0.2s ease;
     text-decoration: none;
 }
 
 .btn-secondary:hover {
-    background-color: var(--btn-secondary-hoverBg, var(--btn-secondary-bg, transparent));
-    color: var(--btn-secondary-hoverText, var(--btn-secondary-text, var(--color-primary, #333)));
     opacity: 0.9;
 }
 
