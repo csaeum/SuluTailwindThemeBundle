@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+
+## [2.3.0] - 2026-05-02
+
+### Added
+
+- update theme fixtures with button-effect presets ([47a839e](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/47a839e04590bd865d5fb956ac4a2d706891aaed))
+- add configurable button padding, border, and composable hover effects ([1bf3b79](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/1bf3b795e4fdd906206b84470932ece2ac833770))
+
+### Documentation
+
+- document new button settings and hover effects ([34a1d47](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/34a1d47833ecedb4281a789ecbfdfc0c5821e4f9))
+- backfill 2.2.1 entry missed by release pipeline ([eac4d45](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/eac4d45d5c460f4256adf4cdbd365e19b3052a9f))
+
+### Changed
+
+- include oldest commit of release range in CHANGELOG generator ([8c2dd2a](https://github.com/steeven-th/SuluTailwindThemeBundle/commit/8c2dd2ad03bf7cb7d7c746c2c99c10bf551c63b1))
+
 ## [2.2.1] - 2026-05-02
 
 ### Fixed
@@ -130,6 +147,7 @@ php bin/adminconsole cache:clear
 - Auto-recompile via Doctrine listener
 - Translations (English, French, German)
 
+[2.3.0]: https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v2.2.1...v2.3.0
 [2.2.1]: https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/steeven-th/SuluTailwindThemeBundle/compare/v2.0.0...v2.1.0
