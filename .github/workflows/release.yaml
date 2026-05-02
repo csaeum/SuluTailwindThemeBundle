@@ -147,7 +147,7 @@ jobs:
               # Non-conventional commits go to chores
               CHORES="${CHORES}\n- ${MSG} (${LINK})"
             fi
-          done < <(git log ${RANGE} --pretty=format:"%H %s" --no-merges)
+          done < <(git log ${RANGE} --pretty=tformat:"%H %s" --no-merges)
 
           # Build the changelog entry
           ENTRY="## [${VERSION}] - ${TODAY}\n"
