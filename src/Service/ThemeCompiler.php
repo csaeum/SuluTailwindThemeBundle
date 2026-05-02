@@ -533,6 +533,13 @@ class ThemeCompiler
                 // Resolve radius Tailwind classes to valid CSS values
                 if ('radius' === $prop) {
                     $value = $this->resolveRadius((string) $value);
+                } elseif ('border' === $prop || 'hoverBorder' === $prop) {
+                    // Border vars must hold a full shorthand (width style color),
+                    // otherwise app.css `border: var(--btn-X-border, ...)` resolves
+                    // to an invalid `border: <color>` declaration.
+                    $value = ('none' === $value)
+                        ? 'none'
+                        : '1px solid ' . $this->resolveColorValue((string) $value);
                 } else {
                     $value = $this->resolveColorValue((string) $value);
                 }
