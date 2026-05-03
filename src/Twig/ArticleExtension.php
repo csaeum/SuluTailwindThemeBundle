@@ -228,12 +228,33 @@ class ArticleExtension extends AbstractExtension
     {
         $tokens = $this->themeExtension->getTokens();
 
+        $cardImageRatio = (string) ($tokens['articles_cardImageRatio'] ?? '16:9');
+        $ratioParts = explode(':', $cardImageRatio);
+        // A portrait ratio has its width < its height (e.g. 3:4, 9:16).
+        // Defaults to landscape when the ratio is malformed.
+        $isPortrait = 2 === count($ratioParts)
+            && (int) $ratioParts[0] > 0
+            && (int) $ratioParts[0] < (int) $ratioParts[1];
+
         return [
             'newsStyle' => $tokens['articles_newsStyle'] ?? 'classic',
             'eventStyle' => $tokens['articles_eventStyle'] ?? 'card_info',
             'blogStyle' => $tokens['articles_blogStyle'] ?? 'classic',
             'listingStyle' => $tokens['articles_listingStyle'] ?? 'grid',
-            'cardImageRatio' => $tokens['articles_cardImageRatio'] ?? '16:9',
+            'cardImageRatio' => $cardImageRatio,
+            'cardOrientation' => $isPortrait ? 'portrait' : 'landscape',
+            'cardSurface' => $tokens['articles_cardSurface'] ?? 'none',
+            'cardPadding' => $tokens['articles_cardPadding'] ?? '1rem',
+            'cardImagePadded' => (bool) ($tokens['articles_cardImagePadded'] ?? true),
+            'cardBorder' => $tokens['articles_cardBorder'] ?? 'none',
+            'cardBorderWidth' => $tokens['articles_cardBorderWidth'] ?? '1px',
+            'cardBorderStyle' => $tokens['articles_cardBorderStyle'] ?? 'solid',
+            'cardHoverTransform' => $tokens['articles_cardHoverTransform'] ?? 'none',
+            'cardHoverImage' => $tokens['articles_cardHoverImage'] ?? 'zoom',
+            'cardHoverShadow' => $tokens['articles_cardHoverShadow'] ?? 'none',
+            'cardHoverBorder' => $tokens['articles_cardHoverBorder'] ?? 'none',
+            'cardHoverDuration' => $tokens['articles_cardHoverDuration'] ?? '300ms',
+            'cardHoverEasing' => $tokens['articles_cardHoverEasing'] ?? 'ease-out',
             'showDates' => $tokens['articles_showDates'] ?? 'both',
             'showAuthors' => $tokens['articles_showAuthors'] ?? 'both',
             'showCategories' => $tokens['articles_showCategories'] ?? 'both',

@@ -48,6 +48,7 @@
 * **Menu configuration**: Configurable menu type, colors, animation, and display options
 * **Twig integration**: Helper functions for including theme CSS, fonts, block styles, and menu config
 * **Article blocks**: 3 article-specific blocks for pages — article list (grid/list/cards), article carousel, article featured (hero/side-by-side/spotlight)
+* **Customizable article cards**: configure surface, border (width + style), padding, and composable hover effects (card transform, image effect, shadow, border color, duration, easing) for the listing card, grid and list styles via the admin Articles tab
 * **CLI commands**: Install preset themes, assign to webspaces, recompile CSS, and run integration diagnostics from the command line
 * **Auto-recompile**: Doctrine listener recompiles CSS on theme save
 

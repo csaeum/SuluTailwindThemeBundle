@@ -1,25 +1,37 @@
 {#
     Article card component for listings.
-    Renders a single article as a card with image, title, excerpt, date, category.
+    Renders a single article using the iw-article-card-* CSS classes generated
+    by the ThemeCompiler. Surface, border, padding and hover effects are driven
+    by the article configuration tokens (passed in as named parameters).
 
     Parameters:
     - article: resolved article content object
-    - showImage: bool (default true)
-    - showDate: bool (default true)
-    - showExcerpt: bool (default true)
-    - showCategory: bool (default true)
+    - layout: 'vertical' (default) | 'horizontal' (used by the list style)
     - imageRatio: aspect ratio string (default '16/9')
-    - layout: 'vertical' (default) | 'horizontal'
-    - cardMode: bool (default false) — when true, disables image border-radius
-      and adds inner padding on text, for use inside a card container
+    - showImage / showDate / showExcerpt / showCategory: bool toggles
+    - cardSurface, cardBorder, cardHoverTransform, cardHoverImage,
+      cardHoverShadow, cardHoverBorder: tokens from the theme config; used
+      to build BEM modifier classes on the root element.
+    - cardImagePadded (bool): when false, the image touches the card edges
+      (image-bleed mode); when true (default), the image keeps its own
+      padding/radius inside the card.
 #}
+{% set layout = layout|default('vertical') %}
+{% set imageRatio = imageRatio|default('16/9') %}
 {% set showImage = showImage is defined ? showImage : true %}
 {% set showDate = showDate is defined ? showDate : true %}
 {% set showExcerpt = showExcerpt is defined ? showExcerpt : true %}
 {% set showCategory = showCategory is defined ? showCategory : true %}
-{% set cardMode = cardMode is defined ? cardMode : false %}
-{% set imageRatio = imageRatio|default('16/9') %}
-{% set layout = layout|default('vertical') %}
+
+{% set hasBorder = (cardBorder|default('none')) != 'none' %}
+{% set hoverTransform = cardHoverTransform|default('none') %}
+{% set hoverImage = cardHoverImage|default('zoom') %}
+{% set hoverShadow = cardHoverShadow|default('none') %}
+{% set hasHoverBorder = hasBorder and (cardHoverBorder|default('none')) != 'none' %}
+{% set imagePadded = cardImagePadded is defined ? cardImagePadded : true %}
+{# In horizontal+bleed mode the image must stretch to card height,
+   so we drop the aspect-ratio that would otherwise constrain it. #}
+{% set keepAspectRatio = imagePadded or layout != 'horizontal' %}
 
 {% set articleTitle = article.title|default('') %}
 {% set articleUrl = article.routePath|default(article.url|default('#')) %}
@@ -31,7 +43,15 @@
 {% set articleImage = article.excerptImages|default(article.excerpt.images|default(article.heroImage|default(null))) %}
 {% set articleCategories = article.excerptCategories|default(article.excerpt.categories|default([])) %}
 
-<article class="article-card group {{ layout == 'horizontal' ? 'flex gap-4' : 'flex flex-col' }}">
+{% set cardClasses = ['iw-article-card'] %}
+{% if layout == 'horizontal' %}{% set cardClasses = cardClasses|merge(['iw-article-card--horizontal']) %}{% endif %}
+{% if not imagePadded %}{% set cardClasses = cardClasses|merge(['iw-article-card--image-bleed']) %}{% endif %}
+{% if hoverTransform != 'none' %}{% set cardClasses = cardClasses|merge(['iw-article-card--hover-' ~ hoverTransform]) %}{% endif %}
+{% if hoverImage != 'none' %}{% set cardClasses = cardClasses|merge(['iw-article-card--image-' ~ hoverImage]) %}{% endif %}
+{% if hoverShadow != 'none' %}{% set cardClasses = cardClasses|merge(['iw-article-card--shadow-' ~ hoverShadow]) %}{% endif %}
+{% if hasHoverBorder %}{% set cardClasses = cardClasses|merge(['iw-article-card--hover-border']) %}{% endif %}
+
+<article class="{{ cardClasses|join(' ') }}">
     {% if showImage and articleImage is not empty %}
         {% set imgMedia = null %}
         {% if articleImage is iterable and articleImage|length > 0 %}
@@ -42,43 +62,36 @@
         {% endif %}
 
         {% if imgMedia %}
-            <a href="{{ articleUrl }}" class="{{ layout == 'horizontal' ? 'w-1/3 flex-shrink-0' : 'w-full' }}">
-                <div class="overflow-hidden {{ (not cardMode or layout == 'horizontal') ? 'rounded-[var(--border-imageRadius)]' : '' }}">
-                    <img src="{{ imgMedia.thumbnails['iw_theme_16_9']|default(imgMedia.url) }}"
-                         alt="{{ imgMedia.title|default(articleTitle) }}"
-                         class="w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                         style="aspect-ratio: {{ imageRatio }}"
-                         loading="lazy">
-                </div>
+            <a href="{{ articleUrl }}" class="iw-article-card-image">
+                <img src="{{ imgMedia.thumbnails['iw_theme_16_9']|default(imgMedia.url) }}"
+                     alt="{{ imgMedia.title|default(articleTitle) }}"
+                     {% if keepAspectRatio %}style="aspect-ratio: {{ imageRatio }}"{% endif %}
+                     loading="lazy">
             </a>
         {% endif %}
     {% endif %}
 
-    <div class="{{ layout == 'horizontal' ? 'flex-1 min-w-0' : (cardMode ? 'px-4 pb-4 pt-3' : 'mt-4') }}">
+    <div class="iw-article-card-body">
         {% if showCategory and articleCategories is iterable and articleCategories|length > 0 %}
-            <div class="mb-2">
-                {% for category in articleCategories|slice(0, 1) %}
-                    <span class="inline-block px-2 py-0.5 text-xs font-semibold rounded-[var(--border-radius)] bg-[var(--color-primary-100)] text-[var(--color-primary-700)]">
-                        {{ category.name|default(category.title|default('')) }}
-                    </span>
-                {% endfor %}
-            </div>
+            {% for category in articleCategories|slice(0, 1) %}
+                <span class="iw-article-card-category">
+                    {{ category.name|default(category.title|default('')) }}
+                </span>
+            {% endfor %}
         {% endif %}
 
-        <h3 class="font-[var(--font-family-heading)] font-semibold text-lg leading-snug mb-2">
-            <a href="{{ articleUrl }}" class="text-[var(--color-text)] hover:text-[var(--color-primary)] transition-colors">
-                {{ articleTitle }}
-            </a>
+        <h3 class="iw-article-card-title">
+            <a href="{{ articleUrl }}">{{ articleTitle }}</a>
         </h3>
 
         {% if showDate and articleDate is not empty %}
-            <time datetime="{{ articleDate|date('c') }}" class="text-sm text-[var(--color-secondary-500)] mb-2 block">
+            <time datetime="{{ articleDate|date('c') }}" class="iw-article-card-date">
                 {{ iw_sulu_tailwind_theme_format_date(articleDate, 'medium') }}
             </time>
         {% endif %}
 
         {% if showExcerpt and articleExcerpt is not empty %}
-            <p class="text-sm text-[var(--color-secondary-600)] line-clamp-2">
+            <p class="iw-article-card-excerpt">
                 {{ articleExcerpt|striptags|trim }}
             </p>
         {% endif %}

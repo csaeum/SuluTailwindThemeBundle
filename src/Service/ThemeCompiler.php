@@ -201,6 +201,7 @@ class ThemeCompiler
         $css .= $this->generateButtonVariables($tokens['buttons'] ?? []);
         $css .= $this->generateMenuVariables($menuConfig);
         $css .= $this->generateArticleVariables($tokens);
+        $css .= $this->generateArticleCardVariables($tokens);
         $css .= "}\n\n";
 
         // Button classes
@@ -211,6 +212,9 @@ class ThemeCompiler
 
         // Form field utility class
         $css .= $this->generateFormFieldClass();
+
+        // Article card classes (base + BEM modifiers for hover effects)
+        $css .= $this->generateArticleCardClasses();
 
         // Block variant classes
         $css .= $this->generateBlockVariantClasses($tokens['blockVariants'] ?? [], $tokens['buttons'] ?? []);
@@ -264,6 +268,288 @@ class ThemeCompiler
         }
 
         return $css . "\n";
+    }
+
+    /**
+     * Generate CSS custom properties for article card appearance.
+     *
+     * Emits the resolved surface, padding, border shorthand, and hover transition
+     * tokens. Border is emitted as a full shorthand (width style color) so the
+     * generated classes can drop it into a `border` declaration without producing
+     * invalid CSS, mirroring the strategy used for buttons.
+     *
+     * @param array<string, mixed> $tokens All theme tokens
+     *
+     * @return string CSS variable declarations
+     */
+    private function generateArticleCardVariables(array $tokens): string
+    {
+        $surface = (string) ($tokens['articles_cardSurface'] ?? 'none');
+        $padding = (string) ($tokens['articles_cardPadding'] ?? '1rem');
+        $border = (string) ($tokens['articles_cardBorder'] ?? 'none');
+        $borderWidth = (string) ($tokens['articles_cardBorderWidth'] ?? '1px');
+        $borderStyle = (string) ($tokens['articles_cardBorderStyle'] ?? 'solid');
+        $hoverBorder = (string) ($tokens['articles_cardHoverBorder'] ?? 'none');
+        $hoverDuration = ButtonEffectCatalog::resolveDuration((string) ($tokens['articles_cardHoverDuration'] ?? ButtonEffectCatalog::DEFAULT_DURATION));
+        $hoverEasing = ButtonEffectCatalog::resolveEasing((string) ($tokens['articles_cardHoverEasing'] ?? ButtonEffectCatalog::DEFAULT_EASING));
+
+        $surfaceValue = ('none' === $surface) ? 'transparent' : $this->resolveColorValue($surface);
+        $borderValue = ('none' === $border)
+            ? 'none'
+            : "{$borderWidth} {$borderStyle} " . $this->resolveColorValue($border);
+        $hoverBorderValue = ('none' === $hoverBorder)
+            ? 'transparent'
+            : $this->resolveColorValue($hoverBorder);
+
+        $css = "  /* Article card */\n";
+        $css .= "  --iw-card-surface: {$surfaceValue};\n";
+        $css .= "  --iw-card-padding: {$padding};\n";
+        $css .= "  --iw-card-border: {$borderValue};\n";
+        $css .= "  --iw-card-hover-border-color: {$hoverBorderValue};\n";
+        $css .= "  --iw-card-hover-duration: {$hoverDuration};\n";
+        $css .= "  --iw-card-hover-easing: {$hoverEasing};\n";
+
+        return $css . "\n";
+    }
+
+    /**
+     * Image hover effect presets for article cards.
+     *
+     * Each entry is a tuple [base, hover] of CSS declarations to apply on the
+     * card image. Either side can be empty when the effect only needs a hover
+     * transition. The base is applied to `.iw-article-card-image img`, the
+     * hover is scoped under `.iw-article-card--image-<key>:hover`.
+     *
+     * @var array<string, array{base: string, hover: string}>
+     */
+    private const ARTICLE_CARD_IMAGE_EFFECTS = [
+        'zoom' => ['base' => '', 'hover' => 'transform: scale(1.05);'],
+        'zoom-strong' => ['base' => '', 'hover' => 'transform: scale(1.10);'],
+        'grayscale' => ['base' => 'filter: grayscale(1);', 'hover' => 'filter: grayscale(0);'],
+        'brightness' => ['base' => '', 'hover' => 'filter: brightness(1.10);'],
+    ];
+
+    /**
+     * Generate CSS classes for article cards.
+     *
+     * Emits the base block (`.iw-article-card`), its child elements (image,
+     * body, sub-elements), the horizontal layout modifier, and every hover
+     * modifier (transform, image effect, shadow). Modifier classes are always
+     * emitted so the Twig template can apply them conditionally based on the
+     * admin configuration without requiring per-token recompilation.
+     *
+     * Hover shadows and transforms reuse ButtonEffectCatalog mappings to keep
+     * the design tokens consistent across the bundle.
+     *
+     * @return string CSS class declarations
+     */
+    private function generateArticleCardClasses(): string
+    {
+        $css = "/* Article card component */\n";
+
+        // Base block: surface, border, padding, transition wired to CSS variables.
+        // The flex `gap` provides the same spacing as the configured padding
+        // between the image and the body — same value horizontally and
+        // vertically so the rhythm stays consistent with the inner padding.
+        $css .= ".iw-article-card {\n";
+        $css .= "  display: flex;\n";
+        $css .= "  flex-direction: column;\n";
+        $css .= "  gap: var(--iw-card-padding, 1rem);\n";
+        $css .= "  background-color: var(--iw-card-surface, transparent);\n";
+        $css .= "  border: var(--iw-card-border, none);\n";
+        $css .= "  border-radius: var(--border-radius);\n";
+        $css .= "  padding: var(--iw-card-padding, 0);\n";
+        $css .= "  transition: background-color var(--iw-card-hover-duration, 300ms) var(--iw-card-hover-easing, ease-out),\n";
+        $css .= "    border-color var(--iw-card-hover-duration, 300ms) var(--iw-card-hover-easing, ease-out),\n";
+        $css .= "    box-shadow var(--iw-card-hover-duration, 300ms) var(--iw-card-hover-easing, ease-out),\n";
+        $css .= "    transform var(--iw-card-hover-duration, 300ms) var(--iw-card-hover-easing, ease-out);\n";
+        $css .= "}\n";
+
+        // Horizontal layout (used by the list style)
+        $css .= ".iw-article-card--horizontal {\n";
+        $css .= "  flex-direction: row;\n";
+        $css .= "  align-items: flex-start;\n";
+        $css .= "}\n";
+
+        // Image wrapper + image transitions (transition target for zoom/grayscale/brightness)
+        $css .= ".iw-article-card-image {\n";
+        $css .= "  display: block;\n";
+        $css .= "  overflow: hidden;\n";
+        $css .= "  border-radius: var(--border-imageRadius, var(--border-radius));\n";
+        $css .= "}\n";
+        $css .= ".iw-article-card-image img {\n";
+        $css .= "  width: 100%;\n";
+        $css .= "  height: auto;\n";
+        $css .= "  object-fit: cover;\n";
+        $css .= "  transition: transform var(--iw-card-hover-duration, 300ms) var(--iw-card-hover-easing, ease-out),\n";
+        $css .= "    filter var(--iw-card-hover-duration, 300ms) var(--iw-card-hover-easing, ease-out);\n";
+        $css .= "}\n";
+        // In horizontal layout the image takes a third of the width, content fills the rest
+        $css .= ".iw-article-card--horizontal .iw-article-card-image {\n";
+        $css .= "  width: 33%;\n";
+        $css .= "  flex-shrink: 0;\n";
+        $css .= "}\n";
+
+        // Body wrapper (text content)
+        $css .= ".iw-article-card-body {\n";
+        $css .= "  flex: 1;\n";
+        $css .= "  min-width: 0;\n";
+        $css .= "}\n";
+
+        // Sub-elements (sourced from the original template's inline Tailwind classes)
+        $css .= ".iw-article-card-category {\n";
+        $css .= "  display: inline-block;\n";
+        $css .= "  padding: 0.125rem 0.5rem;\n";
+        $css .= "  margin-bottom: 0.5rem;\n";
+        $css .= "  font-size: 0.75rem;\n";
+        $css .= "  font-weight: 600;\n";
+        $css .= "  border-radius: var(--border-radius);\n";
+        $css .= "  background-color: var(--color-primary-100);\n";
+        $css .= "  color: var(--color-primary-700);\n";
+        $css .= "}\n";
+        $css .= ".iw-article-card-title {\n";
+        $css .= "  font-family: var(--font-family-heading);\n";
+        $css .= "  font-weight: 600;\n";
+        $css .= "  font-size: 1.125rem;\n";
+        $css .= "  line-height: 1.375;\n";
+        $css .= "  margin-bottom: 0.5rem;\n";
+        $css .= "}\n";
+        $css .= ".iw-article-card-title a {\n";
+        $css .= "  color: var(--color-text);\n";
+        $css .= "  text-decoration: none;\n";
+        $css .= "  transition: color 0.2s ease;\n";
+        $css .= "}\n";
+        $css .= ".iw-article-card-title a:hover {\n";
+        $css .= "  color: var(--color-primary);\n";
+        $css .= "}\n";
+        $css .= ".iw-article-card-date {\n";
+        $css .= "  display: block;\n";
+        $css .= "  font-size: 0.875rem;\n";
+        $css .= "  color: var(--color-secondary-500);\n";
+        $css .= "  margin-bottom: 0.5rem;\n";
+        $css .= "}\n";
+        $css .= ".iw-article-card-excerpt {\n";
+        $css .= "  font-size: 0.875rem;\n";
+        $css .= "  color: var(--color-secondary-600);\n";
+        $css .= "  display: -webkit-box;\n";
+        $css .= "  -webkit-line-clamp: 2;\n";
+        $css .= "  -webkit-box-orient: vertical;\n";
+        $css .= "  overflow: hidden;\n";
+        $css .= "}\n\n";
+
+        // Hover transform modifiers (card-level movement)
+        $css .= "/* Article card — hover transform modifiers */\n";
+        $cardTransforms = ['lift', 'lift-strong', 'scale-up', 'scale-down', 'tilt'];
+        foreach ($cardTransforms as $key) {
+            $value = ButtonEffectCatalog::resolveTransform($key);
+            $css .= ".iw-article-card--hover-{$key}:hover { transform: {$value}; }\n";
+        }
+        $css .= "\n";
+
+        // Hover image effect modifiers (image-level filter / scale)
+        $css .= "/* Article card — hover image modifiers */\n";
+        foreach (self::ARTICLE_CARD_IMAGE_EFFECTS as $key => $effect) {
+            if ('' !== $effect['base']) {
+                $css .= ".iw-article-card--image-{$key} .iw-article-card-image img { {$effect['base']} }\n";
+            }
+            $css .= ".iw-article-card--image-{$key}:hover .iw-article-card-image img { {$effect['hover']} }\n";
+        }
+        $css .= "\n";
+
+        // Hover shadow modifiers (reuse button shadow catalog for consistency)
+        $css .= "/* Article card — hover shadow modifiers */\n";
+        $cardShadows = ['sm', 'md', 'lg', 'xl', 'glow-primary', 'glow-accent'];
+        foreach ($cardShadows as $key) {
+            $value = ButtonEffectCatalog::resolveShadow($key);
+            $css .= ".iw-article-card--shadow-{$key}:hover { box-shadow: {$value}; }\n";
+        }
+        $css .= "\n";
+
+        // Hover border color modifier (only meaningful when border is configured)
+        $css .= "/* Article card — hover border color modifier */\n";
+        $css .= ".iw-article-card--hover-border:hover { border-color: var(--iw-card-hover-border-color); }\n\n";
+
+        // Image-bleed modifier: image touches card edges (no padding around it,
+        // no own radius). Card needs overflow:hidden so the negative margins
+        // are clipped by the card border-radius. Both the wrapper and the
+        // inner <img> drop their radius — the global `img { border-radius:
+        // var(--radius-img); }` rule of app.css would otherwise re-apply a
+        // radius and the image corners would no longer follow the card edges.
+        // The card flex `gap` provides the spacing between the image and the
+        // body, so the bleed sides only emit negative margins.
+        $css .= "/* Article card — image bleed modifier (image touches card edges) */\n";
+        $css .= ".iw-article-card--image-bleed { overflow: hidden; }\n";
+        $css .= ".iw-article-card--image-bleed .iw-article-card-image,\n";
+        $css .= ".iw-article-card--image-bleed .iw-article-card-image img { border-radius: 0; }\n";
+        // Vertical: image bleeds top + sides
+        $css .= ".iw-article-card--image-bleed:not(.iw-article-card--horizontal) .iw-article-card-image {\n";
+        $css .= "  margin-top: calc(-1 * var(--iw-card-padding, 0));\n";
+        $css .= "  margin-left: calc(-1 * var(--iw-card-padding, 0));\n";
+        $css .= "  margin-right: calc(-1 * var(--iw-card-padding, 0));\n";
+        $css .= "}\n";
+        // Horizontal: image bleeds top + bottom + left. Force image to stretch
+        // to card height (the inline aspect-ratio is dropped by the Twig
+        // template in this mode so object-fit:cover wins).
+        $css .= ".iw-article-card--image-bleed.iw-article-card--horizontal { align-items: stretch; }\n";
+        $css .= ".iw-article-card--image-bleed.iw-article-card--horizontal .iw-article-card-image {\n";
+        $css .= "  margin-top: calc(-1 * var(--iw-card-padding, 0));\n";
+        $css .= "  margin-bottom: calc(-1 * var(--iw-card-padding, 0));\n";
+        $css .= "  margin-left: calc(-1 * var(--iw-card-padding, 0));\n";
+        $css .= "  display: flex;\n";
+        $css .= "}\n";
+        $css .= ".iw-article-card--image-bleed.iw-article-card--horizontal .iw-article-card-image img {\n";
+        $css .= "  width: 100%;\n";
+        $css .= "  height: 100%;\n";
+        $css .= "  object-fit: cover;\n";
+        $css .= "}\n\n";
+
+        // Listing wrappers (grid layouts shared by every listing style)
+        $css .= "/* Article listing layouts */\n";
+        $css .= ".iw-article-listing { display: block; }\n";
+        $css .= ".iw-article-listing--cards { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }\n";
+        $css .= ".iw-article-listing--grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }\n";
+        $css .= ".iw-article-listing--list { display: flex; flex-direction: column; gap: 1.5rem; }\n";
+        $css .= "@media (min-width: 640px) {\n";
+        $css .= "  .iw-article-listing--grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }\n";
+        $css .= "}\n";
+        $css .= "@media (min-width: 768px) {\n";
+        $css .= "  .iw-article-listing--cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }\n";
+        $css .= "}\n";
+        $css .= "@media (min-width: 1024px) {\n";
+        $css .= "  .iw-article-listing--grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }\n";
+        $css .= "}\n";
+
+        // Portrait variant: keeps the same cards-vs-grid differential as
+        // landscape (grid stays one column denser than cards) but bumps the
+        // counts so portrait images don't blow the card height.
+        //
+        //                Mobile   Tablet   Desktop
+        //   cards land.  1        2        2
+        //   grid  land.  1        2        3
+        //   cards port.  1        2        3   (= grid landscape)
+        //   grid  port.  2        3        4
+        //
+        // The template adds the modifier class only when the configured
+        // image ratio is portrait (width < height), so landscape behaviour
+        // is unaffected.
+        $css .= ".iw-article-listing--portrait.iw-article-listing--cards { grid-template-columns: 1fr; }\n";
+        $css .= ".iw-article-listing--portrait.iw-article-listing--grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }\n";
+        $css .= "@media (min-width: 768px) {\n";
+        $css .= "  .iw-article-listing--portrait.iw-article-listing--cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }\n";
+        $css .= "  .iw-article-listing--portrait.iw-article-listing--grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }\n";
+        $css .= "}\n";
+        $css .= "@media (min-width: 1024px) {\n";
+        $css .= "  .iw-article-listing--portrait.iw-article-listing--cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }\n";
+        $css .= "  .iw-article-listing--portrait.iw-article-listing--grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }\n";
+        $css .= "}\n";
+
+        $css .= ".iw-article-listing-empty {\n";
+        $css .= "  text-align: center;\n";
+        $css .= "  padding: 3rem 0;\n";
+        $css .= "  color: var(--color-secondary-500);\n";
+        $css .= "}\n\n";
+
+        return $css;
     }
 
     /**

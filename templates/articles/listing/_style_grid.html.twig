@@ -1,12 +1,17 @@
 {#
     Listing style: Grid
     3-column grid on desktop, 2 on tablet, 1 on mobile.
+    Surface, border and hover effects come from the theme article config.
 #}
 {% set config = iw_sulu_tailwind_theme_article_config() %}
 {% set cardRatio = config.cardImageRatio|default('16:9')|replace({':': '/'}) %}
+{% set listingClasses = ['iw-article-listing', 'iw-article-listing--grid'] %}
+{% if config.cardOrientation == 'portrait' %}
+    {% set listingClasses = listingClasses|merge(['iw-article-listing--portrait']) %}
+{% endif %}
 
 {% if articles is defined and articles is iterable and articles|length > 0 %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div class="{{ listingClasses|join(' ') }}">
         {% for article in articles %}
             {% include '@ItechWorldSuluTailwindTheme/articles/common/_article_card.html.twig' with {
                 article: article,
@@ -14,6 +19,13 @@
                 showDate: config.showDates|iw_article_visible('listing'),
                 showExcerpt: config.showExcerpts|iw_article_visible('listing'),
                 showCategory: config.showCategories|iw_article_visible('listing'),
+                cardSurface: config.cardSurface,
+                cardBorder: config.cardBorder,
+                cardImagePadded: config.cardImagePadded,
+                cardHoverTransform: config.cardHoverTransform,
+                cardHoverImage: config.cardHoverImage,
+                cardHoverShadow: config.cardHoverShadow,
+                cardHoverBorder: config.cardHoverBorder,
             } only %}
         {% endfor %}
     </div>
@@ -24,7 +36,7 @@
         baseUrl: baseUrl|default(''),
     } only %}
 {% else %}
-    <p class="text-center text-[var(--color-secondary-500)] py-12">
+    <p class="iw-article-listing-empty">
         {{ 'iw_sulu_tailwind_theme.article.no_articles'|trans }}
     </p>
 {% endif %}

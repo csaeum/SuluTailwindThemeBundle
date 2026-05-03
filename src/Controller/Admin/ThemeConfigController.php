@@ -485,6 +485,10 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         $articleKeys = [
             'articles_newsStyle', 'articles_eventStyle', 'articles_blogStyle',
             'articles_listingStyle', 'articles_cardImageRatio',
+            'articles_cardSurface', 'articles_cardPadding', 'articles_cardImagePadded',
+            'articles_cardBorder', 'articles_cardBorderWidth', 'articles_cardBorderStyle',
+            'articles_cardHoverTransform', 'articles_cardHoverImage', 'articles_cardHoverShadow',
+            'articles_cardHoverBorder', 'articles_cardHoverDuration', 'articles_cardHoverEasing',
             'articles_showDates', 'articles_showAuthors', 'articles_showCategories',
             'articles_showExcerpts', 'articles_showBreadcrumbs', 'articles_showRelated',
             'articles_relatedCount',
@@ -654,6 +658,10 @@ class ThemeConfigController extends AbstractController implements SecuredControl
         $articleKeys = [
             'articles_newsStyle', 'articles_eventStyle', 'articles_blogStyle',
             'articles_listingStyle', 'articles_cardImageRatio',
+            'articles_cardSurface', 'articles_cardPadding', 'articles_cardImagePadded',
+            'articles_cardBorder', 'articles_cardBorderWidth', 'articles_cardBorderStyle',
+            'articles_cardHoverTransform', 'articles_cardHoverImage', 'articles_cardHoverShadow',
+            'articles_cardHoverBorder', 'articles_cardHoverDuration', 'articles_cardHoverEasing',
             'articles_showDates', 'articles_showAuthors', 'articles_showCategories',
             'articles_showExcerpts', 'articles_showBreadcrumbs', 'articles_showRelated',
             'articles_relatedCount',
