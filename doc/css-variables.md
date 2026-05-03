@@ -269,6 +269,112 @@ Each class includes `background-color`, `color`, `border`, `border-radius`, `cur
 
 ---
 
+## Article card variables
+
+The article card component reads its appearance from a small set of CSS custom properties so the same compiled stylesheet can host any combination of surface, border and hover effects without per-card overrides.
+
+| Variable | Purpose |
+|----------|---------|
+| `--iw-card-surface` | Card background color (or `transparent` when `cardSurface = none`) |
+| `--iw-card-padding` | Inner padding shorthand |
+| `--iw-card-border` | Border shorthand (`width style color`) ready to drop into `border:` |
+| `--iw-card-hover-border-color` | Border color applied on hover when `cardHoverBorder` is configured |
+| `--iw-card-hover-duration` | Shared hover transition duration |
+| `--iw-card-hover-easing` | Shared hover transition timing function |
+
+All values are wired to the matching admin tokens (`articles_card*`) in `iw_theme_config_articles.xml`.
+
+---
+
+## Article card CSS classes
+
+The component is exposed as a stable, surchargeable API on top of the BEM-lite convention `iw-article-card[-element][--modifier]`.
+
+**Block + elements:**
+
+| Class | Role |
+|-------|------|
+| `.iw-article-card` | Card root (vertical layout by default) |
+| `.iw-article-card-image` | Image wrapper (sets overflow + image radius) |
+| `.iw-article-card-body` | Text content wrapper |
+| `.iw-article-card-category` | Category badge |
+| `.iw-article-card-title` | Article title (`<h3>`) |
+| `.iw-article-card-date` | Publication date (`<time>`) |
+| `.iw-article-card-excerpt` | Short excerpt with 2-line clamp |
+
+**Layout modifier:**
+
+| Class | Effect |
+|-------|--------|
+| `.iw-article-card--horizontal` | Switches to a row layout (image left, content right). Used by the `list` listing style. |
+| `.iw-article-card--image-bleed` | Removes the image's own padding/radius. The card receives `overflow: hidden` and the image is shifted with negative margins to touch the card edges (top + sides in vertical layout, top + bottom + left in horizontal layout). The image then follows the card border-radius via the `overflow: hidden` clip. |
+
+**Card hover transform modifiers** (mutually exclusive — one per card):
+
+| Class | Effect on hover |
+|-------|-----------------|
+| `.iw-article-card--hover-lift` | Card translates up by 2px |
+| `.iw-article-card--hover-lift-strong` | Card translates up by 4px |
+| `.iw-article-card--hover-scale-up` | Card scales to 1.05 |
+| `.iw-article-card--hover-scale-down` | Card scales to 0.97 |
+| `.iw-article-card--hover-tilt` | Slight rotation + scale |
+
+**Image hover modifiers** (mutually exclusive — one per card):
+
+| Class | Effect |
+|-------|--------|
+| `.iw-article-card--image-zoom` | Image scales to 1.05 on hover |
+| `.iw-article-card--image-zoom-strong` | Image scales to 1.10 on hover |
+| `.iw-article-card--image-grayscale` | Image is grayscale at rest, regains color on hover |
+| `.iw-article-card--image-brightness` | Image brightens on hover |
+
+**Hover shadow modifiers** (mutually exclusive — one per card):
+
+| Class | Effect on hover |
+|-------|-----------------|
+| `.iw-article-card--shadow-sm` to `--shadow-xl` | Box-shadow presets |
+| `.iw-article-card--shadow-glow-primary` | Tinted glow using `--color-primary` |
+| `.iw-article-card--shadow-glow-accent` | Tinted glow using `--color-accent` |
+
+**Hover border modifier:**
+
+| Class | Effect |
+|-------|--------|
+| `.iw-article-card--hover-border` | Switches `border-color` to `--iw-card-hover-border-color` on hover |
+
+**Listing wrappers** (used by `_style_cards.html.twig`, `_style_grid.html.twig`, `_style_list.html.twig`):
+
+| Class | Role |
+|-------|------|
+| `.iw-article-listing` | Bare listing container |
+| `.iw-article-listing--cards` | Two-column grid (single column on mobile) |
+| `.iw-article-listing--grid` | Three-column grid (two on tablet, one on mobile) |
+| `.iw-article-listing--list` | Vertical stack of horizontal cards |
+| `.iw-article-listing--portrait` | Adjusts the column count so portrait images don't blow the card height while keeping the `cards`-vs-`grid` differential (`cards-portrait`: 1/2/3 · `grid-portrait`: 2/3/4 across mobile/tablet/desktop). Applied automatically by the cards/grid templates when `cardOrientation` is `portrait`. |
+| `.iw-article-listing-empty` | Centered "no articles" message |
+
+**Overriding the look in your project:**
+
+```css
+/* Increase the visual weight of cards */
+.iw-article-card {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    transition-duration: 200ms;
+}
+
+/* Tighten the spacing of the body */
+.iw-article-card-body {
+    padding-top: 0.75rem;
+}
+
+/* Replace the title font on listings only */
+.iw-article-listing--cards .iw-article-card-title {
+    font-family: 'Playfair Display', serif;
+}
+```
+
+---
+
 ## Block variant classes
 
 See [Block variants documentation](block-variants.md) for the full reference on `.block-variant-*` classes and their internal CSS custom properties.
