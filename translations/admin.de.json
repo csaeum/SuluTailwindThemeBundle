@@ -585,5 +585,8 @@
     "iw_sulu_tailwind_theme.style.article_blog_sidebar": "Seitenleiste",
     "iw_sulu_tailwind_theme.style.article_listing_grid": "Raster",
     "iw_sulu_tailwind_theme.style.article_listing_list": "Liste",
-    "iw_sulu_tailwind_theme.style.article_listing_cards": "Karten"
+    "iw_sulu_tailwind_theme.style.article_listing_cards": "Karten",
+
+    "iw_sulu_tailwind_theme.custom_id": "HTML-ID",
+    "iw_sulu_tailwind_theme.custom_classes": "CSS-Klassen"
 }

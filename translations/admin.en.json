@@ -592,5 +592,8 @@
     "iw_sulu_tailwind_theme.style.article_blog_sidebar": "Sidebar",
     "iw_sulu_tailwind_theme.style.article_listing_grid": "Grid",
     "iw_sulu_tailwind_theme.style.article_listing_list": "List",
-    "iw_sulu_tailwind_theme.style.article_listing_cards": "Cards"
+    "iw_sulu_tailwind_theme.style.article_listing_cards": "Cards",
+
+    "iw_sulu_tailwind_theme.custom_id": "HTML ID",
+    "iw_sulu_tailwind_theme.custom_classes": "CSS classes"
 }
